@@ -1,4 +1,6 @@
 wa-cache
 wa-data
+wa-config
+wa-log
 .fw_compatible
 

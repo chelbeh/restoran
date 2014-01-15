@@ -1,0 +1,62 @@
+
+<div class="block" id="list-apps">
+
+    {if !empty($messages)}
+        {foreach $messages as $message}
+            <div class="block double-padded i-message-{$message.result}">
+                {if $message.result == 'success'}<i class="icon16 yes"></i>
+                {elseif $message.result == 'fail'}
+                <i class="icon16 no"></i>
+                {/if}
+                {$message.text|escape}
+            </div>
+        {/foreach}
+    {/if}
+    {if !empty($vendor_name)}<h1>{$vendor_name|string_format:'[`Apps by %s`]'|escape}</h1>{/if}
+
+    {if !empty($apps)}
+        <ul class="thumbs li300px">
+
+            {foreach $apps as $app}
+                <li>
+                    <div class="profile image96px">
+                        <div class="image">
+                            <a href="#/apps/{$app.slug}{if !empty($app.edition)}.{$app.edition}{/if}/">
+                                <img src="{$app.icons.96}" alt="{$app.name|truncate:15|escape}">
+                            </a>
+                        </div>
+                        <div class="details">
+                            <h5><a href="#/apps/{$app.slug}{if !empty($app.edition)}.{$app.edition}{/if}/">{$app.name|truncate:15|escape}</a></h5>
+                            <p>{$app.description}</p>
+                            {if empty($app.installed)}
+                                {if empty($app.price)}
+                                    <strong>[`Free`]</strong>
+                                {else}
+                                    {if $app.lease_price == 'free'}
+                                        {* free to install on this particular installation (cloud) *}
+                                        <strong>[`Free`]</strong>
+                                    {else}
+                                        {if !empty($app.compare_price)}<strike class="bold gray">{$app.compare_price}</strike>&nbsp; {/if}
+                                        <strong{if !empty($app.compare_price)} class="highlighted"{/if}>{$app.price}</strong>
+                                        {if $app.lease_price}
+                                            [`or`] <strong>{sprintf('[`%s/mo`]',$app.lease_price)}</strong>
+                                        {/if}
+                                    {/if}
+                                {/if}
+                            {else}
+                                <em>[`Installed`]</em>
+                            {/if}
+                        </div>
+                    </div>
+                </li>
+            {/foreach}
+
+        </ul>
+    {/if}
+
+</div>
+<script type="text/javascript">
+<!--
+$.layout.window.setTitle('{"[`Apps`]"|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}');
+//-->
+</script>

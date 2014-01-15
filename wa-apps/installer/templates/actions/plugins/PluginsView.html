@@ -1,0 +1,81 @@
+{if !empty($messages)}
+    {foreach $messages as $message}
+        <div class="block double-padded i-message-{$message.result}">
+            {if $message.result == 'success'}<i class="icon16 yes"></i>
+            {elseif $message.result == 'fail'}
+            <i class="icon16 no"></i>
+            {/if}
+            {$message.text|escape}
+        </div>
+    {/foreach}
+{/if}
+
+{if !empty($top)}<h1>[`Popular plugins`]</h1>{/if}
+<p>[`The following list of plugins is automatically updated from the Webasyst Store. Click on a plugin to install.`]</p>
+
+<style>
+    .wa-plugins li img { border: 1px solid #ccc; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); height: 110px; width: 200px; }
+</style>
+
+<ul class="thumbs wa-plugins">
+{$installer = "`$wa_backend_url`installer/"}
+{foreach $slug as $key}
+    {foreach $apps[$key]['plugins'] as $plugin_id => $plugin}
+    <li{if !empty($plugin.installed)} class="i-installed"{/if}>
+        {$app = $apps[$key]}
+        <a href="{$installer}#/plugins/{$app['slug']}/{$plugin_id}/" data-href="{$installer}#/plugins%s/{$app['slug']}/{$plugin_id}/" class="js-item-link">
+            <!-- cover -->
+            <img src="{$plugin.icon}">
+
+            <!-- name & author -->
+            <h5>{$plugin.name|default:$plugin_id|escape|truncate:30}</h5>
+
+            <!-- plugin price and status -->
+            {if empty($plugin.installed)}
+                {if $plugin.commercial}
+                    {if $plugin.lease_price == 'free'}
+                        {* free to install on this particular installation (cloud) *}
+                        <span class="black">[`Free`]</span>
+                    {else}
+                        {if !empty($plugin.compare_price)}
+                            <s class="gray">{$plugin.compare_price}</s>&nbsp;
+                            <strong class="highlighted black">{$plugin.price}</strong>
+                        {else}
+                            <span class="black">
+                                {$plugin.price}
+                                {if $plugin.lease_price}
+                                    [`or`] {sprintf('[`%s/mo`]',$plugin.lease_price)}
+                                {/if}
+                            </span>
+                        {/if}
+                        {if !empty($plugin.purchased) && false}
+                            <form action="{$installer}?module=update&action=manager" method="post">
+                                <input type="hidden" name="return_url" value="{$return_url|replace:'%plugin_id%':$plugin_id|escape}">
+                                <input type="hidden" name="install" value="1">
+                                <input type="hidden" name="app_id[{$plugin.slug}]" value="{$plugin.vendor}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
+                                <input type="submit" class="button green" value="[`Install`]"{if empty($plugin.applicable)} disabled="disabled"{/if}>
+                            </form>
+                        {/if}
+                    {/if}
+                {else}
+                    <span class="black">[`Free`]</span>
+                    {*
+                    <form action="{$installer}?module=update&action=manager" method="post">
+                        <input type="hidden" name="return_url" value="{$return_url|replace:'%plugin_id%':$plugin_id|escape}">
+                        <input type="hidden" name="install" value="1">
+                        <input type="hidden" name="app_id[{$plugin.slug}]" value="{$plugin.vendor}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
+                        <input type="submit" class="button green" value="[`Install`]"{if empty($plugin.applicable)} disabled="disabled"{/if}>
+                    </form>
+                    *}
+                {/if}
+            {else}
+                <em class="gray">[`Installed`]</em>
+            {/if}
+        </a>
+    </li>
+  {/foreach}
+ {foreachelse}
+    <p class="align-center gray">[`No plugins were found.`]</p>
+ {/foreach}
+ </ul>
+<div class="clear"></div>
