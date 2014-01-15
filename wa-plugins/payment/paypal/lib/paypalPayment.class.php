@@ -8,6 +8,7 @@
  *
  * @property-read string $email
  * @property-read string $sandbox
+ * @property-read array $currency
  */
 class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, waIPaymentRefund, waIPaymentCancel
 {
@@ -15,16 +16,62 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
 
     public function allowedCurrency()
     {
-        return 'USD';
+        return array_keys(array_filter(array_map('intval', $this->currency)));
+    }
+
+    public static function availableCurrency()
+    {
+        /**
+         * @see https://www.paypal.com/cgi-bin/webscr?cmd=p/sell/mc/mc_intro-outside
+         */
+        $allowed = array(
+            'CAD', //Canadian Dollar
+            'EUR', //Euro
+            'GBP', //British Pound
+            'USD', //U.S. Dollar
+            'JPY', //Japanese Yen
+            'AUD', //Australian Dollar
+            'NZD', //New Zealand Dollar
+            'CHF', //Swiss Franc
+            'HKD', //Hong Kong Dollar
+            'SGD', //Singapore Dollar
+            'SEK', //Swedish Krona
+            'DKK', //Danish Krone
+            'PLN', //Polish Zloty
+            'NOK', //Norwegian Krone
+            'HUF', //Hungarian Forint
+            'CZK', //Czech Koruna
+            'ILS', //Israeli New Shekel
+            'MXN', //Mexican Peso
+            'BRL', //Brazilian Real (only for Brazilian members)
+            'MYR', //Malaysian Ringgit (only for Malaysian members)
+            'PHP', //Philippine Peso
+            'TWD', //New Taiwan Dollar
+            'THB', //Thai Baht
+            'TRY', //Turkish Lira (only for Turkish members)
+            'RUB', //Russian Ruble
+        );
+        $available = array();
+        $app_config = wa()->getConfig();
+        if (method_exists($app_config, 'getCurrencies')) {
+            $currencies = $app_config->getCurrencies();
+            foreach ($currencies as $code => $c) {
+                if (in_array($code, $allowed)) {
+                    $available[] = array(
+                        'value'       => $code,
+                        'title'       => sprintf('%s %s', $c['code'], $c['title']),
+                        'description' => $c['sign'],
+                    );
+                }
+            }
+        }
+        return $available;
     }
 
     public function payment($payment_form_data, $order_data, $auto_submit = false)
     {
-        if ($order_data['currency_id'] != 'USD') {
-            return array(
-                'type' => 'error',
-                'data' => _w('Order total amount needs to be converted to USD in order to make payment on PayPal'),
-            );
+        if (!in_array($order_data['currency_id'], $this->allowedCurrency())) {
+            throw new waException('Unsupported currency');
         }
         if (empty($order_data['description_en'])) {
             $order_data['description_en'] = 'Order '.$order_data['order_id'];
@@ -33,7 +80,7 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
         $hidden_fields = array(
             'cmd'           => '_xclick',
             'business'      => $this->email,
-            'item_name'     => $order_data['description_en'],
+            'item_name'     => $order_data['description'],
             'item_number'   => $this->app_id.'_'.$this->merchant_id.'_'.$order_data['order_id'],
             'no_shipping'   => 1,
             'amount'        => number_format($order_data['amount'], 2, '.', ''),
@@ -41,6 +88,7 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
             'return'        => '', //TODO
             'cancel_return' => '', //TODO
             'notify_url'    => $this->getRelayUrl(),
+            'charset'       => 'utf-8',
         );
         $view = wa()->getView();
 
@@ -99,6 +147,7 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
 
     /**
      * IPN (Instant Payment Notification)
+     * @throws waPaymentException
      * @param $data - get from gateway
      * @return array
      */
@@ -116,7 +165,7 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
         }
 
         $state = $this->sendData($post_data);
-        
+
         if ($state == self::STATE_VERIFIED) {
             // accept transaction
             $transaction_data = $this->formalizeData($data);
@@ -147,9 +196,6 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
                 $transaction_data = $this->saveTransaction($transaction_data, $data);
 
                 $result = $this->execAppCallback('payment', $transaction_data);
-
-                self::addTransactionData($transaction_data['id'], $result);
-
                 if (!empty($result['error'])) {
                     throw new waPaymentException('Forbidden (validate error): '.$result['error']);
                 }
@@ -195,7 +241,8 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
         if ($data['first_name'] || $data['last_name'])
             $view_data .= trim($data['first_name'].' '.$data['last_name']).', ';
         if (!empty($data['address_street']) || !empty($data['address_city']) || !empty($data['address_state']) ||
-            !empty($data['address_zip']) || !empty($data['address_country']))
+            !empty($data['address_zip']) || !empty($data['address_country'])
+        )
             $view_data .= $data['address_street'].' '.$data['address_city'].' '.$data['address_state'].' '.$data['address_zip'].' '.$data['address_country'].', ';
         $view_data = substr($view_data, 0, -2);
         $view_data = preg_replace('/ +/', ' ', $view_data);
@@ -212,17 +259,18 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
 
     /**
      * Payment transport
-     *
+     * @throws waException
+     * @param $data
      * @return string state result
      */
     private function sendData($data)
     {
         $app_error = $response = null;
-        /*
-         if (extension_loaded('curl') || !function_exists('curl_init')) {
-         throw new waException('PHP extension cURL not available');
-         }
-         */
+
+        if (!extension_loaded('curl') || !function_exists('curl_init')) {
+            throw new waException('PHP extension cURL not available');
+        }
+
         if (!($ch = curl_init())) {
             throw new waException('curl init error');
         }
@@ -230,8 +278,16 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
             throw new waException('curl init error: '.curl_errno($ch));
         }
 
-        @curl_setopt($ch, CURLOPT_URL, $this->getEndpointUrl());
+        $url = $this->getEndpointUrl();
+
+        $headers = array(
+            'Connection: close',
+            'Host: '.parse_url($url, PHP_URL_HOST),
+        );
+
+        @curl_setopt($ch, CURLOPT_URL, $url);
         @curl_setopt($ch, CURLOPT_POST, 1);
+        @curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         @curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         @curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         @curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -257,10 +313,10 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
     {
         $transaction_model = new waTransactionModel();
         return $transaction_model->getByFields(array(
-            'plugin' => $this->id,
-            'app_id'   => $this->app_id,
-            'merchant_id'      => $this->merchant_id,
-            'native_id'        => $transaction_data['native_id']
+            'plugin'      => $this->id,
+            'app_id'      => $this->app_id,
+            'merchant_id' => $this->merchant_id,
+            'native_id'   => $transaction_data['native_id']
         ));
     }
 

@@ -364,3 +364,9 @@ img.c-app16x16icon-menu-v {
     left: 2px;
 }
 .wa-message-text .errormsg { display: inline; }
+
+#contacts-container li.contact-row.selected.shadowed { margin: -1px -11px; padding: 11px 20px; position:relative; background: #ffc; }
+ul.v-list { padding: 0; margin: 0; }
+ul.v-list li { list-style: none; background: white; padding: 8px; border-top: 1px solid #ccc; }
+#contacts-container .hide-when-not-selected { display: none; }
+#contacts-container li.contact-row.selected.shadowed .hide-when-not-selected { display: inline-block; }

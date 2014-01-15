@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WebAsyst\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2013-07-19 16:24+0400\n"
+"PO-Revision-Date: 2013-12-20 12:56+0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -830,9 +830,6 @@ msgstr "Действующий пароль"
 msgid "Incorrect current password"
 msgstr "Неправильный действующий пароль"
 
-msgid "Select a master contact to which all other contacts will be merged"
-msgstr "Выберите главный контакт, в который объединить все остальные"
-
 msgid "Users can not be merged into other contacts."
 msgstr "Пользователи не могут быть объединены в другой контакт."
 
@@ -874,4 +871,40 @@ msgstr "Оставьте поле пустым, чтобы сохранить с
 
 msgid "Fields visible on %sown profile%s page"
 msgstr "Поля, видимые на %sстрание своего профиля%s"
+
+msgid "Merge contacts"
+msgstr "Объединение контактов"
+
+msgid "Choose a master contact that will be retained after merging."
+msgstr "Выберите главный контакт, который останется после объединения."
+
+msgid "Other contacts will be deleted during this merging operation."
+msgstr "Остальные контакты в результате выполнения процедуры объединения будут удалены."
+
+msgid "Contact info from the contacts to be deleted, except unique fields, will be added to master contact."
+msgstr "Контактная информация из удаляемых контактов, за исключением уникальных полей, будет добавлена в главный контакт."
+
+msgid "Links to deleted contacts from other applications will be updated to link to master contact."
+msgstr "Ссылки на удаляемые контакты, которые есть в других приложениях, будут изменены на главный контакт."
+
+msgid "selected as a master contact"
+msgstr "выбран как главный контакт"
+
+msgid "%s has been selected as a master contact."
+msgstr "%s выбран как главный контакт."
+
+msgid "However, there are no contacts to be merged with %s, by the reasons designated above."
+msgstr "Однако, нет ни одного контакта, который мог бы быть объединен с %s, по причинам указанным выше."
+
+msgid "%d other contact will be merged with %%s."
+msgid_plural "%d other contacts will be merged with %%s."
+msgstr[0] "%d контакт будет объединен с %%s."
+msgstr[1] "Остальные %d контакта будут объединены с %%s."
+msgstr[2] "Остальные %d контактов будут объединены с %%s."
+
+msgid "%d contact will not be merged by the reasons designated above."
+msgid_plural "%d contacts will not be merged by the reasons designated above."
+msgstr[0] "%d контакт не будет объединен по причинам указанным выше."
+msgstr[1] "%d контакта не будут объединены по причинам указанным выше."
+msgstr[2] "%d контактов не будут объединены по причинам указанным выше."
 

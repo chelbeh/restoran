@@ -3,4 +3,6 @@ wa-data/
 wa-config/
 wa-log/
 .fw_compatible
+.idea
+*.md5
 

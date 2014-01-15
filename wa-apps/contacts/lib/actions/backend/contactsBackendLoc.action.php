@@ -50,6 +50,7 @@ class contactsBackendLocAction extends waViewAction
             'Internet',
             'Limited access',
             'Merge',
+            'Merge contacts',
             'Must be a number.',
             'Incorrect Email address format.',
             'Incorrect URL format.',

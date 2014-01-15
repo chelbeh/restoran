@@ -1,5 +1,14 @@
 <?php
 return array(
+    'protocol'       => array(
+        'value'        => 'soap',
+        'title'        => 'Способ подключения',
+        'control_type' => 'select',
+        'options'      => array(
+            'soap' => 'SOAP-протокол',
+            'rest' => 'Новый протокол',
+        ),
+    ),
     'login'          => array(
         'value'        => '',
         'title'        => 'Идентификатор (логин)',
@@ -11,6 +20,18 @@ return array(
         'title'        => 'Пароль',
         'description'  => '',
         'control_type' => 'password',
+    ),
+    'api_password'   => array(
+        'value'        => '',
+        'title'        => 'QIWI PULL API',
+        'description'  => '',
+        'control_type' => 'password',
+    ),
+    'prv_name'       => array(
+        'value'        => '',
+        'title'        => 'Продавец',
+        'description'  => 'Название провайдера, которое будет показано клиенту (произвольная строка до 100 символов)',
+        'control_type' => 'text',
     ),
     'lifetime'       => array(
         'value'        => 24,

@@ -92,15 +92,17 @@
                     </div>
 
                     {{* Not editable info block *}}
-                    <ul class="hint" style="list-style-type: none; margin: 30px 0 0 0">
-                        <li>[`Contact id`]: {{$contact.id}}</li>
-                        <li>[`Added`]: {{$contact_create_time}}</li>
-                        {{if !empty($author)}}
-                            <li>[`Author`]: {{$author.name|escape}}</li>
-                        {{/if}}
-                        <li>[`Method`]: {{$contact.create_method}}</li>
-                        <li>[`Application`]: {{$contact.create_app_id}}</li>
-                    </ul>
+                    {{if empty($limited_own_profile)}}
+                        <ul class="hint" style="list-style-type: none; margin: 30px 0 0 0">
+                            <li>[`Contact id`]: {{$contact.id}}</li>
+                            <li>[`Added`]: {{$contact_create_time}}</li>
+                            {{if !empty($author)}}
+                                <li>[`Author`]: {{$author.name|escape}}</li>
+                            {{/if}}
+                            <li>[`Method`]: {{$contact.create_method}}</li>
+                            <li>[`Application`]: {{$contact.create_app_id}}</li>
+                        </ul>
+                    {{/if}}
                 </div>
                 <div class="clear-left"></div>
             </div>

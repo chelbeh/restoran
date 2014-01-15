@@ -21,23 +21,25 @@ class webmoneyPayment extends waPayment implements waIPayment
     public function allowedCurrency()
     {
         $currency = false;
+
         switch ($this->protocol) {
             case self::PROTOCOL_WEBMONEY_LEGACY:
             case self::PROTOCOL_PAYMASTER:
-                $currency = array('RUB', 'USD', 'EUR', 'UAH', 'UZS', 'BYR');
+                $currency = array('RUB', 'UAH', 'USD', 'EUR', 'UZS', 'BYR');
                 break;
             case self::PROTOCOL_WEBMONEY:
             default:
-                if (preg_match('/^([RZ])\d+$/i', trim($this->LMI_PAYEE_PURSE), $matches)) {
-                    $currency_map = array(
-                        'Z' => 'USD',
-                        'R' => 'RUB',
-                        'E' => 'EUR',
-                        'D' => 'USD',
-                        'U' => 'UAH',
-                        'Y' => 'UZS',
-                        'B' => 'BYR',
-                    );
+                $currency_map = array(
+                    'R' => 'RUB',
+                    'U' => 'UAH',
+                    'Z' => 'USD',
+                    'E' => 'EUR',
+                    'D' => 'USD',
+                    'Y' => 'UZS',
+                    'B' => 'BYR',
+                );
+                $pattern = '/^(['.implode('', array_keys($currency_map)).'])\d+$/i';
+                if (preg_match($pattern, trim($this->LMI_PAYEE_PURSE), $matches)) {
                     $key = strtoupper($matches[1]);
                     if (isset($currency_map[$key])) {
                         $currency = $currency_map[$key];

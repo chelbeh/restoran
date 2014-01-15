@@ -166,6 +166,7 @@ class installerHelper
 
     public static function isDeveloper()
     {
+        return false;// VADIM CODE
         $result = false;
         $paths = array();
         $paths[] = dirname(__FILE__).'/.svn';

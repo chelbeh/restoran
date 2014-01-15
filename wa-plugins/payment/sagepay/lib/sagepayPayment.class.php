@@ -31,6 +31,14 @@ class sagepayPayment extends waPayment implements waIPayment
         $params['options']['currency'] = $currencies;
         return parent::getSettingsHTML($params);
     }
+    
+    public function __get($name)
+    {
+        if ($name === 'crypt_password') {
+            return str_pad($this->getSettings($name), 16, " ");
+        }
+        return parent::__get($name);
+    }
 
     /**
      * @param array $payment_form_data POST form data

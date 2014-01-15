@@ -8,7 +8,7 @@ return array(
     ),
 	'rights' => true,
 	'analytics' => true,
-	'version'=>'1.0.3',
+	'version'=>'1.0.4',
 	'critical'=>'1.0.0',
 	'vendor' => 'webasyst',
 	'system' => true,

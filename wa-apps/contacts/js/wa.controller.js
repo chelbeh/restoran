@@ -17,8 +17,8 @@
             });
 
             this.lastView = {
-                title: $.storage.get('contacts/lastview/title'),
-                hash: $.storage.get('contacts/lastview/hash')
+                title: null,
+                hash: null
             };
             this.options = options;
             this.random = null;
@@ -178,7 +178,16 @@
             if (this.previousHash == hash) {
                 return;
             }
+            var old_hash = this.previousHash;
             this.previousHash = hash;
+
+            var e = new $.Event('wa_before_dispatched');
+            $(window).trigger(e);
+            if (e.isDefaultPrevented()) {
+                this.previousHash = old_hash;
+                window.location.hash = old_hash;
+                return false;
+            }
 
             hash = hash.replace(/^[^#]*#\/*/, '');
 
@@ -238,7 +247,8 @@
             // Highlight current item in history, if exists
             this.highlightSidebar();
 
-            $(document).trigger('hashchange', [hash]);
+            $(document).trigger('hashchange', [hash]); // Kinda legacy
+            $(window).trigger('wa-dispatched');
         },
 
         /** Load last page  */
@@ -518,6 +528,14 @@
             });
         },
 
+        contactsMerge: function () {
+            var selected = $.wa.grid.getSelected();
+            if (selected.length < 2) {
+                return false;
+            }
+            this.loadHTML('?module=contacts&action=mergeSelectMaster', { ids: selected });
+        },
+
         // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
         // *   Other UI-related stuff: dialogs, form submissions etc.
         // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -789,10 +807,12 @@
                     throw new Error('Unknown block: '+name);
             }
 
+            // Kinda legacy
             if (this.afterInitHTML) {
                 this.afterInitHTML();
                 this.afterInitHTML = '';
             }
+            $(window).trigger('wa_after_init_html', [name, title, menus]);
         },
 
         /** Add or update a toolbar above contacts list. */
@@ -821,8 +841,8 @@
                                     '<a href="#" onclick="$.wa.controller.addToListDialog(); return false"><i class="icon16 add-to-list"></i>'+$_('Add to list')+'</a>' +
                                 '</li>' : '') +
                             (($.wa.controller.contactsMerge && $.wa.controller.admin) ?
-                                '<li>' +
-                                    '<a href="#" onClick="$.wa.controller.contactsMerge(); return false"><i class="icon16 merge"></i>'+$_('Merge')+'</a>' +
+                                '<li class="two-or-more">' +
+                                    '<a href="#" onClick="$.wa.controller.contactsMerge(); return false"><i class="icon16 merge"></i>'+$_('Merge contacts')+'</a>' +
                                 '</li>' : '') +
                             ($.wa.controller.exportDialog ?
                                 '<li>' +
@@ -883,6 +903,10 @@
                 if ($('#list-category li:not(.empty):not(.selected)').size() <= 0) {
                     $('#add-to-category-link').addClass('disabled');
                 }
+                // Merge link is only active when there are 2 or more contacts selected
+                if (cnt < 2) {
+                    $('#actions-with-selected li.two-or-more').addClass('disabled');
+                }
             }
         },
 
@@ -905,7 +929,9 @@
                     if (beforeLoadCallback) {
                         beforeLoadCallback.call($.wa.controller);
                     }
+                    $(window).trigger('wa_before_load', [elem, url, params, response]);
                     $(elem).html(response);
+                    $(window).trigger('wa_after_load', [elem, url, params, response]);
                 }
             });
         },
@@ -956,8 +982,6 @@
                     title: title,
                     hash: window.location.hash.toString()
                 };
-                $.storage.set('contacts/lastview/title', this.lastView.title);
-                $.storage.set('contacts/lastview/hash', this.lastView.hash);
 
                 el.text(title);
                 this.setBrowserTitle(title);

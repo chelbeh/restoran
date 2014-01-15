@@ -15,11 +15,15 @@ class private24Payment extends waPayment implements waIPayment
         $view->assign('order', $order_data);
         $view->assign('settings', $this->getSettings());
         $form = array();
-        $form['amt'] = $order->total;
+        $form['amt'] = number_format($order->total, 2, '.', '');
         $form['ccy'] = $order->currency;
         $form['order'] = sprintf('%s_%s_%s', $this->app_id, $this->merchant_id, $order->id);
-        $form['merhcant'] = $this->merchant;
-        $form['details'] = $order->description;
+        $form['merchant'] = $this->merchant;
+
+        $pattern = "@[^\\w\\d".preg_quote("~@#$%^-_(){}'`+=[]:;/\\", '@')."]+@u";
+        $description = trim(preg_replace('@\\s{2,}@', ' ', preg_replace($pattern, ' ', $order->description)));
+        $form['details'] = mb_substr($description, 0, 130);
+        $form['ext_details'] = mb_substr($description, 0, 250);
         $form['pay_way'] = 'privat24';
 
         $form['return_url'] = $this->getAdapter()->getBackUrl();
