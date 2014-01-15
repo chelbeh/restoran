@@ -1,0 +1,82 @@
+<div class="dialog {if $type == 'set'}width650px height350px{else}large{/if}" id="s-product-list-create-dialog">
+    <div class="dialog-background"></div>
+    <form id="s-product-list-create-form" method="post"
+          action="?module=products&action=saveListSettings&{$type}_id=0&parent_id={if !empty($parent)}{$parent.id}{else}0{/if}"
+          enctype="multipart/form-data"
+    >
+    <div class="dialog-window">
+        <div class="dialog-content">
+            <div class="dialog-content-indent">
+                <h1>{$title_text}</h1>
+                <div class="fields form s-dialog-form">
+                    <div class="field-group">
+                        <div class="field">
+                            <div class="name">{$name_text}</div>
+                            <div class="value">
+                                <input type="text" name="name" class="large long s-full-width-input" value="" id="s-c-product-list-name">
+                            </div>
+                        </div>
+                        {$smarty.capture.frontend_url}
+                    </div>
+                    {$smarty.capture.ext_fields}
+                    <div class="field-group">
+                        <div class="field">
+                            <div class="name">
+                                {$type_text}
+                            </div>
+                            <div class="value no-shift">
+                                <ul class="thumbs li150px s-list-type-selector">
+                                    <li style="margin-bottom: 0;">
+                                        <label>
+                                            <input id="s-type-static" type="radio" name="type" value="0" checked="checked">
+                                            <strong>[`Static`]</strong>
+                                            <i class="icon16 {if $type == 'category'}folder{else}ss set{/if}"></i>
+                                            <br><br>
+                                            <span class="hint">{$static_type_text}</span>
+                                        </label>
+                                    </li>
+                                    <li style="margin-bottom: 0;">
+                                        <label>
+                                            <input id="s-type-dynamic" type="radio" name="type" value="1">
+                                            <strong>[`Dynamic`]</strong>
+                                            <i class="icon16 {if $type == 'category'}folder-dynamic{else}ss set-dynamic{/if}"></i>
+                                            <br><br>
+                                            <span class="hint">{$dynamic_type_text}</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field-group" id="s-dynamic-field-group" style="display:none;">
+                        {$smarty.capture.dynamic_settings}
+                    </div>
+                    {$smarty.capture.description}
+                    {$smarty.capture.custom_params}
+                </div>
+            </div>
+        </div>
+        <div class="dialog-buttons">
+            <div class="dialog-buttons-gradient">
+                <input type="submit" value="[`Save`]" class="button green">
+                [`or`] <a class="cancel" href="#">[`cancel`]</a>
+            </div>
+        </div>
+        {$wa->csrf()}
+    </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function() {
+        var d = $('#s-product-list-create-dialog');
+        $('#s-product-list-create-dialog input[name=type]').click(function() {
+            if ($(this).val() == '0') {
+                $('#s-dynamic-field-group').hide();
+            } else {
+                $('#s-dynamic-field-group').show();
+                d.trigger('dynamic_settings');
+            }
+        });
+    });
+</script>
+{$smarty.capture.js}

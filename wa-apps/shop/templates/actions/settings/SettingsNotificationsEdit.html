@@ -1,0 +1,94 @@
+<div class="float-right">
+    <ul class="menu-h">
+        <li><a id="notification-delete" data-id="{$n.id}" href="#"><i class="icon16 delete"></i>[`Delete notification`]</a></li>
+    </ul>
+    <script type="text/javascript">
+        $("#notification-delete").click(function () {
+            var id = $(this).attr('data-id');
+            var dialog = $('#s-settings-confirm-delete');   // html-code of dialog is located on main template
+            if (dialog.parent().get(0) != document.body) {
+                $(document.body).append(dialog);
+            }
+            dialog.waDialog({
+                disableButtonsOnSubmit: true,
+                onLoad: function() {
+                    $(this).find('form').find('input[name=id]').val(id);
+                },
+                onSubmit: function(dialog) {
+                    var form = $(this);
+                    var loading_icon = dialog.find('.loading').show();
+                    $.post(form.attr('action'), form.serialize(), function (response) {
+                        if (response.status == 'ok') {
+                            $("#notification-" + id).remove();
+                            loading_icon.hide();
+                            dialog.trigger('close');
+                            $.settings.notificationsAction('');
+                        }
+                    }, "json");
+                    return false;
+                }
+            });
+            return false;
+        });
+    </script>
+</div>
+
+<h1>
+    {$n.name}
+    <span class="hint"><i class="icon16 {$transports[$n.transport].icon}"></i>{$transports[$n.transport].name}</span>
+</h1>
+
+<form id="notification-form" method="post" action="?module=settings&action=notificationsSave&id={$n.id}">
+<div class="fields form">
+
+    <!-- notification content (transport-dependent) -->
+    <div class="field-group">
+        <div class="field">
+            <div class="name">[`Event`]</div>
+            <div class="value no-shift">
+                {$events[$n.event].name}
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">[`Notification name`]</div>
+            <div class="value">
+                <input id="n-name" name="data[name]" type="text" class="bold" value="{$n.name}">
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">[`Enabled`]</div>
+            <div class="value">
+                <input type="checkbox" name="data[status]" value="1" {if $n.status}checked{/if}>
+            </div>
+        </div>
+    </div>
+            
+    <div class="field-group">
+        <div class="field">
+            <div class="name">[`Order source`]</div>
+            <div class="value no-shift">
+                <select name="data[source]">
+                    <option value="" {if !$n.source}selected{/if}>[`All order sources`]</option>
+                    <option value="backend" {if $n.source == 'backend'}selected{/if}>[`Backend orders only`]</option>
+                    {foreach $routes as $domain => $domain_routes}
+                        {foreach $domain_routes as $route}
+                            {$url = $domain|cat:"/":$route.url}
+                            <option {if $url == $n.source}selected{/if} value="{$url}">{$url}</option>
+                        {/foreach}
+                    {/foreach}
+                </select>
+                <p class="hint">[`Notification will be sent only for orders placed via the selected source.`]</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="field-group">
+        {include file="templates/actions/settings/SettingsNotifications.`$n.transport`.html" inline}
+    </div>
+
+    {include file="templates/actions/settings/SettingsNotificationsHelp.html" inline}
+
+</div>
+</form>
+
+<div class="clear-left"></div>

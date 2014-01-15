@@ -1,0 +1,91 @@
+<div class="blank s-settings-form">
+    {if $no_weight}
+        <div class="block double-padded s-banner-error">
+            <i class="icon10 exclamation"></i>
+            {sprintf('[`Most shipping rate calculation modules require <strong>product weight</strong> information which is taken from a product feature with the <code>%s</code> identifier.`]', 'weight')}
+            [`You don't have such feature in your online store setup.`]
+            {sprintf('[`Add it in the <a href="%s">Product types &amp; Features</a> screen to make.`]', '?action=settings#/features/')}
+        </div>
+    {/if}
+
+    <div class="block double-padded">
+
+        <div class="float-right">
+            <ul class="menu-h with-icons s-add-shipping-method" id="s-shipping-menu">
+                <li>
+                    <a href="#/shipping/" class="inline-link js-action"><i class="icon16 add"></i><b><i>[`Add shipping option`]</i></b><i class="icon16 darr"></i></a>
+                    <ul class="menu-v with-icons">
+                        {foreach $plugins as $id => $plugin}
+                        <li>
+                            <a href="#/shipping/plugin/add/{$id}/">
+                            {if empty($plugin.icon.16)}{shopHelper::getIcon('ss shipping-bw')}{else}{shopHelper::getIcon($plugin.icon.16)}{/if}{$plugin.name|escape}
+                            <span class="hint">{strip_tags($plugin.description)}</span>
+                            </a>
+
+                        </li>
+                        {/foreach}
+                        {if !empty($installer)}
+                        <li class="bordered-top" style="padding-top: 18px; padding-bottom: 18px;">
+                            <a href="#/shipping/plugins/" style="text-align: center;"><i class="icon16 add"></i>[`Browse shipping plugins...`]</a>
+                        </li>
+                        {/if}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <h1 class="js-bread-crumbs">[`Shipping`]</h1>
+
+        <br>
+        <table class="zebra" id="s-settings-shipping">
+            <tbody>
+            {foreach $instances as $id => $plugin}
+
+            <tr data-id="{$id}">
+                <td class="min-width"><i class="icon16 sort"></i></td>
+                <td class="min-width">
+                    {if !empty($plugin.logo)}
+                        <img src="{$plugin.logo}">
+                    {elseif !empty($plugin.img)}
+                        <img src="{$plugin.img}">
+                    {/if}
+                </td>
+                <td>
+                    <h3 class="large{if empty($plugin.status)} gray{/if}">
+                       {$plugin.name|escape}
+                       {if empty($plugin.status)}([`disabled`]){/if}
+                    </h3>
+                    <p class="hint">{strip_tags($plugin.description)}</p>
+                </td>
+                <td>
+                    <ul class="menu-h with-icons">
+                        <li><a href="#/shipping/plugin/setup/{$id}/" class="nowrap"><i class="icon16 settings"></i>[`Configure`]</a></li>
+                        <li><a href="#/shipping/plugin/delete/{$id}/" class="nowrap js-action js-confirm" data-confirm-text="[`This will permanently delete this shipping option. Are you sure?`]"><i class="icon16 delete"></i>[`Delete`]</a></li>
+                    </ul>
+                </td>
+
+            </tr>
+            {foreachelse}
+            <tr>
+                <td>
+                    <em class="gray">[`No shipping options are defined.`]</em>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+
+    <div id="s-settings-shipping-setup" class="fields form"></div>
+
+    </div>
+    <div class="clear-both"></div>
+</div>
+
+
+<script type="text/javascript" src="{$wa_app_static_url}js/settings/shipping.js?{$wa->version()}"></script>
+<script type="text/javascript">
+document.title = '{"[`Shipping`]"|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+if(typeof($)!='undefined') {
+$.settings.shippingInit();
+}
+</script>

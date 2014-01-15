@@ -1,0 +1,30 @@
+<?php
+
+class shopCouponModel extends waModel
+{
+    //
+    // Clarification about table columns.
+    // * `type` can be a currency iso-3 code, or '%', or '$FS'. Latter means "Free Shipping".
+    // * `limit` is max number of uses for the code. NULL means unlimited use.
+    // * `used` is how many times the code has already been used.
+    //   Therefore, (`limit` IS NOT NULL) AND (`used` >= `limit`) means the code is inactive.
+    // * `expire_datetime` is the moment when coupon stops working. NULL means no time limit.
+    //   Therefore, NOW() > `expire_datetime` means the code is inactive.
+    //
+    protected $table = 'shop_coupon';
+
+    public function useOne($id)
+    {
+        $sql = "UPDATE {$this->table} SET used = used + 1 WHERE id = :id";
+        $this->exec($sql, array('id' => $id));
+    }
+
+    public function countActive()
+    {
+        $sql = "SELECT COUNT(*) FROM {$this->table}
+                WHERE ((`limit` IS NULL) OR (`used` < `limit`))
+                    AND ((`expire_datetime` IS NULL) OR (`expire_datetime` > ?))";
+        return (int) $this->query($sql, date('Y-m-d H:i:s'))->fetchField();
+    }
+}
+
