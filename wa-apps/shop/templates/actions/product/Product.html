@@ -673,7 +673,7 @@
                                 <tr {if count($product.skus) < 2} style="display:none;"{/if}>
                                     <th class="s-sku-sort min-width"{if count($product.skus) <= 1} style="display:none;"{/if}>&nbsp;</th>
                                     <th>&nbsp;</th>
-                                    <th class="s-name">[`SKU name`]</th><!--VADIM CODE-->
+                                    <th class="s-name"{if count($product.skus) <= 1} style="display:none;"{/if}>[`SKU name`]</th>
                                     <th>[`Price`]</th>
                                     <th>[`In stock`]</th>
                                     <th colspan="2"></th>
@@ -699,7 +699,7 @@
                                         <td class="s-sku">
                                             <input type="text" name="skus[{$sku_id}][sku]" value="{$sku.sku|escape}" placeholder="[`SKU code`]" title="[`Any text code or label identifying this product, e.g. model or serial number`]">
                                         </td>
-                                        <td class="s-name"><!--VADIM CODE-->
+                                        <td class="s-name"{if $sku@total <= 1} style="display: none;"{/if}>
                                             <input type="text" name="skus[{$sku_id}][name]" value="{$sku.name|escape}" class="bold long{if empty($sku.available)} grey{/if}" placeholder="[`SKU name`]" title="[`SKU name displayed in the storefront`]">
                                         </td>
                                         <td class="s-price">
