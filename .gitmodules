@@ -1,0 +1,3 @@
+[submodule "wa-apps/shop"]
+	path = wa-apps/shop
+	url = git@github.com:slowpokes/aromacode_shop.git
