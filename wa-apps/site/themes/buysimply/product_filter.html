@@ -1,0 +1,244 @@
+<!-- filtering by product features --> 
+{if isset($category.params.max_price)}
+{$currency_filter = $wa->shop->currency()}
+    {foreach $currencies as $cf}
+        {if $cf.code == $currency_filter}
+            {$filter_rate=$cf.rate}
+            {$math_max_price_filter = $category.params.max_price / $filter_rate}
+            {$max_price_filter =ceil($math_max_price_filter)}
+        {/if}
+    {/foreach}
+
+{if isset($category.params.min_price)}
+        {$math_min_price_filter = $category.params.min_price / $filter_rate}
+        {$min_price_filter = floor($math_min_price_filter)}
+    {else}
+    {$min_price_filter = 0}
+    {/if}
+    {$coef = ceil(($max_price_filter - $min_price_filter)/100)}
+    <br />
+{/if}
+
+{if !empty($theme_settings.display_type_filter) && $theme_settings.display_type_filter == 'new'}
+{$shop_filters = waRequest::cookie('shop_filters', '', waRequest::TYPE_STRING)}
+<div class="filters2">
+    <div class="caption acapitalize">Фильтр товаров</div>
+    <form method="get" action="{$wa->currentUrl()}">
+    {foreach $filters as $fid => $filter}
+        <div{if $fid == 'price'} class="content_price"{/if}>
+        {if $fid == 'price'}
+            {$c = $wa->shop->currency(true)}
+            <b data-feature="{$fid}"><span>[`Price`]</span></b>
+            <p>
+            [`from`] <input type="text" name="price_min" 
+            {if $wa->get('price_min')}
+            value="{(int)$wa->get('price_min')}"
+            {elseif isset($min_price_filter)}
+            value="{$min_price_filter}"
+            {/if}
+            
+            {if isset($min_price_filter)}
+            placeholder="{$min_price_filter}"
+            {else}
+            placeholder="0"
+            {/if}
+            >
+            [`to`] <input type="text" name="price_max" 
+            
+            {if $wa->get('price_max')}
+            value="{(int)$wa->get('price_max')}"
+            {elseif isset($max_price_filter)}
+            value="{$max_price_filter}"
+            {/if}
+            
+            {if isset($max_price_filter)}
+            placeholder="{$max_price_filter}"
+            {else}
+            placeholder="∞"
+            {/if}
+            > 
+            <span class="filter-price">{if $c.sign == 'руб.'}<span class="ruble" style="display:inline;">Р </span>{else}{$c.sign}{/if}</span>
+            </p>
+        {else}
+            <b data-feature="{$fid}"><span>{$filter.name|escape}</span><i class="{if in_array($fid, explode(',', $shop_filters))}icon-caret-up{else}icon-caret-down{/if}"></i></b>
+            <p{if in_array($fid, explode(',', $shop_filters))} class="active"{else} style="display: none;"{/if}>
+            {if $filter.type == 'boolean'}
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code)} checked{/if} value="1"> [`Yes`]</label><br>
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code) === '0'} checked{/if} value="0"> [`No`]</label><br>
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code, '') === ''} checked{/if} value=""> [`Any`]</label><br>
+            {else}
+            {foreach $filter.values as $v_id => $v}
+                <label><input type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if} value="{$v_id}"> {$v}</label><br>
+            {/foreach}
+            {/if}
+            </p>
+        {/if}
+        </div>
+    {/foreach}
+        {if $wa->get('sort')}<input type="hidden" name="sort" value="{$wa->get('sort')|escape}">{/if}
+        {if $wa->get('order')}<input type="hidden" name="order" value="{$wa->get('order')|escape}">{/if}
+        <div class="content"><input type="submit" value="[`Filter products`]"></div>
+        <div class="reset_filter"><a href="#">Сбросить</a></div>
+    </form>
+
+  <link type="text/css" rel="stylesheet" href="/wa-content/css/jquery-ui/base/jquery.ui.slider.css">
+<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.mouse.min.js"></script>
+<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.slider.min.js"></script>  
+    <script>
+    var param = window.location.search, global = false;
+    if(param.length){
+        var param_a = param.replace(/\?/, '').split('&');
+        $.each(param_a, function( index, value ) {
+            if(value.replace(/^.*=/, '') != '') global = true;        
+        });
+    }
+    if(global){ $('.reset_filter').show(); }else{ $('.reset_filter').hide(); }
+    $('.reset_filter a').attr('href', location.href.replace(/\?.*/, ''));
+    $('.filters2 b').not('[data-feature="price"]').click(function(){
+        var p = $(this).next('p');
+        if(p.hasClass('active')){
+            p.removeClass('active').slideUp('slow');
+            $(this).find('i').removeClass('icon-caret-up').addClass('icon-caret-down');
+        }else{
+            p.addClass('active').slideDown('slow');
+            $(this).find('i').removeClass('icon-caret-down').addClass('icon-caret-up');
+        }
+        
+        var filters = $.cookie('shop_filters');
+        if (filters) { filters = filters.split(','); } else { filters = []; }
+        
+        var i = $.inArray($(this).data('feature') + '', filters);
+        if (i != -1) { filters.splice(i, 1) } else { filters[filters.length] = $(this).data('feature'); }
+        
+        if(filters){ $.cookie('shop_filters', filters.join(','), { expires: 30, path: '/'}); } else { $.cookie('shop_filters', null); }
+    });
+    
+    
+ {if isset($category.params.max_price)}   
+    $.wa.wmfilter = { 
+    	price_min: {$min_price_filter},
+    	price_max: {$max_price_filter},
+    	price_values: [{$min_price_filter},{$max_price_filter}]
+    };
+    
+    if ($('.filters2 input[name=price_min]').length) {
+        $('.filters2 input[name=price_min]').closest('div').append('<div class="price-slider"></div>');
+        $(".price-slider").slider({
+            range: true,
+            min: $.wa.wmfilter.price_min,
+            max: $.wa.wmfilter.price_max,
+            values: $.wa.wmfilter.price_values,
+            
+            slide: function( event, ui ) {
+                var v = ui.values[0] == $(this).slider('option', 'min') ? '' : ui.values[0];
+                $(this).closest('form').find('input[name="price_min"]').val(v ? Math.round(v/{$coef}) * {$coef} : $.wa.wmfilter.price_min);
+                v = ui.values[1] == $(this).slider('option', 'max') ? '' : ui.values[1];
+                $(this).closest('form').find('input[name="price_max"]').val(v ? Math.round(v/{$coef}) * {$coef} : $.wa.wmfilter.price_max);
+            },
+            change: function (event, ui) {
+                $.wa.wmfilter.price_values = ui.values;
+                $(this).closest('form').find('input[name="price_min"]').change();
+            }
+        });
+        
+        /*$(".price-slider").prepend('<span class="hint left">' + $.wa.wmfilter.price_min_str + '</span>' +
+            '<span class="hint right">' + $.wa.wmfilter.price_max_str + '</span>');*/
+        $(".price-slider>a:first").addClass('left');
+
+        $.fn.onKeyFinish = function (defer, callback) {
+            return this.each(function () {
+                var that = $(this);
+                that.currentValue = that.val();
+                that.interval = null;
+                $(this).off('keyup.wmfilter');
+                $(this).on('keyup.wmfilter', function (e) {
+                    clearInterval(that.interval);
+                    if (that.currentValue != that.val()) {
+                        that.interval = setInterval(function () {
+                            clearInterval(that.interval);
+                            callback.call(that);
+                            that.currentValue = that.val();
+                        }, defer);
+                    }
+                });
+            });
+        };
+        $(".filters2 input[name=price_min],.filters2 input[name=price_max]").onKeyFinish(200, function () {
+            var min = parseFloat($(".filters2 input[name=price_min]").val());
+            if (!min) {
+                min = $(".price-slider").slider('option', 'min');
+            }
+            var max = parseFloat($(".filters2 input[name=price_max]").val());
+            if (!max) {
+                max = $(".price-slider").slider('option', 'max');
+            }
+            if (max >= min) {
+                $(".price-slider").slider('option', 'values', [min, max]);
+            }
+        });
+    }
+{/if}
+    </script>
+</div>
+{else}
+<script type="text/javascript" src="{$wa_active_theme_url}filters.js"></script><!-- js -->
+
+    <div class="filters">
+        <form method="get" action="">
+        <p>
+          {$c = $wa->shop->currency(true)}
+              <span>[`Price`]</span>
+              
+              
+             <input type="text" name="price_min" 
+            {if $wa->get('price_min')}
+            value="{(int)$wa->get('price_min')}"
+            {elseif isset($min_price_filter)}
+            value="{$min_price_filter}"
+            {/if}
+            
+            {if isset($min_price_filter)}
+            placeholder="{$min_price_filter}"
+            {else}
+            placeholder="0"
+            {/if}
+            >
+            <input type="text" name="price_max" 
+            
+            {if $wa->get('price_max')}
+            value="{(int)$wa->get('price_max')}"
+            {elseif isset($max_price_filter)}
+            value="{$max_price_filter}"
+            {/if}
+            
+            {if isset($max_price_filter)}
+            placeholder="{$max_price_filter}"
+            {else}
+            placeholder="∞"
+            {/if}
+            > 
+              	<span class="filter-price" style="display:inline">{if $c.sign == 'руб.'}<span class="ruble" style="display:inline;">Р </span>{else}{$c.sign}{/if}</span>
+        </p>
+        <p class="filters-swith">Раскрыть фильтр<i class="icon-angle-down"></i></p>
+        <div class="filters-popup">
+        {foreach $filters as $fid => $filter}                      
+            {if $fid != 'price'} 
+          	<p>
+                <span>{$filter.name|escape}</span>
+                {foreach $filter.values as $v_id => $v}
+                    <label>
+                        <input type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked
+
+{/if} value="{$v_id}"> {$v}
+                    </label><br>
+                {/foreach}
+            </p>  
+            {/if}            
+        {/foreach}
+        </div>  
+            <input type="submit" value="Применить"> <!--[`Filter products`]-->
+        </form>
+    </div>
+{/if}

@@ -1,0 +1,74 @@
+{include file="templates/actions/campaigns/CampaignsSidebar.html"}
+<div class="content right200px"><div class="shadowed">
+<div class="m-envelope-stripes-1"><div class="m-envelope-stripes-2">
+<div class="block m-core-header">
+    <a href="#/campaigns/archive/" class="no-underline"><i class="icon10 larr"></i>[`Sent`]</a>
+</div>
+
+<div class="block double-padded border-box{if $campaign.status != mailerMessageModel::STATUS_SENT} sending{/if}" id="report-wrapper" style="width:100%;float:left;">
+    <h1>
+        {ifempty($campaign.subject, "[`<no subject>`]")|escape}
+    </h1>
+
+    {if $campaign.status == mailerMessageModel::STATUS_SENT}
+        <p>
+            [`Sent:`] {waDateTime::format('humandatetime', $campaign.finished_datetime)}
+        </p>
+    {/if}
+
+    <div class="fields">
+        <div class="field">
+            <div class="name">[`Sender`]:</div>
+            <div class="value">{$campaign.from_name|escape} &lt;{$campaign.from_email|escape}&gt;</div>
+        </div>
+        <div class="field">
+            <div class="name">[`Return-path`]:</div>
+            <div class="value">
+                {if $campaign.return_path}
+                    {$campaign.return_path|escape}
+                {else}
+                    [`Not specified`]
+                {/if}
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">[`Sending speed:`]</div>
+            <div class="value">
+                {if empty($params.speed_limit)}
+                    [`No limit`]
+                {else}
+                    {$params.speed_limit} [`letters per hour`]
+                {/if}
+            </div>
+        </div>
+        {if empty($params.google_analytics)}
+            <div class="field">
+                <div class="name">[`Google Analytics`]</div>
+                <div class="value">[`Disabled`]</div>
+            </div>
+        {else}
+            <div class="field">
+                <div class="name">[`Google Analytics`]</div>
+                <div class="value">[`Enabled`]</div>
+            </div>
+            <div class="field">
+                <div class="name">[`Source (utm_source):`]</div>
+                <div class="value">{ifempty($params.google_analytics_utm_source)|escape}</div>
+            </div>
+            <div class="field">
+                <div class="name">[`Medium (utm_medium):`]</div>
+                <div class="value">{ifempty($params.google_analytics_utm_medium)|escape}</div>
+            </div>
+            <div class="field">
+                <div class="name">[`Campaign (utm_campaign):`]</div>
+                <div class="value">{ifempty($params.google_analytics_utm_campaign)|escape}</div>
+            </div>
+        {/if}
+    </div>
+</div>
+<div class="clear-both"></div>
+
+</div></div>{* div.m-envelope-stripes-1, div.m-envelope-stripes-2 *}
+</div></div>{* div.content.right200px, div.shadowed *}
+
+

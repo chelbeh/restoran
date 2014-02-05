@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: mailer\n"
+"POT-Creation-Date: 2012-01-27 11:52+0400\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: mailer\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en_US\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: /wa-apps/mailer/lib/config/app.php:4
+msgid "No <tt>cron</tt> jobs, required for long or scheduled automated mailings, have been set up for your account."
+msgstr "No <tt>cron</tt> jobs, required for long mailings, have been set up for your account."
+
+msgid "Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “Send” button to complete the email sending process."
+msgstr "<br>Important note: Without <tt>cron</tt> jobs set up, do not close your browser window after clicking on the “Send” button to complete the email sending process."
+
+msgid "You can edit subject to advise your recipients this is just a test."
+msgstr "Edit the subject to show the recipients that this is a test message."
+
+msgid "Delivering errors"
+msgstr "Delivery errors"
+
+msgid "not available"
+msgstr "no data"
+
+msgid "Options"
+msgstr "Parameters"
+
+msgid "No one unsubscribed yet."
+msgstr "No unsubscribed addresses yet."
+
+msgid "Email addresses in this list have a permanent error returned by recipient mail servers."
+msgstr "Previous attempts to send messages to these email addresses have resulted in a permanent error returned by the recipient server."
+
+msgid "These addresses either do not exist, or can not receive your message by any reason."
+msgstr "The corresponding mail boxes either do not exist, or cannot receive your message by any reason."
+
+msgid "Attempts to repeat sending messages to these addresses may cause banning of your sender server."
+msgstr "Further attempts to send messages to these addresses may result in blacklisting of your mail server."
+
+msgid "No one subscribed yet."
+msgstr "No subscribed addresses yet."
+
+msgid "http://www.webasyst.com/framework/docs/server/cron/"
+msgstr "http://www.webasyst.com/developers/docs/tips/cron/"
+

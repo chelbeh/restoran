@@ -1,0 +1,220 @@
+{if isset($sender.id)}
+    <h2>[`Edit sender`]</h2>
+{else}
+    <h2>[`Add a new sender`]</h2>
+{/if}
+
+<form id="form-senders" action="?module=senders&action=save" method="post">
+{if isset($sender.id)}<input type="hidden" name="id" value="{$sender.id}" />{/if}
+<div class="block fields form">
+    <div class="field-group">
+        <div class="field">
+            <div class="name">[`Name`]</div>
+            <div class="value">
+                <input type="text" name="data[name]" value="{if isset($sender.name)}{$sender.name}{/if}" />
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">[`Email`]</div>
+            <div class="value">
+                <input type="text" name="data[email]" value="{if isset($sender.email)}{$sender.email}{/if}" />
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">
+                [`Reply-To Email`]<br>
+            </div>
+            <div class="value">
+                <input type="text" name="params[reply_to]" value="{ifset($params.reply_to)}" />
+                <br><span class="hint">[`If you leave this field empty, replies will come to the main sender address specified above.`]</span>
+            </div>
+        </div>
+    </div>
+    <div class="field-group">
+        <div class="field">
+            <div class="name">[`Transport`]</div>
+            <div class="value">
+                <select id="transport-type" name="params[type]">
+                    {foreach $sender_types as $id => $s}
+                        <option value="{$id}"{if $params.type==$id} selected{/if}>
+                            {if is_string($s)}
+                                {$s}
+                            {else}
+                                {ifset($s.name)}
+                            {/if}
+                        </option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    {if isset($sender_types.mail)}
+        <div id="mail-params"{if $params.type != 'mail'} style="display:none"{/if} class="field-group transport-params">
+            <div class="field">
+                <div class="name">[`Options`]</div>
+                <div class="value">
+                    <input type="text" placeholder="-f%s" name="params[options]" />
+                </div>
+            </div>
+        </div>
+    {/if}
+
+    {if isset($sender_types.smtp)}
+        <div id="smtp-params"{if $params.type != 'smtp'} style="display:none"{/if} class="field-group transport-params">
+            <div class="field">
+                <div class="name">[`Server`]</div>
+                <div class="value">
+                    <input type="text" name="params[server]" value="{if isset($params.server)}{$params.server}{/if}" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`Port`]</div>
+                <div class="value">
+                    <input type="text" placeholder="25" name="params[port]" value="{if isset($params.port)}{$params.port}{/if}" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`Login`]</div>
+                <div class="value">
+                    <input type="text" name="params[login]" value="{if isset($params.login)}{$params.login}{/if}" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`Password`]</div>
+                <div class="value">
+                    <input type="password" name="params[password]" value="{if isset($params.password)}{$params.password}{/if}" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`Encryption`]</div>
+                <div class="value">
+                    <select name="params[encryption]">
+                         <option value="">[`None`]</option>
+                         <option {if isset($params.encryption) && $params.encryption == 'ssl'}selected{/if} value="ssl">[`SSL/TLS`]</option>
+                         <option {if isset($params.encryption) && $params.encryption == 'tls'}selected{/if} value="tls">[`STARTTLS`]</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    {/if}
+
+    {if isset($sender_types.sendmail)}
+        <div id="sendmail-params"{if $params.type != 'sendmail'} style="display:none"{/if} class="field-group transport-params">
+            <div class="field">
+                <div class="name">[`Command`]</div>
+                <div class="value">
+                    <input type="text" placeholder="/usr/sbin/sendmail -bs" name="params[command]" value="{ifset($params.command)}" />
+                </div>
+            </div>
+        </div>
+    {/if}
+
+    {if isset($sender_types.test)}
+        <div id="test-params"{if $params.type != 'test'} style="display:none"{/if} class="field-group transport-params">
+            <div class="field">
+                <div class="bold red value">[`Note: mail will be saved in wa-log/mailer/ and will NOT be sent to recipients.`]</div>
+            </div>
+        </div>
+    {/if}
+
+    {foreach $sender_types as $id => $s}
+        {if !is_string($s) && isset($s.content)}
+            <div id="{$id}-params"{if $params.type != $id} style="display:none"{/if} class="field-group transport-params">
+                {$s.content}
+            </div>
+        {/if}
+    {/foreach}
+
+    <div class="hidden field">
+        <span class="errormsg"></span>
+    </div>
+</div>
+
+<div class="hidden buttons">
+    {if $show_delete_button}
+        <a href="javascript:void(0)" class="red hint delete-link float-right">[`Delete this sender`]</a>
+    {/if}
+
+    <input type="submit" class="button green" value="{if isset($sender.id)}[`Save`]{else}[`Add`]{/if}" />
+    <span> [`or`] </span>
+    <a href="#/senders/" class="cancel-link">[`cancel`]</a>
+</div>
+
+</form>
+
+<script>(function() { "use strict";
+    var form = $('#form-senders');
+
+    $("#transport-type").change(function () {
+        form.find('em.errormsg').remove();
+        form.find('.errormsg').parent().hide();
+        form.find('.error').removeClass('error');
+        $(".transport-params").hide();
+        $(".transport-params").find('input').attr('disabled', 'disabled');
+        $("#" + $(this).val() + "-params").show().find('input').removeAttr('disabled');
+    });
+
+    // Set up dialog buttons
+    var buttons = form.find('.buttons').children();
+    form.parents('.dialog').find('.dialog-buttons-gradient').empty().append(buttons);
+
+    // Cancel link closes dialog
+    buttons.filter('.cancel-link').click(function() {
+        form.parents('.dialog').trigger('close').empty().remove();
+        return false;
+    });
+
+    // Save button
+    buttons.filter('input').click(function() {
+        var loading = $('<i class="icon16 loading"></i>');
+        form.parents('.dialog').find('.dialog-buttons-gradient').append(loading);
+        form.find('em.errormsg').remove();
+        form.find('.errormsg').parent().hide();
+        form.find('.error').removeClass('error');
+
+        var port_input = form.find('[name="params[port]"]');
+        if (!$.trim(port_input.val())) {
+            port_input.val(port_input.attr('placeholder'));
+        }
+
+        $.post(form.attr('action'), form.serialize(), function(r) {
+            if (r.errors) {
+                loading.remove();
+                var other_errors = form.find('.errormsg:not(em)').empty().parent().show(), input;
+                for (var fld in r.errors) {
+                    if (r.errors.hasOwnProperty(fld)) {
+                        // Note: r.errors[fld] being null means that json_encode() failed to process a message
+                        // in other than UTF8 encoding. Most probably this is an error checking SMTP mailbox.
+                        input = $('[name="'+fld+'"]');
+                        if (input.length <= 0) {
+                            other_errors.append($('<em class="errormsg"></em>').text(r.errors[fld]||"[`Unknown error`]"));
+                            continue;
+                        }
+                        input.addClass('error').parent().append($('<em class="errormsg"></em>').text(r.errors[fld]||"[`Unknown error`]"));
+                    }
+                }
+            } else {
+                form.parents('.dialog').trigger('close').empty().remove();
+                {if empty($sender.id)}
+                    $.storage.set('mailer/settings/new_sender_id', ''+r.data);
+                {/if}
+                $.wa.mailer.redispatch();
+            }
+        }, 'json');
+    });
+
+    {if isset($sender.id)}
+        // Delete button
+        buttons.filter('.delete-link').click(function() {
+            if (!confirm("[`Do you really want to delete this sender?`]")) {
+                return;
+            }
+            $(this).attr('disabled', true).html('<i class="icon16 loading"></i>');
+            $.post('?module=senders&action=delete', { id: "{$sender.id}" }, function() {
+                form.parents('.dialog').trigger('close').empty().remove();
+                $.wa.mailer.redispatch();
+            });
+        });
+    {/if}
+})();</script>

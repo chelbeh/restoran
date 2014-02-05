@@ -1,0 +1,169 @@
+<!-- filtering by product features -->
+{if isset($filters) && !empty($filters)}
+{include file="product_filter.html"}
+{/if}
+	<!-- eof filtering by product features -->  
+
+	<!-- category tree -->
+	{if isset($product)}
+	{if $product.categories}
+       {foreach $product.categories as $prd}
+            {if $prd@first}{$category.id = $prd.id}{/if}
+       {/foreach}            
+    {/if}
+    {/if}
+
+	{if $categories = $wa->shop->categories()}
+
+{if !$wa->isMobile() && $top_menu.type == 1 && $top_menu.content != 'category_tree'}
+  <div id="category-tree-screen" class="category-left-pull"> 
+    {if isset($category)}{$cid=$category.id}{else}{$cid=null}{/if}
+    {wa_print_tree tree=$wa->shop->categories(0,2,true) selected=$cid unfolded=true class="category-tree dhtml" elem='<a 
+
+href=":url">:name</a>'}
+</div>    
+{elseif !$wa->isMobile() && $top_menu.type == 2 && $top_menu.content != 'category_tree'}
+    
+  <div id="category-tree-screen" class="category-left-popup type2"> 
+{if isset($category)}{$cid=$category.id}{else}{$cid=null}{/if}
+    {wa_print_tree tree=$wa->shop->categories(0,2,true) selected=$cid unfolded=true class="category-tree dhtml" elem='<a 
+
+href=":url">:name</a>'}
+    
+    
+</div>
+{elseif !$wa->isMobile() && $top_menu.type == 4 && $top_menu.content != 'category_tree'}  
+    
+    <div id="category-tree-screen" class="category-left-popup type4">
+   {if isset($category)}{$cid=$category.id}{else}{$cid=null}{/if}
+    {$tree=$wa->shop->categories(0,2,true)}    
+    <ul class="menu-v category-tree">      
+      {strip}{foreach $tree as $t}
+    	<li>
+          <a {if $cid == $t.id}class="selected"{/if} href="{$t.url}">{$t.name}</a>
+          {if $t.childs}
+          <ul class="menu-v">
+            {$con = 0}
+            {$arr = array()}
+            {foreach $t.childs as $t1}            	
+            	{$arr[count($arr)] = $t1}
+            	{foreach $t1.childs as $t2}
+            		{$arr[count($arr)] = $t2}
+            	{/foreach}
+            {/foreach}
+            {$con = ceil(count($arr)/3)}
+                        
+            {foreach $arr as $a}  
+              {if $a@first || $a@index is div by $con}<li>{/if}
+           
+            <a class="level{$a.depth}{if $cid == $a.id} selected{/if}{if ($a.depth == '1') && !$a@first} offset-top{/if}" href="{$a.url}" >
+
+{$a.name}</a> 
+           
+              {if $a@last || ($a@index+1) is div by $con}</li>{/if}
+            {/foreach}             
+          </ul>
+          {/if}
+      </li>
+      {/foreach}{/strip}
+    </ul>
+    
+      
+      <script>
+		$('.type4 .selected').parents().each(function(){ if ($(this).is('.type4>ul>li')) $(this).children('a').addClass('selected'); 
+
+});
+    </script>
+</div>
+{/if}
+
+
+
+
+{*для адаптивного дизайна*}
+  <script type="text/javascript" src="{$wa_theme_url}category.js"></script><!-- js -->
+  <div id="category-tree"{if $top_menu && $top_menu.content != 'category_tree' && $top_menu.type == 3} class="media-all"{/if}>
+    {if isset($category)}{$cid=$category.id}{else}{$cid=null}{/if}
+    {wa_print_tree tree=$wa->shop->categories(0,null,true) selected=$cid unfolded=true class="category-tree-s dhtml" elem='<a href=":url">:name</a>'}
+
+<script type="text/javascript">
+          	$('ul.category-tree-s').prepend('<li class="catalog">Категории</li>');
+          	$('ul.category-tree').prepend('<li class="catalog">Категории</li>');
+          	$('#category-tree ul.category-tree-s.dhtml').hide();                     
+</script>
+	</div>
+{*для адаптивного дизайна*}
+    <!-- eof category tree -->
+    {*11-11-13 перенесено завершение условия*}
+{/if}
+{*11-11-13*}
+
+
+{*21.12.2013*}
+{if empty($theme_settings.info_block) || $theme_settings.info_block == 2 }
+{$info_block = 1}
+{/if}
+{if !empty($theme_settings.info_block) && $theme_settings.info_block == 1 && $wa_app == 'shop'}
+{$info_block = 1}
+{/if}
+<!-- shop page -->
+{if $info_block == 1}
+
+
+    
+    
+{if !empty($theme_settings.top_menu_source) && $theme_settings.top_menu_source == 'site'}
+    {$shop_pages=$wa->shop->pages()}
+    {if isset($page_id)  && $wa_app == 'shop'}{$blid = $page_id}{else}{$blid = null}{/if}
+{else}
+    {$shop_pages=$wa->site->pages()}
+    {if isset($page_id)  && $wa_app == 'site'}{$blid = $page_id}{else}{$blid = null}{/if}
+{/if}    
+ 
+    
+    {if !empty($shop_pages)}
+	<div id="shop-pages">
+	<ul>
+      <li class="link-caption"><span>Информация</span></li>
+
+
+
+<ul class="pages-navig-pull">{strip}
+{foreach $shop_pages as $llm}
+{if !isset($llm.menu_display)}
+<li{if $llm.id==$blid} class="selected"{/if}><a href="{$llm.url}">{$llm.name}</a>
+{if $llm.childs}
+    <ul>
+    {foreach $llm.childs as $llmc}
+    {if !isset($llmc.menu_display)}
+    <li{if $llmc.id==$blid} class="selected"{/if}><a href="{$llmc.url}">{$llmc.name}</a>
+    
+    {if $llmc.childs}
+        <ul>
+        {foreach $llmc.childs as $llmcc}
+        {if !isset($llmcc.menu_display)}
+        <li{if $llmcc.id==$blid} class="selected"{/if}><a href="{$llmcc.url}">{$llmcc.name}</a></li>
+        {/if}
+        {/foreach}
+        </ul>
+    {/if}
+    
+    </li>
+    {/if}
+    {/foreach}
+    </ul>
+{/if}
+</li>
+{/if}
+{/foreach}
+</ul>
+
+    </ul>
+	</div>
+    {/if}
+
+
+
+    {/if}
+	<!-- eof shop page -->
+{*end 21.12.2013*} 

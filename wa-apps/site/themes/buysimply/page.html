@@ -1,0 +1,19 @@
+<!-- navigation breadcrumbs -->
+    {*21.12.2013*}
+    {if isset($breadcrumbs)}
+        <div class="breadcrumbs">
+            <a href="{$wa_url}">Главная</a>
+            {if $breadcrumbs}
+                {foreach $breadcrumbs as $breadcrumb}
+                    » <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
+                {/foreach}
+                
+            {/if}
+             » {$page.name|escape} 
+        </div>
+    {/if}
+ {*21.12.2013*}
+<div id="page" role="main">
+	<h1>{$page.title}</h1>
+	{$page.content}
+</div>

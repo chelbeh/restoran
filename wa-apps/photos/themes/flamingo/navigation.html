@@ -1,0 +1,6 @@
+<ul>
+	<li class="home"><a href="/"><i class="icon-home"></i></a></li>
+	{foreach $wa->apps() as $pages}
+	<li><a href="{$pages.url}"{if $pages.id == $wa_app} class="selected"{/if}>{$pages.name}</a></li>
+	{/foreach}
+</ul>

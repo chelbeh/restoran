@@ -1,0 +1,15 @@
+{if $all_selected_id}
+    <input type="hidden" name="remove_ids[]" value="{$all_selected_id}">
+{/if}
+{if $contacts_count}
+    <ul class="menu-v compact with-icons m-checkbox-menu zebra" style="max-width:500px;">
+        <li><label style="margin-left:2px;">
+            <span class="count">{$contacts_count}</span>
+            <input type="checkbox" name="add_values[]" value="0"{if $all_selected_id} checked{/if}>
+            [`All subscribers`]
+        </label></li>
+    </ul>
+{else}
+    <p>[`You have no subscribers so far.`]</p>
+{/if}
+

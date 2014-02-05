@@ -1,0 +1,314 @@
+{include file="templates/actions/campaigns/CampaignsSidebar.html"}
+
+<div class="content right200px"><div class="shadowed">
+<div class="m-envelope-stripes-1"><div class="m-envelope-stripes-2">
+<div class="block m-core-header">
+    <a href="#/campaigns/archive/" class="no-underline"><i class="icon10 larr"></i>[`Sent`]</a>
+</div>
+
+<div class="block double-padded border-box{if $campaign.status != mailerMessageModel::STATUS_SENT} sending{/if}" id="report-wrapper" style="width:100%;float:left;">
+
+    {if $return_path_error}
+        <div class="info-block">
+            <p><i class="icon16 exclamation"></i>[`Error checking Return-path mailbox`] {$campaign.return_path}</p>
+            <p><span class="errormsg">{$return_path_error}</span></p>
+            {if $allow_return_path_edit}
+                <p><a href="javascript:void(0)" class="edit-return-path-link" class="left-padded">[`Edit settings`]</a></p>
+            {/if}
+        </div>
+    {/if}
+    {if $campaign.status == mailerMessageModel::STATUS_SENDING_ERROR}
+        <div class="info-block"><p>
+            [`An error occured while sending the campaign.`]
+        </p></div>
+    {/if}
+
+    <h1>
+        {ifempty($campaign.subject, "[`<no subject>`]")|escape}
+    </h1>
+
+    {*
+     * Progressbar HTML
+     *}
+    {if $campaign.status == mailerMessageModel::STATUS_SENT}
+        <p>
+            [`Sent:`] {waDateTime::format('humandatetime', $campaign.finished_datetime)}
+        </p>
+    {elseif $campaign.status != mailerMessageModel::STATUS_SENDING_ERROR}
+        <div class="green progressbar" style="width:100%;margin-left:-6px">
+            <div class="progressbar-outer">
+                <div class="progressbar-text" id="progressbar-text"><i class="icon16 loading" style="margin-top:2px;"></i></div>
+                <div class="progressbar-inner" id="progressbar-status" style="width:1%"></div>
+            </div>
+        </div>
+        <div class="align-center" style="min-height:35px;position:relative;">
+            {if $campaign.status == mailerMessageModel::STATUS_SENDING}
+                <span class="sending-countdown {if empty($campaign.estimated_finish_datetime)}hidden{/if}">
+                    [`Remaining:`] <span id="campaign-sending-time-left"><i class="icon16 loading"></i></span>
+                </span>
+                {if $wa->mailer->writable($campaign)}
+                    <a id="resume-pause" href="javascript:void(0)" class="button blue">
+                        <i class="icon16 pause"></i>[`Pause`]</a>
+                    </a>
+                {/if}
+            {elseif $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED}
+                <span class="sending-countdown paused">[`Sending paused`]</span>
+                {if $wa->mailer->writable($campaign)}
+                    <a id="resume-pause" href="javascript:void(0)" class="button blue">
+                        <i class="icon16 play"></i>[`Resume`]
+                    </a>
+                {/if}
+            {/if}
+        </div>
+    {/if}
+
+    <div class="clear-both"></div>
+
+    {*
+     * Pie diagram block.
+     *}
+    <div id="pie-graph"></div>
+
+    {*
+     * Pie diagram legend.
+     *}
+    <div id="pie-legend" class="criteria-hidden">
+        {include file="templates/actions/campaigns/pie_diagram_legend.html"}
+    </div>
+    <div class="clear-both"></div>
+
+    {*
+     * Links to show/filter resipient list.
+     *}
+    <p>
+        <span style="position:relative;top:-2px;">[`Show list:`]</span>
+        <a href="#" rel="" class="show-recipients-link inline-link"><b>[`All recipients`]</b></a> |
+        {if $campaign.opened_count_available}
+            <a href="#" rel="status=3" class="show-recipients-link inline-link"><b>[`Opened`]</b></a> |
+        {/if}
+        <a href="#" rel="status=5" class="show-recipients-link inline-link"><b>[`Unsubscribed`]</b></a> |
+        <a href="#" rel="status=-1,-2" class="show-recipients-link inline-link"><b>[`Bounced`]</b></a> |
+        <a href="#" rel="status=-3,-4" class="show-recipients-link inline-link"><b>[`Exceptions`]</b></a> |
+        {if $stats.not_sent_num}
+            <a href="#" rel="status=0" class="show-recipients-link inline-link"><b>[`Not sent yet`]</b></a> |
+        {/if}
+        <a href="#" rel="status=1" class="show-recipients-link inline-link"><b>[`Unknown`]</b></a> |
+
+        <span class="inline-block">
+            <i class="icon16 search before-input"></i><input id="search-recipients" type="search" placeholder="[`Search by name or email`]" style="width:180px;">
+            <i class="icon16 move before-input hidden search-submit" style="cursor:pointer"></i>
+        </span>
+    </p>
+
+    {*
+     * Recipients list wrapper.
+     *}
+    <div id="recipient-lists-wrapper"></div>
+    {if !$campaign.has_unsubscribe_link}
+        <div class="hidden recipients-hint" id="no-unsubscribe-link-hint">
+            <hr>
+            [`* NOTE:`] [`Unsubscribe URL is located only in your message headers. It does not guarantee an appearance of unsubscribe link in recipient mail program.`]
+        </div>
+    {/if}
+    {if empty($campaign.return_path)}
+        <div class="hidden recipients-hint" id="no-return-path-hint">
+            <hr>
+            [`* NOTE:`] [`Return-path is not customized. This does not allow to track most of potential bounces from recipient mail servers. Only invalid messages bounced by your sender server have been counted.`]
+        </div>
+    {/if}
+</div>
+<div class="clear-both"></div>
+
+</div></div>{* div.m-envelope-stripes-1, div.m-envelope-stripes-2 *}
+</div></div>{* div.content.right200px, div.shadowed *}
+
+<div id="error-text-dialog"></div>
+<div id="update-container" class="hidden"></div>
+
+<script>(function() { "use strict";
+    var report_wrapper = $('#report-wrapper');
+
+    $.wa.mailer.showLastSearchBreadcrumb({$campaign.id});
+
+    {if $campaign.status != mailerMessageModel::STATUS_SENT}
+        $.wa.mailer.updateCampaignReportProgress(
+            {$campaign.id},
+            {$stats.percent_complete_precise|replace:',':'.'},
+            {ifempty($campaign.estimated_finish_datetime, 0)},
+            ('{strtotime($campaign.send_datetime)}' - 0) || 0,
+            {time()}
+            {if $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED || $campaign.status == mailerMessageModel::STATUS_SENDING_ERROR}
+                , true // do not update page every several seconds
+            {/if}
+        );
+    {else}
+        $.wa.mailer.cleanupSentCampaign({$campaign.id});
+    {/if}
+    {if $check_return_path}
+        // Check return paths (once a minute)
+        if (!$.wa.mailer.last_return_path_check || $.wa.mailer.last_return_path_check - (new Date()).getTime() > 60000) {
+            $.get('?module=campaigns&action=check', function (response) {}, "json");
+            $.wa.mailer.last_return_path_check = (new Date()).getTime();
+        }
+    {/if}
+
+    //
+    // Recipients list
+    //
+    var recipient_lists_wrapper = $('#recipient-lists-wrapper');
+    // Helper to load next 50 recipients
+    var loadNext50 = function(params, callback_before) {
+        recipient_lists_wrapper.append('<i class="icon16 loading" style="margin:0 0 0 27px;"></i>');
+        $.get('?module=campaigns&action=recipientsReport&campaign_id={$campaign.id}', params, function(r) {
+            recipient_lists_wrapper.children('.loading').remove();
+            if (typeof callback_before == 'function') {
+                callback_before();
+            }
+            var existing_table = recipient_lists_wrapper.find('table.recipients-report:first');
+            var container = $('<div></div>').appendTo(recipient_lists_wrapper);
+            container.html(r);
+            container.find('.show-recipients-link').removeClass('disabled').filter('[rel="'+params+'"]').addClass('disabled');
+            container.find('td:last-child').each(function() {
+                var self = $(this);
+                if (self.children('div.hidden').length > 0) {
+                    self.children('span').addClass('show-full-error-text');
+                }
+            });
+            if (existing_table.length > 0) {
+                existing_table.find('tr:last').after(container.find('tr'));
+                container.find('table').remove();
+            }
+        });
+    };
+    // Links to show recipients
+    report_wrapper.on('click', '.show-recipients-link', function() {
+        var self = $(this);
+        if (self.hasClass('disabled')) {
+            return false;
+        }
+        var params = $(this).attr('rel');
+        var links;
+        if ($(this).parents('#recipient-lists-wrapper').length <= 0) {
+            links = report_wrapper.find('.show-recipients-link');
+        } else {
+            links = $('#recipient-lists-wrapper .show-recipients-link');
+        }
+        links.removeClass('disabled').filter('[rel="'+params+'"]').addClass('disabled')
+
+        $('.recipients-hint').hide();
+        if (params == 'status=-1,-2') {
+            $('#no-return-path-hint').show();
+        } else if (params == 'status=5') {
+            $('#no-unsubscribe-link-hint').show();
+        }
+
+        if (self.parents('#recipient-lists-wrapper').length <= 0) {
+            recipient_lists_wrapper.empty();
+            loadNext50(params);
+        } else {
+            self.append('<i class="icon16 loading" style="margin:-3px 0 0 5px;"></i>');
+            loadNext50(params, function() {
+                recipient_lists_wrapper.empty();
+            });
+        }
+        return false;
+    });
+    // 'Load more recipients' at the bottom of the list
+    $('.load-more-recipients', recipient_lists_wrapper[0]).live('click', function() {
+        var self = $(this);
+        loadNext50(self.attr('rel'));
+        self.remove();
+    });
+    // Search field
+    var searchSubmit = function() {
+        report_wrapper.find('.show-recipients-link.disabled').removeClass('disabled');
+        recipient_lists_wrapper.empty();
+        loadNext50('search='+encodeURIComponent($(this).val()));
+    };
+    var search_recipients_field = $('#search-recipients');
+    var search_recipients_submit = search_recipients_field.siblings('.search-submit').click(function() {
+        searchSubmit.apply(search_recipients_field[0]);
+    });
+    search_recipients_field.bind('wa.search-submit', searchSubmit).keypress(function(e) {
+        if (e.which == 13 || e.which == 10) {
+            searchSubmit.apply(this);
+            return false;
+        }
+    }).bind('keyup blur', function() {
+        if (search_recipients_field.val()) {
+            search_recipients_submit.removeClass('hidden');
+        } else {
+            search_recipients_submit.addClass('hidden');
+        }
+    });
+
+    // Links to show full error text
+    $('.show-full-error-text', recipient_lists_wrapper[0]).live('click', function() {
+        var html = $(this).siblings('div.hidden').html();
+        $('#error-text-dialog').waDialog({
+            'content': html,
+            'buttons': $('<button class="button">[`Close`]</button>').click(function() {
+                $(this).parents(".dialog").trigger("close");
+            })
+        });
+    });
+    // Link to show recipient selection criteria
+    var pie_legend = $('#pie-legend').on('click', '.show-recipients-selection-criteria', function() {
+        if (pie_legend.is('.criteria-hidden')) {
+            pie_legend.removeClass('criteria-hidden').addClass('criteria-visible');
+            setTimeout(function() {
+                pie_legend.find('tr.recipients-selection-criteria td').height($('#recipients-selection-criteria').outerHeight()-1);
+            }, 0);
+        } else {
+            pie_legend.removeClass('criteria-visible').addClass('criteria-hidden');
+        }
+    });
+
+    // Link to edit return path settings
+    {if $allow_return_path_edit}
+        var return_path_dialog = null;
+        report_wrapper.on('click', '.edit-return-path-link', function() {
+            var url = '?module=returnpath&action=dialog&email={$campaign.return_path}';
+            if (return_path_dialog) {
+                return_path_dialog.empty().remove();
+            }
+            return_path_dialog = $().waDialog({
+                url: url
+            });
+        });
+    {/if}
+
+    {if $wa->mailer->writable($campaign)}
+        // Pause/resume sending
+        $('#resume-pause').click(function() {
+            {if $campaign.status == mailerMessageModel::STATUS_SENDING}
+                var data = { id: {$campaign.id}, pause: 1 };
+            {else}
+                var data = { id: {$campaign.id}, resume: 1 };
+            {/if}
+
+            $('#campaign-sending-time-left').parent().remove();
+            $(this).find('.icon16').removeClass('pause').removeClass('play').addClass('loading');
+            $.post('?module=campaigns&action=pause', data, function() {
+                if (data.resume) {
+                    $.wa.mailer.redispatch();
+                    $.post("?module=campaigns&action=send", data);
+                } else {
+                    // Reload page after several seconds to allow sending process to actually stop.
+                    $.wa.mailer.report_redispatch_delayed = true;
+                    window.setTimeout(function() {
+                        $.wa.mailer.report_redispatch_delayed = false;
+                        $.wa.mailer.redispatch();
+                    }, 10000);
+                }
+            });
+        });
+    {/if}
+
+    // Make sure draft link is removed from sidebar
+    $('#wa-app > .sidebar a[href="#/campaigns/letter/{$campaign.id}"]').closest('li').remove();
+
+    // Pie chart
+    $.wa.mailer.drawReportPie('{$wa_app_static_url}', [{$stats.opened_percent}, {$stats.unsubscribed_percent}, {$stats.bounced_percent}, {$stats.exceptions_percent}, {$stats.unknown_percent}, {$stats.not_sent_percent}]);
+})();</script>
+
