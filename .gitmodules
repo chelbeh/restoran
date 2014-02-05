@@ -1,3 +1,6 @@
 [submodule "wa-apps/shop"]
 	path = wa-apps/shop
 	url = git@github.com:slowpokes/aromacode_shop.git
+[submodule "wa-apps/shipment"]
+	path = wa-apps/shipment
+	url = git@github.com:slowpokes/shipment.git
