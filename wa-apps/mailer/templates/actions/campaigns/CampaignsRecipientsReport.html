@@ -1,0 +1,62 @@
+<div id="pie-legend-copy" class="hidden">
+    {include file="templates/actions/campaigns/pie_diagram_legend.html"}
+</div>
+
+{if $recipients}
+    {if $error_classes}
+        <div class="block" style="max-width:600px;margin-left:23px;padding-left:0;">
+            <table class="zebra">
+                {foreach $error_classes as $e}
+                    <tr>
+                        <td><a class="inline-link show-recipients-link" href="javascript:void(0)" rel="{$e.param}"><b>{$e.name}</b></a></td>
+                        {if $e.percent !== null}
+                            <td>{$e.count}</td>
+                            <td>({$e.percent}%)</td>
+                        {else}
+                            <td colspan="2">{$e.count}</td>
+                        {/if}
+                    </tr>
+                {/foreach}
+            </table>
+        </div>
+    {/if}
+
+    <table class="zebra recipients-report">
+        {foreach $recipients as $r}
+            <tr>
+                <td class="min-width">{$start + $r@iteration}</td>
+                <td>{$r.name|escape}</td>
+                <td>{$r.email|escape}</td>
+                <td>
+                    {$r.status_text}
+                    {if $r.error}
+                        <div class="hidden">{$r.error|escape|nl2br}</div>
+                    {/if}
+                </td>
+            </tr>
+        {/foreach}
+    </table>
+    {if $has_more}
+        <a class="inline-link load-more-recipients" rel="{$parameters}" href="javascript:void(0)"><b>[`Load next 50`] ({sprintf_wp('total %s', $total_rows)})</b></a>
+    {/if}
+{else}
+    <p>[`No entries in this list`]</p>
+{/if}
+
+<script>(function($) { "use strict";
+
+    // Update chart legend
+    var old_pie_legend = $('#pie-legend table');
+    var new_pie_legend = $('#pie-legend-copy table');
+    old_pie_legend.hide().find('.recipients-selection-criteria').insertBefore(new_pie_legend.find('.sub-lined'));
+    old_pie_legend.after(new_pie_legend).remove();
+    $('#pie-legend-copy').remove();
+
+    // Retain active link selection in chart legend
+    var active_link = $('.show-recipients-link.disabled:first');
+    if (active_link.length > 0) {
+        new_pie_legend.find('.show-recipients-link[rel="'+active_link.attr('rel')+'"]').addClass('disabled');
+    }
+
+})($);</script>
+

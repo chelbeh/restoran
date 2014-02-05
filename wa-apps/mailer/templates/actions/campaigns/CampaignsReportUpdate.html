@@ -1,0 +1,88 @@
+<div id="pie-legend-copy" class="hidden">
+    {include file="templates/actions/campaigns/pie_diagram_legend.html"}
+</div>
+
+<script>(function($) { "use strict";
+    // Update pie chart
+    $.wa.mailer.drawReportPie('{$wa_app_static_url}', [
+        {$stats.opened_percent},
+        {$stats.unsubscribed_percent},
+        {$stats.bounced_percent},
+        {$stats.exceptions_percent},
+        {$stats.unknown_percent},
+        {$stats.not_sent_percent}
+    ]);
+
+    // Update chart legend
+    var old_pie_legend = $('#pie-legend table');
+    var new_pie_legend = $('#pie-legend-copy table');
+    if (old_pie_legend.find('.no-images-message:visible').length > 0) {
+        new_pie_legend.find('.no-images-message').show();
+    }
+    old_pie_legend.hide().find('.recipients-selection-criteria').insertBefore(new_pie_legend.find('.sub-lined'));
+    old_pie_legend.after(new_pie_legend).remove();
+    $('#pie-legend-copy').remove();
+
+    // Retain active link selection in chart legend
+    var active_link = $('.show-recipients-link.disabled:first');
+    if (active_link.length > 0) {
+        new_pie_legend.find('.show-recipients-link[rel="'+active_link.attr('rel')+'"]').addClass('disabled');
+    }
+
+    // When recipient list is visible, show warning that it could have outdated
+    var recipient_lists = $('#recipient-lists-wrapper');
+    if (recipient_lists.children().length > 0) {
+        recipient_lists.find('.load-more-recipients, .reload-list').remove();
+        recipient_lists.children(':last').append(
+            $('<a class="inline-link reload-list" href="javascript:void(0)"><b>[`List is outdated. Click to update.`]</b></a>').click(function() {
+                var link = $('#report-wrapper .show-recipients-link.disabled:first');
+                if (link.length <= 0) {
+                    $('#search-recipients').trigger('wa.search-submit');
+                } else {
+                    if (link.parents('#recipient-lists-wrapper').length <= 0) {
+                        recipient_lists.empty();
+                    }
+                    link.removeClass('disabled').click();
+                }
+            })
+        );
+    }
+
+    {if $campaign.status != mailerMessageModel::STATUS_SENT && $campaign.status != mailerMessageModel::STATUS_DRAFT}
+        $.wa.mailer.updateCampaignReportProgress(
+            {$campaign.id},
+            {$stats.percent_complete_precise|replace:',':'.'},
+            {ifempty($campaign.estimated_finish_datetime, 0)},
+            {strtotime($campaign.send_datetime)},
+            {time()}
+            {if $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED || $campaign.status == mailerMessageModel::STATUS_SENDING_ERROR}
+                , true // do not update page every several seconds
+            {/if}
+        );
+        {if $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED || $campaign.status == mailerMessageModel::STATUS_SENDING_ERROR}
+            if (!$.wa.mailer.report_redispatch_delayed) {
+                $.wa.mailer.redispatch();
+            }
+        {/if}
+    {else}
+        $.wa.mailer.cleanupSentCampaign({$campaign.id});
+    {/if}
+    {if !$is_sending && $campaign.status == mailerMessageModel::STATUS_SENDING}
+        // Make sure campaign is sending
+        $.ajax({
+            type: 'POST',
+            url: '?module=campaigns&action=send',
+            data: { id: '{$campaign.id}' },
+            dataType: 'html',
+            success: function (r) {
+                // Nothing to do
+            },
+            global: false, // prevent ajaxError handlers to trigger
+            error: function() {
+                // Nothing to do
+            },
+            timeout: 300000
+        });
+    {/if}
+})($);</script>
+

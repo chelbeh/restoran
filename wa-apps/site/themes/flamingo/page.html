@@ -1,0 +1,21 @@
+<div class="white-back">
+	<div class="row-fluid">
+		<div class="span3">
+			<div id="menu-vv">
+				<ul class="nav nav-pills nav-stacked">
+					{wa_print_tree tree=$wa->site->pages() attrs = 'id="page-list"' class="menu" elem ='<a href=":url">:name</a>' selected=$page.id}
+				</ul>
+			</div>
+		</div>
+		<div class="span9">
+			 <h3>{$page.title}</h3>
+			 <hr>
+			{$page.content}
+		</div>
+	</div>
+</div>
+{literal}
+<script>
+	$('input[type="submit"]').addClass('flamingo-1');
+</script>
+{/literal}

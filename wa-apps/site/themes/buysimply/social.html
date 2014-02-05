@@ -1,0 +1,22 @@
+<ul>  
+  <!--social button-->
+  <li class="button">
+  	<ul>
+      <li><a href="#" title=""><i class="soc-tw"></i></a></li><!--twitter-->
+      <li><a href="#" title=""><i class="soc-vk"></i></a></li><!--vkontakte-->
+      <li><a href="#" title=""><i class="soc-fb"></i></a></li><!--facebook-->
+      <li><a href="#" title=""><i class="soc-go"></i></a></li><!--google+-->
+      <li><a href="#" title=""><i class="soc-lj"></i></a></li><!--livejornal-->
+      <li><a href="#" title=""><i class="soc-pl"></i></a></li><!--pinterest-->
+      {if $wa->blog}{$rss = $wa->blog->rssUrl()}
+      {if $rss}
+      <li><a href="{$rss}" title="RSS"><i class="soc-rss"></i></a></li><!--rss-->
+      {/if}
+      {/if}
+    </ul>
+  </li>
+  
+  <!--design stydio or copyring-->
+  <li class="powered-by">&copy; Создание шаблона <a href="http://wm-site.ru">wm-site.ru</a></li>
+  <!--{time()|wa_datetime:"Y"}-->
+</ul>

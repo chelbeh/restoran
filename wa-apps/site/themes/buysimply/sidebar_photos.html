@@ -1,0 +1,84 @@
+	<div id="gallery-nav">
+    <ul>
+      	<li class="link-caption"><span>фотогалерея</span></li>
+
+        <!-- core filters -->
+        <li {if $wa->param('action') neq 'photo' && $wa->param('action') neq 'page' && $wa->param('action') neq 'album' && !$wa->param
+
+('hash')} class="selected"{/if}>
+            <a href="{$wa_app_url}">[`Photostream`]</a>
+        </li>
+        <li {if $wa->param('action') neq 'page' && $wa->param('action') neq 'album' && $wa->param('hash') == 'favorites'} 
+
+class="selected"{/if}>
+            <a href="{$wa_app_url}favorites/">[`Editors’ choice`]</a>
+        </li>
+
+        <!-- plugins -->
+        {* @event frontend_sidebar.%plugin_id%.menu *}
+        {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.menu)}
+            <li>{$item.menu}</li>
+        {/if}{/foreach}
+
+        <!-- pages -->
+        {* static info page list *}
+        {if $photos_pages = $wa->photos->pages()}
+      {$phid = $wa->param('page_id')}
+     {wa_print_tree tree=$wa->photos->pages(0, 2, true) selected=$phid unfolded=true class="pages-navig-pull" elem='<a href=":url">:name</a>'}
+      
+      
+        {/if}
+
+
+        <!-- albums -->
+        {if $albums = $wa->photos->albums(0)}
+      <ul class="pages-navig-pull">
+            <li class="dropdown">
+                <a href="#" class="inline-link">[`Albums`]</a>
+                      
+                              
+            {wa_print_tree tree=$albums class="cild-album" elem ='<a href=":url">:name</a>'}
+
+            </li>
+      </ul>
+        {/if}
+    
+        <!-- tags -->      	
+      	
+
+        <!-- more plugins -->
+        {* @event frontend_sidebar.%plugin_id%.section *}
+        {capture name="more"}{strip}
+            {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.section)}
+                <hr><div class="block">{$item.section}</div>
+            {/if}{/foreach}
+        {strip}{/capture}
+        {if $smarty.capture.more ne ""}
+            <li class="dropdown">
+                <a href="#" class="inline-link">[`More`]<i class="icon-angle-down"></i></a>
+                <div class="popup">
+
+                </div>
+            </li>
+        {/if}
+      
+      {$cloud = $wa->photos->tags()}      	
+      	{if $cloud}
+      <li class="link-caption" style="margin-top:20px;"><span style="font-size:12px; padding:10px 0 2px;">Теги</span></li>
+      {/if}
+    </ul>   
+
+      
+      
+    	
+      	{if $cloud}
+   <div id="tags-block">         
+               
+                    {foreach $cloud as $tag}        
+<a href="{$wa_app_url}tag/{$tag.uri_name}/">{$tag.name}</a>{if !$tag@last}, &nbsp;{/if}                  
+                    {/foreach}
+      </div>
+                
+        {/if}
+      
+	</div>

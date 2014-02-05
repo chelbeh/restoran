@@ -1,0 +1,18 @@
+<ul>
+  
+  <!--contact in header-->
+  <li class="top-contact"><span>(495)</span> 123-44-55</li>
+  <li class="top-contact"><span>(495)</span> 123-55-66</li>
+  <li class="hint top-contact">* круглосуточно</li>
+  
+  <!--contact in footer-->
+  <li class="bottom-contact"><i class="icon-map-marker"></i>Коломна, ул. Зайцева, 38</li>
+  
+  {if $wa->shop}
+  {if $wa->shop->settings('phone')}
+  <li class="bottom-contact"><i class="icon-phone"></i>{$wa->shop->settings('phone')}</li>
+  {/if}
+  <li class="bottom-contact"><i class="icon-envelope-alt"></i><a href="mailto:{$wa->shop->settings('email')}">{$wa->shop->settings('email')}</a></li>
+  {/if}
+  
+</ul>

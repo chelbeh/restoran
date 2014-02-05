@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="flamingo" system="0" vendor="898299" author="wa-magazin.ru" app="photos" parent_theme_id="shop:flamingo" version="1.0">
+    <name locale="en_US">Themes Flamingo</name>
+    <name locale="ru_RU">Дизайн шаблон Flamingo</name>
+	<description locale="ru_RU">Дизайн шаблон Flamingo для Photos</description>
+	<description locale="en_US">Flamingo themes for Photos</description>
+    <files>
+    	<file path="index.html" custom="0" parent="1">
+        </file>
+        <file path="style.css" custom="0">
+            <description locale="en_US">Core Photos app CSS</description>
+            <description locale="ru_RU">Основной CSS приложения «Фото»</description>
+        </file>
+        <file path="content.html" custom="0">
+            <description locale="en_US">Main layout and navigation for the Photos app content</description>
+			<description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Фото»</description>
+        </file>
+        <file path="head.html" custom="0">
+			<description locale="en_US">Photos app's &lt;head&gt; instructions</description>
+			<description locale="en_US">Блок &lt;head&gt; приложения «Фото»</description>
+        </file>
+        <file path="leftmenu.html">
+            <description locale="en_US">Left menu in other page</description>
+            <description locale="ru_RU">Левое меню на всех страницах, кроме главной</description>
+        </file>
+        <file path="view-thumbs.html" custom="0">
+            <description locale="en_US">Photo list thumbnails view</description>
+            <description locale="ru_RU">Список фотографий эскизами</description>
+        </file>
+        <file path="view-plain.html" custom="0">
+            <description locale="en_US">Photo list plain view</description>
+            <description locale="ru_RU">Список фотографий «простыней»</description>
+        </file>
+        <file path="photo.html" custom="0">
+            <description locale="en_US">One photo and its details</description>
+            <description locale="ru_RU">Просмотр фотографий по одной</description>
+        </file>
+        <file path="home.html" custom="0">
+            <description locale="en_US">Wrapper for the main photo gallery homepage</description>
+            <description locale="ru_RU">Обертка для главной страницы фотогалереи</description>
+        </file>
+        <file path="album.html" custom="0">
+            <description locale="en_US">Wrapper for photo album</description>
+            <description locale="ru_RU">Обертка для альбома фотографий</description>
+        </file>
+        <file path="search.html" custom="0">
+            <description locale="en_US">Wrapper for photo search (filtering) results, e.g. by tag or by rating</description>
+            <description locale="ru_RU">Обертка для страницы поиска (фильтрации) фотографий, например, по тегу или автору</description>
+        </file>
+        <file path="page.html" custom="0">
+            <description locale="en_US">Static page content</description>
+			<description locale="ru_RU">Содержимое информационной страницы</description>
+        </file>
+    	<file path="error.html" custom="0">
+	      <description locale="en_US">404 and other errors</description>
+    	  <description locale="ru_RU">404 и другие ошибки</description>
+	    </file>
+	    <file path="navigation.html" custom="0">
+            <description locale="en_US">Internal app navigation</description>
+            <description locale="ru_RU">Внутренняя навигация приложения</description>
+        </file>
+    </files>
+    <about locale="en_US">
+    </about>
+    <about locale="ru_RU">
+    </about>
+</theme>

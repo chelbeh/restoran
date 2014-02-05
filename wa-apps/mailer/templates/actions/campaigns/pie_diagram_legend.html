@@ -1,0 +1,129 @@
+<table class="zebra pie-graph-legend">
+    <tr>
+        <td class="min-width"></td>
+        <td><a href="javascript:void(0)" class="inline-link show-recipients-selection-criteria"><b><i>[`All recipients`]:</i></b></a></td>
+        <td class="min-width" colspan="2">{$stats.recipients_num}</td>
+    </tr>
+    <tr><td colspan="4" class="hidden"></td></tr>
+
+    {if !empty($recipient_criteria)}
+        {*
+         * Recipients selection criteria block (hidden by default)
+         *}
+        <tr class="recipients-selection-criteria">
+            <td></td>
+            <td colspan="2">
+                <div id="recipients-selection-criteria">
+                    <div style="margin-bottom:10px;"><strong>[`How recipients were chosen:`]</strong></div>
+                    {foreach $recipient_criteria as $group}
+                        {if $group.name}
+                            <div>
+                                <span class="name">{$group.name}:</span>
+                                <ul>
+                                    {foreach $group.criteria as $r}
+                                        <li>
+                                            {if $r.count}
+                                                <span class="count">{$r.count}</span>
+                                            {/if}
+                                            {if empty($r.href)}
+                                                {$r.name|escape}
+                                            {else}
+                                                <a href="{$r.href}">{$r.name|escape}</a>
+                                            {/if}
+                                        </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                        {else}
+                            {foreach $group.criteria as $r}
+                                <div>
+                                    {if $r.count}
+                                        <span class="count">{$r.count}</span>
+                                    {/if}
+                                    <span class="name">
+                                        {if empty($r.href)}
+                                            {$r.name|escape}
+                                        {else}
+                                            <a href="{$r.href}">{$r.name|escape}</a>
+                                        {/if}
+                                    </span>
+                                </div>
+                            {/foreach}
+                        {/if}
+                    {/foreach}
+                    <div style="margin-top:10px;">
+                        <a href="javascript:void(0)" rel="" class="inline-link show-recipients-link"><b><i>[`Show list`]</i></b></a>
+                    </div>
+                </div>
+            </div></td>
+            <td></td>
+        </tr>
+    {/if}
+
+    <tr class="sub-lined">
+        <td style="vertical-align:top"><b class="legend-dot" style="background-color:green"></b></td>
+        {if $campaign.opened_count_available}
+            <td><a href="#" rel="status=3" class="show-recipients-link inline-link"><b>[`Opened`]:</b></a></td>
+            <td class="min-width">{$stats.opened_num}</td>
+            <td class="min-width">({$stats.opened_percent_formatted}%)</td>
+        {else}
+            <td colspan="3">
+                <a class="inline-link nowrap float-right" href="javascript:void(0)" onclick="$(this).siblings('.no-images-message').toggle()"><b>[`not available`]</b></a>
+                [`Opened`]:
+                <div class="hidden no-images-message clear-right" style="margin-top:5px;">
+                    [`Opens can not be counted as your message does not contain images.`]
+                </div>
+            </td>
+        {/if}
+    </tr>
+    <tr>
+        <td><b class="legend-dot" style="background:url({$wa_app_static_url}img/strokegreen.png)"></b></td>
+        <td class="nowrap">
+            <a href="#" rel="status=5" class="show-recipients-link inline-link"><b>[`Unsubscribed`]:</b></a>
+            {if !$campaign.has_unsubscribe_link}
+                *
+            {/if}
+        </td>
+        <td class="min-width">{$stats.unsubscribed_num}</td>
+        <td class="min-width nowrap">
+            ({$stats.unsubscribed_percent_formatted}%)
+        </td>
+    </tr>
+    <tr>
+        <td><b class="legend-dot" style="background-color:red"></b></td>
+        <td class="nowrap">
+            <a href="#" rel="status=-1,-2" class="show-recipients-link inline-link"><b>[`Bounced`]:</b></a>
+            {if empty($campaign.return_path)}
+                *
+            {/if}
+        </td>
+        <td class="min-width">{$stats.bounced_num}</td>
+        <td class="min-width">
+            ({$stats.bounced_percent_formatted}%)
+        </td>
+    </tr>
+    <tr>
+        <td><b class="legend-dot" style="background:url({$wa_app_static_url}img/strokered.png)"></b></td>
+        <td>
+            <a href="#" rel="status=-3,-4" class="show-recipients-link inline-link"><b>[`Exceptions`]:</b></a>
+        </td>
+        <td class="min-width">{$stats.exceptions_num}</td>
+        <td class="min-width">
+            ({$stats.exceptions_percent_formatted}%)
+        </td>
+    </tr>
+    <tr>
+        <td><b class="legend-dot" style="background-color:#ccc"></b></td>
+        <td><a href="#" rel="status=1" class="show-recipients-link inline-link"><b>[`Unknown`]:</b></a></td>
+        <td class="min-width">{$stats.unknown_num}</td>
+        <td class="min-width">({$stats.unknown_percent_formatted}%)</td>
+    </tr>
+    {if $stats.not_sent_num}
+        <tr>
+            <td><b class="legend-dot" style="background-color:white"></b></td>
+            <td><a href="#" rel="status=0" class="show-recipients-link inline-link"><b>[`Not sent yet`]:</b></a></td>
+            <td class="min-width">{$stats.not_sent_num}</td>
+            <td class="min-width">({$stats.not_sent_percent_formatted}%)</td>
+        </tr>
+    {/if}
+</table>
