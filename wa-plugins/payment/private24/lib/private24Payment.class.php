@@ -7,6 +7,8 @@
  */
 class private24Payment extends waPayment implements waIPayment
 {
+    private $order_id;
+
     public function payment($payment_form_data, $order_data, $auto_submit = false)
     {
         $order = waOrder::factory($order_data);
@@ -26,7 +28,8 @@ class private24Payment extends waPayment implements waIPayment
         $form['ext_details'] = mb_substr($description, 0, 250);
         $form['pay_way'] = 'privat24';
 
-        $form['return_url'] = $this->getAdapter()->getBackUrl();
+
+        $form['return_url'] = $this->getRelayUrl().'?customer=1';
         $form['server_url'] = $this->getRelayUrl();
 
         $view->assign('form', $form);
@@ -51,8 +54,6 @@ class private24Payment extends waPayment implements waIPayment
 
     protected function callbackHandler($request)
     {
-        $transaction_data = $this->formalizeData($request);
-
         if (!$this->order_id || !$this->app_id || !$this->merchant_id) {
             throw new waPaymentException('invalid order number', 404);
         }
@@ -61,14 +62,24 @@ class private24Payment extends waPayment implements waIPayment
             throw new waPaymentException('invalid signature', 404);
         }
 
-        $transaction_data['state'] = self::STATE_CAPTURED;
+        $result = array();
+        $transaction_data = $this->formalizeData($request);
+        if (!empty($request['customer'])) {
+            switch (ifempty($transaction_data['state'])) {
+                case self::STATE_CAPTURED:
+                    $result['redirect'] = $this->getAdapter()->getBackUrl(waAppPayment::URL_SUCCESS, $transaction_data);
+                    break;
+                case self::STATE_DECLINED:
+                    $result['redirect'] = $this->getAdapter()->getBackUrl(waAppPayment::URL_FAIL, $transaction_data);
+            }
+        }
+        if (ifempty($transaction_data['state']) == self::STATE_CAPTURED) {
+            $transaction_data = $this->saveTransaction($transaction_data, $request);
 
-        $transaction_data = $this->saveTransaction($transaction_data, $request);
+            $this->execAppCallback(self::CALLBACK_PAYMENT, $transaction_data);
+        }
 
-        $result = $this->execAppCallback(self::CALLBACK_PAYMENT, $transaction_data);
-
-        self::addTransactionData($transaction_data['id'], $result);
-
+        return $result;
     }
 
     protected function formalizeData($transaction_raw_data)
@@ -85,6 +96,12 @@ class private24Payment extends waPayment implements waIPayment
             'order_id'    => $this->order_id,
             'view_data'   => 'Phone: '.ifset($raw['sender_phone'], '-'),
         ));
+        if ($transaction_raw_data['state'] == 'ok') {
+            $transaction_data['state'] = self::STATE_CAPTURED;
+        } elseif ($transaction_raw_data['state'] == 'fail') {
+            $transaction_data['state'] = self::STATE_DECLINED;
+
+        }
 
         return $transaction_data;
     }

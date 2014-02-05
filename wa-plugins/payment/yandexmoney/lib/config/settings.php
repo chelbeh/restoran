@@ -36,8 +36,8 @@ return array(
     'paymentType'  => array(
         'value'        => array('PC' => true,),
         'options'      => yandexmoneyPayment::settingsPaymentOptions(),
-        'title'        => 'Выбор оплаты',
-        'description'  => 'Настройки доступных способов оплаты.<br/><strong>Доступны для подключения по протоколу версии 3.0</strong>',
+        'title'        => 'Варианты для способа оплаты «на выбор покупателя»',
+        'description'  => 'Настройки доступных способов оплаты для выбора покупателям.<br/><strong>Доступны для подключения по протоколу версии 3.0</strong>',
         'control_type' => waHtmlControl::GROUPBOX,
     ),
 

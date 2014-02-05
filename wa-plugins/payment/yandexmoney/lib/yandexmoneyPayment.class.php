@@ -77,17 +77,26 @@ class yandexmoneyPayment extends waPayment implements waIPayment
         if ($this->payment_mode) {
             switch ($this->payment_mode) {
                 case 'customer':
-                    $options = array(
-                        'name'    => 'Способ оплаты',
-                        'options' => array(),
-                    );
                     $ways = self::settingsPaymentOptions();
+                    $options = array(
+                        'title'       => 'Способ оплаты',
+                        'description' => '',
+                        'options'     => array(),
+                    );
+
+
                     foreach ($ways as $way => $name) {
                         if (isset($this->paymentType[$way]) && !empty($this->paymentType[$way])) {
                             $options['options'][$way] = $name;
                         }
                     }
-                    $fields['paymentType'] = waHtmlControl::getControl(waHtmlControl::SELECT, 'paymentType', $options);
+                    if (count($options['options']) == 1) {
+                        $hidden_fields['paymentType'] = key($options['options']);
+                    } elseif (count($options['options']) > 1) {
+                        $options['value'] = key($options['options']);
+                        $fields['paymentType'] = waHtmlControl::getControl(waHtmlControl::SELECT, 'paymentType', $options);
+                        $auto_submit = false;
+                    }
                     break;
                 default:
                     $hidden_fields['paymentType'] = $this->payment_mode;
@@ -193,7 +202,7 @@ class yandexmoneyPayment extends waPayment implements waIPayment
     private function getEndpointUrl()
     {
         if ($this->TESTMODE) {
-            return 'http://demomoney.yandex.ru/eshop.xml';
+            return 'https://demomoney.yandex.ru/eshop.xml';
         } else {
             return 'https://money.yandex.ru/eshop.xml';
         }
