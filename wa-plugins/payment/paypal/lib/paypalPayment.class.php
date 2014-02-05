@@ -80,7 +80,7 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
         $hidden_fields = array(
             'cmd'           => '_xclick',
             'business'      => $this->email,
-            'item_name'     => $order_data['description'],
+            'item_name'     => str_replace(array('«', '»'), '"', $order_data['description']),
             'item_number'   => $this->app_id.'_'.$this->merchant_id.'_'.$order_data['order_id'],
             'no_shipping'   => 1,
             'amount'        => number_format($order_data['amount'], 2, '.', ''),
@@ -189,7 +189,7 @@ class paypalPayment extends waPayment implements waIPayment, waIPaymentCapture, 
                     throw new waPaymentException('Invalid receiver email: '.(!empty($data['receiver_email']) ? $data['receiver_email'] : ''));
                 }
                 // check transaction native id
-                if ($this->getUniqTransaction($this->id, $this->app_id, $this->merchant_id, $transaction_data)) {
+                if ($this->getUniqTransaction($transaction_data)) {
                     throw new waPaymentException('Duplicate transaction');
                 }
                 $transaction_data['state'] = self::STATE_CAPTURED;
