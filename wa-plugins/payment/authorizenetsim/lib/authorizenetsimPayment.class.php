@@ -6,87 +6,236 @@
  */
 class authorizenetsimPayment extends waPayment
 {
-    public function payment($payment_form_data, $order_data, $auto_submit = false)
-    {
-        $order = waOrder::factory($order_data);
-        $fp_timestamp = time();
-        $fp_sequence = $order->id;
-
-        $fp_hash_string = $this->login."^".$fp_sequence."^".$fp_timestamp."^".$order->total."^".$order->currency;
-
-        $form = array(
-            'x_login'              => $this->login,
-            'x_test_request'       => $this->testmode ? 'TRUE' : 'FALSE',
-            'x_show_form'          => 'PAYMENT_FORM',
-            'x_fp_sequence'        => $fp_sequence,
-            'x_fp_timestamp'       => $fp_timestamp,
-            'x_fp_hash'            => $this->hmac($this->key, $fp_hash_string),
-            'x_amount'             => $order->total,
-            'x_currency_code'      => $order->currency,
-            'x_first_name'         => $order->billing_address['firstname'],
-            'x_last_name'          => $order->billing_address['lastname'],
-            'x_address'            => $order->billing_address['street'],
-            'x_city'               => $order->billing_address['city'],
-            'x_state'              => $order->billing_address['region_name'],
-            'x_zip'                => $order->billing_address['zip'],
-            'x_country'            => $order->billing_address['country_name'],
-            'x_email'              => $order->contact_email,
-
-            "x_customer_ip"        => waRequest::getIp(),
-            'x_invoice_num'        => $order->id_str,
-            'x_description'        => $order->description_en,
-            'x_ship_to_first_name' => $order->shipping_address['firstname'],
-            'x_ship_to_last_name'  => $order->shipping_address['lastname'],
-            'x_ship_to_address'    => $order->shipping_address['street'],
-            'x_ship_to_city'       => $order->shipping_address['city'],
-            'x_ship_to_state'      => $order->shipping_address['region_name'],
-            'x_ship_to_zip'        => $order->shipping_address['zip'],
-            'x_ship_to_country'    => $order->shipping_address['country_name'],
-
-            'x_relay_response'     => 'FALSE',
-        );
-        $view = wa()->getView();
-        $view->assign('form', $form);
-        $view->assign('form_url', $this->getEndpointUrl());
-        $view->assign('auto_submit', $auto_submit);
-        return $view->fetch($this->path.'/templates/payment.html');
-    }
+    protected static $type_trans = array(
+        'AUTH_ONLY'    => self::OPERATION_AUTH_ONLY,
+        'AUTH_CAPTURE' => self::OPERATION_AUTH_CAPTURE,
+    );
 
     public function allowedCurrency()
     {
-        return true;
+        return 'USD';
     }
 
-    private function getEndpointUrl()
+    public function supportedOperations()
     {
-        return 'https://secure.authorize.net/gateway/transact.dll';
+        return array(
+            self::OPERATION_AUTH_ONLY,
+            self::OPERATION_AUTH_CAPTURE,
+            self::OPERATION_HOSTED_PAYMENT_AFTER_ORDER
+        );
+    }
+
+    public function payment($data, $order_data, $auto_submit = false)
+    {
+        $data['order_id'] = $order_data['order_id'];
+
+        if ($order_data['currency_id'] != 'USD') {
+            throw new waPaymentException(_w('Order currency is not USD but payment gateway provide only USD transactions'));
+        }
+
+        $type_trans = array_flip(self::$type_trans);
+        if (!empty($data['type']) && !empty($type_trans[$data['type']])) {
+            $type = $type_trans[$data['type']];
+        } else {
+            $type = self::OPERATION_AUTH_ONLY;
+        }
+        $data['customer_data'] = waLocale::transliterate($data['customer_data'], $data['customer_data']['locale']);
+
+        if (empty($order_data['description_en'])) {
+            $order_data['description_en'] = 'Order #'.$order_data['order_id'].' ('.gmdate('F, d Y').')';
+        }
+        $form_fields = array(
+            'x_login'            => $this->login,
+            'x_amount'           => number_format($order_data['amount'], 2, '.', ''),
+            'x_description'      => $order_data['description_en'],
+            'x_invoice_num'      => $order_data['order_id'],
+            'x_fp_sequence'      => rand(1, 1000),
+            'x_fp_timestamp'     => time(),
+            'x_test_request'     => 'false',
+            'x_show_form'        => 'PAYMENT_FORM',
+
+            'x_type'             => $type,
+            'x_version'          => '3.1',
+            'x_method'           => 'CC',
+            'x_cust_id'          => $data['customer_data']['id'],
+            'x_customer_ip'      => wa()->getRequest()->server('REMOTE_ADDR'),
+
+            'x_duplicate_window' => '28800',
+
+            'x_first_name'       => $data['customer_data']['firstname'],
+            'x_last_name'        => $data['customer_data']['lastname'],
+            'x_company'          => $data['customer_data']['company'],
+            'x_address'          => isset($data['customer_data']['address:street']) ? $data['customer_data']['address:street'] : '',
+            'x_city'             => $data['customer_data']['address:city'],
+            'x_state'            => $data['customer_data']['address:region'],
+            'x_zip'              => $data['customer_data']['address:zip'],
+            'x_country'          => $data['customer_data']['address:country'],
+            'x_phone'            => $data['customer_data']['phone'],
+            'x_email'            => $data['customer_data']['email'],
+
+            'x_relay_response'   => isset($data['x_relay_response']) ? $data['x_relay_response'] : 'true',
+            'x_relay_url'        => $this->getRelayUrl(),
+            'wa_success_url'     => $this->getAdapter()->getBackUrl(waAppPayment::URL_SUCCESS, $data),
+            'wa_decline_url'     => $this->getAdapter()->getBackUrl(waAppPayment::URL_DECLINE, $data),
+            'wa_cancel_url'      => $this->getAdapter()->getBackUrl(waAppPayment::URL_FAIL, $data),
+            'wa_app_id'          => $this->app_id,
+            'wa_merchant_id'     => $this->merchant_id
+        );
+        $form_fields['x_fp_hash'] = ''; // @TODO: get from common 'address' field
+        if (phpversion() >= '5.1.2') {
+            $form_fields['x_fp_hash'] = hash_hmac('md5', $this->login."^".$form_fields['x_fp_sequence']."^".$form_fields['x_fp_timestamp']."^".$form_fields['x_amount']."^", $this->trans_key);
+        } else {
+            $form_fields['x_fp_hash'] = bin2hex(mhash(MHASH_MD5, $this->login."^".$form_fields['x_fp_sequence']."^".$form_fields['x_fp_timestamp']."^".$form_fields['x_amount']."^", $this->trans_key));
+        }
+        if ($this->form_header) {
+            $form_fields['x_header_html_payment_form'] = $this->form_header;
+        }
+        $view = wa()->getView();
+
+        $view->assign('url', wa()->getRootUrl());
+        $view->assign('form_fields', $form_fields);
+
+        $view->assign('form_url', $this->getEndpointUrl());
+        $view->assign('auto_submit', $auto_submit);
+
+        return $view->fetch($this->path.'/templates/payment.html');
+    }
+
+    protected function getEndpointUrl()
+    {
+        if ($this->testmode) {
+            return 'https://test.authorize.net/gateway/transact.dll';
+        } else {
+            return 'https://secure.authorize.net/gateway/transact.dll';
+        }
+    }
+
+    protected function callbackInit($request)
+    {
+        if (empty($request['x_invoice_num']) || empty($request['wa_app_id']) || empty($request['wa_merchant_id'])) {
+            self::log($this->id, 'Invalid transaction data');
+            throw new waException('Invalid transaction data');
+        } else {
+            $this->app_id = $request['wa_app_id'];
+            $this->merchant_id = $request['wa_merchant_id'];
+        }
+        return parent::callbackInit($request);
     }
 
     /**
-     * Makes HMAC MD5 hash of the $data
-     * @see http://www.php.net/manual/en/function.mhash.php
-     * @param $key string
-     * @param $data string
-     * @return string hashed string
+     *
+     * @param $data - get from gateway
+     * @return void
      */
-    private function hmac($key, $data)
+    protected function callbackHandler($data)
     {
-        // RFC 2104 HMAC implementation for php.
-        // Creates an md5 HMAC.
-        // Eliminates the need to install mhash to compute a HMAC
-        // Hacked by Lance Rushing
+        $transaction_data = $this->formalizeData($data);
+        $transaction_data['order_id'] = $data['x_invoice_num'];
+        $transaction_data['plugin'] = $this->id;
 
-        $b = 64; // byte length for md5
-        if (strlen($key) > $b) {
-            $key = pack("H*", md5($key));
+        $supported_operations = $this->supportedOperations();
+        if (!isset($transaction_data['type']) || !in_array($transaction_data['type'], $supported_operations)) {
+            self::log($this->id, 'Unsupported payment operation');
+            throw new waPaymentException('Unsupported payment operation');
         }
-        $key = str_pad($key, $b, chr(0x00));
-        $ipad = str_pad('', $b, chr(0x36));
-        $opad = str_pad('', $b, chr(0x5c));
-        $k_ipad = $key ^ $ipad;
-        $k_opad = $key ^ $opad;
+        if (!$this->login) {
+            self::log($this->id, 'Empty merchant data');
+            throw new waPaymentException('Empty merchant data');
+        }
+        $error_str = null;
 
-        return md5($k_opad.pack("H*", md5($k_ipad.$data)));
+        // Check md5 hash
+        //
+        if (!isset($data['x_trans_id']) || empty($data['x_amount'])) { //  || empty($data['x_MD5_Hash'])
+            $error_str = 'empty fields (trans_id , amount or hash)';
+        } else {
+            $data['x_amount'] = number_format((float) $data['x_amount'], 2, '.', '');
+            $hash = $this->md5_hash.$this->login.$data['x_trans_id'].$data['x_amount'];
+
+            if (strtoupper(md5($hash)) != strtoupper($data['x_MD5_Hash'])) {
+                $error_str = 'invalid hash';
+            }
+        }
+        if ($error_str) {
+            self::log($this->id, $error_str);
+            throw new waPaymentException($error_str);
+        }
+        switch ($transaction_data['type']) {
+            case self::OPERATION_AUTH_CAPTURE:
+                $app_payment_method = 'Payment';
+                $transaction_data['state'] = self::STATE_CAPTURED;
+                break;
+
+            case self::OPERATION_AUTH_ONLY:
+                $app_payment_method = 'Payment';
+                $transaction_data['state'] = self::STATE_AUTH;
+                break;
+
+            default:
+                $app_payment_method = 'Payment';
+        }
+        if ($transaction_data['result'] != 1) {
+            $transaction_data['state'] = self::STATE_DECLINED;
+        } else {
+            $transaction_data['error'] = null;
+        }
+        $transaction_data = $this->saveTransaction($transaction_data, $data);
+
+        $transaction_data['success_back_url'] = isset($data['wa_success_url']) ? $data['wa_success_url'] : null;
+
+        $result = $this->execAppCallback($app_payment_method, $transaction_data);
+
+        $result['template'] = wa()->getConfig()->getRootPath().'/wa-plugins/payment/'.$this->id.'/templates/callback.html';
+
+        self::addTransactionData($transaction_data['id'], $result);
+
+        self::log($this->id, 'Transaction added');
+
+        return $result;
+    }
+
+    /**
+     * Convert transaction raw data to formatted data
+     * @param array $data - transaction raw data
+     * @return array $transaction_data
+     */
+    protected function formalizeData($data)
+    {
+        $fields = array(
+            'x_type', 'x_trans_id', 'x_amount', 'x_invoice_num', 'x_cust_id', 'x_response_code', 'x_response_reason_text',
+            'x_first_name', 'x_last_name', 'x_company', 'x_address', 'x_city', 'x_state', 'x_zip', 'x_country', 'x_phone', 'x_email'
+        );
+        foreach ($fields as $f) {
+            if (!isset($data[$f])) {
+                $data[$f] = null;
+            }
+        }
+        $view_data = '';
+        if ($data['x_card_type'] && $data['x_account_number'])
+            $view_data .= $data['x_card_type'].': '.$data['x_account_number'].', ';
+        if ($data['x_first_name'] || $data['x_last_name'])
+            $view_data .= trim($data['x_first_name'].' '.$data['x_last_name']).', ';
+        if ($data['x_email'])
+            $view_data .= $data['x_email'].', ';
+        if ($data['x_phone'] || $data['x_company'] || $data['x_address'] || $data['x_city'] || $data['x_state'] || $data['x_zip'])
+            $view_data .= $data['x_phone'].' '.$data['x_company'].' '.$data['x_address'].' '.$data['x_city'].' '.$data['x_state'].' '.$data['x_zip'].', ';
+        $view_data = substr($view_data, 0, -2);
+        $view_data = preg_replace('/ +/', ' ', $view_data);
+
+        $type = strtoupper($data['x_type']);
+
+        $transaction_data = array(
+            'type'        => isset(self::$type_trans[$type]) ? self::$type_trans[$type] : $type,
+            'native_id'   => $data['x_trans_id'],
+            'amount'      => $data['x_amount'],
+            'currency_id' => 'USD',
+            'date_time'   => date('Y-m-d H:i:s'),
+            'order_id'    => $data['x_invoice_num'],
+            'result'      => $data['x_response_code'] == 1,
+            'error'       => $data['x_response_reason_text'],
+            'view_data'   => $view_data
+        );
+        return $transaction_data;
     }
 
 }
