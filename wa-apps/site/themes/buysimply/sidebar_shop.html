@@ -100,11 +100,13 @@ href=":url">:name</a>'}
 
 
 {*21.12.2013*}
+{if isset($theme_settings.info_block)}
 {if empty($theme_settings.info_block) || $theme_settings.info_block == 2 }
 {$info_block = 1}
 {/if}
 {if !empty($theme_settings.info_block) && $theme_settings.info_block == 1 && $wa_app == 'shop'}
 {$info_block = 1}
+{/if}
 {/if}
 <!-- shop page -->
 {if $info_block == 1}

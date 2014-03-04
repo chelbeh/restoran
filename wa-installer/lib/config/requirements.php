@@ -21,6 +21,11 @@ return array(
         'strict'      => false,
         'value'       => 1,
     ),
+    'phpini.mbstring.func_overload'=>array(
+        'description'=>'Smarty properly work',
+        'strict'=>true,
+        'value'=>'<2',
+    ),
     'php.mbstring'           => array(
         'strict' => true,
         'value'  => 1,

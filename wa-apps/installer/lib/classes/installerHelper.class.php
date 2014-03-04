@@ -166,7 +166,6 @@ class installerHelper
 
     public static function isDeveloper()
     {
-        return false;// VADIM CODE
         $result = false;
         $paths = array();
         $paths[] = dirname(__FILE__).'/.svn';
@@ -255,7 +254,7 @@ class installerHelper
 
     /**
      * @param Exception $ex
-     * @param $messages
+     * @param array $messages
      * @throws Exception
      */
     private static function handleException($ex, &$messages)
@@ -263,7 +262,10 @@ class installerHelper
         if ($messages === null) {
             throw $ex;
         } else {
-            $messages[] = array('text' => $ex->getMessage(), 'result' => 'fail');
+            $messages[] = array(
+                'text'   => $ex->getMessage(),
+                'result' => 'fail',
+            );
         }
     }
 }

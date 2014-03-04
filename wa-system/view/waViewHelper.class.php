@@ -140,6 +140,22 @@ class waViewHelper
         }
     }
 
+    public function myUrl()
+    {
+        $auth = wa()->getAuthConfig();
+        if (!empty($auth['app'])) {
+            $app = wa()->getAppInfo($auth['app']);
+            if (!empty($app['my_account'])) {
+                return wa()->getRouteUrl($auth['app'].'/frontend/my');
+            }
+        }
+        $app = wa()->getAppInfo();
+        if (!empty($app['my_account'])) {
+            return wa()->getRouteUrl('/frontend/my');
+        }
+        return null;
+    }
+
     public function headJs()
     {
         $domain = wa()->getRouting()->getDomain(null, true);
@@ -512,7 +528,7 @@ HTML;
         }
         $email = $this->post('email');
         $email_validator = new waEmailValidator();
-        $subject = trim($this->post('subject', 'Website request'));
+        $subject = trim($this->post('subject', _ws('Website request')));
         $body = trim($this->post('body'));
         if (!$body) {
             $errors['body'] = _ws('Please define your request');

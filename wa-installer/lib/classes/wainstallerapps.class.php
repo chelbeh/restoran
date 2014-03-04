@@ -89,7 +89,7 @@ class waInstallerApps
         return $this->identity_hash;
     }
 
-    public static function getServerSignature($raw = false)
+    private static function getServerSignature($raw = false)
     {
         $signature = array(
             'php' => preg_replace('@([^0-9\\.].*)$@', '', phpversion()),
@@ -103,6 +103,53 @@ class waInstallerApps
             $signature['os'] = constant('PHP_OS');
         }
         return $raw ? $signature : base64_encode(json_encode($signature));
+    }
+
+    private static function getDomains($apps, $raw = false)
+    {
+        $d = null;
+        $a = array();
+        if (function_exists('wa')) {
+            $wa = wa();
+            if ($wa && is_object($wa) && method_exists($wa, 'getRouting')) {
+                if (($routing = $wa->getRouting()) && method_exists($routing, 'getByApp')) {
+                    $d = array();
+                    foreach ($apps as $app_id) {
+                        if (!in_array($app_id, array('installer', 'webasyst', 'site',))) {
+                            $app_domains = $routing->getByApp($app_id);
+                            foreach ($app_domains as $domain => $route) {
+                                if ($i = strpos($domain, '/')) {
+                                    $domain = substr($domain, 0, $i);
+                                }
+                                if (strpos($domain, '.')) {
+                                    $domain = preg_replace('@:\d+@', '', $domain);
+                                    if (!in_array($domain, $d)) {
+                                        $d[] = $domain;
+                                    }
+                                    $id = array_search($domain, $d);
+                                    if (!isset($s[$app_id])) {
+                                        $s[$app_id] = array();
+                                    }
+                                    $s[$app_id][] = $id;
+                                }
+                            }
+                            if (!empty($s[$app_id])) {
+                                $a[$app_id] = 0;
+                                foreach ($s[$app_id] as $id) {
+                                    $a[$app_id] += 1 << $id;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!$raw && $d) {
+            $d = implode(':', $d);
+        }
+
+        $result = compact('a', 'd');
+        return $raw ? $result : http_build_query($result);
     }
 
     /**
@@ -121,12 +168,13 @@ class waInstallerApps
 
     private static function init()
     {
-        @ini_set("magic_quotes_runtime", 0);
-        if (version_compare('5.4', PHP_VERSION, '>') && function_exists('set_magic_quotes_runtime') && get_magic_quotes_runtime()) {
-            @set_magic_quotes_runtime(false);
-        }
-        @ini_set('register_globals', 'off');
         if (!isset(self::$root_path)) {
+            @ini_set("magic_quotes_runtime", 0);
+            if (version_compare('5.4', PHP_VERSION, '>') && function_exists('set_magic_quotes_runtime') && get_magic_quotes_runtime()) {
+                @set_magic_quotes_runtime(false);
+            }
+            @ini_set('register_globals', 'off');
+
             self::$root_path = preg_replace('@([/\\\\]+)@', '/', dirname(__FILE__).'/');
             //XXX fix root path definition
             self::$root_path = preg_replace('@(/)wa-installer/lib/classes/?$@', '$1', self::$root_path);
@@ -144,6 +192,7 @@ class waInstallerApps
 
     public function __construct($license = null, $locale = null, $ttl = 600, $force = false)
     {
+        self::init();
         $this->license = $license;
         /* identity hash */
         $this->identity_hash = self::getGenericConfig('identity_hash');
@@ -228,6 +277,7 @@ class waInstallerApps
      */
     public static function checkRequirements(&$requirements, $update_config = false, $action = false)
     {
+        self::init();
         if (is_null($requirements)) {
             $requirements = self::getRequirements('wa-installer/lib/config/requirements.php', 'installer');
         }
@@ -348,6 +398,7 @@ class waInstallerApps
 
     public static function getGenericConfig($property = null, $default = false)
     {
+        self::init();
         $config = self::getConfig(self::CONFIG_GENERIC);
         if ($property) {
             return isset($config[$property]) ? $config[$property] : $default;
@@ -519,11 +570,11 @@ class waInstallerApps
         }
     }
 
-    public function getItems()
+    public function getItems($options = array())
     {
         static $items = null;
         if ($items === null) {
-            $options = array(
+            $options += array(
                 'installed' => true,
             );
             $extra_types = array(
@@ -640,6 +691,9 @@ class waInstallerApps
                             $extras_item['app'] = $app_id;
                             $extras_item['vendor'] = $vendor;
                             $extras_item['slug'] = $slug = $app_id.'/'.$type.'/'.$extras_id;
+                            if (empty($extras_item['name'])) {
+                                $extras_item['name'] = empty($extras_item['installed']['name']) ? $extras_item['slug'] : $extras_item['installed']['name'];
+                            }
                             $extras_item['action'] = self::applicableAction($extras_item);
                             $extras_item['applicable'] = self::checkRequirements($extras_item['requirements'], false, $extras_item['action']);
                             $this->buildUrl($extras_item['download_url']);
@@ -1001,21 +1055,25 @@ class waInstallerApps
         $info = null;
         $id = preg_replace('@/.*$@', '', $slug);
 
-        switch ($id) {
-            case 'wa-plugins':
-                $info = $this->query('app/'.$slug.'/');
-                break;
-            default:
-                //TODO send installation hash
-                $url = 'app/';
-                if (!empty($options['inherited'])) {
-                    $url .= implode(',', (array)$options['inherited']).',';
-                }
-                $url .= $slug;
-                $info = $this->query($url = preg_replace('@,?\\*@', '', $url).'/');
-                break;
+        if (empty($options['local'])) {
+            switch ($id) {
+                case 'wa-plugins':
+                    $info = $this->query('app/'.$slug.'/');
+                    break;
+                default:
+                    //TODO send installation hash
+                    $url = 'app/';
+                    if (!empty($options['inherited'])) {
+                        $url .= implode(',', (array)$options['inherited']).',';
+                    }
+                    $url .= $slug;
+                    $info = $this->query($url = preg_replace('@,?\\*@', '', $url).'/');
+                    break;
+            }
+        } else {
+            $info = array();
         }
-        if ($info) {
+        if ($info || !empty($options['local'])) {
             if ($id == '*') {
                 $slug = preg_replace('@^\\*/@', 'site/', $slug);
             }
@@ -1125,6 +1183,25 @@ class waInstallerApps
                 if (preg_match('@/download/@', $path)) {
                     $query = $query.($query ? '&' : '').'signature='.urlencode(self::getServerSignature());
                 }
+                if (preg_match('@/updates/\?@', $path)) {
+                    parse_str($path, $raw);
+                    if (!empty($raw['v']) && ($raw['v'] = array_filter($raw['v']))) {
+                        $stack = debug_backtrace();
+                        foreach ($stack as $s) {
+                            if (isset($s['class']) && isset($s['function'])) {
+                                if (md5($s['class'].$s['function']) == '4e78e0ba4240bbbcb818f122201cc5b6') {
+                                    $raw['v'] = array();
+                                    break;
+                                }
+                            }
+                        }
+                        $callback = create_function('$a', 'return strpos($a,"/")===false;');
+                        if ($apps = array_filter(array_keys($raw['v']), $callback)) {
+                            $query = $query.($query ? '&' : '').self::getDomains($apps);
+                        }
+                    }
+                }
+
                 $path = preg_replace("@\?.*$@", '', $path);
                 $path .= '?'.$query;
             }
@@ -1604,6 +1681,7 @@ class waInstallerApps
      */
     public static function setGenericOptions($options = array())
     {
+        self::init();
         $allowed_options = array(
             'mod_rewrite',
             'debug',

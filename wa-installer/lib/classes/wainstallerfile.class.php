@@ -20,9 +20,7 @@ class waInstallerFile
     public function getData($path, $encoding = 'base64', $values = true)
     {
         //TODO add local sources support
-
-        //TODO
-        if (true || (!$data = self::getCacheValue($path, array()))) {
+        if (!empty($_GET['refresh']) || !($data = self::getCacheValue($path, array()))) {
             if (!($encoded = $this->getContent($path))) {
                 throw new Exception("Error while get server response {$path}");
             }
@@ -48,7 +46,7 @@ class waInstallerFile
                     break;
             }
             if (!is_array($data)) {
-                $hint = 'array expected, but get '.var_export($data, true);
+                $hint = 'array expected, but get '.var_export(strip_tags($data), true);
                 throw new Exception("Invalid server response {$path}:\n {$hint}");
             }
             self::setCacheValue($path, $data);
@@ -58,6 +56,7 @@ class waInstallerFile
 
     public function getContent($path, $allow_caching = false)
     {
+        //TODO enable caching
         //TODO check response code 4xx/200
         $is_url = preg_match('@^https?://@', $path);
         if ($is_url && ($ch = self::getCurl($path))) {
@@ -80,7 +79,20 @@ class waInstallerFile
             if (session_id()) {
                 session_write_close();
             }
-            $content = @file_get_contents($path);
+
+            if ($post = self::getPost($path)) {
+                $context = stream_context_create(array(
+                    'http' => array(
+                        'method'  => 'POST',
+                        'header'  => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $post
+                    ),
+                ));
+                $content = @file_get_contents($path, false, $context);
+            } else {
+                $content = @file_get_contents($path);
+            }
+
             if (!$content) {
                 $response_code = 'unknown';
                 $hint = '';
@@ -95,10 +107,10 @@ class waInstallerFile
                 }
                 throw new Exception("Invalid server response with code {$response_code} while request {$path}.{$hint}");
             }
-            //TODO check stream headers
         } elseif (!$is_url) {
             $content = @file_get_contents($path);
         } else {
+            $path = preg_replace('@\?.+$@', '', $path);
             throw new Exception("Couldn't read {$path} Please check allow_url_fopen setting or PHP extension Curl are enabled");
         }
         return $content;
@@ -137,6 +149,10 @@ class waInstallerFile
                     $curl_options[$option] = $value;
                 }
             }
+            if ($post = self::getPost($url)) {
+                $curl_options[CURLOPT_POST] = 1;
+                $curl_options[CURLOPT_POSTFIELDS] = $post;
+            }
             $curl_options[CURLOPT_URL] = $url;
             //TODO read proxy settings from generic config
             $options = array();
@@ -156,11 +172,35 @@ class waInstallerFile
         return $ch;
     }
 
+    /**
+     * @param string $url
+     * @return array POST data
+     */
+    private static function getPost(&$url)
+    {
+        $post = array();
+        if (strlen($url) > 1024) {
+            parse_str(parse_url($url, PHP_URL_QUERY), $post);
+            $url = preg_replace('@\?.+$@', '', $url);
+            $get = array_fill_keys(array('hash', 'domain', 'locale', 'signature'), null);
+
+            foreach ($get as $field => &$value) {
+                if (isset($post[$field])) {
+                    $value = $post[$field];
+                    unset($post[$field]);
+                }
+                unset($value);
+            }
+            $url .= '?'.http_build_query(array_filter($get));
+        }
+        return $post ? http_build_query($post) : null;
+    }
+
 
     private static function setCacheValue($path, $value)
     {
 
-        $key = md5($path);
+        $key = __CLASS__.'.'.md5($path);
         if (class_exists('waSerializeCache')) {
             $cache = new waSerializeCache($key, self::$cache_ttl, 'installer');
             $cache->set($value);
@@ -169,9 +209,9 @@ class waInstallerFile
     }
 
 
-    private static function getCacheValue($path, $default = null, $path = null)
+    private static function getCacheValue($path, $default = null)
     {
-        $key = md5($path);
+        $key = __CLASS__.'.'.md5($path);
         $value = $default;
         if (self::$cache_ttl && class_exists('waSerializeCache')) {
             $cache = new waSerializeCache($key, self::$cache_ttl, 'installer');
