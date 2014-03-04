@@ -45,6 +45,7 @@ $(document).ready( function() {
 
     {foreach $queue_apps as $slug => $item}{if !empty($item.name)}
     translate['{$slug}']='{$item.name|escape}';
+    translate['{$item.slug}']='{$item.name|escape}';
     {/if}{/foreach}
 
 });

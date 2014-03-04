@@ -14,7 +14,6 @@ try{
 } catch (waAPIException $e) {
 	print $e;
 } catch (Exception $e) {
-    var_dump($e);
     $e = new waAPIException('server_error', $e->getMessage(), 500);
     print $e;
 }

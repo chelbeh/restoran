@@ -25,7 +25,6 @@ class webasystApiTokenController extends waController
                 $this->response(array(
                     'error' => 'invalid_grant'
                 ));
-                echo $row['client_id'];
                 return;
             }
             // check expire
@@ -73,7 +72,6 @@ class webasystApiTokenController extends waController
                     'error' => 'invalid_request',
                     'error_description' => 'Required parameter is missing: '.$field
                 ));
-                //print_r($field);
                 return false;
             }
             if (is_array($values) && !in_array($v, $values)) {
@@ -81,7 +79,6 @@ class webasystApiTokenController extends waController
                     'error' => ($field == 'grant_type' ? 'unsupported_grant_type' : 'invalid_request'),
                     'error_description' => 'Invalid '.$field.': '.$v
                 ));
-                //print_r($field."->".$v);
                 return false;
             }
         }

@@ -18,6 +18,7 @@ class installerUpdateManagerAction extends waViewAction
     private $vendors = array();
     private $module = 'update';
 
+
     private $urls;
 
     private function init()
@@ -34,7 +35,7 @@ class installerUpdateManagerAction extends waViewAction
             }
             $this->redirect(array(
                 'module' => $this->module,
-                'msg'    => installerMessage::getInstance()->raiseMessage($msg.$r, 'fail'),
+                'msg'    => installerMessage::getInstance()->raiseMessage($msg, 'fail'),
             ));
         }
     }
@@ -45,8 +46,25 @@ class installerUpdateManagerAction extends waViewAction
 
         try {
             $updater = new waInstaller(waInstaller::LOG_TRACE);
-            $state = 0 && $updater->getState();
-            if (!isset($state['stage_status']) || (($state['stage_name'] != waInstaller::STAGE_NONE) && ($state['heartbeat'] > (waInstaller::TIMEOUT_RESUME + 5))) || (($state['stage_name'] == waInstaller::STAGE_UPDATE) && ($state['heartbeat'])) || (($state['stage_status'] == waInstaller::STATE_ERROR) && ($state['heartbeat'])) || (($state['stage_name'] == waInstaller::STAGE_NONE) && ($state['heartbeat'] === false))) {
+            $state = $updater->getState();
+            if (!isset($state['stage_status'])
+                || (
+                    ($state['stage_name'] != waInstaller::STAGE_NONE)
+                    && ($state['heartbeat'] > (waInstaller::TIMEOUT_RESUME + 5))
+                )
+                || (
+                    ($state['stage_name'] == waInstaller::STAGE_UPDATE)
+                    && ($state['heartbeat'])
+                )
+                || (
+                    ($state['stage_status'] == waInstaller::STATE_ERROR)
+                    && ($state['heartbeat'])
+                )
+                || (
+                    ($state['stage_name'] == waInstaller::STAGE_NONE)
+                    && ($state['heartbeat'] === false)
+                )
+            ) {
                 $updater->setState();
                 $state = $updater->getState();
 
@@ -84,9 +102,6 @@ class installerUpdateManagerAction extends waViewAction
                             foreach ($info[$type] as $extra_id => $extras_info) {
                                 if (!empty($extras_info['download_url']) && in_array($extras_info['action'], $execute_actions)) {
                                     $extras_info['subject'] = 'app_'.$type;
-                                    if (!empty($info['name'])) {
-                                        $extras_info['name'] .= " ({$info['name']})";
-                                    }
                                     if (($type == 'themes') && is_array($extras_info['download_url'])) {
                                         foreach ($extras_info['download_url'] as $target => $url) {
                                             $__info = $extras_info;
@@ -94,13 +109,26 @@ class installerUpdateManagerAction extends waViewAction
                                             $__info['slug'] = preg_replace('@^wa-apps/@', '', $target);
                                             $__info['app'] = preg_replace('@^wa-apps/([^/]+)/.+$@', '$1', $target);
                                             if (!isset($queue_apps[$target])) {
-                                                $this->add($target, $__info);
-                                                $queue_apps[$target] = $__info;
+                                                if (($__info['app'] == $app_id) || empty($items[$__info['app']][$type][$extra_id])) {
+                                                    if (!empty($items[$__info['app']][$type][$extra_id]['name'])) {
+                                                        $__info['name'] .= " ({$info['name']})";
+                                                    } elseif($app_info = wa()->getAppInfo($__info['app'])) {
+
+                                                        $__info['name'] .= " ({$app_info['name']})";
+                                                    } else {
+                                                        $__info['name'] .= " ({$__info['app']})";
+                                                    }
+                                                    $this->add($target, $__info);
+                                                    $queue_apps[$target] = $__info;
+                                                }
                                             }
                                         }
                                     } else {
+                                        if (!empty($info['name'])) {
+                                            $extras_info['name'] .= " ({$info['name']})";
+                                        }
                                         if (strpos($app_id, '/')) {
-                                            //XXXX
+                                            //system plugins
                                             $target = $app_id.'/'.$extra_id;
                                         } else {
                                             $target = 'wa-apps/'.$app_id.'/'.$type.'/'.$extra_id;
@@ -108,8 +136,6 @@ class installerUpdateManagerAction extends waViewAction
                                         $this->add($target, $extras_info, $target);
                                         $queue_apps[$target] = $extras_info;
                                     }
-
-
                                 }
                             }
                         }

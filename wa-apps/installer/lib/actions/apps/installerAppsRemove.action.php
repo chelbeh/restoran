@@ -54,6 +54,7 @@ class installerAppsRemoveAction extends waViewAction
                     $deleted_apps[] = $this->deleteApp($app_id);
                 }
             }
+            wa()->setActive('installer');
             if (!$deleted_apps) {
                 throw new waException(_w('Application not found'));
             }
@@ -61,6 +62,7 @@ class installerAppsRemoveAction extends waViewAction
             $message = sprintf($message, implode(', ', $deleted_apps));
             $msg = installerMessage::getInstance()->raiseMessage($message);
         } catch (Exception $ex) {
+            wa()->setActive('installer');
             $msg = installerMessage::getInstance()->raiseMessage($ex->getMessage(), installerMessage::R_FAIL);
         }
         //'module' => installerHelper::getModule(),
@@ -76,10 +78,12 @@ class installerAppsRemoveAction extends waViewAction
         /**
          * @var waAppConfig
          */
+
+        $system = wa($app_id);
+        $system->setActive($app_id);
         $app = SystemConfig::getAppConfig($app_id);
         $info = $app->getInfo();
-        $system = wa($app_id);
-
+        $name = _wd($app_id, $info['name']);
         /**
          * @var waAppConfig $config ;
          */
@@ -124,10 +128,10 @@ class installerAppsRemoveAction extends waViewAction
             try {
                 waFiles::delete($path, true);
             } catch (waException $ex) {
-                //TODO log it
+                
             }
         }
-        return $info['name'];
+        return $name;
     }
 }
 //EOF
