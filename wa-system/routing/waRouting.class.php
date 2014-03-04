@@ -311,6 +311,9 @@ class waRouting
                         preg_match('!^'.$p.'$!ui', $url, $m);
                         if (isset($m[1])) {
                             $r['redirect'] = str_replace('*', $m[1], $r['redirect']);
+                            if (waRequest::server('QUERY_STRING')) {
+                                $r['redirect'] .= '?'.waRequest::server('QUERY_STRING');
+                            }
                         }
                     }
                     wa()->getResponse()->redirect($r['redirect'], 301);
@@ -357,7 +360,9 @@ class waRouting
             $params['action'] = $parts[2];
         }
         $routes = array();
-        if (!$this->route || $this->route['app'] != $app || ($domain_url && $domain_url != $this->getDomain()) ||
+        if (!$this->route || $this->route['app'] != $app ||
+            ($domain_url && $domain_url != $this->getDomain()) ||
+            ($route_url && $this->route['url'] != $route_url) ||
         (isset($this->route['module']) && isset($params['module']) && $this->route['module'] != $params['module'])
         ){
             // find base route
