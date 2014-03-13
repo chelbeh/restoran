@@ -1,0 +1,12 @@
+<div id="page" role="main" class="error-page">
+    <h1>Несуществующая страница</h1>
+    <div class="error">{if $error_code}{$error_code}. {/if}
+    {if $error_message}{$error_message}{else}[`Error`]{/if}
+  	</div>
+  	<p>
+    К сожалению, запрашиваемая Вами страница не найдена.<br>
+Вы можете найти интересующую Вас страницу, пройдя по ссылкам слева
+или перейдя на главную страницу
+  	</p>
+  	<a href="/" class="button">Перейти на главную</a>
+</div>

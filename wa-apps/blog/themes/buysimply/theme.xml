@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="buysimply" system="1" vendor="873332" author="wm-site" app="blog" parent_theme_id="site:buysimply" version="1.3">
+    <name locale="en_US">BuySimply</name>
+    <name locale="ru_RU">BuySimply</name>
+    <files>
+        <file path="index.html" custom="0" parent="1"/>        
+		<file path="sidebar.html" custom="0" parent="1"/>
+        <file path="custom.css" custom="0" parent="1"/>        
+        <file path="custom.mobile.css" custom="0" parent="1"/>
+		
+        <file path="custom.blog.css" custom="0">
+            <description locale="en_US">Core Blog app CSS</description>
+            <description locale="ru_RU">Основной CSS приложения «Блог»</description>
+        </file>
+        <file path="custom.blog.mobile.css" custom="0">
+            <description locale="en_US">Additional Blog app CSS for multi-touch mobile devices</description>
+            <description locale="ru_RU">Дополнительный CSS приложения «Блог» для мобильных устройств</description>
+        </file>        
+        <file path="content.html" custom="0">
+            <description locale="en_US">Main layout and navigation for the Blog app content</description>
+			<description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Блог»</description>
+        </file>
+		<file path="blog.js" custom="0">
+            <description locale="en_US">The main application JS "blog"</description>
+			<description locale="ru_RU">Основной JS приложения «Блог»</description>
+        </file>
+        <file path="head.html" custom="0">
+			<description locale="en_US">Blog app's &lt;head&gt; instructions</description>
+			<description locale="en_US">Блок &lt;head&gt; приложения «Блог»</description>
+        </file>
+        <file path="stream.html" custom="0">
+            <description locale="en_US">Post stream wrapper</description>
+            <description locale="ru_RU">Обертка для страницы вывода списка записей</description>
+        </file>
+        <file path="stream_search.html" custom="0">
+            <description locale="en_US">Post search (filtering) results, e.g. custom search, by tag, by author</description>
+            <description locale="ru_RU">Результат поиска (фильтрации) записей, например, по тегу или автору</description>
+        </file>
+        <file path="stream_posts.html" custom="0">
+            <description locale="en_US">Default post list view mode</description>
+            <description locale="ru_RU">Основной вид списка записей блога</description>
+        </file>
+        <file path="post.html" custom="0">
+            <description locale="en_US">Dedicated post page</description>
+            <description locale="ru_RU">Страница одной записи блога</description>
+        </file>
+        <file path="page.html" custom="0">
+            <description locale="en_US">Static info page</description>
+            <description locale="ru_RU">Информационная страница</description>
+        </file>
+        <file path="comments.html" custom="0">
+            <description locale="en_US">Post comment list</description>
+            <description locale="ru_RU">Комментарии к записи блога</description>
+        </file>
+        <file path="comment.html" custom="0">
+            <description locale="en_US">One comment template</description>
+            <description locale="ru_RU">Вывод одного комментария из списка</description>
+        </file>
+        <file path="login.html" custom="0">
+            <description locale="en_US">Login page</description>
+            <description locale="ru_RU">Страница входа для пользователей</description>
+        </file>
+        <file path="signup.html" custom="0">
+            <description locale="en_US">Sign up page</description>
+            <description locale="ru_RU">Страница регистрации пользователей</description>
+        </file>
+        <file path="forgotpassword.html" custom="0">
+            <description locale="en_US">Forgot password page</description>
+            <description locale="ru_RU">Страница сброса пароля</description>
+        </file>
+        <file path="error.html" custom="0">
+            <description locale="en_US">404 and other errors</description>
+            <description locale="ru_RU">404 и другие ошибки</description>
+        </file>
+    </files>  
+</theme>
