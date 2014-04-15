@@ -151,9 +151,7 @@ $.extend( $.store.prototype, {
 			if( !serializer || !serializer.decode )
 				return true; // continue;
 
-            console.log(serializer);
 			value = serializer.decode( value );
-            console.log(value);
 		});
 
 		return value;
