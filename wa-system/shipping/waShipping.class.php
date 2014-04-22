@@ -174,6 +174,10 @@ abstract class waShipping extends waSystemPlugin
         if (!empty($address)) {
             $this->address = $address;
         }
+        echo "got\n";
+        print_r($this->address);
+        echo "require\n";
+        print_r($this->allowedAddress());
         $this->params = array_merge($this->params, $params);
         try {
             $match = true;
@@ -188,7 +192,7 @@ abstract class waShipping extends waSystemPlugin
                                 break;
                             }
                         } elseif ($expected != mb_strtolower($value)) {
-                            echo "2 $field $expected ".mb_strtolower($value)."\n";
+                            echo "2 $field got $expected , require ".mb_strtolower($value)."\n";
                             $match = false;
                             break;
                         }
