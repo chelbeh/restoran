@@ -184,14 +184,11 @@ abstract class waShipping extends waSystemPlugin
                         $expected = mb_strtolower($this->address[$field]);
                         if (is_array($value)) {
                             if (!in_array($expected, array_map('mb_strtolower', $value))) {
-                                echo "1 $expected\n";
-                                print_r(array_map('mb_strtolower', $value));
-                                echo "\n";
                                 $match = false;
                                 break;
                             }
                         } elseif ($expected != mb_strtolower($value)) {
-                            echo "2 $expected ".mb_strtolower($value)."\n";
+                            echo "2 $field $expected ".mb_strtolower($value)."\n";
                             $match = false;
                             break;
                         }
