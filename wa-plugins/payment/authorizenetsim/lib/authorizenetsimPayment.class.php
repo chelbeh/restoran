@@ -39,11 +39,13 @@ class authorizenetsimPayment extends waPayment
         } else {
             $type = self::OPERATION_AUTH_ONLY;
         }
-        $data['customer_data'] = waLocale::transliterate($data['customer_data'], $data['customer_data']['locale']);
 
         if (empty($order_data['description_en'])) {
             $order_data['description_en'] = 'Order #'.$order_data['order_id'].' ('.gmdate('F, d Y').')';
         }
+        $c = new waContact($order_data['contact_id']);
+        $locale = $c->getLocale();
+
         $form_fields = array(
             'x_login'            => $this->login,
             'x_amount'           => number_format($order_data['amount'], 2, '.', ''),
@@ -57,21 +59,21 @@ class authorizenetsimPayment extends waPayment
             'x_type'             => $type,
             'x_version'          => '3.1',
             'x_method'           => 'CC',
-            'x_cust_id'          => $data['customer_data']['id'],
+            'x_cust_id'          => $order_data['contact_id'],
             'x_customer_ip'      => wa()->getRequest()->server('REMOTE_ADDR'),
 
             'x_duplicate_window' => '28800',
 
-            'x_first_name'       => $data['customer_data']['firstname'],
-            'x_last_name'        => $data['customer_data']['lastname'],
-            'x_company'          => $data['customer_data']['company'],
-            'x_address'          => isset($data['customer_data']['address:street']) ? $data['customer_data']['address:street'] : '',
-            'x_city'             => $data['customer_data']['address:city'],
-            'x_state'            => $data['customer_data']['address:region'],
-            'x_zip'              => $data['customer_data']['address:zip'],
-            'x_country'          => $data['customer_data']['address:country'],
-            'x_phone'            => $data['customer_data']['phone'],
-            'x_email'            => $data['customer_data']['email'],
+            'x_first_name'       => waLocale::transliterate($c->get('firstname'), $locale),
+            'x_last_name'        => waLocale::transliterate($c->get('lastname'), $locale),
+            'x_company'          => waLocale::transliterate($c->get('company'), $locale),
+            'x_address'          => waLocale::transliterate($c->get('address:street', 'default'), $locale),
+            'x_city'             => waLocale::transliterate($c->get('address:city', 'default'), $locale),
+            'x_state'            => waLocale::transliterate($c->get('address:region', 'default'), $locale),
+            'x_zip'              => waLocale::transliterate($c->get('address:zip', 'default'), $locale),
+            'x_country'          => waLocale::transliterate($c->get('address:country', 'default'), $locale),
+            'x_phone'            => $c->get('phone', 'default'),
+            'x_email'            => $c->get('email', 'default'),
 
             'x_relay_response'   => isset($data['x_relay_response']) ? $data['x_relay_response'] : 'true',
             'x_relay_url'        => $this->getRelayUrl(),
@@ -186,8 +188,8 @@ class authorizenetsimPayment extends waPayment
         $result = $this->execAppCallback($app_payment_method, $transaction_data);
 
         $result['template'] = wa()->getConfig()->getRootPath().'/wa-plugins/payment/'.$this->id.'/templates/callback.html';
-
-        self::addTransactionData($transaction_data['id'], $result);
+        $result['url'] = !empty($transaction_data['success_back_url']) ? $transaction_data['success_back_url'] :
+            $this->getAdapter()->getBackUrl(waAppPayment::URL_SUCCESS, $transaction_data);
 
         self::log($this->id, 'Transaction added');
 

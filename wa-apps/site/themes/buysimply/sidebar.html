@@ -76,7 +76,7 @@
 	{$latest_posts = $wa->blog->posts()}
 	{if !empty($latest_posts)}
     <div class="latest-posts">
-      <a class="news" href="/blog">новости</a>
+        <a class="news" href=" {$wa->getUrl('blog/frontend')}">новости</a>
     {foreach $latest_posts as $post}
     <div class="post">                    
       <div class="credentials">        

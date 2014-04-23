@@ -1,103 +1,84 @@
 <div class="header-navigation" role="navigation sitemap">
- {if !$top_menu || $top_menu.content == 'info_page'}
-   <div id="menu-wrap">
-{*21.12.2013*}
-{if !empty($theme_settings.top_menu_source) && $wa->shop}
-{$top_menu_source = $theme_settings.top_menu_source}
-{else}
-{$top_menu_source = 'site'}
-{/if}
+    {if !$top_menu || $top_menu.content == 'info_page'}
+    <div id="menu-wrap">
+        {*21.12.2013*}
+        {if !empty($theme_settings.top_menu_source) && $wa->shop}{$top_menu_source = $theme_settings.top_menu_source}{else}{$top_menu_source = 'site'}{/if}
 
-{if isset($top_menu.index) && $top_menu.index == 1}
-<ul class="menu-v category-tree-pull">
-<li{if $wa_url == $wa->currentUrl()} class="selected"{/if}><a href="{$wa_url}">Главная</a></li>
-</ul>
-{/if}
-
-{if isset($page.id) && $wa_app == $top_menu_source}{$cid = $page.id}{else}{$cid = null}{/if}
-
-{if $top_menu_source =='site'}
-{$link_top_menu = $wa->site->pages(0, 1, false)}
-{else}
-{$link_top_menu = $wa->shop->pages(0, 1, false)}
-{/if}
-
-{if !empty($link_top_menu)}
-<ul class="menu-v category-tree-pull">{strip}
-{foreach $link_top_menu as $ltm}
-{if !isset($ltm.menu_display)}
-<li{if $ltm.id==$cid} class="selected"{/if}><a href="{$ltm.url}">{$ltm.name}</a>
-{if $ltm.childs}
-    <ul>
-    {foreach $ltm.childs as $ltmc}
-    {if !isset($ltmc.menu_display)}
-    <li{if $ltmc.id==$cid} class="selected"{/if}><a href="{$ltmc.url}">{$ltmc.name}</a>
-    {if $ltmc.childs}
-        <ul>
-        {foreach $ltmc.childs as $ltmcc}
-        {if !isset($ltmcc.menu_display)}
-        <li{if $ltmcc.id==$cid} class="selected"{/if}><a href="{$ltmcc.url}">{$ltmcc.name}</a></li>
+        {if isset($top_menu.index) && $top_menu.index == 1}
+        <ul class="menu-v category-tree-pull"><li{if $wa_url == $wa->currentUrl()} class="selected"{/if}><a href="{$wa_url}">Главная</a></li></ul>
         {/if}
-        {/foreach}
+
+        {if isset($page.id) && $wa_app == $top_menu_source}{$cid = $page.id}{else}{$cid = null}{/if}
+        {if $top_menu_source =='site'}{$link_top_menu = $wa->site->pages(0, 1, false)}{else}{$link_top_menu = $wa->shop->pages(0, 1, false)}{/if}
+
+        {if !empty($link_top_menu)}
+        <ul class="menu-v category-tree-pull">{strip}
+            {foreach $link_top_menu as $ltm}
+                {if !isset($ltm.menu_display)}
+                    <li{if $ltm.id==$cid} class="selected"{/if}><a href="{$ltm.url}">{$ltm.name}</a>
+                    {if !empty($ltm.childs)}
+                        <ul>
+                            {foreach $ltm.childs as $ltmc}
+                                {if !isset($ltmc.menu_display)}
+                                <li{if $ltmc.id==$cid} class="selected"{/if}><a href="{$ltmc.url}">{$ltmc.name}</a>
+                                    {if !empty($ltmc.childs)}
+                                        <ul>
+                                            {foreach $ltmc.childs as $ltmcc}
+                                                {if !isset($ltmcc.menu_display)}
+                                                <li{if $ltmcc.id==$cid} class="selected"{/if}><a href="{$ltmcc.url}">{$ltmcc.name}</a></li>
+                                                {/if}
+                                            {/foreach}
+                                        </ul>
+                                    {/if}
+                                </li>
+                                {/if}
+                            {/foreach}
+                        </ul>
+                    {/if}
+                    </li>
+                {/if}
+            {/foreach}
         </ul>
-    {/if}
-    </li>
-    {/if}
-    {/foreach}
-    </ul>
-{/if}
-</li>
-{/if}
-{/foreach}
-</ul>
-{/if}
-{*end 21.12.2013*}
+        {/if}
+        {*end 21.12.2013*}
 
-
-
-  <ul class="menu-v category-tree-pull">{strip}
-  	{foreach $wa->apps() as $a}
-  	<li{if $a.url==$wa_app_url} class="selected"{/if}><a href="{$a.url}">{$a.name}</a></li>
-    {/foreach} {/strip}
-  </ul>
+        {if empty($theme_settings.hideAPPS)}
+            <ul class="menu-v category-tree-pull">{strip}
+            {foreach $wa->apps() as $a}
+                <li{if $a.url==$wa_app_url} class="selected"{/if}><a href="{$a.url}">{$a.name}</a></li>
+            {/foreach}{/strip}
+            </ul>
+        {/if}
     
     </div>
-  <script>
-    var len_li = 0;
-    $('.category-tree-pull>li').each(function(e){      
-      len_li += $(this).width();      
-});
-    var margin = ($('#menu-wrap').width()-len_li)/(2*$('.category-tree-pull>li').length);
-    $('.category-tree-pull>li').each(function(e){      
-      $(this).css('margin-left', margin).css('margin-right', margin);      
-});
-    $('.category-tree-pull li').hover( 
-        function(){      
-            var cont = $('.wrapper .container').offset().left+730;
-            if($(this).find('ul:first').length > 0 && !$(this).hasClass('f-right') ){
-                $(this).find('ul:first').show();
-                var offset = $(this).find('ul:first').offset();          
-                if( offset.left > cont ){              
-                    $('.wrapper .container:first').css('overflow-y', 'hidden');
-                    $(this).addClass('f-right');
+    <script type="text/javascript">
+        var len_li = 0;
+        $('.category-tree-pull>li').each(function(e){ len_li += $(this).width(); });
+        var margin = ($('#menu-wrap').width()-len_li)/(2*$('.category-tree-pull>li').length);
+        $('.category-tree-pull>li').each(function(e){ $(this).css('margin-left', margin).css('margin-right', margin); });
+        $('.category-tree-pull li').hover( 
+            function(){      
+                var cont = $('.wrapper .container').offset().left+730;
+                if($(this).find('ul:first').length > 0 && !$(this).hasClass('f-right') ){
+                    $(this).find('ul:first').show();
+                    var offset = $(this).find('ul:first').offset();          
+                    if( offset.left > cont ){              
+                        $('.wrapper .container:first').css('overflow-y', 'hidden');
+                        $(this).addClass('f-right');
+                    }
                 }
+            }, 
+            function(){
+                $(this).find('ul:first').hide();
+                $(this).removeClass('f-right');
+                $('.wrapper .container:first').css('overflow-y', 'none');      	
             }
-        }, 
-        function(){
-            $(this).find('ul:first').hide();
-            $(this).removeClass('f-right');
-            $('.wrapper .container:first').css('overflow-y', 'none');      	
-        }
-	);
+    	);
     
-    $('.category-tree-pull .selected').parents().each( function() {
-if ($(this).is('li')) $(this).children('a').addClass('a-selected');}); 
-  </script>
-  
-  
-  
-        	
-{elseif $top_menu && $top_menu.content == 'category_tree'}
+        $('.category-tree-pull .selected').parents().each( function(){ if($(this).is('li')) $(this).children('a').addClass('a-selected'); }); 
+    </script>
+    
+    {elseif $top_menu && $top_menu.content == 'category_tree'}
 	<!-- category tree -->	
   
   

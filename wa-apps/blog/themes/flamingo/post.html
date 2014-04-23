@@ -1,0 +1,39 @@
+		<div id="post-{$post.id}">
+			<h1>{$post.title}
+				{if !empty($post.plugins.post_title)}
+					{foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+				{/if}
+			</h1>
+			<div class="row-fluid blogline">
+				<div class="span8 gray">{if $show_comments && $post.comments_allowed}<i class="icon-user"></i> <a href="{$post.user.posts_link}">{$post.user.name}</a>{else}<i class="icon-user"></i> {$post.user.name}</span>{/if} <span class="separator">|</span> {if $post.contact_id}<span class="gray" title="{$post.datetime|wa_datetime}"><i class="icon-time gray"></i> {$post.datetime|wa_datetime:"humandate"}</span>  {if $show_comments && $post.comments_allowed}<span class="separator">|</span><i class="icon-comment gray"></i> {_w('%d comment','%d comments',$post.comment_count)}{/if}{/if}</div>
+			</div>
+         {if !empty($post.plugins.before)}
+            <div class="text_before">
+                {foreach $post.plugins.before as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+
+        <div class="paddingtop" itemprop="articleBody">
+            {$post.text}
+        </div>
+       
+        {if !empty($post.plugins.after)}
+            <div class="alert">
+                {foreach $post.plugins.after as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+
+    </div>
+	<br><br>
+    {* @event frontend_post.%plugin_id%.footer *}
+    {foreach $frontend_post as $plugin => $output}
+        {if !empty($output.footer)}{$output.footer}{/if}
+    {/foreach}
+
+    {if $show_comments && $post.comments_allowed}
+        {if $post.status eq blogPostModel::STATUS_PUBLISHED}
+            {include 'comments.html' inline}
+        {else}
+            <h4>[`Comments for non published posts are disabled`]</h4>
+        {/if}
+    {/if}

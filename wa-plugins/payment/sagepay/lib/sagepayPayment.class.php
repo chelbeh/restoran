@@ -25,6 +25,7 @@ class sagepayPayment extends waPayment implements waIPayment
     public function getSettingsHTML($params = array())
     {
         $currencies = waCurrency::getAll();
+        ksort($currencies);
         foreach ($currencies as $k => $v) {
             $currencies[$k] = $v . ' (' . $k . ')';
         }

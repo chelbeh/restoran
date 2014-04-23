@@ -1,0 +1,40 @@
+{* post list: default view mode *}
+
+{foreach $posts as $post}
+    <div class="blogpost" id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts" {/if}itemscope itemtype="http://schema.org/BlogPosting">
+        <h1>
+            {$post.title}
+
+            {* @event prepare_posts_frontend.%plugin_id%.post_title *}
+            {if !empty($post.plugins.post_title)}
+                {foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+            {/if}
+
+        </h1>
+        {* @event prepare_posts_frontend.%plugin_id%.before *}
+        {if !empty($post.plugins.before)}
+            <div class="text_before">
+                {foreach $post.plugins.before as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+        <div class="text">
+            {$post.text}
+			<div class="row-fluid blogline">
+				<div class="span8 gray">{if $show_comments && $post.comments_allowed}<i class="icon-user"></i> <a href="{$post.user.posts_link}">{$post.user.name}</a>{else}<i class="icon-user"></i> {$post.user.name}</span>{/if} <span class="separator">|</span> {if $post.contact_id}<span class="gray" title="{$post.datetime|wa_datetime}"><i class="icon-time gray"></i> {$post.datetime|wa_datetime:"humandate"}</span>  {if $show_comments && $post.comments_allowed}<span class="separator">|</span><i class="icon-comment gray"></i> <a href="{$post.link}#comments">{_w('%d comment','%d comments',$post.comment_count)}</a>{/if}{/if}</div>
+				<div class="span4 text-right"><a href="{$post.link}" itemprop="url" class="flamingo-1">Читать далее</a></div>
+			</div>
+        </div>
+
+        {* @event prepare_posts_frontend.%plugin_id%.after *}
+        {if !empty($post.plugins.after)}
+            <div class="text_after alert">
+                {foreach $post.plugins.after as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+
+    </div>
+{foreachelse}
+    {if $page lt 2}
+        {_w('%d post','%d posts',0)}
+    {/if}
+{/foreach}

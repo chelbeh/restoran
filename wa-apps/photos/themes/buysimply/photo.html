@@ -1,0 +1,83 @@
+<div class="one-photo-page">
+		<!-- image -->
+        <div class="photo{if $photo.stack_count > 0 || $photo.parent_id != 0} stack{/if}">
+            <div class="image">
+                <div class="corner top left">
+                    {* @event frontend_photo.%plugin_id%.top_left *}
+                    {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.top_left)}
+                        {$item.top_left}
+                    {/if}{/foreach}
+                </div>
+                <div class="corner top right">
+                    {* @event frontend_photo.%plugin_id%.top_right *}
+                    {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.top_right)}
+                        {$item.top_right}
+                    {/if}{/foreach}
+                </div>
+                <div class="stack">
+                    <div id="stack-nav" class="photo-stack">{$stack_nav}</div>
+                </div>
+                <a href="{$photo.next_photo_url}" title="[`Next →`]">
+                    {$wa->photos->getImgHtml($photo, '970', ['id' => 'photo','itemprop' => 'image'])}
+                </a>
+            </div>
+        </div>
+  
+  		<!-- stream navigation -->  		
+		<div class="thumbs-photo-gallery">{$photo_stream}</div>  		
+		<!-- description-->
+  		<div class="photo-description-table">
+          <div class="photo-info-description">
+          	<!-- photo info -->
+        	<h4 id="photo-name" itemprop="name">{$photo.name}</h4>
+        	<!-- photo description -->
+            {if $photo.description}
+            	<p id="photo-description" itemprop="description">{$photo.description}</p>
+        	{/if}
+            <!-- photo autor -->
+            {if $author}
+            <p id="photo-author">
+                <span>
+                    [`Uploaded by`] <span class="photo-info">{$author}</span>
+                </span>
+            </p>
+        	{/if}
+          </div>
+          <div class="photo-tags-and-categories">
+          	 {if $albums || $tags}            
+                {if $albums}
+                    <p id="photo-albums">
+                    [`Albums`]: <span class="photo-info">{$albums}</span><br>
+                    </p>
+                {/if}
+                {if $tags}
+                    <p class="tags" id="photo-tags">
+                        [`Tags`]: <span class="photo-info">{$tags}</span>
+                    </p>
+                {/if}            
+        	{/if}
+          </div>
+         </div>
+
+   
+           
+       
+   
+        {* @event frontend_photo.%plugin_id%.sidebar *}
+        {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.sidebar)}{$item.sidebar}{/if}{/foreach}
+        {*if $exif}
+            <p class="exif hint" id="photo-exif">
+                {$exif}
+            </p>
+        {/if*}
+        
+  
+        {* @event frontend_photo.%plugin_id%.content *}
+        {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.sidebar)}{$item.content}{/if}{/foreach}
+  
+	<!-- maybe comments? -->
+    <div id="photo-hook-bottom">
+        {* @event frontend_photo.%plugin_id%.bottom *}
+        {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.bottom)}{$item.bottom}{/if}{/foreach}
+    </div>
+</div>

@@ -1,0 +1,32 @@
+{* one comment output *}
+<div class="comment" id="comment-{$comment.id}">
+    <div class="credentials">
+		<a name="comment{$comment.id}"{if $comment.site} href="{$comment.site}"{/if}></a>
+		<div class="row-fluid">
+			<div class="span6 gray">
+				{if empty($comment.site)}
+					<i class="icon-user"></i> <span class="username" itemprop="creator">{$comment.name}</span>
+					{else}
+					<i class="icon-user"></i> <a href="{$comment.site}" class="username" itemprop="creator">{$comment.name}</a>
+				{/if}
+			</div>
+			<div class="span6 text-right"> <meta itemprop="commentTime" content="{$comment.datetime|date_format:'Y-m-d\TH:i'}"><i class="icon-time gray"></i> <span class="gray" title="{$comment.datetime|wa_datetime}">{$comment.datetime|wa_datetime:"humandatetime"}</span></div>
+		</div>
+        {* @event prepare_comments_frontend.%plugin_id%.authorname_suffix *}
+        {if !empty($comment.plugins.authorname_suffix)}
+            {foreach $comment.plugins.authorname_suffix as $plugin => $output}{$output}{/foreach}
+        {/if}
+    </div>
+    {* @event prepare_comments_frontend.%plugin_id%.before *}
+    {if !empty($comment.plugins.before)}
+        {foreach $comment.plugins.before as $plugin => $output}{$output}{/foreach}
+    {/if}
+    <div class="text" itemprop="commentText">{$comment.text|nl2br}</div>
+    {* @event prepare_comments_frontend.%plugin_id%.after *}
+    {if !empty($comment.plugins.after)}
+        {foreach $comment.plugins.after as $plugin => $output}{$output}{/foreach}
+    {/if}
+    <div class="actions">
+        <a class="inline-link comment-reply" href="#">[`reply`]</a>
+    </div>
+</div>

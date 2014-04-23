@@ -1,0 +1,55 @@
+<p>
+    [`Shop-Script database:`]
+    {if $mysql_host && $mysql_db}
+        {$mysql_host}/{$mysql_db}
+        {if $settings_error}
+            <span class="red">([`access error`])</span>
+        {/if}
+    {/if}
+    <a id="customize-sc-plugin-settings" class="small inline-link" href="javascript:void(0)"><b>[`customize`]</b></a>
+</p>
+
+{if empty($settings_error)}
+    <ul class="menu-v compact m-checkbox-menu zebra" style="max-width:500px;">
+        {foreach $options as $value => $o}
+            <li>
+                {if isset($o.count)}
+                    <span class="count">{$o.count}</span>
+                {/if}
+                {if $o.checked && !empty($o.list_id)}
+                    <input type="hidden" name="remove_ids[]" value="{$o.list_id}">
+                {/if}
+                <label>
+                    <input type="checkbox" name="add_values[]" value="{$o.value|escape}"{if $o.checked} checked="checked"{/if}> {$o.label}
+                </label>
+            </li>
+        {/foreach}
+    </ul>
+{/if}
+
+<script>(function($) { "use strict";
+    var link = $('#customize-sc-plugin-settings');
+    link.click(function() {
+        $().waDialog({
+            'url': '?plugin=shopscript&module=m&action=settings&campaign_id={$campaign_id}',
+            'buttons': $('<div></div>')
+                        .append($('<input type="submit" class="button green" value="'+$_('Save')+'">'))
+                        .append('<span> '+$_('or')+' </span>')
+                        .append(
+                            $('<a href="#">'+$_('cancel')+'</a>').click(function() {
+                                $(this).parents('.dialog').trigger('close');
+                                return false;
+                            })
+                        )
+        });
+    });
+
+    link.closest('.recipients-group-content').find('input:checkbox').change();
+    if ($.storage.get('mailer.shopscript/show-opened')) {
+        $.storage.del('mailer.shopscript/show-opened');
+        window.setTimeout(function() {
+            link.closest('.recipients-group').removeClass('closed');
+        }, 0);
+    }
+})($);</script>
+

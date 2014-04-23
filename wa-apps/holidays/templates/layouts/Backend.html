@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>{$wa->appName()} &mdash; {$wa->accountName()}</title>
+
+{$wa->css()}
+<link rel="stylesheet" type="text/css" href="{$wa_app_static_url}css/jquery-ui-1.10.3.custom.min.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="{$wa_app_static_url}css/holidays.css?{$wa->version()}" media="screen" />
+
+<script src="{$wa_app_static_url}js/jquery-1.8.2.min.js"></script>
+<script src="{$wa_app_static_url}js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="{$wa_app_static_url}js/jquery.ui.autocomplete.html.js"></script>
+{if $wa->locale() != 'en_US'}
+    <script src="{$wa_url}wa-content/js/jquery-ui/i18n/jquery.ui.datepicker-{$wa->locale()}.js"></script>
+{/if}
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js?{$wa->version()}"></script>
+{$wa->js(false)}
+
+</head>
+<body id="{$wa_app}"><div id="wa">
+    {wa_header}
+    <div id="wa-app">
+        <div class="sidebar left200px"><div class="glass-pane">
+            <div class="block">
+                <ul class="menu-v">
+                    <li><a href="?action=overview"><i class="icon16 calendar"></i>[`Overview`]</a></li>
+                </ul>
+            </div>
+
+            <div class="block">
+                <ul class="menu-v with-icons">
+                    {foreach $contacts as $c}
+                        {if $c.photo}
+                            {$photo_url = waContact::getPhotoUrl($c.id, $c.photo, 16)}
+                        {/if}
+                        <li><a href="?action=contact&id={$c.id}"><i class="icon16 contact"{if $c.photo} style="background:url('{$photo_url}');"{/if}></i>{$c.name|escape}</a></li>
+                    {/foreach}
+                </ul>
+            </div>
+        </div></div>
+        <div class="content left200px{if !empty($c_core_classes)} {$c_core_classes}{/if}" id="c-core">
+            {if isset($content) && $content}
+                {$content}
+            {else}
+                <div class="block">
+                    <h1 class="wa-page-heading">[`Loading...`]</h1>
+                </div>
+            {/if}
+        </div>
+    </div>
+</div>
+<script>$(function() { "use strict";
+
+    // Highlight active item in sidebar
+    $('#wa-app > .sidebar a').each(function() {
+        var a = $(this);
+        var href = a.attr('href');
+        if (window.location.search == href || (!window.location.search && href == '?')) {
+            a.parent().addClass('selected');
+            return false;
+        }
+    });
+
+});</script>
+</body>
+</html>

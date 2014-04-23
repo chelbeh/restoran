@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="buysimply" system="0" vendor="873332" author="wm-site" app="site" version="4.1">
+<theme id="buysimply" system="0" vendor="873332" author="wm-site" app="site" version="4.3">
   <name locale="en_US">BuySimply</name>
   <name locale="ru_RU">BuySimply</name>
   <files>
@@ -15,11 +15,7 @@
     <file path="custom.css">
 		<description locale="en_US">Core CSS</description>
 		<description locale="ru_RU">Основной файл CSS-стилей</description>
-    </file>
-    <file path="custom.mobile.css">
-		<description locale="en_US">Additional CSS for multi-touch mobile devices</description>
-		<description locale="ru_RU">Дополнительный CSS для мобильных устройств</description>
-    </file>
+    </file>    
 	<file path="content.html" custom="0">
 		<description locale="en_US">Main layout for the Site app content</description>
 		<description locale="en_US">Основной вывод приложения «Сайт»</description>
@@ -90,11 +86,67 @@
 	<file path="product_filter.html" custom="1">
 		<description locale="ru_RU">Фильтр товаров категории</description>
 	</file>
+	<file path="buysimply.user.css.html" custom="1">
+		<description locale="ru_RU">Шаблон пользовательских таблиц стилей(CSS)</description>
+	</file>
 </files>
+<about locale="ru_RU">
+<![CDATA[
+<h1>Немного о теме оформления "Купить Просто"</h1>
+<ul>
+  <li>Разработан командой профессионалов, которая состоит из специалистов по Web – дизайну, верстке и интернет маркетингу.</li>
+    <li>Дизайн продуман для эффективного восприятия и взаимодействия пользователя с интернет магазином, он поможет Вам представить свою продукцию в наилучшем виде и создаст хорошее впечатление у потенциальных клиентов.</li>
+    <li>Расположение основных блоков и элементов соответствует современным требованиям к Usability интернет магазинов</li>
+    <li>При разработке использовались современные технологии, которые дают великолепное быстродействие (быструю загрузку и отображение сайта).</li>
+    <li>Исходный код разрабатывался согласно рекомендациям официальных источников.</li>
+    <li>Продуманный каркас шаблона, и эффективный интерфейс, направляют пользователя к основной цели – покупке.</li>
+    <li>Поддержка и кросбраузерная вёрстка делают шаблон совместимым с современными и популярными браузерами: Opera, Firefox, Google Chrome, Yandex, Safari, Internet Explorer старше 7 версии.</li>
+	<li>Адаптация шаблона под устройства с разрешением от 740px</li>
+  <li>Вариации шаблона (в любой момент Вы можете изменить внешний вид Вашего сайта):
+    <ul>
+      <li>7 цветовых схем - черно-желтая, темно-синяя, темно-розовая, зелено-оранжевая, светло-синяя, светло-красная, оранжево-синяя.</li>
+      <li>7 типов отображения меню "дерева категорий".</li>
+      <li>3 типа отображения галереи изображений товаров с возможностью применения уникального типа для каждого из товаров.</li>
+    </ul>
+  </li>
+</ul>
+<p>Демо версия шаблона - "<a href="http://www.buysimply.wm-site.ru/" target="_blank">Купить Просто</a>"</p>
+<p>Инструкция по настройке шаблона - <a href="http://www.webasyst.ru/store/theme/buysimply/dokumentatsiya/" target="_blank">Документация</a></p>
+<p>Автор шаблона - студия "<a href="http://wm-site.ru/" target="_blank">wm-site.ru</a>"</p>
+<p>По вопросам поддержки, обращайте на email kolmakov.igor@gmail.com  (Колмаков Игорь)</p>
+]]>
+</about>
 <settings>
+		<setting var="instruction" control_type="image_select">
+            <value>1.png</value>
+            <name locale="en_US"/>
+            <name locale="ru_RU">
+			<![CDATA[
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">Подробную информацию по настройке дизайна, смотрите в инструкции на нашем 
+			<a target="_blank" href="http://wm-site.ru/blog/nashi-razrabotki/shablon-kupit-prosto/instruktsii-po-nastroyke/">сайте</a></p>
+			
+				<br /><br />
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">1. Цветовая схема<br /><br />
+				1.1 Предустановленные цветовые схемы				
+				</p>
+								
+			]]>
+			</name>
+			<options>
+                <option value="img/1.png"/>
+			</options>	
+        </setting>
+		
         <setting var="color_scheme" control_type="select">
             <value>custom</value>
-            <name locale="ru_RU">1. Цветовая схема</name>
+            <name locale="ru_RU">Выберите предустановленную цветовую схему
+			<![CDATA[
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+					2. Верхний горизонтальный блок навигации<br /><br />
+				2.1. Содержимое верхнего горизонтального блока навигации<br />
+				</p>
+			]]>				
+			</name>
             <name locale="en_US">Color scheme</name>
             <options>
                 <option value="custom">
@@ -129,18 +181,21 @@
         </setting>
 		<setting var="top_menu_content" control_type="select">
             <value>info_page</value>
-            <name locale="ru_RU">2. Содержимое верхнего горизонтального блока навигации
+            <name locale="ru_RU">Выберите содержимое верхнего горизонтального блока навигации
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
 			Если у Вас не установленно приложение "магазин", то не следует менять значение этой настройки.</p>
-			
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			3. Основные разделы сайта<br /><br />
+			3.1. Ссылка "Главная" в списке "основных разделов сайта"
+			</p>
 			]]>
 			</name>
             <name locale="en_US">Content upper horizontal navigation unit</name>
             <options>
                 <option value="info_page">
-                    <name locale="ru_RU">Информационные страницы</name>
+                    <name locale="ru_RU">Информационные страницы (основные разделы сайта)</name>
                     <name locale="en_US">Information Pages</name>
                 </option>
                 <option value="category_tree">
@@ -150,16 +205,81 @@
             </options>
         </setting>
 		
+		<setting var="top_menu_index" control_type="checkbox">
+            <value/>
+            <name locale="ru_RU">Отображать ссылку "Главная" в списке "основных разделов сайта"
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			"Цель ссылки" - главная страница Вашего сайта (параметр $wa_url)
+			<br /><span style="color:red">*</span> 
+			Эта настройка будет работать только при присувствии в "верхнем горизонтальном блоке навигации" "Информационных страниц" (п.2.1, значение "Информационные страницы").
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			3.2 Источник ссылок на «основные информационные страницы»
+			</p>
+			]]>
+			</name>
+            <name locale="en_US">See the link "Home" in the "Information" pages "top horizontal navigation block"</name>
+        </setting>
+		<setting var="top_menu_source" control_type="select">
+            <value>site</value>
+            <name locale="ru_RU">Выберите "источник" ссылок на основные страницы магазина
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			По умолчанию, источник ссылок на основные страницы - приложение "сайт" (приложение "сайт" - вкладка "страницы"), а источник ссылок блока "Информация" (левый сайтбар) - приложение "магазин" 
+			(приложение "магазин" - вкладка "витрина" - "страницы")
+			<br /><span style="color:red">*</span> 
+			При изменении параметра, источник ссылок на основные страницы - страницы приложения "магазин", а источник ссылок блока "Информация" - приложение "сайт".
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			3.3. Ссылки на приложения (магазн, сайт, блог, фото) в верхнем меню
+			</p>
+			]]>
+			</name>
+            <name locale="en_US">Source links to the main store page (links to information pages placed in the top navigation unit)</name>
+            <options>
+                <option value="site">
+                    <name locale="ru_RU">Информационные страницы приложения "сайт"</name>
+                    <name locale="en_US">Information application page "site"</name>
+                </option>
+                <option value="shop">
+                    <name locale="ru_RU">Информационные страницы приложения "магазин"</name>
+                    <name locale="en_US">Information application page "shop"</name>
+                </option>
+            </options>
+        </setting>
+		<setting var="hideAPPS" control_type="checkbox">
+            <value/>
+            <name locale="ru_RU">Скрыть ссылки приложений(магазн, сайт, блог, фото) в верхнем меню
+			<![CDATA[
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			4. "дерево категорий"<br /><br />
+			4.1. Тип отображения дерева категорий
+			</p>
+			]]>
+			</name>
+            <name locale="en_US">Hide links APPS</name>
+        </setting>
+		
+		
+		
+		
+		
 		<setting var="top_menu_type" control_type="select">
             <value>1</value>
-            <name locale="ru_RU">3. Тип отображения дерева категорий
+            <name locale="ru_RU">Выберите тип отображения "дерева категорий"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> Если "дерево категорий" присувствует в "верхнем горизонтальном блоке навигации" (п.2, значение "Дерево категорий"), тип отображения "Выезжающий список дочерних категорий" будет заменен на "Выпадающий список дочерних категорий".
 			<br /><span style="color:red">*</span> 
 			Эта настройка будет работать только при установленном приложении "магазин".
 			</p>
-			
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			5. "левый сайтбар"<br /><br />
+			5.1. Блок "Информация" в левом "сайтбаре"
+			</p>
 			]]>
 			</name>
             <name locale="en_US">Type of display category tree</name>
@@ -180,64 +300,19 @@
                     <name locale="ru_RU">Выпадающий блок категорий 2 и 3-го уровней (неструктурированный)</name>
                     <name locale="en_US">The drop-down box of category 2 and Layer 3 (unstructured)</name>
                 </option>
-				
             </options>
         </setting>
-		
-		
-		
-		 <setting var="top_menu_index" control_type="checkbox">
-            <value></value>
-            <name locale="ru_RU">4. Отображать ссылку "Главная" в списке "информационных страниц"
-			<![CDATA[
-			<br /><br />
-			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
-			"Цель ссылки" - главная страница Вашего сайта (параметр $wa_url)
-			<br /><span style="color:red">*</span> 
-			Эта настройка будет работать только при присувствии в "верхнем горизонтальном блоке навигации" "Информационных страниц" (п.2, значение "Информационные страницы").
-			</p>
-			
-			]]>
-			</name>
-            <name locale="en_US">See the link "Home" in the "Information" pages "top horizontal navigation block"</name>
-        </setting>
-		
-		<setting var="top_menu_source" control_type="select">
-            <value>site</value>
-            <name locale="ru_RU">5. Источник ссылок на основные страницы магазина
-			<![CDATA[
-			<br /><br />
-			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
-			По умолчанию, источник ссылок на основные страницы - приложение "сайт" (приложение "сайт" - вкладка "страницы"), а источник ссылок блока "Информация" (левый сайтбар) - приложение "магазин" 
-			(приложение "магазин" - вкладка "витрина" - "страницы")
-			<br /><span style="color:red">*</span> 
-			При изменении параметра, источник ссылок на основные страницы - страницы приложения "магазин", а источник ссылок блока "Информация" - приложение "сайт".
-			</p>
-			
-			]]>
-			</name>
-            <name locale="en_US">Source links to the main store page (links to information pages placed in the top navigation unit)</name>
-            <options>
-                <option value="site">
-                    <name locale="ru_RU">Информационные страницы приложения "сайт"</name>
-                    <name locale="en_US">Information application page "site"</name>
-                </option>
-                <option value="shop">
-                    <name locale="ru_RU">Информационные страницы приложения "магазин"</name>
-                    <name locale="en_US">Information application page "shop"</name>
-                </option>
-            </options>
-        </setting>
-		
 		<setting var="info_block" control_type="select">
             <value>1</value>
-            <name locale="ru_RU">6. Отображать блок "Информация" в левом "сайтбаре"
+            <name locale="ru_RU">Отображать блок "Информация" в левом "сайтбаре"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
 			По умолчанию, блок "информация" публикует ссылки на информационные страницы приложения "магазин" (приложение "магазин" - вкладка "витрина" - раздел "страницы").
 			</p>
-			
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			5.2. Блок "Последние новости" в левом "сайтбаре"
+			</p>
 			]]>
 			</name>
             <name locale="en_US">Display unit "Information" on the left "saytbare"</name>
@@ -256,16 +331,16 @@
                 </option>
             </options>
         </setting>
-		
-		
-		
 		 <setting var="latest_posts" control_type="checkbox">
             <value>1</value>
-            <name locale="ru_RU">7. Отображать блок "Последние новости" в левом "сайтбаре"
+            <name locale="ru_RU">Отображать блок "Последние новости" в левом "сайтбаре"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
 			Блок "Последние новости" будет отображаться только при при установленном приложении "блог".
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			5.3. Блок "Последние изображения" в левом "сайтбаре"
 			</p>
 			]]>
 			</name>
@@ -273,42 +348,21 @@
         </setting>
 		<setting var="latest_photo" control_type="checkbox">
             <value>1</value>
-            <name locale="ru_RU">8. Отображать блок "Последние изображения" в левом "сайтбаре"
+            <name locale="ru_RU">Отображать блок "Последние изображения" в левом "сайтбаре"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
 			Блок "Последние изображения" будет отображаться только при при установленном приложении "фото".
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			<span style="color:#777;">* далее настроки темы шаблона "buysimply" (Купить Просто) приложения "магазин" (приложение "магазин" - вкадка "витрина" - раздел 
+			"дизайн" ссылка "настройки темы")</span><br /><br />
+			5.4. Блок "Теги товаров" в левом сайтбаре
 			</p>
 			]]>
 			</name>
             <name locale="en_US">See block "Latest News" on the left "saytbare"</name>
         </setting>
 		
-</settings>
-<about locale="ru_RU">
-<![CDATA[
-<h1>Немного о теме оформления "Купить Просто"</h1>
-<ul>
-  <li>Разработан командой профессионалов, которая состоит из специалистов по Web – дизайну, верстке и интернет маркетингу.</li>
-    <li>Дизайн продуман для эффективного восприятия и взаимодействия пользователя с интернет магазином, он поможет Вам представить свою продукцию в наилучшем виде и создаст хорошее впечатление у потенциальных клиентов.</li>
-    <li>Расположение основных блоков и элементов соответствует современным требованиям к Usability интернет магазинов</li>
-    <li>При разработке использовались современные технологии, которые дают великолепное быстродействие (быструю загрузку и отображение сайта).</li>
-    <li>Исходный код разрабатывался согласно рекомендациям официальных источников.</li>
-    <li>Продуманный каркас шаблона, и эффективный интерфейс, направляют пользователя к основной цели – покупке.</li>
-    <li>Поддержка и кросбраузерная вёрстка делают шаблон совместимым с современными и популярными браузерами: Opera, Firefox, Google Chrome, Yandex, Safari, Internet Explorer старше 7 версии.</li>
-	<li>Адаптация шаблона под устройства с разрешением от 740px</li>
-  <li>Вариации шаблона (в любой момент Вы можете изменить внешний вид Вашего сайта):
-    <ul>
-      <li>7 цветовых схем - черно-желтая, темно-синяя, темно-розовая, зелено-оранжевая, светло-синяя, светло-красная, оранжево-синяя.</li>
-      <li>7 типов отображения меню "дерева категорий".</li>
-      <li>3 типа отображения галереи изображений товаров с возможностью применения уникального типа для каждого из товаров.</li>
-    </ul>
-  </li>
-</ul>
-<p>Демо версия шаблона - "<a href="http://www.buysimply.wm-site.ru/" target="_blank">Купить Просто</a>"</p>
-<p>Инструкция по настройке шаблона - <a href="http://www.webasyst.ru/store/theme/buysimply/dokumentatsiya/" target="_blank">Документация</a></p>
-<p>Автор шаблона - студия "<a href="http://wm-site.ru/" target="_blank">wm-site.ru</a>"</p>
-<p>По вопросам поддержки, обращайте на email kolmakov.igor@gmail.com  (Колмаков Игорь)</p>
-]]>
-  </about>  
+</settings> 
 </theme>

@@ -3,11 +3,23 @@
   <tr class="head-lt-ie8">
     <td colspan="3" class="align-left align-middle">
       	<!-- website logo/title -->
-    	<div class="logo">{include file="logo.html"}</div> 
+    	<div class="logo">
+    	{if $logo=$wa->block("`$themeId`.logo")}
+            {$logo}
+        {else}
+            {include file="logo.html"}
+        {/if}
+        </div> 
     </td>
     <td colspan="2" class="align-right align-middle">
       	<!-- block contact -->
-      	<div class="contact">{include file="contact.html"}</div>
+      	<div class="contact">
+      	{if $contact=$wa->block("`$themeId`.contact")}
+            {$contact}
+        {else}
+            {include file="contact.html"}
+        {/if}
+        </div>
     </td>
   </tr>
   <tr><td colspan="5">

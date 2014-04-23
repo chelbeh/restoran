@@ -1,0 +1,44 @@
+<div class="sidebar">
+    {include file="sidebar.html" inline}
+</div>
+<div class="content">
+    <h1 class="album-name">
+        {$album.name} 
+        
+        {if $album.note}
+            <em class="album-note">{$album.note}</em>
+        {/if}
+        {* @event frontend_collection.%plugin_id%.name *}
+        {foreach $frontend_collection as $item}{if !empty($item.name)}{$item.name}{/if}{/foreach}
+    </h1>
+    {if $childcrumbs}
+        <div class="sub-albums">
+            {foreach $childcrumbs as $child}
+                <a href="{$child.full_url}">
+                    <div class="album-image">     
+                        {$previews = $wa->photos->photos( "album/`$child.id`",null, 1)}
+                        {foreach $previews as $preview}
+                            {$wa->photos->getImgHtml($preview, '171x116')}
+                        {/foreach}
+                    </div>
+                    <div class="album-name">
+                        {$child.name|truncate:23:"...":true}
+                    </div>
+                </a>
+            {/foreach}
+        </div>
+    {/if}
+    
+    {if $album.description}
+        <p class="album-description">{$album.description}</p>
+    {/if}
+    
+    {* @event frontend_collection.%plugin_id%.content *}
+    {foreach $frontend_collection as $item}{if !empty($item.content)}{$item.content}{/if}{/foreach}
+    
+    {include file='view-plain.html'}
+    {*
+        or replace 'view-plain' with the following if you want thumbnail view for albums
+        {include file='view-thumbs.html' disable_sidebar=true}
+    *}
+</div>

@@ -421,5 +421,5 @@ hr{display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1
 .align-right{text-align: right;}
 .clear,.clear-both{height: 0; clear: both; overflow: hidden; font-size: 0; line-height: 0;}
 .shadowed{-moz-box-shadow: 0 5px 15px #aaa; -webkit-box-shadow: 0 5px 15px #aaa; box-shadow: 0 5px 15px #aaa;}
-.hidden{display:none !important;}
+.hidden{display:none;}
 .nowrap{white-space:nowrap;}

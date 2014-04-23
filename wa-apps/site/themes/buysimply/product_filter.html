@@ -1,63 +1,31 @@
-<!-- filtering by product features --> 
-{if isset($category.params.max_price)}
-{$currency_filter = $wa->shop->currency()}
-    {foreach $currencies as $cf}
-        {if $cf.code == $currency_filter}
-            {$filter_rate=$cf.rate}
-            {$math_max_price_filter = $category.params.max_price / $filter_rate}
-            {$max_price_filter =ceil($math_max_price_filter)}
-        {/if}
-    {/foreach}
-
-{if isset($category.params.min_price)}
-        {$math_min_price_filter = $category.params.min_price / $filter_rate}
-        {$min_price_filter = floor($math_min_price_filter)}
-    {else}
-    {$min_price_filter = 0}
-    {/if}
-    {$coef = ceil(($max_price_filter - $min_price_filter)/100)}
-    <br />
-{/if}
-
+<!-- filtering by product features -->
 {if !empty($theme_settings.display_type_filter) && $theme_settings.display_type_filter == 'new'}
 {$shop_filters = waRequest::cookie('shop_filters', '', waRequest::TYPE_STRING)}
-<div class="filters2">
+<div class="filters2{if !empty($theme_settings.filterAjax)} ajax{/if}">
     <div class="caption acapitalize">Фильтр товаров</div>
-    <form method="get" action="{$wa->currentUrl()}">
+    <form method="get" action="{$wa->currentUrl(0,1)}">
     {foreach $filters as $fid => $filter}
         <div{if $fid == 'price'} class="content_price"{/if}>
         {if $fid == 'price'}
             {$c = $wa->shop->currency(true)}
+            {if isset($category)}
+                {if isset($category.params.max_price)}
+                    {$max_price_filter = ceil(shop_currency($category.params.max_price, null, null, false))}
+                    {if isset($category.params.min_price)}
+                        {$min_price_filter = floor(shop_currency($category.params.min_price, null, null, false))}
+                    {else}{$min_price_filter = 0}{/if}
+                    {$coef = ceil(($max_price_filter - $min_price_filter)/100)}
+                {/if}
+            {/if}
             <b data-feature="{$fid}"><span>[`Price`]</span></b>
             <p>
             [`from`] <input type="text" name="price_min" 
-            {if $wa->get('price_min')}
-            value="{(int)$wa->get('price_min')}"
-            {elseif isset($min_price_filter)}
-            value="{$min_price_filter}"
-            {/if}
-            
-            {if isset($min_price_filter)}
-            placeholder="{$min_price_filter}"
-            {else}
-            placeholder="0"
-            {/if}
-            >
+            value="{if $wa->get('price_min')}{(int)$wa->get('price_min')}{elseif isset($min_price_filter)}{$min_price_filter}{/if}" 
+            placeholder="{if isset($min_price_filter)}{$min_price_filter}{else}0{/if}">
             [`to`] <input type="text" name="price_max" 
-            
-            {if $wa->get('price_max')}
-            value="{(int)$wa->get('price_max')}"
-            {elseif isset($max_price_filter)}
-            value="{$max_price_filter}"
-            {/if}
-            
-            {if isset($max_price_filter)}
-            placeholder="{$max_price_filter}"
-            {else}
-            placeholder="∞"
-            {/if}
-            > 
-            <span class="filter-price">{if $c.sign == 'руб.'}<span class="ruble" style="display:inline;">Р </span>{else}{$c.sign}{/if}</span>
+            value="{if $wa->get('price_max')}{(int)$wa->get('price_max')}{elseif isset($max_price_filter)}{$max_price_filter}{/if}" 
+            placeholder="{if isset($max_price_filter)}{$max_price_filter}{else}∞{/if}">
+            <span class="filter-price">{if $wa->shop->currency() == 'RUB' && !empty($theme_settings.sumbolRUB)}<span class="ruble">Р</span>{else}{$c.sign}{/if}</span>
             </p>
         {else}
             <b data-feature="{$fid}"><span>{$filter.name|escape}</span><i class="{if in_array($fid, explode(',', $shop_filters))}icon-caret-up{else}icon-caret-down{/if}"></i></b>
@@ -81,12 +49,12 @@
         <div class="reset_filter"><a href="#">Сбросить</a></div>
     </form>
 
-  <link type="text/css" rel="stylesheet" href="/wa-content/css/jquery-ui/base/jquery.ui.slider.css">
-<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.core.min.js"></script>
-<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.mouse.min.js"></script>
-<script type="text/javascript" src="/wa-content/js/jquery-ui/jquery.ui.slider.min.js"></script>  
-    <script>
+    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/css/jquery-ui/base/jquery.ui.slider.css?v{$wa->version()}">
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.core.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.widget.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.mouse.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.slider.min.js?v{$wa->version()}"></script>  
+    <script type="text/javascript">
     var param = window.location.search, global = false;
     if(param.length){
         var param_a = param.replace(/\?/, '').split('&');
@@ -116,7 +84,7 @@
     });
     
     
- {if isset($category.params.max_price)}   
+    {if isset($category.params.max_price)}   
     $.wa.wmfilter = { 
     	price_min: {$min_price_filter},
     	price_max: {$max_price_filter},
@@ -183,61 +151,52 @@
     </script>
 </div>
 {else}
-<script type="text/javascript" src="{$wa_active_theme_url}filters.js"></script><!-- js -->
-
-    <div class="filters">
-        <form method="get" action="">
-        <p>
-          {$c = $wa->shop->currency(true)}
-              <span>[`Price`]</span>
-              
-              
-             <input type="text" name="price_min" 
-            {if $wa->get('price_min')}
-            value="{(int)$wa->get('price_min')}"
-            {elseif isset($min_price_filter)}
-            value="{$min_price_filter}"
+    <input type="hidden" name="init_filter" id="init_filter" value="{if !empty($theme_settings.initFilter)}1{/if}">
+    <script type="text/javascript" src="{$wa_active_theme_url}filters.js"></script><!-- js -->
+    <div class="filters{if !empty($theme_settings.filterAjax)} ajax{/if}">
+        <form method="get" action="{$wa->currentUrl(0,1)}">
+            {$c = $wa->shop->currency(true)}
+            {if isset($category)}
+                {if isset($category.params.max_price)}
+                    {$max_price_filter = ceil(shop_currency($category.params.max_price, null, null, false))}
+                    {if isset($category.params.min_price)}
+                        {$min_price_filter = floor(shop_currency($category.params.min_price, null, null, false))}
+                    {else}{$min_price_filter = 0}{/if}
+                {/if}
             {/if}
-            
-            {if isset($min_price_filter)}
-            placeholder="{$min_price_filter}"
-            {else}
-            placeholder="0"
-            {/if}
-            >
-            <input type="text" name="price_max" 
-            
-            {if $wa->get('price_max')}
-            value="{(int)$wa->get('price_max')}"
-            {elseif isset($max_price_filter)}
-            value="{$max_price_filter}"
-            {/if}
-            
-            {if isset($max_price_filter)}
-            placeholder="{$max_price_filter}"
-            {else}
-            placeholder="∞"
-            {/if}
-            > 
-              	<span class="filter-price" style="display:inline">{if $c.sign == 'руб.'}<span class="ruble" style="display:inline;">Р </span>{else}{$c.sign}{/if}</span>
-        </p>
-        <p class="filters-swith">Раскрыть фильтр<i class="icon-angle-down"></i></p>
-        <div class="filters-popup">
-        {foreach $filters as $fid => $filter}                      
-            {if $fid != 'price'} 
-          	<p>
-                <span>{$filter.name|escape}</span>
-                {foreach $filter.values as $v_id => $v}
-                    <label>
-                        <input type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked
-
-{/if} value="{$v_id}"> {$v}
-                    </label><br>
-                {/foreach}
-            </p>  
-            {/if}            
-        {/foreach}
-        </div>  
+            <p>
+            <span>[`Price`]</span>
+            [`from`] <input type="text" name="price_min" 
+            value="{if $wa->get('price_min')}{(int)$wa->get('price_min')}{elseif isset($min_price_filter)}{$min_price_filter}{/if}" 
+            placeholder="{if isset($min_price_filter)}{$min_price_filter}{else}0{/if}">
+            [`to`] <input type="text" name="price_max" 
+            value="{if $wa->get('price_max')}{(int)$wa->get('price_max')}{elseif isset($max_price_filter)}{$max_price_filter}{/if}" 
+            placeholder="{if isset($max_price_filter)}{$max_price_filter}{else}∞{/if}">
+            <span class="filter-price" style="display:inline-block;">{if $wa->shop->currency() == 'RUB' && !empty($theme_settings.sumbolRUB)}<span class="ruble">Р</span>{else}{$c.sign}{/if}</span>
+            </p>
+            <p class="filters-swith">Раскрыть фильтр<i class="icon-angle-down"></i></p>
+            <div class="filters-popup">
+            {foreach $filters as $fid => $filter}
+                {if $fid != 'price'}
+                <p>
+                    <span>{$filter.name|escape}</span>
+                    {if $filter.type == 'boolean'}
+                        <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code)} checked{/if} value="1"> [`Yes`]</label><br>
+                        <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code) === '0'} checked{/if} value="0"> [`No`]</label><br>
+                        <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code, '') === ''} checked{/if} value=""> [`Any`]</label><br>
+                    {else}
+                        {foreach $filter.values as $v_id => $v}
+                        <label>
+                            <input type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if} value="{$v_id}"> {$v}
+                        </label><br>
+                        {/foreach}
+                    {/if}
+                </p>
+                {/if}
+            {/foreach}
+            </div>
+            {if $wa->get('sort')}<input type="hidden" name="sort" value="{$wa->get('sort')|escape}">{/if}
+            {if $wa->get('order')}<input type="hidden" name="order" value="{$wa->get('order')|escape}">{/if}
             <input type="submit" value="Применить"> <!--[`Filter products`]-->
         </form>
     </div>

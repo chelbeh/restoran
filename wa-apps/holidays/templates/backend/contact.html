@@ -1,0 +1,51 @@
+<div class="block double-padded">
+    <h1>
+        <img src="{$contact->getPhoto(20)}" alt="" width="20" height="20">
+        {$contact.name|escape}
+
+        <a href="?action=vacation&contact_id={$contact.id}" class="button blue left-spaced"><i class="icon16 add"></i>[`Add vacation`]</a>
+    </h1>
+</div>
+
+{if !$vacations}
+    <div class="block"><p>[`No vacations for this person yet.`]</p></div>
+{else}
+    <table class="zebra" id="user-vacations">
+        <thead>
+            <tr>
+                <th>[`First day`]</th>
+                <th>[`Last day`]</th>
+                <th class="min-width nowrap">[`Number of days`]</th>
+            </tr>
+        </thead>
+        <tbody>
+            {$total_days = 0}
+            {foreach $vacations as $v}
+                {$total_days = $total_days + $v.number_of_days}
+                <tr data-id="{$v.id}">
+                    <td class="nowrap">{$v.start|wa_date:'humandate'}</td>
+                    <td class="nowrap">{$v.end|wa_date:'humandate'}</td>
+                    <td class="nowrap">{_w('%d day', '%d days', $v.number_of_days)}</td>
+                </tr>
+            {/foreach}
+        </tbody>
+        <tfoot>
+            <th colspan="2" class="align-right">[`Total:`]</th>
+            <th>{_w('%d day', '%d days', $total_days)}</th>
+        </tfoot>
+    </table>
+{/if}
+
+<script>$(function() { "use strict";
+
+    var table = $('#user-vacations');
+    table.find('tbody tr').each(function() {
+        var tr = $(this), id = tr.data('id');
+        tr.children().each(function() {
+            var td = $(this);
+            $('<a>').attr('href', '?action=vacation&id='+id).html(td.html()).appendTo(td.empty());
+        });
+    });
+
+});</script>
+

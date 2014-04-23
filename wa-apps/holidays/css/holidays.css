@@ -1,0 +1,250 @@
+body {
+    background: url(../img/bg2.jpg) fixed no-repeat #B5CDFF;
+    background-size: cover;
+}
+#wa-applist ul li a { color: #eee; }
+#wa-applist ul li.selected a { color: #fff; }
+#wa-account h3 { color: #fff; }
+#wa-account a { color: #aaa; }
+#wa-my-username { color: #eee; }
+.sidebar .glass-pane {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 1px 15px #5F4204;
+
+    margin: 16px 14px 0 0;
+    -webkit-border-top-right-radius: 15px;
+    -webkit-border-bottom-right-radius: 15px;
+    -moz-border-radius-topright: 15px;
+    -moz-border-radius-bottomright: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    overflow: hidden;
+}
+.sidebar .glass-pane li.selected a {
+    -webkit-border-top-right-radius: 6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-topright: 6px;
+    -moz-border-radius-bottomright: 6px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background: #FFFFFF;
+}
+#c-core {
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    background: rgba(255,255,255,.7);
+    margin: 15px 15px 150px 200px;
+    min-height: 250px;
+    max-width: 999px;
+    box-shadow:
+        inset 4px 4px 10px rgba(255,255,255,.2), /*top internal highlight*/
+        inset -4px -4px 4px rgba(0,0,0,0.1), /*bottom internal shadow*/
+        0 1px 15px #5F4204;
+}
+#c-core.overview {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+.back-header {
+    background: #FCFCFC;
+    border-bottom: 1px solid #DDDDDD;
+}
+.wa-pagination span {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 1em;
+}
+.wa-pagination ul {
+    vertical-align: middle;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+.wa-pagination ul li {
+    list-style-type: none;
+    float: left;
+    padding: 4px 6px;
+}
+.wa-pagination ul li a {
+    display: block;
+    text-decoration: none;
+}
+.wa-pagination ul li a:hover {
+    text-decoration: underline;
+}
+i.icon16 { vertical-align: middle; }
+a.button i.icon16 { margin: 0 .3em 0 0; vertical-align: -15%; }
+
+h1 .button { vertical-align: 20%; }
+.left-spaced.left-spaced.left-spaced.left-spaced { margin-left: 2em; }
+.right-spaced.right-spaced.right-spaced.right-spaced { margin-right: 2em; }
+.top-spaced.top-spaced.top-spaced.top-spaced { margin-top: 1em; }
+.bottom-spaced.bottom-spaced.bottom-spaced.bottom-spaced { margin-bottom: 1em; }
+.cursor-pointer { cursor: pointer; }
+
+.overview-wrapper h1 { color: #30719C; }
+
+
+table.holidays-calendar td {
+    background: transparent;
+}
+table.holidays-calendar td.day, table.holidays-calendar td.stub {
+    border: 1px solid #4098D3;
+    background-color: #f6f6f6;
+    box-shadow:
+        inset 4px 4px 10px rgba(255,255,255,.5), /*top internal highlight*/
+        inset -4px -4px 10px rgba(0,0,0,0.1); /*bottom internal shadow*/
+}
+table.holidays-calendar td.weekday-name div {
+    position: relative;
+    height: 50px;
+}
+table.holidays-calendar td.weekday-name.first span {
+    -webkit-border-top-left-radius: 15px;
+    -moz-border-radius-topleft: 15px;
+    border-top-left-radius: 15px;
+    border-left: 2px solid #30719C;
+}
+table.holidays-calendar td.weekday-name.last span {
+    -webkit-border-top-right-radius: 15px;
+    -moz-border-radius-topright: 15px;
+    border-top-right-radius: 15px;
+    border-right: 2px solid #30719C;
+}
+table.holidays-calendar td.weekday-name span {
+    display: block;
+    background-color: #4098D3;
+    border-top: 2px solid #30719C;
+    color: #fff;
+    text-align: center;
+    padding: 6px;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    bottom: 0;
+}
+table.holidays-calendar td.current {
+    background: #92C9EE !important;
+}
+table.holidays-calendar td.even.day {
+}
+table.holidays-calendar td.odd.day, table.holidays-calendar td.odd.stub {
+}
+table.holidays-calendar td.even.day.weekend {
+
+}
+table.holidays-calendar td.odd.day.weekend {
+}
+table.holidays-calendar td.stub {
+}
+table.holidays-calendar td .cell {
+    position: relative;
+    width: 51px; /*!!!*/
+    height: 49px; /*!!!*/
+    padding-top: 2px;
+}
+table.holidays-calendar td .day-number {
+    position: absolute;
+    z-index: 50;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    line-height: 50px; /*!!!*/
+    text-align: center;
+    color: #5F4524;
+    opacity: .8;
+    font-size: 16px;
+}
+table.holidays-calendar td.month-name {
+    padding-right: 1em;
+    font-size: 20px;
+    font-weight: bold;
+    color: #30719C;
+    text-align: right;
+    text-shadow: 1px 1px 4px #fff;
+}
+table.holidays-calendar .day-vac {
+    width: 52px; /*!!!*/
+    height: 4px;
+    position: relative;
+    margin-bottom: 2px;
+}
+table.holidays-calendar .day-vac.stub {
+    height: 6px;
+}
+table.holidays-calendar .vac-info {
+    position:absolute;
+    height: 51px;
+    width: 100%;
+    left: 16px;
+    min-width: 244px;
+    cursor: pointer;
+    background: #fff;
+    max-width: 320px;
+    border: 1px solid #4098D3;
+}
+table.holidays-calendar .vac-info h5 {
+    margin-top: 3px;
+    max-height: 30px;
+    overflow: hidden;
+}
+table.holidays-calendar .vac-info img {
+    float: left;
+    margin: 0 10px 0 0;
+}
+table.holidays-calendar .vac-info .vac-color-bar {
+    width: 2px;
+    height: 48px;
+    float: left;
+    margin: 0 1px 2px 0;
+}
+
+
+table.holidays-calendar td.top-bordered { border-top: 2px solid #30719C !important; }
+table.holidays-calendar td.right-bordered { border-right: 2px solid #30719C !important; }
+table.holidays-calendar td.bottom-bordered { border-bottom: 2px solid #30719C !important; }
+table.holidays-calendar td.left-bordered { border-left: 2px solid #30719C !important; }
+
+table.holidays-calendar .day-number .icon10 { vertical-align: top; margin: 0; }
+table.holidays-calendar td.right-col { vertical-align: top; }
+table.holidays-calendar td.day .icon16 { position: absolute; bottom: 2px; left: 0; }
+table.holidays-calendar td.day .icon16 + .icon16 { left: 18px; }
+table.holidays-calendar td.day .icon16 + .icon16 + .icon16 { left: 35px; }
+
+.icon16.birthday { background:url(../img/present.png); }
+
+.button.blue { border-color: #4098D3; }
+
+.ui-datepicker-today .ui-state-highlight {
+    border: 1px dashed #c5dbec;
+    background: #dfeffc url(images/ui-bg_glass_85_dfeffc_1x400.png) 50% 50% repeat-x;
+    color: #2e6e9e;
+}
+
+.holidays-calendar .vac-info.inactive {
+    opacity: .2;
+}
+.holidays-calendar .vac-info.active {
+    background: #f4f4f4;
+}
+.holidays-calendar .day-vac.active {
+    margin-top: -1px;
+    margin-bottom: 1px;
+    border-top-width: 2px !important;
+    border-bottom-width: 2px !important;
+}
+.holidays-calendar .day-vac.inactive {
+    opacity: .2;
+}
+.holidays-calendar .paging a.prevnext {
+    text-shadow: 0 0 4px #052033;
+    font-weight: bold;
+    color: white;
+}
+

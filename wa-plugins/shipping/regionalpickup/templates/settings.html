@@ -1,0 +1,216 @@
+<div id="regionalpickup-settings">
+
+    <div class="field">
+        <div class="name">{$p->_w('Locations')}
+            <br><br>
+            <p class="hint">{$p->_w('Customer will be prompted to select preferred location from the list')}</p>
+        </div>
+        <div class="value">
+            <table class="zebra">
+                <thead>
+                    <tr>
+                        <th class="min-width">&nbsp;</th>
+                        <th>{$p->_w('Code')}</th>
+                        <th>{$p->_w('Location name')}</th>
+                        <th>&nbsp;</th>
+                        <th>{$p->_w('Shipping rate (surcharge)')}</th>
+                        <th>{$p->_w('Free delivery limit')}</th>
+                        <th>{$p->_w('Maximum weight (kg)')}</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr class="white">
+                        <td colspan="4">
+                            <a class="inline-link small add-rate" href="#">
+                                <i class="icon10 add"></i> <b><i>{$p->_w('Add location')}</i></b>
+                            </a>
+                        </td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {foreach $values.rate as $rate_code=>$rate}
+                        <tr class="rate">
+                            <td class="min-width">
+                                <i class="icon16 sort"></i>
+                            </td>
+                            <td>
+                                <input type="text" value="{$rate_code}"
+                                       class="input pickpointcode"
+                                       required
+                                       placeholder="{$p->_w('Code')}"
+                                       name="{$namespace}[rate][{$rate_code}][code]"
+                                       >
+                            </td>
+                            <td>
+                                <input type="text" value="{$rate.location}"
+                                       class="refreshable input"
+                                       name="{$namespace}[rate][{$rate_code}][location]"
+                                       placeholder="{$p->_w('Location name')}"
+                                       >
+                            </td>
+                            <td>→</td>
+                            <td>
+                                <input type="text" value="{$rate.cost}"
+                                       name="{$namespace}[rate][{$rate_code}][cost]"
+                                       placeholder="0"
+                                       >
+                            </td>
+                            <td>
+                                <input type="text" value="{$rate.free}"
+                                       name="{$namespace}[rate][{$rate_code}][free]"
+                                       placeholder="0"
+                                       >
+                            </td>
+                            <td>
+                                <input type="text" value="{$rate.maxweight}"
+                                       name="{$namespace}[rate][{$rate_code}][maxweight]"
+                                       placeholder="0"
+                                       >
+                            </td>
+                            <td>
+                                <a class="delete-rate" href="#">
+                                    <i class="icon16 delete"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {foreachelse}
+                        <tr class="rate">
+                            <td class="min-width">
+                                <i class="icon16 sort"></i>
+                            </td>
+                            <td>
+                                <input type="text" value="{$rate_code}"
+                                       class="input pickpointcode"
+                                       required
+                                       placeholder="{$p->_w('Code')}"
+                                       name="{$namespace}[rate][{$rate_code}][code]"
+                                       >
+                            </td>
+                            <td>
+                                <input type="text" value=""
+                                       class="refreshable input"
+                                       name="{$namespace}[rate][0][location]"
+                                       placeholder="{$p->_w('Location name')}"
+                                       >
+                            </td>
+                            <td>→</td>
+                            <td>
+                                <input type="text" value="{$rate.cost}"
+                                       name="{$namespace}[rate][0][cost]"
+                                       placeholder="0"
+                                       >
+                            </td>
+                            <td>
+                                <input type="text" value="{$rate.free}"
+                                       name="{$namespace}[rate][0][free]"
+                                       placeholder="0"
+                                       style="width: 5em"
+                                       >
+                            </td>
+                            <td>
+                                <input type="text" value="{$rate.maxweight}"
+                                       name="{$namespace}[rate][0][maxweight]"
+                                       placeholder="0"
+                                       >
+                            </td>
+                            <td>
+                                <a class="delete-rate" href="#">
+                                    <i class="icon16 delete"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(function() {
+        'use strict';
+
+        var container = $('#regionalpickup-settings');
+
+        container.on('click', '.add-rate', function() {
+            var el = $(this);
+            var table = el.parents('table:first');
+            var last = table.find('tr.rate:last');
+            var clone = last.clone();
+
+            clone.find('input').each(function() {
+                var input = $(this);
+
+                // Найдем максимальный целочисленный rate_code и увеличим на 1
+                // это будет какой-никакой уникальный ID ПВЗ. Пересекаться с
+                // предыдущими значениями будет только в случае переименования
+                // удаления предыдущего максимального значения ПВЗ
+                var rate_code=0;
+                $(".pickpointcode", container).each(function(){
+                    var el_code = $(this).val();
+                    if(el_code !== 'undefined' && !/[^0-9]/.test(el_code))
+                    {
+                        el_code = parseInt(el_code, 10);
+                        rate_code = rate_code > el_code ? rate_code : el_code;
+                    }
+                });
+
+                rate_code++;
+
+                // increase index inside input name
+                var name = input.attr('name');
+
+                input.attr('name', name.replace(/\[rate\]\[(.+?)\]/, '[rate][' + rate_code + ']'));
+
+                input.val((input.hasClass('pickpointcode') ? rate_code : ''));
+            });
+
+            last.after(clone);
+
+            return false;
+        });
+
+        container.on('change', '.pickpointcode', function(){
+            var row = $(this).closest('tr');
+            var new_rate_code = $(this).val();
+            if (new_rate_code){
+                $('input', row).each(function(){
+                    var name = $(this).attr('name');
+                    $(this).attr('name', name.replace(/\[rate\]\[(.+?)\]/, '[rate][' + new_rate_code + ']'));
+                });
+            }
+        });
+
+        container.on('click', '.delete-rate', function() {
+            var el = $(this);
+            var table = el.parents('table:first');
+            if (table.find('tr.rate').length > 1) {
+                el.parents('tr:first').remove();
+            } else {
+                el.parents('tr:first').find('input').val('');
+            }
+            return false;
+        });
+
+        $(".value .zebra tbody").sortable({
+            axis: "y",
+            helper: function(e, ui){
+                ui.children().each(function(){
+                    $(this).width($(this).width());
+                });
+                return ui;
+            },
+            update: function(e, ui){
+                $(".value .zebra tbody tr.rate").each(function(index, value){
+                    $("input", this).each(function(i,v){
+                        name = $(this).attr('name');
+                        $(this).attr('name', name.replace(/\[rate\]\[(\d+)\]/, '[rate][' + (parseInt(index, 10) + 1) +']'));
+                    });
+                });
+            }
+        });
+    });
+
+</script>

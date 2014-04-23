@@ -1,104 +1,82 @@
-	{$blog_pages=$wa->blog->pages()}
-		{if !$settlement_one_blog || $blog_pages || $wa->blog->timeline()}
-			<!-- navigation bar -->
-			<div id="blog-nav">
-    	        <ul>
-                  <li class="link-caption"><span>ссылки блога</span></li>
-        	        {if !$settlement_one_blog || $action == 'post' || $wa->blog->timeline()}
-        	        
-        	        	<!-- blog list -->
+{$blog_pages=$wa->blog->pages()}
+{if !$settlement_one_blog || $blog_pages || $wa->blog->timeline()}
+<!-- navigation bar -->
+<div id="blog-nav">
+    <ul>
+        <li class="link-caption"><span>ссылки блога</span></li>
+        {if !$settlement_one_blog || $action == 'post' || $wa->blog->timeline()}
+            <!-- blog list -->
+            {$blogs = $wa->blog->blogs()}              		
+            {if count($blogs)>1}                  
+                <li class="{if is_array($wa->globals('blog_id')) && empty($is_search)}selected{/if}">
+                    <a href="{$wa->blog->url()}">[`All posts`]<span>({count($wa->blog->posts(null, 1000, ['id']))})</span></a>
+                </li>
+                {foreach $blogs as $blog}
+                    <li class="{if $wa->globals('blog_id') eq $blog.id && empty($is_search)}selected{/if}">
+                        <a href="{$blog.link}">{$blog.name}<span>({count($wa->blog->posts($blog.id, 1000, ['id']))})</span></a>
+                    </li>
+                {/foreach}
+            {else}
+                {$blog=current($blogs)}
+                <li{if empty($is_search)} class="selected"{/if}>
+                    <a href="{$wa->blog->url()}">{$blog.name}<span>({count($wa->blog->posts($blog.id, 1000, ['id']))})</span></a>
+                </li>
+            {/if}
 
-                  
-                  {$blogs = $wa->blog->blogs()}              		
-                        {if count($blogs)>1}                  
-                            <li class="{if is_array($wa->globals('blog_id')) && empty($is_search)}selected{/if}"><a href="{$wa->blog->url
-
-()}">[`All posts`]<span>({count($wa->blog->posts(null, 1000, ['id']))})</span></a></li>
-                            {foreach $blogs as $blog}
-                                <li class="{if $wa->globals('blog_id') eq $blog.id && empty($is_search)}selected{/if}">
-                                    <a href="{$blog.link}">{$blog.name}<span>({count($wa->blog->posts($blog.id, 1000, ['id']))})</span></a>
-                                </li>
-                            {/foreach}
-                        {else}
-                            {$blog=current($blogs)}
-                            <li{if empty($is_search)} class="selected"{/if}>
-                              <a href="{$wa->blog->url()}">{$blog.name}<span>({count($wa->blog->posts($blog.id, 1000, ['id']))})</span></a>
-                            </li>
-                        {/if}
-
-                  
-                       {$timeline = $wa->blog->timeline()}
-                        {if !empty($timeline)}
-                        	<!-- timeline navigation -->
-                  <ul class="pages-navig-pull">
-	                    	<li id="timeline" class="dropdown">
-		                    	<a href="#" class="inline-link">[`Calendar`]</a>
-	    	    	            {if !empty($timeline)}
-	    	    	            	
-        							<ul class="menu-v">
-            						{$year=null}
-            						{foreach $timeline as $year_month => $item}
-                						{if $year neq $item.year}
-                    						{if !$item@first}
-					    	                        </ul>
-                                      						                        </li>
-						                    {/if}
-					    	                <li{if $item.year_selected} class="selected"{/if}>
-					        	            {$year=$item.year}
-					            	        <a href="{$item.year_link}"  >{$item.year|default:'NULL'} год</a>
+            {$timeline = $wa->blog->timeline()}
+            {if !empty($timeline)}
+                <!-- timeline navigation -->
+                <ul class="pages-navig-pull">
+	                <li id="timeline" class="dropdown">
+		                <a href="#" class="inline-link">[`Calendar`]</a>
+	    	    	    {if !empty($timeline)}
+	    	    	    <ul class="menu-v">
+            			    {$year=null}
+            			    {foreach $timeline as $year_month => $item}
+                			    {if $year neq $item.year}
+                    			    {if !$item@first}
+					    	                </ul>
+                                        </li>
+						            {/if}
+					    	        <li{if $item.year_selected} class="selected"{/if}>
+					        	        {$year=$item.year}
+					            	    <a href="{$item.year_link}"  >{$item.year|default:'NULL'} год</a>
                     						<ul class="menu-v">
-						                {/if}
-						                <li{if $item.selected} class="selected"{/if}>
-						                    <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">
-
-{_ws(date("F",gmmktime(0,0,0,$item.month)))}</a>
-						                </li>
-									    {if $item@last}
-									            </ul>
-                                              
-								    	    </li>
-							            {/if}
-						            {/foreach}
-							        </ul>
+						        {/if}
+						        <li{if $item.selected} class="selected"{/if}>
+						            <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">{_ws(date("F",gmmktime(0,0,0,$item.month)))}</a>
+						        </li>
+								{if $item@last}
+								        </ul>
+								    </li>
 							    {/if}
-	                    	</li>
-</ul>
-    	            	{/if}
-    	            {/if}
+                            {/foreach}
+						</ul>
+						{/if}
+                    </li>
+                </ul>
+            {/if}
+        {/if}
 
+        <!-- static page list -->
+        {if isset($page_id)}{$blid = $page_id}{else}{$blid = null}{/if}
+        {wa_print_tree tree=$wa->blog->pages(0, 2, true) selected=$blid unfolded=true class="pages-navig-pull" elem='<a href=":url">:name</a>'}
 
-
-
-
-
-                	<!-- static page list -->
-{if isset($page_id)}{$blid = $page_id}{else}{$blid = null}{/if}
-     {wa_print_tree tree=$wa->blog->pages(0, 2, true) selected=$blid unfolded=true class="pages-navig-pull" elem='<a href=":url">:name</a>'}
-
-
-
-                	
-                	<!-- plugins -->
-					{* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).
-
-%plugin_id%.sidebar *}
-					
-{*21.12.2013*}
-{if isset($frontend_action) &&  !empty($frontend_action)}
-{*21.12.2013*}
-						<li class="dropdown">
-							<a href="#" class="inline-link">[`More`]<i class="icon-angle-down"></i></a>
-   	    	            	<div class="popup">
-								{foreach $frontend_action as $plugin => $output}
-								    {if !empty($output.sidebar)}{$output.sidebar}{/if}
-								{/foreach}
-							</div>
-						</li>
-					{/if}
-
-
-
-
-	            </ul>
-			</div>
-		{/if}
+        <!-- plugins -->
+        {* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.sidebar *}
+        {foreach $frontend_action as $plugin => $output}
+            {if !empty($output.sidebar)}{$blog_plugin = true}{/if}
+        {/foreach}
+        {if isset($blog_plugin)}
+            <li class="dropdown">
+                <a href="#" class="inline-link">[`More`]<i class="icon-angle-down"></i></a>
+               	<div class="popup">
+                    {foreach $frontend_action as $plugin => $output}
+                        {if !empty($output.sidebar)}{$output.sidebar}{/if}
+                    {/foreach}
+                </div>
+            </li>
+        {/if}
+    </ul>
+</div>
+{/if}

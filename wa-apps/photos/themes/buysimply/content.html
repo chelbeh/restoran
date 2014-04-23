@@ -1,0 +1,8 @@
+<!-- plugin hook -->
+{* @event frontend_layout.%plugin_id%.header *}
+{foreach $frontend_layout as $item}{if !empty($item.header)}{$item.header}{/if}{/foreach}
+
+<!-- photos app content -->
+<div {if $action == 'photo'} itemscope itemtype="http://schema.org/Photograph"{/if} class="content-old">
+    {$content}
+</div>

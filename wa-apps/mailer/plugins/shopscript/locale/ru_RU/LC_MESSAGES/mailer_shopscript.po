@@ -1,0 +1,63 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WebAsyst mailer shopscript integration plugin\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-06-20 12:57+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: Russian Federation\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+msgid "Shopscript integration settings"
+msgstr "Настройки интеграции с Shop-Script"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Import from WebAsyst Shop-Script"
+msgstr "Импорт из WebAsyst Shop-Script"
+
+msgid "Allows to create recipients list from buyers and subscribers in old version of Shop-Script"
+msgstr "Позволяет сделать список получателей рассылки из покупателей и подписчиков в старой версии Shop-Script"
+
+msgid "Import from Shop-Script"
+msgstr "Импорт из Shop-Script"
+
+msgid "All customers"
+msgstr "Все покупатели"
+
+msgid "News subscribers"
+msgstr "Подписчики на новости"
+
+msgid "All Shop-Script customers"
+msgstr "Все покупатели Shop-Script"
+
+msgid "Shop-Script news subscribers"
+msgstr "Подписчики на новости Shop-Script"
+
+msgid "Shop-Script database:"
+msgstr "База данных Shop-Script:"
+
+msgid "customize"
+msgstr "настроить"
+
+msgid "Shop-Script"
+msgstr ""
+
+msgid "Please specify access parameters to MySQL database where WebAsyst Shop-Script is installed:"
+msgstr "Укажите параметры доступа к базе данных MySQL, в которой установлено приложение WebAsyst Shop-Script:"
+
+msgid "access error"
+msgstr "ошибка доступа"
+
+msgid "Add newsletter subscribers from the database of your online store based on the WebAsyst Shop-Script application (previous version)."
+msgstr "Добавьте в качестве получателей рассылки покупателей и подписчиков на новости из базы данных вашего интернет-магазина, созданного на основе приложения WebAsyst Shop-Script (предыдущая версия)."
+

@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Holidays app\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-10-07 19:35+0400\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: Russian Federation\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+msgid "Holidays"
+msgstr "Отпуска"
+
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d день"
+msgstr[1] "%d дня"
+msgstr[2] "%d дней"
+
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d год"
+msgstr[1] "%d года"
+msgstr[2] "%d лет"
+
+msgid "Add vacation"
+msgstr "Добавить отпуск"
+
+msgid "No vacations for this person yet."
+msgstr "У этого сотрудника пока нет ни одного отпуска."
+
+msgid "First day"
+msgstr "Первый день"
+
+msgid "Last day"
+msgstr "Последний день"
+
+msgid "Number of days"
+msgstr "Количество дней"
+
+msgid "Total:"
+msgstr "Всего:"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "Delete vacation"
+msgstr "Удалить отпуск"
+
+msgid "Vacation"
+msgstr "Отпуск"
+
+msgid "Person"
+msgstr "Сотрудник"
+
+msgid "Create new contact"
+msgstr "Создать новый контакт"
+
+msgid "First day of vacation"
+msgstr "Первый день отпуска"
+
+msgid "Number of working days"
+msgstr "Количество рабочих дней"
+
+msgid "Comments"
+msgstr "Комментарий"
+
+msgid "Use this field for your convenience."
+msgstr "Используйте это поле как вам удобно."
+
+msgid "Overview"
+msgstr "Обзор"
+
+msgid "Loading..."
+msgstr "Загрузка..."
+
+msgid "prev"
+msgstr "пред"
+
+msgid "next"
+msgstr "след"
+

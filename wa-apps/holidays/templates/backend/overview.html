@@ -1,0 +1,205 @@
+<div class="block double-padded overview-wrapper">
+
+    <table class="holidays-calendar"><tbody>
+        <tr>
+            <td></td>
+            <td colspan="7" style="text-align: center;">
+                <div class="paging">
+                    <a href="?action=overview&start={$prev_start}" class="right-spaced prevnext">
+                        &#x25C0; [`prev`]
+                    </a>
+
+                    <a href="?action=vacation" class="button blue">
+                        <i class="icon16 add"></i>[`Add vacation`]
+                    </a>
+
+                    <a href="?action=overview&start={$next_start}" class="left-spaced prevnext">
+                        [`next`] &#x25B6;
+                    </a>
+                </div>
+            </td>
+            <td></td>
+        </tr>
+        {$vac_buffer = []}
+        {foreach $months as $m}
+            <tr>
+                <td class="month-spacer"></td>
+                {foreach $day_names as $dn}
+                    <td class="month-spacer weekday-name{if $dn@first} first{elseif $dn@last} last{/if}"><div><span>{$dn|escape}</div></div></td>
+                {/foreach}
+                <td class="month-spacer"></td>
+            </tr>
+            {foreach $m.weeks as $w}
+                <tr id="w-{$w.id}">
+                    <td class="month-name">
+                        {if $w@first}
+                            {$m.name}<br>
+                            <span style="font-size:60%">{$m.year}</span>
+                        {/if}
+                    </td>
+                    {foreach $w.days as $d}
+                        {$classes = []}
+                        {if $d@first}
+                            {$classes[] = 'left-bordered'}
+                        {elseif $d@last}
+                            {$classes[] = 'right-bordered'}
+                        {/if}
+                        {if $w@last}
+                            {$classes[] = 'bottom-bordered'}
+                        {/if}
+                        {if !empty($d.weekend)}
+                            {$classes[] = 'weekend'}
+                        {/if}
+                        {if !empty($d.current)}
+                            {$classes[] = 'current'}
+                        {/if}
+                        {if ($w@iteration + $d@iteration) is even by 1}
+                            {$classes[] = 'even'}
+                        {else}
+                            {$classes[] = 'odd'}
+                        {/if}
+
+                        {if !empty($d.stub)}
+                            {$classes[] = 'stub'}
+                            <td class="{join(' ', $classes)}"></td>
+                        {else}
+                            {$classes[] = 'day'}
+                            <td class="{join(' ', $classes)}"><div class="cell">
+                                {foreach ifempty($d.vacations, array()) as $v}
+                                    {if !empty($v.stub)}
+                                        <div class="day-vac stub"></div>
+                                    {else}
+                                        <div class="day-vac" style="{$v.css}" data-id="{$v.id}"></div>
+                                    {/if}
+                                {/foreach}
+                                <div class="day-number">{$d.day}</div>
+                                {foreach ifempty($d.birthdays, []) as $b}
+                                    <i class="icon16 birthday"></i>
+                                {/foreach}
+                            </div></td>
+                        {/if}
+                    {/foreach}
+                    <td class="right-col" style="width:100%;">
+                        {foreach ifempty($w.vacations_started, array()) as $v}
+                            {$vac_buffer[] = $v}
+                        {/foreach}
+                        {foreach ifempty($w.birthdays, array()) as $v}
+                            {$vac_buffer[] = $v}
+                        {/foreach}
+                        {if $vac_buffer}
+                            {$v = array_shift($vac_buffer)}
+                            <div style="position:relative;width:100%;">
+                                <div class="vac-info"{if !empty($v.id)} data-id="{$v.id}"{/if}>
+                                    {if !empty($v.css)}
+                                        <div class="vac-color-bar" style="{$v.css}border-left:1px solid {$v.color[1]};border-right:1px solid {$v.color[2]};"></div>
+                                    {else}
+                                        <div class="vac-color-bar" style="border:1px solid transparent;"></div>
+                                    {/if}
+                                    <img src="{waContact::getPhotoUrl($v.contact_id, $v.contact_photo, 50, 50)|escape}" width="50" height="50" class="float-left">
+                                    <h5>{$v.contact_name|escape}</h5>
+                                    {if !empty($v.id)}
+                                        <a href="?action=vacation&id={$v.id}" class="hint">{$v.start|wa_date:'date'} - {$v.end|wa_date:'date'}</a>
+                                    {else}
+                                        <i class="icon16 birthday"></i>
+                                        <a href="{$wa_backend_url}contacts/#/contact/{$v.contact_id}/no-bc/" class="hint">
+                                            {$v.date|wa_date:'humandate'},
+                                            {_w('%d year', '%d years', $v.age)}
+                                        </a>
+                                    {/if}
+                                </div>
+                            </div>
+                        {/if}
+                    </td>
+                </tr>
+            {/foreach}
+        {/foreach}
+    </tbody></table>
+
+</div>
+
+<script>(function() { "use strict";
+
+    var table = $('table.holidays-calendar');
+
+    var deactivation_timeout = null;
+    table.on('mouseover', '.vac-info', function() {
+        var vac_info = $(this);
+        var vac_id = vac_info.data('id');
+        if (!vac_id || vac_info.hasClass('active')) {
+            return;
+        }
+
+        if (deactivation_timeout) {
+            clearTimeout(deactivation_timeout);
+            deactivation_timeout = null;
+        }
+
+        table.find('.vac-info.active').removeClass('active inactive');
+        vac_info.removeClass('inactive').addClass('active').one('mouseleave', function() {
+            deactivation_timeout = setTimeout(function() {
+                if (!vac_info.hasClass('active')) {
+                    return;
+                }
+                table.find('.vac-info').removeClass('active inactive');
+                table.find('.day-vac').removeClass('active inactive');
+            }, 50);
+        });
+
+        table.find('.day-vac[data-id]').each(function() {
+            var day_vac = $(this);
+            if (day_vac.data('id') == vac_id) {
+                day_vac.removeClass('inactive').addClass('active');
+            } else {
+                day_vac.removeClass('active').addClass('inactive');
+            }
+        });
+    });
+
+    table.on('mouseover', '.day', function() {
+        var day = $(this);
+        var vacs = day.find('.day-vac');
+        if (!vacs.length) {
+            return;
+        }
+
+        if (deactivation_timeout) {
+            clearTimeout(deactivation_timeout);
+            deactivation_timeout = null;
+        }
+
+        table.find('.day').removeClass('active inactive').find('.day-vac.active,.day-vac.inactive').removeClass('active inactive');
+        day.addClass('active').one('mouseleave', function() {
+            deactivation_timeout = setTimeout(function() {
+                if (!day.hasClass('active')) {
+                    return;
+                }
+                table.find('.vac-info').removeClass('active inactive');
+                day.removeClass('active inactive');
+            }, 50);
+        });
+
+        var vac_ids = {};
+        vacs.each(function() {
+            vac_ids[$(this).data('id') || 'none'] = true;
+        });
+
+        table.find('.vac-info').each(function() {
+            var vac_info = $(this);
+            if (vac_ids[vac_info.data('id')]) {
+                vac_info.removeClass('inactive').addClass('active');
+            } else {
+                vac_info.removeClass('active').addClass('inactive');
+            }
+        });
+    });
+
+    table.on('click', '.vac-info', function(e) {
+        if (e.target && e.target.nodeName && e.target.nodeName.toLowerCase() != 'a') {
+            window.location = $(this).find('a:first')[0].href;
+        }
+    });
+
+    // Highlight item in sidebar
+    $('#wa-app > .sidebar a[href="?action=overview"]').closest('li').addClass('selected');
+})();</script>
+

@@ -1,0 +1,16 @@
+{if !$is_lazyloading and !empty($stream_title)}
+<div class="row-fluid">
+	<div class="span12 alert"><h3>{$stream_title}</h3></div>
+</div>
+{/if}
+<a name="page_{$page}"></a>
+{if $is_search}
+	{include file="stream_search.html" inline}
+	{else}
+	{include file="stream_posts.html" inline}
+{/if}
+<div class="pages">
+	{for $p=1 to $pages}
+		<li{if $p eq $page} class="selected"{/if}><a href="{if $p eq $page}#page_{$page}{else}?page={$p}{/if}">{$p}</a></li>
+	{/for}
+</div>

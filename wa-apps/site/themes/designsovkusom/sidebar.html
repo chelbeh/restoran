@@ -1,0 +1,87 @@
+<div class="sidebar" role="navigation">
+
+    {$cats=$wa->shop->categories(0, null, true)}
+    {if !empty($cats)}
+    <div class="leftmenu">
+        <ul>
+            <li class="first"><i class="icon categories"></i>Категории</li>
+            {foreach $cats as $cat}
+                {$subcats = $wa->shop->categories($cat.id,null,true)}
+                <li {if count($subcats)>0}class="category_tree"{/if}>
+                    <a href="{$cat.url}">{$cat.name}</a>
+                    {if count($subcats)>0}
+                    <ul>
+                        {foreach $subcats as $subcat}
+                            <li {if $subcat@first}class="first"{/if}{if $subcat@last}class="last"{/if}><a href="{$subcat.url}">{$subcat.name}</a></li>
+                        {/foreach}
+                    </ul>
+                {/if}
+                </li>
+            {/foreach}
+        </ul>
+    </div>
+    {/if}
+
+    {$pages=$wa->site->pages()}
+    {if !empty($pages)}
+    <div class="leftmenu">
+        <ul id="page-list">
+            <li class="first"><i class="icon categories"></i>Страницы</li>
+            {foreach $pages as $p}
+            <li{if $page.id == $p.id} class="selected"{/if}>
+                <a href="{$p.url}">{$p.name}</a>
+            </li>
+            {/foreach}
+        </ul>
+    </div>
+    {/if}
+    
+    {if $theme_settings.news}
+        {$latest_posts = $wa->blog->posts(null,6)}
+        {if !empty($latest_posts)}
+        <!-- новости -->
+        <div class="news_container">
+            <div class="news">
+                <a href="/blog/">Новости</a>
+                
+                {foreach $latest_posts as $post}
+                <div class="post">
+                    <span>{$post.datetime|wa_datetime:"humandate"}</span>
+                    <h3>
+                        <a href="{$post.link}">{$post.title}</a>
+                        {* @event prepare_posts_frontend.%plugin_id%.post_title *}
+                        {if !empty($post.plugins.post_title)}
+                            {foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+                        {/if}
+                    </h3>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+        {/if}
+    {/if}
+    
+    {if $theme_settings.photos}
+        <!-- посленднее фото -->
+        {$photos = $wa->photos->photos(null,null,8)}
+        {if !empty($photos)}
+        <div class="photos_container">
+        <a href="/photos/">Последние фото</a>
+        <ul>
+        {foreach $photos as $photo}
+            <li {if $photo@iteration is even}class="even"{/if}>
+                {if empty($photo.frontend_link)}
+                  {$wa->photos->getImgHtml($photo, "95x95")}
+                {else}
+                  <a href="{$photo.frontend_link|default:'#'}">
+                    {$wa->photos->getImgHtml($photo, "95x95")}
+                  </a>
+                {/if}
+            </li>
+        {/foreach}
+        </ul>
+        <div class="clear-both"></div>
+        </div>
+        {/if}
+    {/if}
+</div>

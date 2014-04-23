@@ -1,0 +1,29 @@
+<div class="white-back">
+	<div class="row-fluid">
+		<div class="span3">
+		{include file="`$wa_active_theme_path`/sidebar.html" inline}
+			<div class="margintop" id="plugin">
+				<!-- plugins -->
+				{* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.sidebar *}
+					{foreach $frontend_action as $plugin => $output}
+					<ul class="menu-v" style="margin-top:20px;">
+					  {if !empty($output.sidebar)}
+						<li class="collapsible">
+							<a href="#" onClick="return false">
+								{if substr($plugin, -7) == '-plugin'}{$wa->pluginName(substr($plugin, 0, -7))}{else}[`More`]{/if}
+							</a>
+							<div class="inner">
+								{$output.sidebar}
+							</div>
+						</li>
+					  {/if}
+					  </ul>
+				{/foreach}
+				
+			</div>
+		</div>
+		<div class="span9">
+		{$content}
+		</div>
+	</div>
+</div>

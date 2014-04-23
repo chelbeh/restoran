@@ -1,0 +1,118 @@
+<div class="block double-padded">
+    {if $vacation.id}
+        <ul class="float-right menu-h"><li><a href="?action=vacation&delete={$vacation.id}"><i class="icon16 delete"></i>[`Delete vacation`]</a></li></ul>
+    {/if}
+    <h1>[`Vacation`]</h1>
+
+    <form action="" method="post" id="{$uniqid}">
+        <div class="fields">
+            <div class="field">
+                <div class="name">[`Person`]</div>
+                <div class="value">
+                    <input type="hidden" name="id" value="{$vacation.id}">
+                    {if $autocomplete_url}
+                        <input type="hidden" name="vacation[contact_id]" value="{$contact.id}">
+                        <input type="text" class="contacts-autocomplete" value="{$contact.name|escape}">
+                        [s`or`]
+                        <a href="{$wa_backend_url}contacts/#/contacts/add/">
+                            <i class="icon16 add"></i>[`Create new contact`]
+                        </a>
+                    {else}
+                        <select name="vacation[contact_id]">
+                            {foreach $contacts as $c}
+                                <option value="{$c.id}"{if $c.id == $contact.id} selected{/if}>{$c.name|escape}</option>
+                            {/foreach}
+                        </select>
+                    {/if}
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`First day of vacation`]</div>
+                <div class="value">
+                    <input type="text" name="vacation[start]" value="{$vacation.start}"><i class="icon16 calendar cursor-pointer"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`Last day`]</div>
+                <div class="value">
+                    <input type="text" name="vacation[end]" value="{$vacation.end}"><i class="icon16 calendar cursor-pointer"></i>
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`Number of working days`]</div>
+                <div class="value">
+                    <input type="text" name="vacation[number_of_days]" value="{$vacation.number_of_days}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">
+                    [`Comments`]<br>
+                    <span class="hint">[`Use this field for your convenience.`]</span>
+                </div>
+                <div class="value">
+                    <textarea name="vacation[comment]">{$vacation.comment|escape}</textarea>
+                </div>
+            </div>
+            <div class="field">
+                <div class="value">
+                    <input type="submit" class="button green" value="[s`Save`]">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>$(function() { "use strict";
+
+    var form = $('#{$uniqid}')
+    form.find('[name="vacation[end]"],[name="vacation[start]"]').datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+
+    {if $autocomplete_url}
+        var h, hidden = form.find('[name="vacation[contact_id]"]');
+        form.find('.contacts-autocomplete').autocomplete({
+            source: '{$autocomplete_url}',
+            html: 1,
+            open: function() {
+                hidden.val('');
+            },
+            focus: h = function(e, ui) {
+                $(this).val(ui.item.name);
+                hidden.val(ui.item.value);
+                return false;
+            },
+            select: h
+        }).keyup(function() {
+            hidden.val('');
+        });
+    {/if}
+
+    {foreach $errors as $f => $e}
+        showError('vacation[{$f}]', "{$e|replace:'"':'\"'}");//'
+    {/foreach}
+
+    function showError(fld_id, error) {
+        var f = form.find({if $autocomplete_url} fld_id == 'vacation[contact_id]' ? '.contacts-autocomplete' : {/if}'[name="'+fld_id+'"]');
+        if (f.length) {
+            f.addClass('error');
+        } else {
+            f = form.find(':submit');
+        }
+        f.parent().append($('<em class="errormsg"></em>').text(error));
+    };
+
+    form.on('change keyup', '.error', function() {
+        $(this).removeClass('error').siblings('.errormsg').remove();
+    });
+
+    {if $vacation.id}
+        // Highlight person in sidebar
+        $('#wa-app > .sidebar a[href="?action=contact&id={$contact.id}"]').closest('li').addClass('selected');
+    {/if}
+
+    form.on('click', 'i.icon16.calendar', function() {
+        $(this).siblings('.hasDatepicker').datepicker('show');
+    });
+
+});</script>

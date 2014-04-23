@@ -1,0 +1,66 @@
+<div class="blogname"><span class="icon-pencil"></span><span class="separatornext"> </span> <b>[`Блоги`]</b></div>
+<div id="menu-vv" class="paddingbottom">
+	<ul class="menu">
+    	<!-- blog list -->
+        {$blogs = $wa->blog->blogs()}
+        {if count($blogs)>1}
+            <li class="{if is_array($wa->globals('blog_id')) && empty($is_search)}selected{/if}"><a href="{$wa->blog->url()}">[`All posts`]</a></li>
+            {foreach $blogs as $blog}
+                <li class="{if $wa->globals('blog_id') eq $blog.id && empty($is_search)}selected{/if}">
+                    <a href="{$blog.link}">{$blog.name}</a>
+                </li>
+            {/foreach}
+        {else}
+            {$blog=current($blogs)}
+            <li{if empty($is_search)} class="selected"{/if}>
+                <a href="{$wa->blog->url()}">{$blog.name}</a>
+            </li>
+        {/if}
+ </ul>
+ </div>
+<div class="filters border" id="menu-vv" style="display:none;">
+	<div class="filtername"><span class="icon-calendar"></span><span class="separatornext"> </span> <b>[`Категории`]</b></div>
+	<ul class="menu-v menu">
+		<li></li>
+	</ul>
+</div>
+<!-- info pages -->
+{$blog_pages=$wa->blog->pages()}
+{if $blog_pages}
+ <div class="filters border" id="menu-vv">
+	<div class="filtername"><span class="icon-file"></span><span class="separatornext"> </span> <b>Страницы</b></div>
+    {wa_print_tree tree=$blog_pages class="menu" elem ='
+    <a href=":url" title=":title">:name</a>' collapsible_class='collapsible' selected=$wa->param('page_id')}
+</div>
+	{/if}
+<br>
+ {$timeline = $wa->blog->timeline()}
+  {if !empty($timeline)}
+ <div class="filters border" id="menu-vv">
+	<a href="#" class="showcalendar" onClick="return false"><div class="filtername arrowdown"><span class="icon-calendar"></span><span class="separatornext"> </span> <b>[`Calendar`]</b></div></a>
+		<div class="calendar" style="display:none;">
+        <!-- timeline navigation -->
+					<ul class="menu-v menu">
+						{$year=null}
+						{foreach $timeline as $year_month => $item}
+							{if $year neq $item.year}
+								{if !$item@first}
+							</ul>
+		                    {/if}
+	    	             <li class="{if $item.year_selected}selected{/if}">
+	        	            {$year=$item.year}
+							<a href="{$item.year_link}"><b>{$item.year|default:'NULL'}</b></a>
+    						<ul>
+		                {/if}
+		                <li {if $item.selected}class="selected"{/if}>
+		                    <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">{_ws(date("F",gmmktime(0,0,0,$item.month)))} <sup class="gray">({$item.count})</sup></a>
+		                </li>
+							{if $item@last}
+									</ul>
+								</li>
+							{/if}
+						{/foreach}
+			        </ul>
+		</div>
+</div>
+{/if}

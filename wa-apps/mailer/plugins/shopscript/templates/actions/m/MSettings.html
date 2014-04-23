@@ -1,0 +1,65 @@
+<div class="double-padded block">
+    <h1>[`Shopscript integration settings`]</h1>
+
+    <form id="m-sc-settings-form" action="?plugin=shopscript&module=m&action=settings">
+        <div class="fields">
+            <input type="hidden" name="campaign_id" value="{$campaign_id}">
+            <div class="field">
+                <p>[`Please specify access parameters to MySQL database where WebAsyst Shop-Script is installed:`]</p>
+            </div>
+
+            <div class="field">
+                <div class="name">[`MySQL host:`]</div>
+                <div class="value">
+                    <input type="text" name="data[mysql_host]" value="{ifempty($data.mysql_host)|escape}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`MySQL DB:`]</div>
+                <div class="value">
+                    <input type="text" name="data[mysql_db]" value="{ifempty($data.mysql_db)|escape}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`MySQL login:`]</div>
+                <div class="value">
+                    <input type="text" name="data[mysql_login]" value="{ifempty($data.mysql_login)|escape}">
+                </div>
+            </div>
+            <div class="field">
+                <div class="name">[`MySQL password:`]</div>
+                <div class="value">
+                    <input type="password" name="data[mysql_password]" value="{ifempty($data.mysql_password)|escape}">
+                </div>
+            </div>
+            {if $error}
+                <div class="red field">
+                    <p>{$error}</p>
+                </div>
+            {/if}
+        </div>
+
+        <div class="clear-both"></div>
+    </form>
+</div>
+
+<script>(function($) {
+    var form = $('#m-sc-settings-form');
+    var submit = form.parents('.dialog').find(':submit');
+    submit.unbind('click').click(function() {
+        submit.unbind('click').after('<i class="icon16 loading after-button"></i>');
+        $.post(form.attr('action'), form.serialize(), function(result) {
+            submit.siblings('.loading').remove();
+            form.parents('.dialog-content').html(result);
+        });
+        return false;
+    });
+
+    {if $saved && !$error}
+        form.parents('.dialog').trigger('close').remove();
+        $.storage.set('mailer.shopscript/show-opened', true);
+        $.wa.mailer.redispatch();
+    {/if}
+
+})($);</script>
+

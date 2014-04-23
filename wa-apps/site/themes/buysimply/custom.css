@@ -9,7 +9,7 @@ html{
     background:url(img/имя Вашего файла);
 }
 */
-body{background:url(img/body_bg.gif) top center repeat-y;position:relative;}
+body{background:url(img/body_bg.gif) top center repeat-y;position:relative;min-width:740px;}
 /*end28.11.13*/
 
 a{color: #b7b7b7; outline:0 none;}/*link grey*/
@@ -503,7 +503,7 @@ padding-bottom:10px;
 font-size:14px;
   line-height: 15px;
 text-align: right;   
-width: 65px;
+width: 45px;
 height: 24px;
 border: 1px solid #d7bb00;
 background-color: #fff;
@@ -934,6 +934,7 @@ z-index: 2;
 display:block;
   vertical-align:top;
   text-align:left;
+  margin-top: 0;
 }
 .category-tree-popup>li>ul>li{
 display:inline-block;
@@ -1554,4 +1555,9 @@ color:#000;
 }
 .product-list.list .offers span .ruble{
     display:inline-block;
+}
+
+.top-contact a, .top-contact a:hover {
+    color:#363636;
+    text-decoration:none;
 }

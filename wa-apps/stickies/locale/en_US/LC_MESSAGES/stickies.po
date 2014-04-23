@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: stickies\n"
+"POT-Creation-Date: 2012-10-12 17:44+0400\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: stickies\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en_US\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:85
+msgid "Stickies"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:67
+msgid "Delete"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:155
+msgid "Settings"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:78
+msgid "Sticky status"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:95
+msgid "Color"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:136
+msgid "New sticky"
+msgstr ""
+
+#: /wa-apps/stickies/lib/config/stickiesRightConfig.class.php:13
+msgid "no name"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:174
+msgid "Name"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:177
+msgid "Background"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:194
+msgid "Save"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:195
+msgid "Delete board"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions/backend/Backend.html:207
+msgid "New board"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:183
+msgid "Empty server responce"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:184
+msgid "AJAX request error"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:185
+msgid "Invalid server responce"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:186
+msgid "Delete board with all stickies?"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:187
+msgid "Error occurred while sorting boards"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:81
+msgid "Apps"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:117
+msgid "Boards"
+msgstr ""
+
+#: /wa-apps/stickies/templates/actions-mobile/backend/Backend.html:193
+msgid "Please wait"
+msgstr ""
+
+#: /wa-apps/stickies/js/compiled/stickies.js:118
+msgid "Cancel"
+msgstr ""
+
+#: /wa-apps/stickies/lib/models/stickiesSheet.model.php:51
+msgid "Not enough rights to add new board"
+msgstr "Not enough rights to add a new board"
+
+#: /wa-apps/stickies/lib/models/stickiesSticky.model.php:43
+msgid "Not enough rights to work with current board"
+msgstr "Not enough rights to work with the current board"
+
+#: /wa-apps/stickies/lib/actions/sheet/stickiesSheet.actions.php:95
+msgid "Board"
+msgstr ""
+
+#: /wa-apps/stickies/lib/actions/sticky/stickiesSticky.actions.php:74
+msgid "Error while delete sticky"
+msgstr "Error while deleting the sticky"
+
+#: /wa-apps/stickies/lib/api/v1/stickies.stickyUpdate.method.php:45
+msgid "Error while save sticky"
+msgstr "Error while saving the sticky"
+
+#: /wa-apps/stickies/lib/api/v1/stickies.stickyUpdate.method.php:48
+msgid "Invalid sticky ID"
+msgstr ""
+
+#: /wa-apps/stickies/lib/config/stickiesRightConfig.class.php:7
+msgid "Allow add new board"
+msgstr "Allow adding new boards"
+
+#: /wa-apps/stickies/lib/config/stickiesRightConfig.class.php:15
+msgid "Available boards"
+msgstr ""
+
+#: /wa-apps/stickies/lib/config/install.php:4
+msgid "My stickies"
+msgstr ""
+
+#: /wa-apps/stickies/lib/models/stickiesSheet.model.php:83
+msgid "Board not found"
+msgstr ""
+

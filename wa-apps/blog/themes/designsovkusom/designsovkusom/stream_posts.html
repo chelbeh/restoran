@@ -1,0 +1,68 @@
+{* post list: default view mode *}
+{foreach $posts as $post}
+    <li class="post{if $post@iteration is even} even{/if}" id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts" {/if}itemscope itemtype="http://schema.org/BlogPosting">
+        <div class="post-container">
+        <h3>
+            <a href="{$post.link}" itemprop="url">{$post.title}</a>
+
+            {* @event prepare_posts_frontend.%plugin_id%.post_title *}
+            {if !empty($post.plugins.post_title)}
+                {foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+            {/if}
+        </h3>
+        <hr>
+        <div class="credentials">
+
+            {if isset($post.user.photo_url_20)}
+                {if $post.user.posts_link}
+                    <a href="{$post.user.posts_link}">
+                        <img src="{$post.user.photo_url_20}" class="userpic" alt="">
+                    </a>
+                {else}
+                    <img src="{$post.user.photo_url_20}" class="userpic" alt="">
+                {/if}
+            {/if}
+
+            {if $post.user.posts_link}
+                <a href="{$post.user.posts_link}" class="username" rel="author">{$post.user.name}</a>
+            {else }
+                <span class="username" rel="author">{$post.user.name}</span>
+            {/if}
+            <span class="hint date">{$post.datetime|wa_datetime:"humandate"}</span>
+        </div>
+
+        {* @event prepare_posts_frontend.%plugin_id%.before *}
+        {if !empty($post.plugins.before)}
+            <div class="text_before">
+                {foreach $post.plugins.before as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+
+        <div class="text">
+            {$post.text}
+        </div>
+        <div>
+            {if $post.cutted}
+                <a href="{$post.link}">{$post.cut_link_label|default:'[`Continue reading →`]'}</a>
+            {/if}
+            {if $show_comments && $post.comments_allowed}
+                <a href="{$post.link}#comments" class="small float-right">
+                    {if !empty($post.comment_count)}{$post.comment_count}{else}0 {/if}<i class="icon comment"></i>
+                </a>
+            {/if}
+            <div class="clear-both"></div>
+        </div>
+        
+        {* @event prepare_posts_frontend.%plugin_id%.after *}
+        {if !empty($post.plugins.after)}
+            <div class="text_after">
+                {foreach $post.plugins.after as $plugin => $output}{$output}{/foreach}
+            </div>
+        {/if}
+        </div>
+    </li>
+{foreachelse}
+    {if $page lt 2}
+        {_w('%d post','%d posts',0)}
+    {/if}
+{/foreach}
