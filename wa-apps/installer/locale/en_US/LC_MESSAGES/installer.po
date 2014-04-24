@@ -11,7 +11,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.6.4\n"
+"Language: en_US\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
@@ -787,11 +788,15 @@ msgid "Get license"
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:35
-msgid "Installation and usage of the %s app on <strong>%s</strong> is not licensed. Updates are disabled. License your installation by clicking the button above."
+msgid ""
+"Installation and usage of the %s app on <strong>%s</strong> is not licensed. "
+"Updates are disabled. License your installation by clicking the button above."
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:48
-msgid "A newer version of %s <strong>%s</strong> is available for installation (your current version is %s)."
+msgid ""
+"A newer version of %s <strong>%s</strong> is available for installation "
+"(your current version is %s)."
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:187
@@ -807,7 +812,9 @@ msgid "Extend license"
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:71
-msgid "This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>."
+msgid ""
+"This is a licensed installation of %s on %s. License is valid through "
+"<strong>%s</strong>."
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:80
@@ -863,7 +870,10 @@ msgid "List"
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:37
-msgid "Installation and usage of the %s plugin on <strong>%s</strong> is not licensed. Updates are disabled. License your installation by clicking the button above."
+msgid ""
+"Installation and usage of the %s plugin on <strong>%s</strong> is not "
+"licensed. Updates are disabled. License your installation by clicking the "
+"button above."
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:228
@@ -887,7 +897,10 @@ msgid "All themes"
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:37
-msgid "Installation and usage of the %s theme on <strong>%s</strong> is not licensed. Updates are disabled. License your installation by clicking the button above."
+msgid ""
+"Installation and usage of the %s theme on <strong>%s</strong> is not "
+"licensed. Updates are disabled. License your installation by clicking the "
+"button above."
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:215
@@ -895,7 +908,8 @@ msgid "Delete this theme"
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/update/Update.row.html:89
-msgid "License for this app is either expired or not valid for this domain (%s)"
+msgid ""
+"License for this app is either expired or not valid for this domain (%s)"
 msgstr ""
 
 #: /wa-apps/installer/templates/layouts/Backend.html:52
@@ -979,11 +993,15 @@ msgid "But with errors:"
 msgstr ""
 
 #: /wa-apps/installer/lib/classes/installerExtrasRemoveAction.class.php:148
-msgid "Application plugin %s has been deleted', 'Applications plugins %s have been deleted"
+msgid ""
+"Application plugin %s has been deleted', 'Applications plugins %s have been "
+"deleted"
 msgstr ""
 
 #: /wa-apps/installer/lib/classes/installerExtrasRemoveAction.class.php:149
-msgid "Application theme %s has been deleted', 'Applications themes %s have been deleted"
+msgid ""
+"Application theme %s has been deleted', 'Applications themes %s have been "
+"deleted"
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/plugins/PluginsView.html:13
@@ -991,7 +1009,9 @@ msgid "Popular plugins"
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/plugins/PluginsView.html:14
-msgid "The following list of plugins is automatically updated from the Webasyst Store. Click on a plugin to install."
+msgid ""
+"The following list of plugins is automatically updated from the Webasyst "
+"Store. Click on a plugin to install."
 msgstr ""
 
 #: /wa-apps/installer/templates/actions/qa/QaDefault.html:45
@@ -1001,3 +1021,126 @@ msgstr ""
 #: /wa-apps/installer/templates/actions/qa/QaDefault.html:55
 msgid "Theme"
 msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:58
+msgid "Not licensed"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:63
+msgid "Paid until %s"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:65
+msgid "Licensed"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:36
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:36
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:40
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:44
+msgid "Link license"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:37
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:37
+msgid ""
+"Installation and usage of %s app on <strong>%s</strong> is not licensed. "
+"Updates are disabled. Buy a new license or link your existing %s license to "
+"this Webasyst installation."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:70
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:93
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:87
+msgid "This is a valid licensed installation of %s on <strong>%s</strong>."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:76
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:100
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:96
+msgid "Buy more licenses"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:78
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:102
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:98
+msgid ""
+"Additional licenses are required if you are using %s on more than one domain "
+"name (<a href='%s' target='_blank'>one license per domain</a>)."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:78
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:102
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:98
+msgid "http://www.webasyst.com/help/1200/paid-app-licensing/"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:107
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:100
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:134
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:133
+msgid ""
+"%s will be automatically downloaded from Webasyst Store and installed "
+"immediately after you make payment."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:115
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:108
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:142
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:143
+msgid "%s will be downloaded from Webasyst Store and installed automatically."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:28
+#: /wa-apps/installer/templates/actions/themes/Themes.html:15
+msgid "Most popular"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:29
+#: /wa-apps/installer/templates/actions/themes/Themes.html:16
+msgid "Newest"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:41
+msgid ""
+"Installation and usage of %s plugin on <strong>%s</strong> is not licensed. "
+"Updates are disabled. Buy a new license or link your existing %s plugin "
+"license to this Webasyst installation."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:45
+msgid ""
+"Installation and usage of %s theme on <strong>%s</strong> is not licensed. "
+"Updates are disabled. Buy a new license or link your existing %s theme "
+"license to this Webasyst installation."
+msgstr ""
+
+#: /wa-apps/installer/lib/actions/plugins/installerPluginsInfo.action.php:54
+msgid "Plugin not found"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:107
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:134
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:133
+msgid ""
+"If you already have a license, click the button above to link it to this "
+"Webasyst installation."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:29
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:94
+#: /wa-apps/installer/templates/actions/themes/Themes.html:90
+msgid "New!"
+msgstr "New"
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:36
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:101
+#: /wa-apps/installer/templates/actions/themes/Themes.html:97
+msgid "Popular!"
+msgstr "Popular"
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:36
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:102
+#: /wa-apps/installer/templates/actions/themes/Themes.html:99
+msgid "New version!"
+msgstr "New version"

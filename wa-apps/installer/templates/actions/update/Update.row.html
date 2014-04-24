@@ -45,7 +45,7 @@
         {/if}
 
         {if !empty($item.vendor_name)}
-            <span class="hint">{$item.vendor_name}</span>
+            <span class="hint">{$item.vendor_name|escape}</span>
         {/if}
     </td>
 
@@ -88,7 +88,15 @@
             {if !empty($item.commercial) && empty($item.purchased)}
 
             {* not allowed to install the app, i.e. expired *}
-                <span class="small red">{sprintf('[`License for this app is either expired or not valid for this domain (%s)`]',$domain)}</span>
+                {if $item_type eq 'app'}
+                    {$link="apps/`$item.id`"}
+                {elseif $item_type eq 'theme'}
+                    {$link="themes/`$item.id`"}
+                {elseif $item_type eq 'plugin'}
+                    {$link="plugins/`$item.app`/`$item.id`"}
+                {/if}
+                <p class="small red">{sprintf('[`License for this app is either expired or not valid for this domain (%s)`]',$domain)}</p>
+                <input type="button" onClick="javascript:window.location.href='{$wa_backend_url}installer/#/{$link}/';" value="[`Get license`]">
             {else}
 
                 <!-- ok to update -->

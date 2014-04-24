@@ -29,7 +29,10 @@ abstract class installerExtrasRemoveAction extends waViewAction
         $url = parse_url($r = waRequest::server('HTTP_REFERER'), PHP_URL_QUERY);
         if (preg_match('/(^|&)module=(themes|plugins)($|&)/', $url, $matches)) {
             $this->extras_type = $matches[2];
+        } elseif (preg_match('/^installer(\w+)RemoveAction$/', get_class($this), $matches)) {
+            $this->extras_type = strtolower($matches[1]);
         }
+
         if (installerHelper::isDeveloper()) {
             switch ($this->extras_type) {
                 case 'themes':
@@ -42,26 +45,15 @@ abstract class installerExtrasRemoveAction extends waViewAction
                     $msg = '???';
                     break;
             }
-            $this->redirect(array(
-                'module' => $this->extras_type,
-                'msg'    => installerMessage::getInstance()->raiseMessage($msg, 'fail'),
-            ));
+
+            $msg = installerMessage::getInstance()->raiseMessage($msg, installerMessage::R_FAIL);
+            $this->redirect('?msg='.$msg.'#/'.$this->extras_type.'/');
         }
     }
 
     function execute()
     {
         $this->init();
-        if (!$this->extras_type && preg_match('/^installer(\w+)RemoveAction$/', get_class($this), $matches)) {
-            $this->extras_type = strtolower($matches[1]);
-        }
-
-
-        $module = $this->extras_type;
-        $url = parse_url(waRequest::server('HTTP_REFERER'), PHP_URL_QUERY);
-        if (preg_match("/(^|&)module=(update|apps| {$this->extras_type})($|&)/", $url, $matches)) {
-            $module = $matches[2];
-        }
 
         $extras_ids = waRequest::post('extras_id');
         try {
@@ -82,7 +74,7 @@ abstract class installerExtrasRemoveAction extends waViewAction
             );
 
 
-            if ($module == 'plugins') {
+            if ($this->extras_type == 'plugins') {
                 $options['system'] = true;
             }
 
@@ -140,10 +132,10 @@ abstract class installerExtrasRemoveAction extends waViewAction
             $message_plural = sprintf('Applications %a %%s have been deleted', $this->extras_type);
             $message = sprintf(_w($message_singular, $message_plural, count($deleted_extras), false), implode(', ', $deleted_extras));
             $msg = installerMessage::getInstance()->raiseMessage($message);
-            $this->redirect('?msg='.$msg.'#/'.$module.'/');
+            $this->redirect('?msg='.$msg.'#/'.$this->extras_type.'/');
         } catch (Exception $ex) {
             $msg = installerMessage::getInstance()->raiseMessage($ex->getMessage(), installerMessage::R_FAIL);
-            $this->redirect('?msg='.$msg.'#/'.$module.'/');
+            $this->redirect('?msg='.$msg.'#/'.$this->extras_type.'/');
         }
 
     }

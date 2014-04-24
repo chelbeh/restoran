@@ -21,22 +21,22 @@
                 <!-- already installed -->
                 <div class="align-center">
                     {if $app.commercial && !$app.purchased}
-                        {* PAID APP, LICENSE IS NOT VALID *}
-                        <form action="{$app.purchase_url|escape}" method="post">
-                            <input type="hidden" name="app_id[]" value="{$app.slug}">
-                            <input type="hidden" name="domain" value="{$domain}">
-                            <input type="hidden" name="hash" value="{$identity_hash}">
-                            <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                            {if $app.license_expire}
-                                {* EXPIRED LICENSE *}
-                                <input type="submit" class="button red" value="[`Renew license`]">
-                                <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$app.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$app.license_expire))}</p>
-                            {else}
-                                {* NEVER LICENSED *}
-                                <input type="submit" class="button green" value="[`Get license`]">
-                                <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of the %s app on <strong>%s</strong> is not licensed. Updates are disabled. License your installation by clicking the button above.`]",$app.name|escape,installerHelper::getDomain()|escape)}</p>
-                            {/if}
-                        </form>
+                        {* PAID APP, LICENSE IS NOT VALID *}                        
+                        {if $app.license_expire}
+                            {* EXPIRED LICENSE *}
+                            <a class="button green" href="{$app.renew_url|escape}" value="[`Renew license`]">
+                            <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$app.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$app.license_expire))}</p>
+                        {else}
+                            {* NEVER LICENSED *}
+                            <form action="{$app.purchase_url|escape}" method="post">
+                                <input type="hidden" name="app_id[]" value="{$app.slug}">
+                                <input type="hidden" name="domain" value="{$domain}">
+                                <input type="hidden" name="hash" value="{$identity_hash}">
+                                <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
+                                <input type="submit" class="button green" value="[`Link license`]">
+                                <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of %s app on <strong>%s</strong> is not licensed. Updates are disabled. Buy a new license or link your existing %s license to this Webasyst installation.`]",$app.name|escape,installerHelper::getDomain()|escape,$app.name|escape)}</p>
+                            </form>
+                        {/if}
                     {else}
                         {* LICENSED INSTALLATION: EITHER FREE OR PAID *}
                         {if $app.action == waInstallerApps::ACTION_UPDATE}
@@ -47,7 +47,7 @@
                                     <p>
                                         {sprintf("[`A newer version of %s <strong>%s</strong> is available for installation (your current version is %s).`]",$app.name|escape,$app.version,$app.installed.version)}
                                         {if !empty($app.changelog)}
-                                        <a href="{$current_url}changelog/">[`View release notes`]</a>
+                                            <a href="{$current_url}changelog/">[`View release notes`]</a>
                                         {/if}
                                     </p>
                                     {if !$app.applicable}
@@ -62,24 +62,16 @@
 
                             {if $app.license_expire}
                                 {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
-                                <form action="{$app.purchase_url|escape}" method="post">
-                                    <input type="hidden" name="app_id[]" value="{$app.slug}">
-                                    <input type="hidden" name="hash" value="{$identity_hash}">
-                                    <input type="hidden" name="domain" value="{$domain}">
-                                    <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                                    <input type="submit" class="button green" value="[`Extend license`]">
-                                    <p><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$app.name|escape, installerHelper::getDomain()|escape, $app.license_expire)}</p>
-
-                                </form>
+                                <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$app.name|escape, installerHelper::getDomain()|escape, $app.license_expire)}</em></p>
+                                <a class="button green" href="{$app.renew_url|escape}" style="display: inline-block;">[`Extend license`]</a>
+                                <br><br>
                             {else}
-                                {* VALID UNLIMITED LICENSE *}
-                                {if !empty($app.reviews.url)}
-                                <p>
-                                    <a href="{$app.reviews.url}" class="large bold">[`Write a review`]</a>
-                                    <i class="icon16 new-window"></i>
-                                </p>
-                                {/if}
-                                <p>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$app.name,$app.installed.version)}</p>
+                                {* VALID LICENSE *}
+                                <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a valid licensed installation of %s on <strong>%s</strong>.`]",$app.name|escape, installerHelper::getDomain()|escape)}</em></p>
+
+                                <a class="button green" href="{* $app.buymore_url|escape *}https://www.webasyst.com/buy/store/{$app.slug}{if $wa->locale() == 'ru_RU'}?locale=ru_RU{/if}">[`Buy more licenses`]</a>
+                                
+                                <p>{sprintf("[`Additional licenses are required if you are using %s on more than one domain name (<a href='%s' target='_blank'>one license per domain</a>).`]",$app.name|escape, '[`http://www.webasyst.com/help/1200/paid-app-licensing/`]')}</p>
                             {/if}
                         {else}
                             {* FREE APP *}
@@ -89,7 +81,7 @@
                                 <i class="icon16 new-window"></i>
                             </p>
                             {/if}
-                            <p>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$app.name,$app.installed.version)}</p>
+                            <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$app.name,$app.installed.version)}</em></p>
                         {/if}
                     {/if}
                 </div>
@@ -106,8 +98,9 @@
                                 <input type="hidden" name="hash" value="{$identity_hash}">
                                 <input type="hidden" name="domain" value="{$domain}">
                                 <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                                <input type="submit" class="button green" value="[`Install`]"{if !$app.applicable} disabled="disabled"{/if}>
+                                <input type="submit" class="button green" value="[`Buy & Install`]"{if !$app.applicable} disabled="disabled"{/if}>
                             </form>
+                            <p>{sprintf('[`%s will be automatically downloaded from Webasyst Store and installed immediately after you make payment.`]', $app.name|escape)} [`If you already have a license, click the button above to link it to this Webasyst installation.`]</p>
                         {else}
                             {* FREE APP *}
                             <form action="?module=update&action=manager" method="post">
@@ -115,6 +108,7 @@
                                 <input type="hidden" name="app_id[{$app.slug}]" value="{$app.vendor}">
                                 <input type="submit" class="button green" value="[`Install`]"{if !$app.applicable} disabled="disabled"{/if}>
                             </form>
+                            <p>{sprintf('[`%s will be downloaded from Webasyst Store and installed automatically.`]', $app.name|escape)}</p>
                         {/if}
                         {if !$app.applicable}
                             {* DEPENDENCIES *}
@@ -223,7 +217,7 @@
                     <div class="value">
                         {$app.version}
                         {if !empty($app.changelog)}
-                            <a href="{$current_url}changelog/">[`View release notes`]</a>
+                            <a href="{$current_url}changelog/" style="font-size: 0.9em;">[`View release notes`]</a>
                         {/if}
                     </div>
                 </div>
@@ -344,7 +338,7 @@
         {if !empty($app.changelog)}
             <section class="i-page" id="tab-{$app.slug|escape}-changelog" style="display:none;">
                 {foreach $app.changelog as $changelog}
-                    <h5>{$changelog.version}</h5>{if !empty($changelog.datetime)} <span class="hint">{$changelog.datetime|wa_date:'humandate'|escape}</span>{/if}
+                    <h5>{$changelog.version}{if !empty($changelog.datetime)} <span class="hint">{$changelog.datetime|wa_date:'humandate'|escape}</span>{/if}</h5>
                     {if version_compare($changelog.version,$app.installed.version,'>')}{/if}
                     <div class="i-changelog">{$changelog.content|nl2br}</div>
                 {/foreach}

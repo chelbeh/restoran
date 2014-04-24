@@ -23,22 +23,24 @@
             <!-- already installed -->
             <div class="align-center">
                 {if $plugin.commercial && !$plugin.purchased}
-                {* PAID APP, LICENSE IS NOT VALID *}
-                    <form action="{$plugin.purchase_url|escape}" method="post">
-                        <input type="hidden" name="app_id[]" value="{$plugin.slug}">
-                        <input type="hidden" name="hash" value="{$identity_hash}">
-                        <input type="hidden" name="domain" value="{$domain}">
-                        <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                        {if $plugin.license_expire}
+                
+                    {* PAID PLUGIN, LICENSE IS NOT VALID *}
+                    
+                    {if $plugin.license_expire}
                         {* EXPIRED LICENSE *}
-                            <input type="submit" class="button red" value="[`Renew license`]">
-                            <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$plugin.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$plugin.license_expire))}</p>
-                        {else}
+                        <a class="button green" href="{$plugin.renew_url|escape}">[`Renew license`]</a>
+                        <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$plugin.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$plugin.license_expire))}</p>
+                    {else}
                         {* NEVER LICENSED *}
-                            <input type="submit" class="button green" value="[`Get license`]">
-                            <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of the %s plugin on <strong>%s</strong> is not licensed. Updates are disabled. License your installation by clicking the button above.`]",$plugin.name|escape,installerHelper::getDomain()|escape)}</p>
-                        {/if}
-                    </form>
+                        <form action="{$plugin.purchase_url|escape}" method="post">
+                            <input type="hidden" name="app_id[]" value="{$plugin.slug}">
+                            <input type="hidden" name="hash" value="{$identity_hash}">
+                            <input type="hidden" name="domain" value="{$domain}">
+                            <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">    
+                            <input type="submit" class="button green" value="[`Link license`]">
+                            <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of %s plugin on <strong>%s</strong> is not licensed. Updates are disabled. Buy a new license or link your existing %s plugin license to this Webasyst installation.`]",$plugin.name|escape,installerHelper::getDomain()|escape,$plugin.name|escape)}</p>
+                        </form>
+                    {/if}
                 {else}
                 {* LICENSED INSTALLATION: EITHER FREE OR PAID *}
                     {if $plugin.action == waInstallerApps::ACTION_UPDATE}
@@ -49,8 +51,7 @@
                             <p>
                                 {sprintf("[`A newer version of %s <strong>%s</strong> is available for installation (your current version is %s).`]",$plugin.name|escape,$plugin.version,$plugin.installed.version)}
                                 {if !empty($plugin.changelog)}
-                                <br>
-                                <a href="{$current_url}changelog/" class="inline-link">[`View release notes`]</a>
+                                    <a href="{$current_url}changelog/">[`View release notes`]</a>
                                 {/if}
                             </p>
                             {*
@@ -77,36 +78,36 @@
                         </form>
                     {elseif $plugin.commercial}
 
-                        {if $plugin.license_expire}
-                        {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
-                            <form action="{$plugin.purchase_url|escape}" method="post">
-                                <input type="hidden" name="app_id[]" value="{$plugin.slug}">
-                                <input type="hidden" name="hash" value="{$identity_hash}">
-                                <input type="hidden" name="domain" value="{$domain}">
-                                <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                                <input type="submit" class="button green" value="[`Extend license`]">
-                                <p><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$plugin.name|escape, installerHelper::getDomain()|escape, $plugin.license_expire)}</p>
+                        {* PAID PLUGIN *}
 
-                            </form>
+                        {if $plugin.license_expire}
+                        
+                            {* COMMERCIAL LICENSE WITH AN EXPIRATION DATE *}
+                            <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$plugin.name|escape, installerHelper::getDomain()|escape, $plugin.license_expire)}</em></p>
+                            <a class="button green" href="{$plugin.renew_url|escape}" style="display: inline-block;">[`Extend license`]</a>
+                            <br><br>
+                            
                         {else}
-                        {* VALID UNLIMITED LICENSE *}
-                            {if !empty($plugin.reviews.url)}
-                                <p>
-                                    <a href="{$plugin.reviews.url}" class="large bold">[`Write a review`]</a>
-                                    <i class="icon16 new-window"></i>
-                                </p>
-                            {/if}
-                            <p>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$plugin.name,$plugin.installed.version)}</p>
+                        
+                            {* VALID LICENSE *}
+                            <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a valid licensed installation of %s on <strong>%s</strong>.`]",$plugin.name|escape, installerHelper::getDomain()|escape)}</em></p>
+                            
+                             <a class="button green" href="{* $plugin.buymore_url|escape *}https://www.webasyst.com/my/#/neworder/">[`Buy more licenses`]</a>
+                            
+                            <p>{sprintf("[`Additional licenses are required if you are using %s on more than one domain name (<a href='%s' target='_blank'>one license per domain</a>).`]",$plugin.name|escape, '[`http://www.webasyst.com/help/1200/paid-app-licensing/`]')}</p>
                         {/if}
+                        
                     {else}
-                    {* FREE APP *}
+                    
+                        {* FREE PLUGIN *}
                         {if !empty($plugin.reviews.url)}
                             <p>
                                 <a href="{$plugin.reviews.url}" class="large bold">[`Write a review`]</a>
                                 <i class="icon16 new-window"></i>
                             </p>
                         {/if}
-                        <p>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$plugin.name,$plugin.installed.version)}</p>
+                        <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$plugin.name|escape,$plugin.installed.version)}</em></p>
+                        
                     {/if}
                 {/if}
             </div>
@@ -117,24 +118,26 @@
 
             <div class="align-center">
                 {if $plugin.commercial  && empty($plugin.purchased)}
-                {* PAID APP *}
+                    {* PAID APP *}
                     <form action="{$plugin.purchase_url|escape}" method="post">
                         <input type="hidden" name="app_id[]" value="{$plugin.slug}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
                         <input type="hidden" name="hash" value="{$identity_hash}">
                         <input type="hidden" name="domain" value="{$domain}">
                         <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                        <input type="submit" class="button green" value="[`Install`]"{if !$plugin.applicable} disabled="disabled"{/if}>
+                        <input type="submit" class="button green" value="[`Buy & Install`]"{if !$plugin.applicable} disabled="disabled"{/if}>
                     </form>
+                    <p>{sprintf('[`%s will be automatically downloaded from Webasyst Store and installed immediately after you make payment.`]', $plugin.name|escape)} [`If you already have a license, click the button above to link it to this Webasyst installation.`]</p>
                 {else}
-                {* FREE APP *}
+                    {* FREE APP *}
                     <form action="?module=update&action=manager" method="post">
                         <input type="hidden" name="install" value="1">
                         <input type="hidden" name="app_id[{$plugin.slug}]" value="{$plugin.vendor}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
                         <input type="submit" class="button green" value="[`Install`]"{if !$plugin.applicable} disabled="disabled"{/if}>
                     </form>
+                    <p>{sprintf('[`%s will be downloaded from Webasyst Store and installed automatically.`]', $plugin.name|escape)}</p>
                 {/if}
                 {if !$plugin.applicable}
-                {* DEPENDENCIES *}
+                    {* DEPENDENCIES *}
                     <p class="hint">[`This application cannot be installed`]</p>
                     {include file="templates/includes/requirements.html" item=$plugin inline}
                 {/if}
@@ -240,7 +243,7 @@
                 </div>
                 <div class="value">
                     {$plugin.version}{if !empty($plugin.changelog)}
-                    <a href="{$current_url}changelog/">[`View release notes`]</a>
+                        <a href="{$current_url}changelog/" style="font-size: 0.9em;">[`View release notes`]</a>
                     {/if}
                 </div>
             </div>
@@ -249,7 +252,7 @@
                     [`Updated`]
                 </div>
                 <div class="value">
-                    {$plugin.update_datetime|wa_datetime:'humandate'}
+                    {if empty($plugin.update_datetime)}—{else}{$plugin.update_datetime|wa_datetime:'humandate'}{/if}
                 </div>
             </div>
             {*
@@ -281,8 +284,8 @@
     <div class="content">
 
         <div class="i-breadcrumbs">
-            <a href="#/plugins/">[`All plugins`]</a>
-            {if !empty($plugin.vendor)} &raquo; <a href="#/plugins&vendor={$plugin.vendor}/" data-href="#/plugins%s&vendor={$plugin.vendor}/%s/" data-filter="vendor" class="js-item-link">{$plugin.vendor_name}</a>{/if}
+            <a href="#/plugins/{$plugin.app}/">[`All plugins`]</a>
+            {if !empty($plugin.vendor)} &raquo; <a href="#/plugins&vendor={$plugin.vendor}/" data-href="#/plugins%s&vendor={$plugin.vendor}/%s/" data-filter="vendor" class="js-item-link">{$plugin.vendor_name|escape}</a>{/if}
         </div>
 
         <article class="i-summary">
@@ -293,7 +296,7 @@
                 </div>
                 <div class="details">
                     <h1>{$plugin.name}{if isset($plugin.status_label) && $plugin.status_label} <span class="highlighted i-plugin-label">{$plugin.status_label}</span>{/if}</h1>
-                    <p>{$plugin.summary}</p>
+                    <p>{$plugin.summary|default:''}</p>
 
                     <nav>
                         <ul class="menu-h">
@@ -306,7 +309,7 @@
 
                 </div>
             </div>
-            {if $plugin.screenshots}
+            {if !empty($plugin.screenshots)}
                 <div class="i-screenshots">
                     {$screenshot = reset($plugin.screenshots)}
                     {if $screenshot}

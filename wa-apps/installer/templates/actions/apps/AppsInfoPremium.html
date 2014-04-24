@@ -33,8 +33,8 @@
                                 <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$app.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$app.license_expire))}</p>
                             {else}
                                 {* NEVER LICENSED *}
-                                <input type="submit" class="button green" value="[`Get license`]">
-                                <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of the %s app on <strong>%s</strong> is not licensed. Updates are disabled. License your installation by clicking the button above.`]",$app.name|escape,installerHelper::getDomain()|escape)}</p>
+                                <input type="submit" class="button green" value="[`Link license`]">
+                                <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of %s app on <strong>%s</strong> is not licensed. Updates are disabled. Buy a new license or link your existing %s license to this Webasyst installation.`]",$app.name|escape,installerHelper::getDomain()|escape,$app.name|escape)}</p>
                             {/if}
                         </form>
                     {else}
@@ -97,6 +97,7 @@
                                 <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                                 <input type="submit" class="button green" value="[`Buy & Install`]"{if !$app.applicable} disabled="disabled"{/if}>
                             </form>
+                            <p>{sprintf('[`%s will be automatically downloaded from Webasyst Store and installed immediately after you make payment.`]', $app.name|escape)}</p>
                         {else}
                             {* FREE APP *}
                             <form action="?module=update&action=manager" method="post">
@@ -104,6 +105,7 @@
                                 <input type="hidden" name="app_id[{$app.slug}]" value="{$app.vendor}{if !empty($app.edition)}:{$app.edition}{/if}">
                                 <input type="submit" class="button green" value="[`Install`]"{if !$app.applicable} disabled="disabled"{/if}>
                             </form>
+                            <p>{sprintf('[`%s will be downloaded from Webasyst Store and installed automatically.`]', $app.name|escape)}</p>
                         {/if}
                         {if !$app.applicable}
                             {* DEPENDENCIES *}

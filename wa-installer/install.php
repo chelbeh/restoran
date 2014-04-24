@@ -349,7 +349,7 @@ HTML;
                                     'target' => $decoded,
                                     'slug'   => $decoded,
                                 );
-                                if (preg_match('@wa-apps/([\\w\\d\\-]+)$2', $decoded, $matches)) {
+                                if (preg_match('@wa-apps/([\\w\\d\\-]+)$@', $decoded, $matches)) {
                                     $apps[] = $matches[1];
                                 }
                             }

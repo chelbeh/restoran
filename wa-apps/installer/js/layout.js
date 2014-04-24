@@ -146,7 +146,7 @@ $.layout = {
                     matches = matches.slice(query_size);
                     if (item = matches.shift() || '') {
                         item = query + '/' + item;
-                       // query = this.path.query;
+                        // query = this.path.query;
                     }
                 } else {
                     query = this.options.default_query.plugins;
@@ -293,7 +293,7 @@ $.layout = {
         }
         var id = this.helper.getListId(path);
         var $container = this.container(id);
-        if ($container.length) {
+        if ($container.length && ($container.html() != 'null')) {
             self.focusList(path);
             self.dispatch(path);
         } else {
@@ -429,7 +429,7 @@ $.layout = {
 
         var $container = $('#wa-app > div#' + id);
 
-        if (!$container.length) {
+        if (!$container.length && ($container.html() !='null')) {
             var href = path.item.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/])/g, '\\$1');
             var item_selector = '#wa-app > div.content:first a[href*="\\/' + href + '\\/"]:first';
             var $item = $(item_selector).parents('li');
@@ -490,7 +490,7 @@ $.layout = {
         $container.find(id).show();
     },
     blurTab: function (path) {
-        this.path.tab = path.tab = false;
+        this.path.tab = false;
         this.loadTab(path);
     },
     blurItem: function (path) {
@@ -507,8 +507,8 @@ $.layout = {
             $sidebar.animate({
                 'width': '200px'
             }, this.options.duration).queue(function () {
-                    $(this).dequeue();
-                });
+                $(this).dequeue();
+            });
 
             $content.animate({
                 'margin-left': '200px'
@@ -538,9 +538,9 @@ $.layout = {
             $('#wa-app > div.sidebar').show().animate({
                 'width': '0px'
             }, this.options.duration).queue(function () {
-                    $(this).hide();
-                    $(this).dequeue();
-                });
+                $(this).hide();
+                $(this).dequeue();
+            });
         } else {
             $('#wa-app > div.sidebar').hide();
         }
@@ -548,8 +548,8 @@ $.layout = {
             $container.show().animate({
                 'margin-left': '0px'
             }, this.options.duration).queue(function () {
-                    $(this).dequeue();
-                });
+                $(this).dequeue();
+            });
         } else {
             $container.show().css({
                 'margin-left': '0px'
@@ -644,20 +644,22 @@ $.layout = {
         var self = this;
         $.layout.trace('$.layout.loadContent', [url, container]);
         $.get(url, function (result) {
-            if (self.random != r) {
+            if (!container && (self.random != r)) {
                 // too late: user clicked something else.
                 return;
             }
             container = container || self.container();
-            container.html(result);
-            $('html, body').animate({
-                scrollTop: 0
-            }, 200);
-            if (typeof(callback) == 'function') {
-                try {
-                    callback();
-                } catch (e) {
-                    $.layout.error('$.layout.loadContent callback error: ' + e.message, e);
+            if (result) {
+                container.html(result);
+                $('html, body').animate({
+                    scrollTop: 0
+                }, 200);
+                if ((self.random == r) && (typeof(callback) == 'function')) {
+                    try {
+                        callback();
+                    } catch (e) {
+                        $.layout.error('$.layout.loadContent callback error: ' + e.message, e);
+                    }
                 }
             }
         });

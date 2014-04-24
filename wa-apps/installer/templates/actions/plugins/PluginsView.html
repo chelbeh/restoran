@@ -19,8 +19,13 @@
 
 <ul class="thumbs wa-plugins">
 {$installer = "`$wa_backend_url`installer/"}
+{$sort = -1000}{$_plugins=[]}
 {foreach $slug as $key}
     {foreach $apps[$key]['plugins'] as $plugin_id => $plugin}
+    {if !isset($plugin.sort)}{$sort = $sort+1}{$plugin.sort=$sort}{/if}
+    {$_sort=$plugin.sort}
+
+    {capture assign="_plugin"}
     <li{if !empty($plugin.installed)} class="i-installed"{/if}>
         {$app = $apps[$key]}
         <a href="{$installer}#/plugins/{$app['slug']}/{$plugin_id}/" data-href="{$installer}#/plugins%s/{$app['slug']}/{$plugin_id}/" class="js-item-link">
@@ -73,9 +78,13 @@
             {/if}
         </a>
     </li>
+    {/capture}
+    {$_plugins[$_sort]=$_plugin}
   {/foreach}
  {foreachelse}
     <p class="align-center gray">[`No plugins were found.`]</p>
  {/foreach}
+    <!-- {ksort($_plugins)} -->
+    {implode("",$_plugins)}
  </ul>
 <div class="clear"></div>

@@ -1,4 +1,5 @@
 <?php
+
 class installerPluginsInfoAction extends waViewAction
 {
     public function execute()
@@ -23,15 +24,24 @@ class installerPluginsInfoAction extends waViewAction
         $applications = installerHelper::getInstaller()->getApps($options, $filter);
 
         $plugin_search = array();
-        $plugin_search['slug'] = preg_replace('@^.+/@', '', waRequest::get('slug'));
+        $plugin_search['id'] = preg_replace('@^.+/@', '', waRequest::get('slug'));
         if (array_filter($search, 'strlen') && ($app = installerHelper::search($applications, $search))) {
-            $plugin_search['slug'] = $search['slug']."/plugins/".$plugin_search['slug'];
+            $plugin_search['slug'] = $search['slug']."/plugins/".$plugin_search['id'];
             $options = array(
                 'action'       => true,
                 'requirements' => true,
                 //XXX   'vendor'       => waRequest::get('plugin_vendor', 'webasyst'),
             );
+
             $plugin = installerHelper::getInstaller()->getItemInfo($plugin_search['slug'], $options);
+            if (!$plugin && empty($options['system'])) {
+                $path = wa()->getAppPath('plugins/'.$plugin_search['id'].'/lib/config/plugin.php', $search['slug']);
+                if (file_exists($path)) {
+                    $options['local'] = true;
+                    $plugin = installerHelper::getInstaller()->getItemInfo($plugin_search['slug'], $options);
+                }
+
+            }
             if ($plugin) {
                 $plugin['app'] = preg_replace('@^(wa-plugins/)?([^/]+)/.+$@', '$1$2', $plugin['slug']);
                 $plugin['slug'] = preg_replace('@^wa-plugins/([^/]+)/plugins/(.+)$@', 'wa-plugins/$1/$2', $plugin['slug']);
@@ -41,7 +51,7 @@ class installerPluginsInfoAction extends waViewAction
             $this->view->assign('plugin', $plugin);
             $this->view->assign('query', waRequest::get('query', '', waRequest::TYPE_STRING_TRIM).'/');
         } else {
-            throw new waException(_w('Theme not found'), 404);
+            throw new waException(_w('Plugin not found'), 404);
         }
     }
 

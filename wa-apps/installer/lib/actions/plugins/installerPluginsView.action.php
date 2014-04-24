@@ -35,7 +35,7 @@ class installerPluginsViewAction extends installerItemsAction
                 $return_url .= '#'.$return_hash;
             }
         }
-        $this->view->assign('top', !!preg_match('@^[^/]+$@', waRequest::get('slug')));
+        $this->view->assign('top', !!preg_match('@^[^/]+$@', waRequest::get('slug')) && !waRequest::get('filter'));
         $this->view->assign('return_url', $return_url);
     }
 }

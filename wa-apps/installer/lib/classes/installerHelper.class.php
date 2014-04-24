@@ -1,4 +1,5 @@
 <?php
+
 class installerHelper
 {
     /**
@@ -133,21 +134,46 @@ class installerHelper
     public static function getUpdates($vendor = null)
     {
         static $items = null;
+        $config = wa('installer')->getConfig();
         if ($items === null) {
             self::$counter = array(
                 'total'      => 0,
                 'applicable' => 0,
                 'payware'    => 0,
             );
-
+            $app_settings_model = new waAppSettingsModel();
+            $errors = (array)json_decode($app_settings_model->get('installer', 'errors', '[]'));
             $items = self::getInstaller()->getUpdates($vendor);
-            foreach ($items as $item) {
+            $changed = false;
+            foreach ($items as $id => $item) {
                 if (isset($item['version'])) {
                     ++self::$counter['total'];
                     if (!empty($item['applicable'])) {
                         ++self::$counter['applicable'];
                     }
                 }
+
+                if (!empty($item['error'])) {
+                    if (!$errors) {
+                        $model = new waAnnouncementModel();
+                        $data = array(
+                            'app_id'   => 'installer',
+                            'text'     => $item['error'],
+                            'datetime' => date('Y-m-d H:i:s', time() - 86400),
+                        );
+                        if (!$model->select('COUNT(1) `cnt`')->where('app_id=s:app_id AND datetime > s:datetime', $data)->fetchField('cnt')) {
+                            $data['datetime'] = date('Y-m-d H:i:s');
+                            $model->insert($data);
+                        }
+                    }
+
+                    $errors[$id] = true;
+                    $changed = true;
+                } elseif (!empty($errors[$id])) {
+                    unset($errors[$id]);
+                    $changed = true;
+                }
+
                 foreach (array('themes', 'plugins') as $extras) {
                     if (isset($item[$extras])) {
                         self::$counter['total'] += count($item[$extras]);
@@ -159,14 +185,36 @@ class installerHelper
                     }
                 }
             }
-            wa('installer')->getConfig()->setCount(self::$counter['total'] ? self::$counter['total'] : null);
+            if ($changed) {
+                $app_settings_model->ping();
+                $app_settings_model->set('installer', 'errors', json_encode($errors));
+            }
+
+            if ($errors) {
+                $count = '!';
+            } elseif (self::$counter['total']) {
+                $count = self::$counter['total'];
+            } else {
+                $count = null;
+            }
+
+            $config->setCount($count);
         }
         return $items;
     }
 
+    public static function overdue($slug = null)
+    {
+        static $errors;
+        if (!isset($errors)) {
+            $app_settings_model = new waAppSettingsModel();
+            $errors = (array)json_decode($app_settings_model->get('installer', 'errors', '[]'));
+        }
+        return $slug ? !empty($errors[$slug]) : !empty($errors);
+    }
+
     public static function isDeveloper()
     {
-        return false;
         $result = false;
         $paths = array();
         $paths[] = dirname(__FILE__).'/.svn';

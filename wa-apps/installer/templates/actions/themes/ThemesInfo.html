@@ -24,29 +24,35 @@
             <!-- already installed -->
             <div class="align-center">
                 {if $theme.commercial && !$theme.purchased}
-                {* PAID APP, LICENSE IS NOT VALID *}
-                    <form action="{$theme.purchase_url|escape}" method="post">
-                        <input type="hidden" name="app_id[]" value="{$theme.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
-                        {foreach $theme.inherited as $inherited}
-                            <input type="hidden" name="app_id[]" value="{$inherited.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
-                        {/foreach}
-                        <input type="hidden" name="hash" value="{$identity_hash}">
-                        <input type="hidden" name="domain" value="{$domain}">
-                        <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                        {if $theme.license_expire}
+                    {* PAID APP, LICENSE IS NOT VALID *}
+                    {if $theme.license_expire}
                         {* EXPIRED LICENSE *}
-                            <input type="submit" class="button red" value="[`Renew license`]">
-                            <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$theme.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$theme.license_expire))}</p>
-                        {else}
+                        <a class="button green" href="{$theme.renew_url|escape}">[`Renew license`]</a>
+                        <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$theme.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$theme.license_expire))}</p>
+                    {else}
                         {* NEVER LICENSED *}
-                            <input type="submit" class="button green" value="[`Get license`]">
-                            <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of the %s theme on <strong>%s</strong> is not licensed. Updates are disabled. License your installation by clicking the button above.`]",$theme.name|escape,installerHelper::getDomain()|escape)}</p>
-                        {/if}
-                    </form>
+                        <form action="{$theme.purchase_url|escape}" method="post">
+                            <input type="hidden" name="app_id[]" value="{$theme.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
+                            {foreach $theme.inherited as $inherited}
+                                <input type="hidden" name="app_id[]" value="{$inherited.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
+                            {/foreach}
+                            <input type="hidden" name="hash" value="{$identity_hash}">
+                            <input type="hidden" name="domain" value="{$domain}">
+                            <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
+                            
+                            
+                                <input type="submit" class="button green" value="[`Link license`]">
+                                <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of %s theme on <strong>%s</strong> is not licensed. Updates are disabled. Buy a new license or link your existing %s theme license to this Webasyst installation.`]",$theme.name|escape,installerHelper::getDomain()|escape, $theme.name|escape)}</p>
+                            
+                        </form>
+                    {/if}
                 {else}
-                {* LICENSED INSTALLATION: EITHER FREE OR PAID *}
+                
+                    {* LICENSED INSTALLATION: EITHER FREE OR PAID *}
+                    
                     {if $theme.action == waInstallerApps::ACTION_UPDATE}
-                    {* UPDATES ARE AVAILABLE *}
+                    
+                        {* UPDATES ARE AVAILABLE *}
                         <form action="?module=update&action=manager" method="post">
                             <input type="hidden" name="app_id[{$theme.slug}]" value="{$theme.vendor}{if !empty($theme.edition)}:{$theme.edition}{/if}">
                             {if !empty($theme.inherited)}{foreach $theme.inherited as $inherited}
@@ -56,8 +62,7 @@
                             <p>
                                 {sprintf("[`A newer version of %s <strong>%s</strong> is available for installation (your current version is %s).`]",$theme.name|escape,$theme.version,$theme.installed.version)}
                                 {if $theme.changelog}
-                                    <br>
-                                    <a href="{$current_url}changelog/" data-href="{$current_data_url}changelog/" class="inline-link js-item-link">[`View release notes`]</a>
+                                    <a href="{$current_url}changelog/" data-href="{$current_data_url}changelog/" class="js-item-link">[`View release notes`]</a>
                                 {/if}
                             </p>
 
@@ -69,40 +74,32 @@
                             {/if}
 
                         </form>
+                        
                     {elseif $theme.commercial}
+                    
+                        {if $theme.license_expire}
+                            {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
+                            <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$theme.name|escape, installerHelper::getDomain()|escape, $theme.license_expire)}</em></p>
+                            <a class="button green" href="{$theme.renew_url|escape}" style="display: inline-block;">[`Extend license`]</a>
+                            <br><br>
+                        {else}
+                            {* VALID LICENSE *}
+                            <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a valid licensed installation of %s on <strong>%s</strong>.`]",$theme.name|escape, installerHelper::getDomain()|escape)}</em></p>
+                            <a class="button green" href="{* $theme.buymore_url|escape *}https://www.webasyst.com/my/#/neworder/">[`Buy more licenses`]</a>
+                            <p>{sprintf("[`Additional licenses are required if you are using %s on more than one domain name (<a href='%s' target='_blank'>one license per domain</a>).`]",$theme.name|escape, '[`http://www.webasyst.com/help/1200/paid-app-licensing/`]')}</p>
+                        {/if}
+                        
+                    {else}
+                    
+                        {* FREE APP *}
                         {if !empty($theme.reviews.url)}
                             <p>
                                 <a href="{$theme.reviews.url}" class="large bold">[`Write a review`]</a>
                                 <i class="icon16 new-window"></i>
                             </p>
                         {/if}
-
-                        {if $theme.license_expire}
-                        {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
-                            <form action="{$theme.purchase_url|escape}" method="post">
-                                <input type="hidden" name="app_id[]" value="{$theme.slug}">
-                                {foreach $theme.inherited as $inherited}
-                                    <input type="hidden" name="app_id[]" value="{$inherited.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
-                                {/foreach}
-                                <input type="hidden" name="hash" value="{$identity_hash}">
-                                <input type="hidden" name="domain" value="{$domain}">
-                                <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                                <input type="submit" class="button green" value="[`Extend license`]">
-                                <p><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$theme.name|escape, installerHelper::getDomain()|escape, $theme.license_expire)}</p>
-
-                            </form>
-                        {else}
-                        {* VALID UNLIMITED LICENSE *}
-                            <p>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$theme.name,$theme.installed.version)}</p>
-                        {/if}
-                    {else}
-                    {* FREE APP *}{if !empty($theme.reviews.url)}
-                        <p>
-                            <a href="{$theme.reviews.url}" class="large bold">[`Write a review`]</a>
-                            <i class="icon16 new-window"></i>
-                        </p>
-                    {/if}
-                        <p>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$theme.name,$theme.installed.version)}</p>
+                        <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`You have the latest version of %s installed: <strong>%s</strong>`]",$theme.name|escape,$theme.installed.version)}</em></p>
+                        
                     {/if}
                 {/if}
             </div>
@@ -113,7 +110,7 @@
 
             <div class="align-center">
                 {if $theme.commercial && empty($theme.purchased)}
-                {* PAID APP *}
+                {* PAID THEME *}
                     <form action="{$theme.purchase_url|escape}" method="post">
                         <input type="hidden" name="app_id[]" value="{$theme.slug}">
                         {foreach $theme.inherited as $inherited}
@@ -122,10 +119,11 @@
                         <input type="hidden" name="hash" value="{$identity_hash}">
                         <input type="hidden" name="domain" value="{$domain}">
                         <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                        <input type="submit" class="button green" value="[`Install`]"{if !$theme.applicable} disabled="disabled"{/if}>
+                        <input type="submit" class="button green" value="[`Buy & Install`]"{if !$theme.applicable} disabled="disabled"{/if}>
                     </form>
+                    <p class="gray">{sprintf('[`%s will be automatically downloaded from Webasyst Store and installed immediately after you make payment.`]', $theme.name|escape)} [`If you already have a license, click the button above to link it to this Webasyst installation.`]</p>
                 {else}
-                {* FREE APP *}
+                {* FREE THEME *}
                     <form action="?module=update&action=manager" method="post">
                         <input type="hidden" name="app_id[{$theme.slug}]" value="{$theme.vendor}{if !empty($theme.edition)}:{$theme.edition}{/if}">
                         {if !empty($theme.inherited)}{foreach $theme.inherited as $inherited}
@@ -133,6 +131,7 @@
                         {/foreach}{/if}
                         <input type="submit" class="button green" value="[`Install`]"{if !$theme.applicable} disabled="disabled"{/if}>
                     </form>
+                    <p class="gray">{sprintf('[`%s will be downloaded from Webasyst Store and installed automatically.`]', $theme.name|escape)}</p>
                 {/if}
                 {if !$theme.applicable}
                 {* DEPENDENCIES *}
@@ -242,7 +241,7 @@
                 </div>
                 <div class="value">
                     {$theme.version}{if $theme.changelog}
-                        <a href="{$current_url}changelog/" data-href="{$current_data_url}changelog/" class="js-item-link">[`View release notes`]</a>
+                        <a href="{$current_url}changelog/" data-href="{$current_data_url}changelog/" class="js-item-link" style="font-size: 0.9em;">[`View release notes`]</a>
                     {/if}
                 </div>
             </div>
@@ -288,7 +287,7 @@
 
         <div class="i-breadcrumbs">
             <a href="#/themes/">[`All themes`]</a>
-            {if !empty($theme.vendor)} &raquo; <a href="#/themes&vendor={$theme.vendor}/" data-href="#/themes%s%s&vendor={$theme.vendor}/" data-filter="vendor" class="js-item-link">{$theme.vendor_name}</a>{/if}
+            {if !empty($theme.vendor)} &raquo; <a href="#/themes&vendor={$theme.vendor}/" data-href="#/themes%s%s&vendor={$theme.vendor}/" data-filter="vendor" class="js-item-link">{$theme.vendor_name|escape}</a>{/if}
         </div>
 
         <article class="i-summary">
