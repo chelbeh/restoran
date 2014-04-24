@@ -32,23 +32,6 @@ class installerUpdateAction extends waViewAction
                 $items['installer']['name'] = _w('Webasyst Framework');
             };
 
-            foreach ($items as &$item) {
-                if (!empty($item['error'])) {
-                    $model = new waAnnouncementModel();
-                    $data = array(
-                        'app_id'   => 'installer',
-                        'text'     => $item['error'],
-                        'datetime' => date('Y-m-d H:i:s', time() - 86400),
-                    );
-                    $count = $model->select('COUNT(1) `cnt`')->where('app_id=s:app_id AND datetime > s:datetime', $data)->fetchField('cnt');
-                    if (!$count) {
-                        $data['datetime'] = date('Y-m-d H:i:s');
-                        $model->insert($data);
-                    }
-                    break;
-                }
-            }
-
         } catch (Exception $ex) {
             $messages[] = array('text' => $ex->getMessage(), 'result' => 'fail');
         }

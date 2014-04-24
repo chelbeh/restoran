@@ -8,11 +8,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)"
-">=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n"
+"%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.6.4\n"
+"Language: ru_RU\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
 
@@ -459,9 +460,7 @@ msgstr "Темы"
 
 #: /wa-apps/installer/templates/actions/plugins/Plugins.html:69
 msgid "App plugin can not be installed due to unresolved conflicts:"
-msgstr ""
-"Приложение не может быть установлено сейчас в связи с неразрешенными "
-"конфликтами:"
+msgstr "Плагин не может быть установлен в связи с неразрешенными конфликтами:"
 
 #: /wa-apps/installer/templates/actions/plugins/Plugins.html:75
 msgid ""
@@ -598,7 +597,7 @@ msgstr "Лицензия недействительна"
 
 #: /wa-apps/installer/templates/actions/apps/AppsInfo.html:40
 msgid "Renew license"
-msgstr "Продлить срок действия лицензии"
+msgstr "Продлить лицензию"
 
 #: /wa-apps/installer/templates/actions/update/Update.row.html:59
 msgid "This application is not available for purchase"
@@ -822,12 +821,12 @@ msgid ""
 "A newer version of %s <strong>%s</strong> is available for installation "
 "(your current version is %s)."
 msgstr ""
-"Обновленная версия «%s» <strong>%s</strong> доступна для установки (сейчас "
+"Новая версия %s <strong>%s</strong> доступна для установки (сейчас "
 "установлена версия %s)."
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:187
 msgid "View release notes"
-msgstr "Что нового?"
+msgstr "Список изменений"
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:57
 msgid "This application cannot be updated"
@@ -842,8 +841,8 @@ msgid ""
 "This is a licensed installation of %s on %s. License is valid through "
 "<strong>%s</strong>."
 msgstr ""
-"Это лицензионная установка приложения «%s» на домене %s. Лицензия "
-"действительна до <strong>%s</strong>."
+"Это лицензионная установка «%s» на домене %s. Лицензия действительна до "
+"<strong>%s</strong>."
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:80
 msgid "You have the latest version of %s installed: <strong>%s</strong>"
@@ -851,7 +850,7 @@ msgstr "Установлена последняя версия «%s»: <strong>%
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:95
 msgid "Buy & Install"
-msgstr "Купить"
+msgstr "Купить и установить"
 
 #: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:107
 msgid "This application cannot be installed"
@@ -1035,8 +1034,149 @@ msgstr ""
 
 #: /wa-apps/installer/templates/actions/qa/QaDefault.html:45
 msgid "Plugin"
-msgstr ""
+msgstr "Плагин"
 
 #: /wa-apps/installer/templates/actions/qa/QaDefault.html:55
 msgid "Theme"
+msgstr "Тема"
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:58
+msgid "Not licensed"
+msgstr "Нет лицензии"
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:63
+msgid "Paid until %s"
+msgstr "Арендовано до %s"
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:65
+msgid "Licensed"
+msgstr "Лицензия"
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:36
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:36
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:40
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:44
+msgid "Link license"
+msgstr "Подключить лицензию"
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:37
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:37
+msgid ""
+"Installation and usage of %s app on <strong>%s</strong> is not licensed. "
+"Updates are disabled. Buy a new license or link your existing %s license to "
+"this Webasyst installation."
 msgstr ""
+"Установка и использование «%s» на домене <strong>%s</strong> не "
+"лицензирована. Возможность установки обновлений отключена. Купите новую "
+"лицензию или подключите приобретенную ранее лицензию «%s» к этой установке "
+"Webasyst."
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:70
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:93
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:87
+msgid "This is a valid licensed installation of %s on <strong>%s</strong>."
+msgstr "Лицензионная установка «%s» на домене <strong>%s</strong>."
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:76
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:100
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:96
+msgid "Buy more licenses"
+msgstr "Купить еще лицензию"
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:78
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:102
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:98
+msgid ""
+"Additional licenses are required if you are using %s on more than one domain "
+"name (<a href='%s' target='_blank'>one license per domain</a>)."
+msgstr ""
+"Приобретение дополнительных лицензий требуется, если вы используете «%s» "
+"более чем на одном доменном имени (<a href='%s' target='_blank'>одна "
+"лицензия на домен</a>)."
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:78
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:102
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:98
+msgid "http://www.webasyst.com/help/1200/paid-app-licensing/"
+msgstr "http://www.webasyst.ru/help/1199/paid-app-licensing/"
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:107
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:100
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:134
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:133
+msgid ""
+"%s will be automatically downloaded from Webasyst Store and installed "
+"immediately after you make payment."
+msgstr ""
+"Загрузка и установка «%s» будет произведена автоматически сразу после оплаты."
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:115
+#: /wa-apps/installer/templates/actions/apps/AppsInfoPremium.html:108
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:142
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:143
+msgid "%s will be downloaded from Webasyst Store and installed automatically."
+msgstr "Загрузка и установка «%s» будет произведена автоматически."
+
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:28
+#: /wa-apps/installer/templates/actions/themes/Themes.html:15
+msgid "Most popular"
+msgstr "Популярные"
+
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:29
+#: /wa-apps/installer/templates/actions/themes/Themes.html:16
+msgid "Newest"
+msgstr "Новые"
+
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:41
+msgid ""
+"Installation and usage of %s plugin on <strong>%s</strong> is not licensed. "
+"Updates are disabled. Buy a new license or link your existing %s plugin "
+"license to this Webasyst installation."
+msgstr ""
+"Установка и использование плагина «%s» на домене <strong>%s</strong> не "
+"лицензирована. Возможность установки обновлений отключена. Купите новую "
+"лицензию или подключите приобретенную ранее лицензию плагина «%s» к этой "
+"установке Webasyst."
+
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:45
+msgid ""
+"Installation and usage of %s theme on <strong>%s</strong> is not licensed. "
+"Updates are disabled. Buy a new license or link your existing %s theme "
+"license to this Webasyst installation."
+msgstr ""
+"Установка и использование темы дизайна «%s» на домене <strong>%s</strong> не "
+"лицензирована. Возможность установки обновлений отключена. Купите новую "
+"лицензию или подключите приобретенную ранее лицензию темы дизайна «%s» к "
+"этой установке Webasyst."
+
+#: /wa-apps/installer/lib/actions/plugins/installerPluginsInfo.action.php:54
+msgid "Plugin not found"
+msgstr "Плагин не найден"
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:107
+#: /wa-apps/installer/templates/actions/plugins/PluginsInfo.html:134
+#: /wa-apps/installer/templates/actions/themes/ThemesInfo.html:133
+msgid ""
+"If you already have a license, click the button above to link it to this "
+"Webasyst installation."
+msgstr ""
+"Если у вас уже есть приобретенная лицензия, щелкните по кнопке выше, чтобы "
+"подключить лицензию к этой установке Webasyst."
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:29
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:94
+#: /wa-apps/installer/templates/actions/themes/Themes.html:90
+msgid "New!"
+msgstr "Новинка"
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:36
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:101
+#: /wa-apps/installer/templates/actions/themes/Themes.html:97
+msgid "Popular!"
+msgstr "Хит!"
+
+#: /wa-apps/installer/templates/actions/apps/Apps.html:36
+#: /wa-apps/installer/templates/actions/plugins/Plugins.html:102
+#: /wa-apps/installer/templates/actions/themes/Themes.html:99
+msgid "New version!"
+msgstr "Новая версия"
