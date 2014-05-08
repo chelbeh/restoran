@@ -150,6 +150,7 @@ abstract class waViewAction extends waController
     {
         $this->view->assign('_message', waMessage::getMessage('message'));
         $this->view->assign('_error', waMessage::getMessage('error'));
+        $this->view->assign('_result', waMessage::getMessage('result'));
         $this->view->cache($this->cache_time);
         if ($this->cache_time && $this->isCached())  {
             return $this->view->fetch($this->getTemplate(), $this->cache_id);
