@@ -8,7 +8,7 @@ class waMetroModel extends waModel
         $stations = array();
         $data = $this->order('name')->fetchAll();
         foreach($data as $d){
-            $stations[$d['id']] = $d['name'];
+            $stations[$d['name']] = $d['name'];
         }
         return $stations;
     }
