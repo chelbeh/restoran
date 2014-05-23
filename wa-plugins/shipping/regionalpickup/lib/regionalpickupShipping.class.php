@@ -21,7 +21,7 @@
  * @license http://www.gnu.org/licenses/lgpl.html LGPL-2.1
  * @author Serge Rodovnichenko <sergerod@gmail.com>
  * @copyright (C) 2014 Serge Rodovnichenko <sergerod@gmail.com>
- * @version 1.3
+ * @version 1.3.1
  *
  * @property-read string $currency Валюта плагина
  * @property-read array $rate_zone Массив со страной и регионом, для которых работает плагин
@@ -46,15 +46,7 @@ class regionalpickupShipping extends waShipping
 
     public function allowedAddress()
     {
-        $address = array();
-
-        foreach ($this->rate_zone as $field => $value) {
-            if (!empty($value)) {
-                $address[$field] = $value;
-            }
-        }
-
-        return array($address);
+        return array(array_filter($this->rate_zone));
     }
 
     /**
@@ -86,19 +78,17 @@ class regionalpickupShipping extends waShipping
             return _w('No suitable pick-up points');
         }
 
-        $rates = $this->rate;
-        $currency = $this->currency;
         $weight = $this->getTotalWeight();
         $cost = $this->getTotalPrice();
 
         $deliveries = array();
 
-        foreach ($rates as $code => $rate) {
+        foreach ($this->rate as $code => $rate) {
             if($this->isAllowedWeight($rate, $weight)) {
                 /** @todo для ясности можно и отдельный метод сделать, который будет выдавать нужный формат массива */
                 $deliveries[$code] = array(
                     'name' => $rate['location'],
-                    'currency' => $currency,
+                    'currency' => $this->currency,
                     'rate' => $this->calcCost($rate, $cost),
                     'est_delivery' => ''
                 );
@@ -141,13 +131,7 @@ class regionalpickupShipping extends waShipping
 
     public function requestedAddressFields()
     {
-        if(!$this->prompt_address)
-            return FALSE;
-
-        return array(
-            'country' => array('cost' => TRUE, 'required' => TRUE),
-            'region' => array('cost' => TRUE)
-        );
+        return FALSE;
     }
 
     /**
@@ -156,6 +140,8 @@ class regionalpickupShipping extends waShipping
      * в БД.
      *
      * Название ПВЗ не можеь быть пустым. Потомушта.
+     *
+     * @todo Проверять, чтоб страна и регион были указаны
      *
      * @param array $settings
      * @return array
@@ -176,19 +162,24 @@ class regionalpickupShipping extends waShipping
         return parent::saveSettings($settings);
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     *
     public function getSettings($name = null) {
-        $values = parent::getSettings($name);
+        $settings = parent::getSettings($name);
 
-        $default_rate_values = array('free'=>"0", "maxweight"=>"0", "cost"=>"0");
-
-        if(isset($values["rate"])) {
-            foreach ($values["rate"] as $index => $item) {
-                $values["rate"][$index] = array_merge($default_rate_values, array('code'=>$index), $item);
+        if (isset($settings['rate']) && is_array($settings['rate'])) {
+            foreach ($settings['rate'] as $index => $item) {
+                $settings['rate'][$index] = array_merge(
+                        array('code' => $index, 'free' => '0.0', 'maxweight' => '0.0', 'cost' => '0.0'), (array) $item
+                );
             }
         }
 
-        return $values;
+        return $settings;
     }
+     */
 
     /**
      * Проверяет есть-ли у варианта ограничение по максимальному весу

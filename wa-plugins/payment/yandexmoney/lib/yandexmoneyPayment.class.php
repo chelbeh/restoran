@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author WebAsyst Team
@@ -119,8 +120,13 @@ class yandexmoneyPayment extends waPayment implements waIPayment
     {
         $this->request = $request;
         $pattern = '/^([a-z]+)_(.+)_(.+)$/';
+        $merchant_pattern = '/^([a-z]+)_([^_]+)_([^_]+)/';
 
         if (!empty($request['orderNumber']) && preg_match($pattern, $request['orderNumber'], $match)) {
+            $this->app_id = $match[1];
+            $this->merchant_id = $match[2];
+            $this->order_id = $match[3];
+        } elseif (!empty($request['merchant_order_id']) && preg_match($merchant_pattern, $request['merchant_order_id'], $match)) {
             $this->app_id = $match[1];
             $this->merchant_id = $match[2];
             $this->order_id = $match[3];
@@ -183,7 +189,7 @@ class yandexmoneyPayment extends waPayment implements waIPayment
         $transaction_data = $this->saveTransaction($transaction_data, $request);
 
         $result = $this->execAppCallback($app_payment_method, $transaction_data);
-        return $this->getXMLResponse($request, $result['result'] ? self::XML_SUCCESS : self::XML_PAYMENT_REFUSED, $result['error']);
+        return $this->getXMLResponse($request, !empty($result['result']) ? self::XML_SUCCESS : self::XML_PAYMENT_REFUSED, ifset($result['error']));
     }
 
     protected function callbackExceptionHandler(Exception $ex)
@@ -304,6 +310,18 @@ class yandexmoneyPayment extends waPayment implements waIPayment
             $view_data .= 'Account: '.$transaction_raw_data['paymentPayerCode'];
         }
 
+        if (!empty($transaction_raw_data['cps_provider'])) {
+            switch ($transaction_raw_data['cps_provider']) {
+                case 'wm':
+                    $view_data .= 'Оплачено: WebMoney';
+                    break;
+                default:
+                    $view_data .= 'Оплачено: '.$transaction_raw_data['cps_provider'];
+                    break;
+
+            }
+        }
+
         $transaction_data = array_merge($transaction_data, array(
             'type'        => null,
             'native_id'   => ifset($transaction_raw_data['invoiceId']),
@@ -316,14 +334,18 @@ class yandexmoneyPayment extends waPayment implements waIPayment
         ));
 
         switch ($transaction_raw_data['action']) {
-            case 'checkOrder':
+            case 'checkOrder': //Проверка заказа
                 $this->version = '3.0';
-            case 'Check':
-                //Проверка заказа
                 $transaction_data['type'] = self::OPERATION_CHECK;
                 break;
-            case 'paymentAviso':
+            case 'paymentAviso': //Уведомления об оплате
                 $this->version = '3.0';
+                $transaction_data['type'] = self::OPERATION_AUTH_CAPTURE;
+                break;
+
+            case 'Check': //Проверка заказа
+                $transaction_data['type'] = self::OPERATION_CHECK;
+                break;
             case 'PaymentSuccess': //Уведомления об оплате
                 $transaction_data['type'] = self::OPERATION_AUTH_CAPTURE;
                 break;
@@ -381,6 +403,7 @@ class yandexmoneyPayment extends waPayment implements waIPayment
             'AC' => 'платеж с банковской карты',
             'GP' => 'платеж по коду через терминал',
             'MC' => 'оплата со счета мобильного телефона',
+            'NV' => 'оплата со счета WebMoney',
         );
     }
 }
