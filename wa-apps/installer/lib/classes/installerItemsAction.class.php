@@ -1,4 +1,5 @@
 <?php
+
 abstract class installerItemsAction extends waViewAction
 {
     protected $module = null;
@@ -54,15 +55,12 @@ abstract class installerItemsAction extends waViewAction
 
             if (empty($subject)) {
                 $extras = array();
-                $storage = wa()->getStorage();
                 $search = array();
-                $key = preg_replace('/s$/', '', $this->module);
-                $slug_id = "installer_select_{$key}";
-                $vendor_id = "installer_select_{$key}_vendor";
 
                 $options = $this->getExtrasOptions();
 
-                $slug = waRequest::get('slug', $storage->read($slug_id));
+
+                $slug = waRequest::get('slug');
                 if (!empty($options['filter']['slug'])) {
                     $slug = $options['filter']['slug'];
                     unset($options['filter']['slug']);
@@ -79,12 +77,13 @@ abstract class installerItemsAction extends waViewAction
                         $search['slug'] = array_unique(array_merge($search['slug'], $s));
                     }
                 }
+
                 if ((!$this->redirect || !empty($search['slug'])) && (($keys = installerHelper::search($applications, $search, true)) !== null)) {
                     $slug = array();
                     foreach ($keys as $id => $key) {
                         $slug[$id] = $applications[$key]['slug'];
                     }
-                    //   $storage->write($vendor_id, $search['vendor'] = $app['vendor']);
+
                     $extras = installerHelper::getInstaller()->getExtras($slug, $this->module, $options);
                     $vendor_name = null;
                     foreach ($extras as $app_id => $app_item) {
@@ -124,7 +123,6 @@ abstract class installerItemsAction extends waViewAction
                     }
 
                     $this->view->assign('vendor_name', $vendor_name);
-                    $storage->write($slug_id, $search['slug'] = $slug);
                 } else {
                     reset($applications);
                     if ($app = current($applications)) {
