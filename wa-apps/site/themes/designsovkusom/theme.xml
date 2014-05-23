@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="designsovkusom" system="0" vendor="988467" author="Designsovkusom" app="site" version="1.0.1">
+<theme id="designsovkusom" system="0" vendor="988467" author="Designsovkusom" app="site" version="1.0.2">
   <name locale="en_US">Designsovkusom</name>
   <name locale="ru_RU">Дизайн со вкусом</name>
   <files>
@@ -40,7 +40,7 @@
       <description locale="en_US">404 and other errors</description>
       <description locale="ru_RU">404 и другие ошибки</description>
     </file> 
-  <file path="designsovkusom.css" custom="1"/><file path="designsovkusom.js" custom="1"/><file path="dsv.logo.html" custom="1"/><file path="dsv.contact.html" custom="1"/><file path="dsv.social.html" custom="1"/><file path="dsv.user.css" custom="1"/><file path="dsv.address.html" custom="1"/></files>
+  <file path="designsovkusom.css" custom="1"/><file path="designsovkusom.js" custom="1"/><file path="dsv.logo.html" custom="1"/><file path="dsv.contact.html" custom="1"/><file path="dsv.social.html" custom="1"/><file path="dsv.user.css" custom="1"/><file path="dsv.address.html" custom="1"/><file path="color.blue.css" custom="1"/><file path="color.orange.css" custom="1"/><file path="color.red.css" custom="1"/><file path="color.green.css" custom="1"/><file path="color.purple.css" custom="1"/></files>
   <settings>
 	<setting var="logo_slogan" control_type="text">
 		<value>Современный интернет-магазин</value>
@@ -86,6 +86,52 @@
 		<value>1</value>
 		<name locale="en_US">Show last photos in site</name>
 		<name locale="ru_RU">Отображать последние фотографии в сайт</name>
+	</setting>
+	<setting var="jivosite" control_type="checkbox">
+		<value>1</value>
+		<name locale="en_US">Jivosite on / off</name>
+		<name locale="ru_RU">Отображать консультант Jivosite</name>
+	</setting>
+	<setting var="widget_id" control_type="text">
+		<value>128160</value>
+		<name locale="en_US">Jivosite widget id</name>
+		<name locale="ru_RU">Jivosite widget id</name>
+	</setting>
+	<setting var="color_theme" control_type="select">
+		<value>none</value>
+		<name locale="ru_RU">Цветовая схема</name>
+		<name locale="en_US">Theme color</name>
+		<options>
+			<option value="none">
+				<name locale="ru_RU">Стандарт</name>
+				<name locale="en_US">Standart</name>
+			</option>
+			<option value="blue">
+				<name locale="ru_RU">Синий</name>
+				<name locale="en_US">Blue</name>
+			</option>
+			<option value="orange">
+				<name locale="ru_RU">Оранжевый</name>
+				<name locale="en_US">Orange</name>
+			</option>
+			<option value="red">
+				<name locale="ru_RU">Красный</name>
+				<name locale="en_US">Red</name>
+			</option>
+			<option value="green">
+				<name locale="ru_RU">Зеленый</name>
+				<name locale="en_US">Green</name>
+			</option>
+			<option value="purple">
+				<name locale="ru_RU">Фиолетовый</name>
+				<name locale="en_US">Purple</name>
+			</option>
+		</options>
+	</setting>
+	<setting var="my_color" control_type="text">
+		<value/>
+		<name locale="en_US">Own color</name>
+		<name locale="ru_RU">Свой цвет</name>
 	</setting>
   </settings>
 </theme>

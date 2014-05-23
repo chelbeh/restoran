@@ -4,3 +4,6 @@
 [submodule "wa-apps/shipment"]
 	path = wa-apps/shipment
 	url = git@github.com:slowpokes/shipment.git
+[submodule "wa-apps/courier"]
+	path = wa-apps/courier
+	url = git@github.com:slowpokes/courier.git
