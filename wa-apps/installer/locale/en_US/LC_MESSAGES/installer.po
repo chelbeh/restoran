@@ -1144,3 +1144,25 @@ msgstr "Popular"
 #: /wa-apps/installer/templates/actions/themes/Themes.html:99
 msgid "New version!"
 msgstr "New version"
+
+#: /wa-apps/installer/templates/actions/plugins/PluginsView.html:17
+msgid "Or browse for all plugins in <a href=\"%s\">Installer</a> app."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/themes/ThemesView.html:6
+msgid "Installed design themes"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/themes/ThemesView.html:91
+msgid "New themes from Webasyst Store"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/plugins/PluginsView.html:67
+#: /wa-apps/installer/templates/actions/plugins/PluginsView.html:77
+msgid "Install \"%s\" plugin?"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/update/UpdateManager.html:103
+#: /wa-apps/installer/templates/actions/update/UpdateManager.html:108
+msgid "Finalizing the installation and redirecting back to the app..."
+msgstr ""

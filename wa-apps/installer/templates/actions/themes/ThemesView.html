@@ -1,22 +1,30 @@
 {capture assign="installed_format"}[`Theme “%s” is installed, but not used by any apps. To start using this theme, apply it in your Site app's Routing settings.`]{/capture}
 {capture assign="used_format"}[`Theme %s is now in use on`]{/capture}
-<ul class="thumbs li250px">
-    {$dialogs = array()}
-    {foreach $themes as $theme}
-        <li>
-            <a href="#/themes/{$theme.id}" class="js-theme-info">
-                <div class="wa-theme-cover">
-                    {if !empty($theme.cover)}
-                        <img src="{$theme.cover}" />
-                    {else}
-                        <span class="hint">[`No thumbnail available`]</span>
-                    {/if}
-                </div>
-                <h5 class="wa-theme-name">{$theme.name|escape}</h5>
-            </a>
+{$dialogs = array()}
+<div class="wa-themes-installed" style="background: rgba(0,0,0,0.15);">
+
+    <h5 class="wa-themes-group">[`Installed design themes`]</h5>
+    
+    <ul class="thumbs li250px">
+
+        {foreach $themes as $theme}
             {if $theme.path}
+            <li>
+                <a href="#/themes/{$theme.id}" class="js-theme-info">
+                    <div class="wa-theme-cover">
+                        {if !empty($theme.cover)}
+                            <img src="{$theme.cover}" />
+                        {else}
+                            <span class="hint">[`No thumbnail available`]</span>
+                        {/if}
+                        {if !empty($theme.used)}<div class="wa-in-use-badge">[s`In use`]</div>{/if}
+                    </div>
+                    <h5 class="wa-theme-name">{$theme.name|escape}</h5>
+                </a>
+                <em class="wa-theme-installed"><i class="icon10 yes"></i> [`Installed`]</em>
+                
                 {if !empty($theme.used)}
-                    <strong class="wa-theme-in-use">[s`In use`]</strong>
+                    
                     {capture append="dialogs"}
                         <div class="dialog width400px" id="wa-theme-use-dialog-{$theme.id}">
                             <div class="dialog-background"> </div>
@@ -45,7 +53,6 @@
                         </div>
                     {/capture}
                 {else}
-                    <em class="gray">[`Installed`]</em>
                     <i class="icon10 settings"></i>
                     {capture append="dialogs"}
                         <div class="dialog width400px js-setup" id="wa-theme-use-dialog-{$theme.id}">
@@ -71,42 +78,72 @@
                         </div>
                     {/capture}
                 {/if}
-            {elseif !empty($theme.commercial)}
-                {if true}
-                    {if 1||!empty($theme.compare_price)}
-                        <strike class="wa-price">{$theme.compare_price}</strike>&nbsp;
-                        <strong class="highlighted">{$theme.price}</strong>
-                    {else}
-                        <span class="wa-price">
-                            {$theme.price}
-                        </span>
+                
+            </li>
+            {/if}
+        {/foreach}
+    </ul>
+
+</div>
+
+<div class="wa-themes-from-the-store">
+
+    <h5 class="wa-themes-group">[`New themes from Webasyst Store`]</h5>
+    
+    <ul class="thumbs li250px">
+        {foreach $themes as $theme}
+            {if !$theme.path}
+            <li>
+                <a href="#/themes/{$theme.id}" class="js-theme-info">
+                    <div class="wa-theme-cover">
+                        {if !empty($theme.cover)}
+                            <img src="{$theme.cover}" />
+                        {else}
+                            <span class="hint">[`No thumbnail available`]</span>
+                        {/if}
+                    </div>
+                    <h5 class="wa-theme-name">{$theme.name|escape}</h5>
+                </a>
+                
+                {if !empty($theme.commercial)}
+                    {if true}
+                        {if !empty($theme.compare_price)}
+                            <strike class="wa-price">{$theme.compare_price}</strike>&nbsp;
+                            <strong class="highlighted">{$theme.price}</strong>
+                        {else}
+                            <span class="wa-price">
+                                {$theme.price}
+                            </span>
+                        {/if}
+                        <form id="js-theme-info-{$theme.id}" action="{$wa_backend_url}installer/#/themes/{$theme.id|escape}/" method="GET">
+                        </form>
+                    {elseif !empty($theme.purchase_link)}
+                        <form action="{$theme.purchase_link|default:''}" method="post" id="js-theme-buy-{$theme.id}">
+                            <strong>{$theme.payware.price.config|escape}</strong>
+                            {foreach $theme.inherited as $inherited}
+                                <input type="hidden" name="app_id[]" value="{$inherited.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
+                            {/foreach}
+                            <input type="hidden" name="hash" value="{$identity_hash}">
+                        </form>
                     {/if}
-                    <form id="js-theme-info-{$theme.id}" action="{$wa_backend_url}installer/#/themes/{$theme.id|escape}/" method="GET">
-                    </form>
-                {elseif !empty($theme.purchase_link)}
-                    <form action="{$theme.purchase_link|default:''}" method="post" id="js-theme-buy-{$theme.id}">
-                        <strong>{$theme.payware.price.config|escape}</strong>
+                {else}
+                    <span class="wa-price">
+                        [`Free`]
+                    </span>
+                    <form id="js-theme-install-{$theme.id}" action="{$wa_backend_url}installer/?module=update&action=manager" method="POST" title="{sprintf('[`Install theme "%s" for the %s app?`]',$theme.name,$app['name'])|escape}">
+                        <input type="hidden" name="return_url" value="{$return_url|replace:'%theme_id%':$theme.id|escape}">
                         {foreach $theme.inherited as $inherited}
-                            <input type="hidden" name="app_id[]" value="{$inherited.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
+                            <input type="hidden" name="app_id[{$inherited.slug}]" value="{$theme.vendor}{if !empty($theme.edition)}:{$theme.edition}{/if}">
                         {/foreach}
-                        <input type="hidden" name="hash" value="{$identity_hash}">
+                        <input type="hidden" name="install" value="1">
                     </form>
                 {/if}
-            {else}
-                <span class="wa-price">
-                    [`Free`]
-                </span>
-                <form id="js-theme-install-{$theme.id}" action="{$wa_backend_url}installer/?module=update&action=manager" method="POST" title="{sprintf('[`Install theme "%s" for the %s app?`]',$theme.name,$app['name'])|escape}">
-                    <input type="hidden" name="return_url" value="{$return_url|replace:'%theme_id%':$theme.id|escape}">
-                    {foreach $theme.inherited as $inherited}
-                        <input type="hidden" name="app_id[{$inherited.slug}]" value="{$theme.vendor}{if !empty($theme.edition)}:{$theme.edition}{/if}">
-                    {/foreach}
-                    <input type="hidden" name="install" value="1">
-                </form>
+            </li>
             {/if}
-        </li>
-    {/foreach}
-</ul>
+        {/foreach}
+    </ul>
+    
+</div>
 
 {foreach $dialogs as $dialog_id => $dialog}
     {$dialog}

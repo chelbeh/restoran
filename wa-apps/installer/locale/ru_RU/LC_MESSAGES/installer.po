@@ -1030,7 +1030,7 @@ msgid ""
 "Store. Click on a plugin to install."
 msgstr ""
 "Щелкните по плагину, чтобы автоматически скачать и установить его из "
-"магазина Webasyst"
+"магазина Webasyst."
 
 #: /wa-apps/installer/templates/actions/qa/QaDefault.html:45
 msgid "Plugin"
@@ -1180,3 +1180,26 @@ msgstr "Хит!"
 #: /wa-apps/installer/templates/actions/themes/Themes.html:99
 msgid "New version!"
 msgstr "Новая версия"
+
+#: /wa-apps/installer/templates/actions/plugins/PluginsView.html:17
+msgid "Or browse for all plugins in <a href=\"%s\">Installer</a> app."
+msgstr ""
+"Или просмотрите все плагины в приложении «<a href=\"%s\">Инсталлер</a>»."
+
+#: /wa-apps/installer/templates/actions/themes/ThemesView.html:6
+msgid "Installed design themes"
+msgstr "Установленные темы дизайна"
+
+#: /wa-apps/installer/templates/actions/themes/ThemesView.html:91
+msgid "New themes from Webasyst Store"
+msgstr "Новые темы дизайна из магазина Webasyst"
+
+#: /wa-apps/installer/templates/actions/plugins/PluginsView.html:67
+#: /wa-apps/installer/templates/actions/plugins/PluginsView.html:77
+msgid "Install \"%s\" plugin?"
+msgstr "Установить плагин «%s»?"
+
+#: /wa-apps/installer/templates/actions/update/UpdateManager.html:103
+#: /wa-apps/installer/templates/actions/update/UpdateManager.html:108
+msgid "Finalizing the installation and redirecting back to the app..."
+msgstr "Завершение установки и перенаправление обратно в приложение..."

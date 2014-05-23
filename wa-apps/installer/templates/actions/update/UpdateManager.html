@@ -9,9 +9,9 @@ $(document).ready( function() {
         console.production = {if waSystemConfig::isDebug()}false{else}true{/if};
         $.installer.init({
             redirect_url: '{$return_url|escape:'js'}',
-            redirect_timeout: 1000,
-            updateStateInterval: 1000,
-            updateStateErrorInterval: 2000,
+            redirect_timeout: 1500,/*ms*/
+            updateStateInterval: 1000,/*ms*/
+            updateStateErrorInterval: 2000,/*ms*/
             timestamp:{time()},
             queue:[
             {foreach $queue_apps as $target => $item}{
@@ -100,9 +100,14 @@ $(document).ready( function() {
         <p>[`An error occurred during installation`]</p>
         <p><i class="icon10 no"></i> <em class="error"><strong>{{html current_state.error}}</strong></em>
         {{else}}
-        <p><i class="icon10 yes"></i> <em class="success"><strong>[`Applications were successfully installed`]</strong></em></p>
+        <p><i class="icon10 yes"></i> <em class="success"><strong>[`Finalizing the installation and redirecting back to the app...`]</strong></em><i class="icon16 loading"></i></p>
         {{/if}}
         {{/if}}
+        {/literal}{if !empty($return_url)}{literal}
+        {{if result && result.success}}
+            <p><i class="icon10 yes"></i> <em class="success"><strong>[`Finalizing the installation and redirecting back to the app...`]</strong></em><i class="icon16 loading"></i></p>
+        {{/if}}
+        {/literal}{/if}{literal}
     </div>
     <div id="installer-update-complete-log">
         <i class="icon16 text"></i>
