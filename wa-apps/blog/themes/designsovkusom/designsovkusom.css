@@ -54,7 +54,7 @@ body {
 q { 
 	quotes: "" ""; 
 }
-ul, ol, dir, menu { 
+ul, dir, menu { 
 	list-style: none; 
 }
 sub, sup { 
@@ -92,7 +92,10 @@ html, body {
 	margin: 0px;
 	color: #444444;
 }
-
+ol li {
+    margin-left: 16px;
+}
+u, em { text-decoration: underline;}
 .description a,
 .post .text a,
 #page a {color: #4888ee;}
@@ -530,7 +533,7 @@ html, body {
         display: inline-block;
         margin-bottom: 15px;
         position: relative;
-        color: #411;
+        color: #262626;
         font-size: 12px;
         width: 48%;
     }
@@ -561,6 +564,7 @@ html, body {
     }
     .comment-form-fields label {
         width: 150px;
+        font-size: 12px;
         display: block;
         float: left;
     }
@@ -582,6 +586,7 @@ html, body {
         font-size: 14px;
         font-weight: normal;
     }
+    div.post img { max-width: 711px; }
     .post-comments {
         border-top: 1px solid #cecece;
         background-color: #fff;
@@ -609,7 +614,22 @@ html, body {
         margin-right: 5px;
     }
     .post-comments .auth-type li.selected a { text-decoration: none; }
-    
+    .comment-info {
+        padding-left: 60px
+    }
+    .comment-image {
+        width: 50px;
+        float: left;
+    }
+    .comment-image  img {
+        -moz-border-radius: 25px;
+        -webkit-border-radius: 25px;
+        border-radius: 25px;
+        -moz-box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+        -ms-box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+        -webkit-box-shadow:1px 2px 3px rgba(0,0,0,0.1);
+        box-shadow: 1px 2px 3px rgba(0,0,0,0.1);
+    }
     #comment_text {
         border: 1px solid #dcdcdc;
         border-top-color: 1px solid #c4c4c4;
@@ -674,7 +694,7 @@ html, body {
     .credentials span { display: inline-block; vertical-align: middle; padding-left: 0 !important; //display: inline;}
     /*.credentials .userpic { min-width: 20px; display: block; float: left; margin-right: 2px; }*/
     .credentials .username { font-size: 0.9em; margin: 0; }
-    .credentials .username, .credentials .username a { color: #777; padding: 0; display: inline; }
+    .credentials .username, .credentials .username a { color: #262626; padding: 0; display: inline; }
     .credentials a.username:hover { color: red; }
     .credentials .date { margin: 0 3px; }
     .post .credentials { margin-bottom: 20px;}
@@ -688,22 +708,42 @@ html, body {
     .comments textarea { height: 100px; min-height: 100px; width: 75%; margin-top: 0; } 
     .comments ul,
     .comments ul.menu-v li { padding: 0; margin: 0; list-style: none;}
+    .comments ul .comment{padding: 10px 10px 10px 25px;}
     .comments ul li { margin:0 0 20px 0;}
-    .comments ul li ul { margin:20px 0 0 0; }
+    .comments ul li ul { margin:10px 0 0 0; }
     .comments ul li span.hint a { color: #aaa; text-decoration: underline; }
     .comments .text { margin: 5px 0 }
     .comments .actions { margin-bottom: 5px }
     .comments ul li a.comment-delete { margin: 0 0 0 5px; padding: 0; color: #d99; text-decoration: underline; }
     .comments ul li a.comment-delete:hover { background: red; color: white; }
-    .comments ul li ul { padding-left: 25px; }
+    .comments ul li ul .comment {
+        font-size: 12px;
+        position: relative;
+        padding: 10px;
+        margin-right: 10px;
+        background-color: #e6e6e6;
+    }
+    .comments ul li ul .comment-arrow {
+        background-image: url('img/dsv/comment-arrow.png');
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 11px;
+        position: absolute;
+        top: -11px;
+        left: 30px;
+    }
+    .comments ul li ul .comment-image {display: none;}
+    .comments ul li ul .comment-info {padding-left: 0px}
     .comments ul li .comment-form { padding: 10px 30px; }
     .comments ul li .comment-form textarea { min-height: 100px; }
     .comments ul.menu-h.auth-type { padding: 0 0 40px; margin-left: -5px; }
     .comments ul.menu-h.auth-type li { padding-right: 10px; }
     .comments ul.menu-h.auth-type li a { padding: 5px 6px; }
     .comments ul.menu-h.auth-type li a img { top: 0; }
-    .comments .comment-reply {padding: 5px 0; color: #4888ee;}
-    
+    .comments .comment-reply {padding: 0 0 5px; color: #4888ee;}
+    .comment-form {
+
+    }
     
     /* 4.3. ПРОСМОТР СТРАНИЦЫ */
 #page {

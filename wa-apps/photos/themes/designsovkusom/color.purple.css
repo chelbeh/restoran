@@ -1,0 +1,25 @@
+.apps li:hover {background-color: #951684;}
+
+.main_menu ul li a:hover,
+.main_menu ul li a.active { border-bottom: 2px solid #951684;}
+.main_menu ul>li.first,
+ .leftmenu>ul>li.first {
+	background-color: #951684; 
+}
+.leftmenu>ul>li.first:hover { background-color: #951684; }
+
+.news_container,
+.sidebar-block-container.white {
+	border-top: 3px solid #951684;
+}
+
+.news .post h3 a:hover {color: #951684;}
+
+.photos_container ul li:hover {
+	border: 1px solid #951684;
+}
+
+.product-navigation li.selected {
+	border-bottom: 3px solid #951684;
+	color: #951684;
+}
