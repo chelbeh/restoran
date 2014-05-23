@@ -1109,6 +1109,7 @@ $.wa.contactEditor.factoryTypes.Composite = $.extend({}, $.wa.contactEditor.base
         for(var sfid in this.fieldData.subfields) {
             var sf = this.fieldData.subfields[sfid];
             var editor = $.extend({}, $.wa.contactEditor.factoryTypes[sf.type]);
+            if(editor.currentMode!== undefined){
             var sfData = this.fieldData.fields[sfid];
             if (this.fieldData.required && this.fieldData.required[sfid]) {
                 sfData.required = true;
@@ -1122,6 +1123,7 @@ $.wa.contactEditor.factoryTypes.Composite = $.extend({}, $.wa.contactEditor.base
             editor.parentEditorData.parent = this;
             this.subfieldEditors[sfid] = editor;
             val.data[sfid] = editor.getValue();
+            }
         }
 
         this.fieldValue = val;

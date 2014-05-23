@@ -1,7 +1,7 @@
-wa-cache/
-wa-data/
-wa-config/
-wa-log/
+wa-config
+wa-cache
+wa-data
+wa-log
 .fw_compatible
 .idea
 *.md5
