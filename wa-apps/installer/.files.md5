@@ -44,7 +44,7 @@ c39e1be7652f17263633706e6bccc63c *lib/classes/installerItemsAction.class.php
 0817e2ed5f4d448099be3070b4610c06 *lib/cli/installerApps.cli.php
 5a7b0c0f3947b12d3d58164acc791571 *lib/cli/installerHash.cli.php
 865908cbf9cc987cbb81ea5a106775cf *lib/config/app.php
-d39daa757dd7e32179ae640fc3506c9d *lib/config/build.php
+04ccce6e1b55855e2d946cf52ba032be *lib/config/build.php
 ca9f4520183c02f91dac9cc21b85f703 *lib/config/factories.php
 49a18845606b5b64b93e324617c5a04e *lib/config/installerConfig.class.php
 cb0d857703c059be2e3059ce38200e12 *lib/config/requirements.php
