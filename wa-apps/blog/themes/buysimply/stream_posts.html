@@ -1,5 +1,4 @@
 {* post list: default view mode *}
-
 {foreach $posts as $post}
     <div class="post" id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts" {/if}itemscope itemtype="http://schema.org/BlogPosting">
         <h3 class="caption-name">
@@ -12,7 +11,7 @@
 
         </h3>
         <div class="credentials">
-			<div class="left align-left">
+			<div class="float-left align-left">
             {if isset($post.user.photo_url_20)}
                 {if $post.user.posts_link}
                     <a href="{$post.user.posts_link}"><img src="{$post.user.photo_url_20}" class="userpic" alt=""></a>
@@ -24,7 +23,7 @@
               <a href="{$post.user.posts_link}" class="username" rel="author">{$post.user.name}</a>,{else}
               <span class="username" rel="author">{$post.user.name}</span>,{/if}<span class="date">{$post.datetime|wa_datetime:"humandatetime"}</span>
           	</div>
-            <div class="right align-right">
+            <div class="align-right">
             {if $show_comments && $post.comments_allowed}
             	{if !empty($post.comment_count)}
               		<a href="{$post.link}#comments"><i class="icon-comments"></i>{_w('%d comment','%d comments',$post.comment_count)}</a>
@@ -33,6 +32,7 @@
                 {/if}
             {/if}
             </div>
+            <div class="clear"></div>
         </div>
 
         {* @event prepare_posts_frontend.%plugin_id%.before *}
@@ -45,8 +45,7 @@
         <div class="text">
             {$post.text}
             {if $post.cutted}
-          		<a href="{$post.link}" class="view-post">Читать далее →</a>
-          {*<a href="{$post.link}">{$post.cut_link_label|default:'[`Continue reading →`]'}</a>*}
+          		<a href="{$post.link}" class="button view-post">[`Read more →`]</a>
             {/if}
         </div>      
 
@@ -58,9 +57,7 @@
         {/if}      
     </div>
 {foreachelse}
-
     {if $page lt 2}
         {_w('%d post','%d posts',0)}
     {/if}
-
 {/foreach}

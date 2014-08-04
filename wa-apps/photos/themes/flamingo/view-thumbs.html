@@ -14,9 +14,9 @@
                     {foreach $photo.hooks.top_right as $plugin => $output}{$output}{/foreach}
                     {if $photo.stack_count > 0}<span class="indicator">{$photo.stack_count}</span>{/if}
                 </div>
-                <a href="{$photo.frontend_link}">{$wa->photos->getImgHtml($photo, '180x180', ['itemprop' => 'image'])}</a>
+                <a href="{$photo.frontend_link}">{$wa->photos->getImgHtml($photo, '0x180')}</a>
                 <div class="caption">
-                <h5 itemprop="name">{$photo.name}</h5>
+                <h5>{$photo.name}</h5>
 
                 {* @event prepare_photos_frontend.name.%plugin_id% *}
                 {foreach $photo.hooks.name as $plugin => $output}{$output}{/foreach}
@@ -26,7 +26,7 @@
                 {/if}                        
 
                 {if $photo.description}
-                    <p itemprop="description" class="small">{$photo.description}</p>
+                    <p class="small">{$photo.description}</p>
                 {/if}
 
                 {* @event prepare_photos_frontend.thumb.%plugin_id% *}

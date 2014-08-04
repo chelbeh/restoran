@@ -1,39 +1,39 @@
 <div class="one-photo-page">
-		<!-- image -->
-        <div class="photo{if $photo.stack_count > 0 || $photo.parent_id != 0} stack{/if}">
-            <div class="image">
-                <div class="corner top left">
-                    {* @event frontend_photo.%plugin_id%.top_left *}
-                    {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.top_left)}
-                        {$item.top_left}
-                    {/if}{/foreach}
-                </div>
-                <div class="corner top right">
-                    {* @event frontend_photo.%plugin_id%.top_right *}
-                    {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.top_right)}
-                        {$item.top_right}
-                    {/if}{/foreach}
-                </div>
-                <div class="stack">
-                    <div id="stack-nav" class="photo-stack">{$stack_nav}</div>
-                </div>
-                <a href="{$photo.next_photo_url}" title="[`Next →`]">
-                    {$wa->photos->getImgHtml($photo, '970', ['id' => 'photo','itemprop' => 'image'])}
-                </a>
+	<!-- image -->
+    <div class="photo{if $photo.stack_count > 0 || $photo.parent_id != 0} stack{/if}">
+        <div class="image">
+            <div class="corner top left">
+                {* @event frontend_photo.%plugin_id%.top_left *}
+                {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.top_left)}
+                    {$item.top_left}
+                {/if}{/foreach}
             </div>
+            <div class="corner top right">
+                {* @event frontend_photo.%plugin_id%.top_right *}
+                {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.top_right)}
+                    {$item.top_right}
+                {/if}{/foreach}
+            </div>
+            <div class="stack">
+                <div id="stack-nav" class="photo-stack">{$stack_nav}</div>
+            </div>
+            <a href="{$photo.next_photo_url}" title="[`Next >`]">
+                {$wa->photos->getImgHtml($photo, '970', ['id' => 'photo','itemprop' => 'image'])}
+            </a>
         </div>
-  
-  		<!-- stream navigation -->  		
-		<div class="thumbs-photo-gallery">{$photo_stream}</div>  		
-		<!-- description-->
-  		<div class="photo-description-table">
-          <div class="photo-info-description">
-          	<!-- photo info -->
-        	<h4 id="photo-name" itemprop="name">{$photo.name}</h4>
-        	<!-- photo description -->
+    </div>
+    
+  	<!-- stream navigation -->  		
+	<div class="thumbs-photo-gallery">{$photo_stream}</div>
+	<!-- description-->
+  	<div class="photo-description-table">
+        <div class="photo-info-description">
+            <!-- photo info -->
+            <h4 id="photo-name" itemprop="name">{$photo.name}</h4>
+            <!-- photo description -->
             {if $photo.description}
             	<p id="photo-description" itemprop="description">{$photo.description}</p>
-        	{/if}
+            {/if}
             <!-- photo autor -->
             {if $author}
             <p id="photo-author">
@@ -41,43 +41,85 @@
                     [`Uploaded by`] <span class="photo-info">{$author}</span>
                 </span>
             </p>
-        	{/if}
-          </div>
-          <div class="photo-tags-and-categories">
-          	 {if $albums || $tags}            
-                {if $albums}
-                    <p id="photo-albums">
-                    [`Albums`]: <span class="photo-info">{$albums}</span><br>
-                    </p>
-                {/if}
-                {if $tags}
-                    <p class="tags" id="photo-tags">
-                        [`Tags`]: <span class="photo-info">{$tags}</span>
-                    </p>
-                {/if}            
-        	{/if}
-          </div>
-         </div>
+            {/if}
+            {if !empty($theme_settings.socialButtonPhotos)}
+            <!-- socials -->
+            <div class="product-social">{$_photo = $wa->photos->photo($photo.id, "200x0")}
+                <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+                <span>[`Share`]: </span>
+                <div id="yashare-init" class="yashare-auto-init"
+                    data-yashareL10n="ru"
+                    data-yashareQuickServices="{$theme_settings.socialButtonPhotos}"
+                    data-yashareTitle="{$photo.name|escape}"
+                    data-yashareDescription="{$photo.description|escape}"
+                    data-yashareImage="{$_photo.thumb_200x0.url}"
+                    {if !empty($theme_settings.socialButtonTypePhotos)}{$theme_settings.socialButtonTypePhotos}{/if}
+                ></div>
+            </div>
+            {/if}
+        </div>
+        <div class="photo-tags-and-categories"{if !$albums && !$tags} style="border:none;"{/if}>
+        {if $albums || $tags}
+            {if $albums}
+                <p id="photo-albums">[`Albums`]: <span class="photo-info">{$albums}</span><br></p>
+            {/if}
+            {if $tags}
+                <p class="tags" id="photo-tags">[`Tags`]: <span class="photo-info">{$tags}</span></p>
+            {/if}            
+        {/if}
+        </div>
+     </div>
 
-   
-           
-       
-   
-        {* @event frontend_photo.%plugin_id%.sidebar *}
-        {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.sidebar)}{$item.sidebar}{/if}{/foreach}
-        {*if $exif}
-            <p class="exif hint" id="photo-exif">
-                {$exif}
-            </p>
-        {/if*}
-        
+    {* @event frontend_photo.%plugin_id%.sidebar *}
+    {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.sidebar)}{$item.sidebar}{/if}{/foreach}
+    {*if $exif}<p class="exif hint" id="photo-exif">{$exif}</p>{/if*}
+
+    {* @event frontend_photo.%plugin_id%.content *}
+    {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.content)}{$item.content}{/if}{/foreach}
   
-        {* @event frontend_photo.%plugin_id%.content *}
-        {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.sidebar)}{$item.content}{/if}{/foreach}
-  
-	<!-- maybe comments? -->
+	{* maybe comments? *}
     <div id="photo-hook-bottom">
         {* @event frontend_photo.%plugin_id%.bottom *}
         {foreach $frontend_photo as $plugin_id => $item}{if !empty($item.bottom)}{$item.bottom}{/if}{/foreach}
     </div>
+    {if !empty($theme_settings.socialButtonPhotos)}
+    <script type="text/javascript">
+        function getStreamById(id){
+            var res = { };
+            $.each(__photo_stream_data, function(i, obj){
+                res = obj;
+                return (obj.id != id);
+            });
+            return res;
+        }
+        var _yasha = {
+            theme: {if strpos($theme_settings.socialButtonTypePhotos, 'counter') === false}'default'{else}'counter'{/if},
+            type: {if strpos($theme_settings.socialButtonTypePhotos, 'none') === false}{if strpos($theme_settings.socialButtonTypePhotos, 'icon') === false}'button'{else}'icon'{/if}{else}'none'{/if},
+            quickservices: {json_encode(explode(',', $theme_settings.socialButtonPhotos))}
+        };
+        $(function(){
+            $('#photo-stream ul.photostream li').unbind('click.stream').bind('click.stream', function(){
+                if($(this).data('photo-id')){
+                    var obj = getStreamById($(this).data('photo-id'));
+                    var yasha = {
+                        element: 'yashare-init',
+                        l10n: 'ru',
+                        link: obj.full_url,
+                        title: obj.name,
+                        description: obj.description ? obj.description : '',
+                        image: obj.thumb.url,
+                        theme: _yasha.theme,
+                        elementStyle: {
+                            'type': _yasha.type,
+                            'quickServices': _yasha.quickservices
+                        }
+                    };
+                    $('#yashare-init').remove();
+                    $('.product-social').append('<div id="yashare-init" class="yashare-auto-init" />');
+                    new Ya.share(yasha);
+                }
+            });
+        });
+    </script>
+    {/if}
 </div>

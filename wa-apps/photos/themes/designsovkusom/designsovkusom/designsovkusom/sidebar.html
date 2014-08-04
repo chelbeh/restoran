@@ -1,0 +1,106 @@
+<!-- левое меню -->
+<div class="leftmenu clear-both">
+    <ul>
+        <li class="first"><i class="icon photo_menu"></i>Фотогалерея</li>
+        <li {if $wa->currentUrl() == $wa_app_url} class="selected"{/if}>
+            <a href="{$wa_app_url}">[`All photos`]</a>
+        </li>
+        <li {if $wa->param('action') neq 'page' && $wa->param('hash') == 'favorites'} class="selected"{/if}>
+            <a href="{$wa_app_url}favorites/">[`Editors’ choice`]</a>
+        </li>
+        {if $malbums = $wa->photos->albums(0)}
+        <li class="category_tree">
+            <a href="#">Альбомы</a>
+            <ul>
+            {foreach $malbums as $malbum}
+                <li {if $malbum@first}class="first"{/if}{if $malbum@last}class="last"{/if}>
+                    <a href="{$malbum.url}">{$malbum.name}</a>
+                </li>
+            {/foreach}
+            </ul>
+        </li>
+        {/if}
+        {if $pages = $wa->photos->pages()}
+        <li class="category_tree">
+            <a href="#">Страницы</a>
+            <ul>
+            {foreach $pages as $page}
+                <li {if $page@first}class="first"{/if}{if $page@last}class="last"{/if}>
+                    <a href="{$page.url}">{$page.name}</a>
+                </li>
+            {/foreach}
+            </ul>
+        </li>
+        {/if}
+        {* @event frontend_sidebar.%plugin_id%.menu *}
+        {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.menu)}<li>{$item.menu}</li>{/if}{/foreach}
+    </ul>
+</div>
+
+<!-- категории -->
+{$cats=$wa->shop->categories(0, null, true)}
+{if !empty($cats)}
+<div class="leftmenu">
+    <ul class="cat">
+        <li class="first"><i class="icon categories"></i>Категории</li>
+    {foreach from=$cats item=cat name=leftmenu}
+        {$subcats = $wa->shop->categories($cat.id,null,true)}
+        <li {if count($subcats)>0}class="category_tree"{/if}>
+            <a href="{$cat.url}">{$cat.name}</a>
+            {if count($subcats)>0}
+            <ul>
+                {foreach from=$subcats item=subcat name=subleftmenu}
+                    <li {if $smarty.foreach.subleftmenu.first}class="first"{/if}{if $smarty.foreach.subleftmenu.last}class="last"{/if}><a href="{$subcat.url}">{$subcat.name}</a></li>
+                {/foreach}
+            </ul>
+        {/if}
+        </li>
+    {/foreach}
+    </ul>
+</div>
+{/if}
+
+{if $theme_settings.news}
+    {$latest_posts = $wa->blog->posts(null,6)}
+    {if !empty($latest_posts)}
+    <!-- новости -->
+    <div class="news_container">
+        <div class="news">
+            <a href="/blog/">Новости</a>
+            
+            {foreach $latest_posts as $post}
+            <div class="post">
+                <span>{$post.datetime|wa_datetime:"humandate"}</span>
+                <h3>
+                    <a href="{$post.link}">{$post.title}</a>
+                    {* @event prepare_posts_frontend.%plugin_id%.post_title *}
+                    {if !empty($post.plugins.post_title)}
+                        {foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+                    {/if}
+                </h3>
+            </div>
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+{/if}
+
+{if $theme_settings.tags}
+    {if $cloud = $wa->photos->tags()}
+    <!-- облако тегов -->
+    <div class="sidebar-block-container">
+        <div class="sidebar-block">
+            <div class="tags align-center">
+                {foreach $cloud as $tag}
+                    <a href="{$wa_app_url}tag/{$tag.uri_name}/" style="font-size: {$tag.size}%; opacity: {$tag.opacity}">{$tag.name}</a>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+    {/if}
+{/if}
+
+{* @event frontend_sidebar.%plugin_id%.section *}
+{foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.section)}
+    <hr><div class="block">{$item.section}</div>
+{/if}{/foreach}

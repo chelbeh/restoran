@@ -1,0 +1,47 @@
+<style>
+    .del-block {
+        display: inline-block;
+        padding-left: 200px;
+    }
+    
+</style>
+
+<div class="dialog small width500px" id="banner-del" style="display:none">
+    <div class="dialog-background"></div>
+    <div class="dialog-window">
+    	<form method="post" enctype="multipart/form-data"  action="?action=bannerDel">
+            <input type="hidden" value="" name="banner_id" id="bannerdel_id" />
+    	<div class="dialog-content">
+    		<div class="dialog-content-indent">
+    			<h1>[`Delete this banner with all images?`]</h1>
+    		</div>
+    	</div>
+    	<div class="dialog-buttons">
+    		<div class="dialog-buttons-gradient">
+    			<input type="submit" class="button red" value="[`Delete`]" /> [`or`]
+    			<a href="javascript:void(0)" class="inline-link cancel"><b><i>[`cancel`]</i></b></a>
+    		</div>
+    	</div>
+    	</form>
+    </div>		
+</div>
+
+<div class="block">
+	<h1 class="wa-page-heading">[`All banners`]</h1>
+   	<table class="zebra">
+   		{foreach from=$banners item=b}
+    	<tr>
+        	<td>
+                <b>#{$b.id}</b>&nbsp;&nbsp;&nbsp;&nbsp;<b><a href="#/banner/{$b.id}/" style="display: inline-block;">{$b.title}</a></b><br />
+        		<i>{$b.width} &times; {$b.height}</i>
+                
+                <div class="del-block" id="{$b.id}">
+                    <a class="banner-del-link" href="#" class="bold no-underline" id="{$b.id}">
+                        <i class="icon16 delete"></i><strong class="underline">[`Delete this banner`]</strong>
+                    </a>
+                </div>
+        	</td>
+      	</tr>
+      	{/foreach}
+    </table>
+</div>			

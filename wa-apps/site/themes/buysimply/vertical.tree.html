@@ -1,0 +1,25 @@
+{if !empty($theme_settings.top_menu_type)}{$class_tree=$theme_settings.top_menu_type}{else}{$class_tree='3'}{/if}
+
+{$tree = $wa->shop->categories(0, null, true)}
+{if isset($category)}{$selected_category=$category.id}{else}{$selected_category=null}{/if}
+{if isset($product) && $product.categories}
+    {$selected_category = $product.categories}
+    {$selected_category = current($selected_category)}
+    {$selected_category = $selected_category.id}
+{/if}
+    
+{if $tree}{$stwol = false}
+    {if $class_tree == '3' || $wa->isMobile() || $theme_settings.top_menu_content == 'category_tree'}
+        {$class_tree = 'vertical-tree-three dhtml'}
+    {elseif $class_tree == '2'}
+        {$class_tree = 'vertical-tree-two'}
+    {elseif $class_tree == '4'}
+        {$class_tree = 'vertical-tree-four'}{$stwol = true}
+    {else}
+        {$class_tree = 'vertical-tree-one'}
+    {/if}
+<div class="shop-category{if $theme_settings.top_menu_content == 'category_tree'} hide-for-desktop{/if}">
+    <div class="caption"><span>[`Categories`]</span></div>
+    {call wm_print_tree class="buysimply-vertical-tree `$class_tree`" level=3 tree=$tree selected=$selected_category stwol=$stwol column=3}
+</div>
+{/if}

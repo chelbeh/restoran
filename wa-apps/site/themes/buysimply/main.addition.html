@@ -1,0 +1,32 @@
+{$favorite_p = waRequest::cookie('shop_favorite', '', waRequest::TYPE_STRING)}
+{$compare_p = waRequest::cookie('shop_compare', '', waRequest::TYPE_STRING)}
+<script type="text/javascript" src="{$wa_theme_url}main.addition.js"></script>
+{if empty($theme_settings.addition)}
+<div id="main-addition">
+    <ul>
+        <li{if !$favorite_p} class="disabled"{/if}>
+            <a id="favorite-link" href="{$wa->getUrl('shop/frontend')}search/?addition=favorite" rel="nofollow"><i class="icon-heart"></i><span class="text">[`Favorites`] </span>(<span class="count">{if !$favorite_p}0{else}{count(explode(',', $favorite_p))}{/if}</span>)</a>
+        </li>
+        <li{if !$compare_p || count(explode(',', $compare_p))<2} class="disabled"{/if}>
+            <a id="compare-link" data-href="{$wa->getUrl('shop/frontend')}compare/" href="{if $compare_p}{$wa->getUrl('shop/frontend/compare/', ['id' => $compare_p])}{else}javascript:void(0);{/if}" rel="nofollow"><i class="icon-bar-chart"></i><span class="text">[`Compare`] </span>(<span class="count">{if !$compare_p}0{else}{count(explode(',', $compare_p))}{/if}</span>)</a>
+        </li>
+    </ul>
+</div>
+{else}
+{$lastview_p = waRequest::cookie('shop_lastview', '', waRequest::TYPE_STRING)}
+<div id="main-addition-2">
+    <div class="container">
+    <ul>
+        <li{if !$favorite_p} class="disabled"{/if}>
+            <a id="favorite-link" href="{$wa->getUrl('shop/frontend')}search/?addition=favorite" rel="nofollow"><i class="icon-heart"></i><span class="text">[`Favorites`] </span>(<span class="count">{if !$favorite_p}0{else}{count(explode(',', $favorite_p))}{/if}</span>)</a>
+        </li>
+        <li{if !$compare_p || count(explode(',', $compare_p))<2} class="disabled"{/if}>
+            <a id="compare-link" data-href="{$wa->getUrl('shop/frontend')}compare/" href="{if $compare_p}{$wa->getUrl('shop/frontend/compare/', ['id' => $compare_p])}{else}javascript:void(0);{/if}" rel="nofollow"><i class="icon-bar-chart"></i><span class="text">[`Compare`] </span>(<span class="count">{if !$compare_p}0{else}{count(explode(',', $compare_p))}{/if}</span>)</a>
+        </li>
+        <li class="no-border{if !$lastview_p} disabled{/if}">
+            <a id="lastview-link" href="{$wa->getUrl('shop/frontend')}search/?addition=lastview" rel="nofollow"><i class="icon-eye-open"></i><span class="text">[`Viewed products`] </span>(<span class="count">{if !$lastview_p}0{else}{count(explode(',', $lastview_p))}{/if}</span>)</a>
+        </li>
+    </ul>
+    </div>
+</div>
+{/if}

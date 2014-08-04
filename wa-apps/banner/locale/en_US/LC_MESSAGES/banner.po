@@ -1,0 +1,123 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: banner-1.0.0\n"
+"POT-Creation-Date: 2014-05-11 17:45+0400\n"
+"PO-Revision-Date: \n"
+"Last-Translator: welldi-studio.ru <n.grineva@welldi-studio.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+msgid "Banners"
+msgstr "Banners"
+
+msgid "Code to be placed on the page"
+msgstr "Code to be placed on the page"
+
+msgid "Add banner"
+msgstr "Add banner"
+
+msgid "All banners"
+msgstr "All banners"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Add a banner"
+msgstr "Add a banner"
+
+msgid "Title, e.g. Top banner"
+msgstr "Title, e.g. Top banner"
+
+msgid "Width (pixels). e.g: 200"
+msgstr "Width (pixels). e.g: 200"
+
+msgid "Height (pixels). e.g: 300"
+msgstr "Height (pixels). e.g: 300"
+
+msgid "or"
+msgstr "or"
+
+msgid "cancel"
+msgstr "cancel"
+
+msgid "Delete this banner with all images?"
+msgstr "Delete this banner with all images?"
+
+msgid "Delete this banner"
+msgstr "Delete this banner"
+
+msgid "Delete this image?"
+msgstr "Delete this image?"
+
+msgid "Add image to this banner"
+msgstr "Add image to this banner"
+
+msgid "Link"
+msgstr "Link"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "'Alt' tag"
+msgstr "'Alt' tag"
+
+msgid "'Title' tag for the link"
+msgstr "'Title' tag for the link"
+
+msgid "'Title' tag"
+msgstr "'Title' tag"
+
+msgid "On/off"
+msgstr "On/off"
+
+msgid "Open in the new window"
+msgstr "Open in the new window"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Show"
+msgstr "Show"
+
+msgid "Enabled"
+msgstr "Enabled"
+
+msgid "Disabled"
+msgstr "Disabled"
+
+msgid "Disable"
+msgstr "Disable"
+
+msgid "Turn on"
+msgstr "Turn on"
+
+msgid "Delete this image"
+msgstr "Delete this image"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "No images found."
+msgstr "No images found."
+
+msgid "Add image for this banner"
+msgstr "Add image for this banner"
+
+msgid "The file is not an image, or another error occurred: "
+msgstr "The file is not an image, or another error occurred: "
+
+msgid "File could not be saved due to the insufficient file write permissions for the upload folder."
+msgstr "File could not be saved due to the insufficient file write permissions for the upload folder."
+
+msgid "Failed to upload file"
+msgstr "Failed to upload file"
+
+

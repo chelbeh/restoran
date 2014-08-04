@@ -1,0 +1,34 @@
+{if $wa->shop && !empty($theme_settings.autofitItem)}
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.core.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.widget.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.position.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.min.js?v{$wa->version()}"></script>
+{/if}
+<script type="text/javascript">
+{if $wa->shop}var sumbolrub = {if empty($theme_settings.sumbolRUB)}0{else}1{/if};{/if}
+$.buysimply = {
+    {if !empty($theme_settings.authDialog)}auth_base_url: "{$wa->loginUrl()}",
+    auth_home_link: "<a class=\"auth-home-link\" href=\"{$wa_url}\">[`Back to home page`]</a>",
+    auth_my_link: "{if $wa->shop}<a href=\"{$wa->getUrl('shop/frontend/my')}\">[`Go to your account`]</a> [`or`] {/if}",{/if}
+    {if $wa->shop}
+        shop_url: "{$wa->getUrl('shop/frontend')}",
+        default_img_url: { dummy96: "{$wa_theme_url}img/dummy96.png" },
+        {if !empty($theme_settings.soaringItem)}soaring_visible_item: {$theme_settings.soaringItem},
+        {$currency_info = $wa->shop->currency(true)}
+        {if !isset($currency_info.sign_delim)}{$currency_info.sign_delim = " "}{/if}
+        {if !isset($currency_info.sign_position)}{$currency_info.sign_position = 1}{/if}
+        {if !isset($currency_info.sign_html)}{$currency_info.sign_html = $currency_info.sign}{/if}
+        {if !isset($currency_info.decimal_point)}{$currency_info.decimal_point = ','}{/if}
+        {if !isset($currency_info.frac_digits)}{$currency_info.frac_digits = 2}{/if}
+        {if !isset($currency_info.thousands_sep)}{$currency_info.thousands_sep = ' '}{/if}
+        currency: {json_encode($currency_info)},{/if}
+        {if !empty($theme_settings.autofitItem)}autofit_visible_item: {$theme_settings.autofitItem},{/if}
+    {/if}
+    locale: {
+        {if !empty($theme_settings.authDialog)}cong: "[`Congratulations!`]", isauth: "[`Authorization was successful!`]",{/if}
+        {if $wa->shop && !empty($theme_settings.soaringItem)}remove: "[`Remove`]", pcs: "[`pcs.`]", empty: "[`empty`]",{/if}
+        err_cnt_prd: "[`Much product is no longer available!`]",
+        showall: "[`Show all`]"
+    }
+};
+</script>

@@ -1,0 +1,11 @@
+<!-- FB Widget -->
+<div class="fb-like-box {$place}{if !empty($theme_settings.communityFBshowBorder)} border{/if}"
+    data-href="{$theme_settings.communityFBhref}"
+    data-width="234"
+    data-height="{if empty($theme_settings.communityFBheight)}400{else}{$theme_settings.communityFBheight}{/if}"
+    data-colorscheme="{if empty($theme_settings.communityFBcolorscheme)}light{else}{$theme_settings.communityFBcolorscheme}{/if}"
+    data-show-faces="{if empty($theme_settings.communityFBshowFaces)}false{else}true{/if}"
+    data-header="{if empty($theme_settings.communityFBheader)}false{else}true{/if}"
+    data-stream="{if empty($theme_settings.communityFBstream)}false{else}true{/if}"
+    data-show-border="{if empty($theme_settings.communityFBshowBorder)}false{else}true{/if}"
+></div>

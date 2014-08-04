@@ -32,8 +32,10 @@
             </ul>
         </li>
         {/if}
+        {if !isset($photo) && !isset($album) && !empty($disable_sidebar)}
         {* @event frontend_sidebar.%plugin_id%.menu *}
         {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.menu)}<li>{$item.menu}</li>{/if}{/foreach}
+        {/if}
     </ul>
 </div>
 
@@ -100,7 +102,9 @@
     {/if}
 {/if}
 
+{if !isset($photo) && !isset($album) && !empty($disable_sidebar)}
 {* @event frontend_sidebar.%plugin_id%.section *}
 {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.section)}
     <hr><div class="block">{$item.section}</div>
 {/if}{/foreach}
+{/if}

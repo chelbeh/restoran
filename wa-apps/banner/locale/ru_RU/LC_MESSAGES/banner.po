@@ -1,0 +1,123 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: banner-1.0.0\n"
+"POT-Creation-Date: 2014-05-11 17:45+0400\n"
+"PO-Revision-Date: \n"
+"Last-Translator: welldi-studio.ru <n.grineva@welldi-studio.ru>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"Language: ru_RU\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+msgid "Banners"
+msgstr "Баннеры"
+
+msgid "Code to be placed on the page"
+msgstr "Код для вставки на страницу"
+
+msgid "Add banner"
+msgstr "Добавить баннер"
+
+msgid "All banners"
+msgstr "Все баннеры"
+
+msgid "Loading..."
+msgstr "Загрузка..."
+
+msgid "Add a banner"
+msgstr "Добавить баннер"
+
+msgid "Title, e.g. Top banner"
+msgstr "Название (например: Верхний баннер)"
+
+msgid "Width (pixels). e.g: 200"
+msgstr "Ширина (в пикселах). Например: 200"
+
+msgid "Height (pixels). e.g: 300"
+msgstr "Высота (в пикселах). Например: 300"
+
+msgid "or"
+msgstr "или"
+
+msgid "cancel"
+msgstr "отмена"
+
+msgid "Delete this banner with all images?"
+msgstr "Удалить этот баннер со всеми изображениями?"
+
+msgid "Delete this banner"
+msgstr "Удалить этот баннер"
+
+msgid "Delete this image?"
+msgstr "Удалить изображение?"
+
+msgid "Add image to this banner"
+msgstr "Добавить изображение для этого баннера"
+
+msgid "Link"
+msgstr "Ссылка"
+
+msgid "Image"
+msgstr "Изображение"
+
+msgid "'Alt' tag"
+msgstr "Тег 'alt'"
+
+msgid "'Title' tag for the link"
+msgstr "Тег 'title' для ссылки"
+
+msgid "'Title' tag"
+msgstr "Тег 'title'"
+
+msgid "On/off"
+msgstr "Вкл/откл. показ"
+
+msgid "Open in the new window"
+msgstr "Открывать ссылку в новом окне"
+
+msgid "Add"
+msgstr "Добавить"
+
+msgid "Show"
+msgstr "Показывать"
+
+msgid "Enabled"
+msgstr "Включено"
+
+msgid "Disabled"
+msgstr "Отключено"
+
+msgid "Disable"
+msgstr "Отключить"
+
+msgid "Turn on"
+msgstr "Включить"
+
+msgid "Delete this image"
+msgstr "Удалить это изображение"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "No images found."
+msgstr "Пока нет изображений для этого баннера."
+
+msgid "Add image for this banner"
+msgstr "Добавить изображение для этого баннера"
+
+msgid "The file is not an image, or another error occurred: "
+msgstr "Файл не является изображением, либо произошла другая ошибка: "
+
+msgid ""
+"File could not be saved due to the insufficient file write permissions for "
+"the upload folder."
+msgstr "Файл не может быть сохранен: недостаточно прав."
+
+msgid "Failed to upload file"
+msgstr "Файл не загружен"

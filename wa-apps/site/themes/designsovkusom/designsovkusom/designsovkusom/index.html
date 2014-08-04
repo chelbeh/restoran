@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>{$wa->title()|escape}</title>
+  <meta name="Keywords" content="{$wa->meta('keywords')|escape}" />
+  <meta name="Description" content="{$wa->meta('description')|escape}" />
+
+  <!-- css -->
+  <!--<link href="{$wa_theme_url}default.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>-->
+  <link href="{$wa_theme_url}designsovkusom.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+  <link href="{$wa_theme_url}dsv.user.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+  <link href="{$wa_theme_url}mobile.css?v{$wa_theme_version}"{if !$wa->isMobile()} media="screen and (max-width: 760px)"{/if} rel="stylesheet" type="text/css">
+  {if $wa->isMobile()}
+      <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;" />
+  {/if}
+  {$wa->css()} {* links active plugins CSS *}
+
+  <!-- js -->
+  <script type="text/javascript" src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" src="{$wa_theme_url}designsovkusom.js?v{$wa_theme_version}"></script>
+  {$wa->js()} {* links active plugins JS *}
+
+  {$wa->headJs()} {* links Google Analytics tracking code and current site's custom JS (Site app) *}
+  
+  <!-- custom default theme settings -->
+  <style>
+    {if !empty($theme_settings.nav_bg_color)}
+        #header { background: {$theme_settings.nav_bg_color}; }
+    {/if}
+    {if !empty($theme_settings.nav_text_color)}
+        #header,
+        #header ul#wa-apps li a,
+        #header ul#wa-apps li strong { color: {$theme_settings.nav_text_color} !important; }
+    {/if}
+  </style>
+    
+</head>
+<body id="top">
+    <div class="wrapper_top">
+        <div class="container">
+            <div class="float-left">
+                <ul class="apps">
+                    {foreach from=$wa->apps() item=a}
+                        <li class="{if $a.url==$wa_app_url}selected {/if}{if $a.url=="/"}home{/if}">{if $a.url=="/"}<i class="icon home"></i>{/if}<a href="{$a.url}">{$a.name}</a></li>
+                    {/foreach}
+                </ul>
+            </div>
+            <div class="auth float-left">
+                {if $wa->isAuthEnabled()}
+                    {if $wa->user()->isAuth()}
+                        <a href="{$wa->getUrl('/frontend/my')}" class="bold">{$wa->user('firstname')}</a>
+                        <a href="?logout">[s`Log out`]</a>
+                    {else}
+                         <a href="{$wa->loginUrl()}"><i class="icon login"></i> [s`Log in`]</a>&nbsp;&nbsp;| <a href="{$wa->signupUrl()}">[s`Sign up`]</a>
+                    {/if}
+                {/if}
+            </div>
+              
+            {$cart_total = $wa->shop->cart->total()}
+            
+            <!-- cart summary -->
+            <a href="{$wa->getUrl('shop/frontend/cart')}" class="cart float-right {if !$cart_total} empty{/if}" id="cart-summary" title="Перейти в корзину">
+                <div class="basket float-left">
+                    <i class="icon basket"></i>
+                </div>
+                <div>
+                    <span class="cartlabel">корзина <i class="icon warrow-right"></i></span>
+                    <span class="cartempty">
+                        {$cartcount = $wa->shop->cart()->count()}
+                        <span class="cart-count">{$cartcount}</span>
+                        <span class="price nowrap cart-total">{wa_currency($cart_total, $wa->shop->currency())}</span>
+                    </span>
+                </div>
+            </a>
+        </div><!-- container -->
+    </div><!-- wrapper top -->
+    
+    <div class="wrapper">
+        <div class="container" style="position:relative;">
+            <div id="header">
+                <!-- Логотип -->
+                <div class="logo">
+                    <a href="/">
+                        {include file="dsv.logo.html"}
+                    </a>
+                </div>
+                
+                <!-- Поиск -->
+                <div class="search">
+                     <form method="get" action="{$wa->getUrl('/frontend/search')}" class="searchform">
+                         <input type="search" name="query" {if !empty($query)}value="{$query}"{/if} id="search" placeholder="Поиск товара">
+                         <button title="Найти"><i class="icon lens"></i></button>
+                    </form>
+                </div>
+                
+                <!-- Контакты -->
+                <div class="contacts">
+                    {include file="dsv.contact.html"}
+                </div>
+            </div><!-- header -->
+        </div><!-- container -->
+    </div><!-- wrapper -->
+    
+    <div class="wrapper_menu">
+        <div class="container">
+            <!-- центральное меню -->
+            <div class="main_menu" role="navigation">
+                <ul>
+                    {foreach from=$wa->shop->pages() item=p name=menu}
+                    {if !$p.nomenu}
+                        <li><a href="{$p.url}" {if $smarty.foreach.menu.first}class="first"{/if}>{$p.name}</a></li>
+                    {/if}
+                    {/foreach}
+                </ul>
+            </div>
+        </div>    
+    </div>
+
+    <div id="main">
+        <div class="container app-header"></div>
+        <div class="container">
+            {if $wa->currentUrl() == $wa_app_url && !empty($error_code) && $error_code == 404}
+            <div class="welcome">
+                <h1>[`Welcome to your new site!`]</h1>
+                <p>{sprintf('[`Start by creating a page in your <a href="%s">site backend</a>.`]', $wa_backend_url|cat:'site/#/pages/')}</p>
+            </div>
+            {else}
+                {$content}
+            {/if}
+            <div class="clear-both"></div>
+        </div>
+    </div>
+    
+    <div id="footer">
+        <div class="container" style="border-top: 2px solid #cecece; padding-top: 10px">
+            <div id="copyright">
+                <span class="copy">&copy; <a href="{$wa_url}">{$wa->accountName()}</a> {time()|wa_datetime:"Y"} </span>
+                
+                <ul class="footer-navigation">
+                    {foreach from=$wa->apps() item=a}
+                        <li><a href="{$a.url}">{$a.name}</a><li>
+                    {/foreach}
+                    {foreach from=$wa->shop->pages() item=a}
+                        {if !$a.nomenu}
+                            <li><a href="{$a.url}">{$a.name}</a><li>
+                        {/if}
+                    {/foreach}
+                </ul>
+
+                <!-- plugin hook: 'frontend_footer' -->
+                {* @event frontend_footer.%plugin_id% *}
+                {foreach $frontend_footer as $_}{$_}{/foreach}
+            </div>
+            <div style="display: table-row;">
+                <div class="social">
+                    <ul>
+                        {include file="dsv.social.html"}
+                    </ul>
+                </div>
+                <div class="shop-info">
+                    <ul>
+                        {include file="dsv.address.html"}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <p id="back-top"><a href="#top" title="ВВЕРХ"><span></span></a></p>
+</body>
+</html>

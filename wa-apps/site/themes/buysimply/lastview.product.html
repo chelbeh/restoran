@@ -1,0 +1,22 @@
+{$lastview_p = waRequest::cookie('shop_lastview', '', waRequest::TYPE_STRING)}
+{$lastview_p = $wa->shop->products('id/'|cat:$lastview_p, 8)}
+{if !empty($lastview_p)}<!-- latest product-->
+<div class="latest-photo">
+    <div class="caption"><span><a title="[`Open all viewed products`]" href="{$wa->getUrl('shop/frontend')}search/?addition=lastview">[`Viewed products`]</a></span></div>  
+    <ul>
+    {foreach $lastview_p as $_p}      
+        <li itemscope itemtype ="http://schema.org/Product">
+            <div class="image_">
+                <a href="{$_p.frontend_url}" title="{$_p.name|escape}{if $_p.summary} &mdash; {strip_tags($_p.summary)|escape}{/if}">
+                    {*$badge_html = $wa->shop->badgeHtml($p.badge)}
+                    {if $badge_html}
+                        <div class="corner top left{if !empty($theme_settings.badge_type)} {$theme_settings.badge_type}{/if}">{$badge_html}</div>
+                    {/if*}
+                    {$wa->shop->productImgHtml($_p, '96x96', ['itemprop' => 'image', 'alt' => $_p.name, 'default' => "`$wa_theme_url`img/dummy96.png"])}                    
+                </a>
+            </div>        
+        </li>
+    {/foreach}
+    </ul>
+</div>
+{/if}

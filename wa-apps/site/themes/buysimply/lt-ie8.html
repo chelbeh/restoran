@@ -7,7 +7,7 @@
     	{if $logo=$wa->block("`$themeId`.logo")}
             {$logo}
         {else}
-            {include file="logo.html"}
+            {include file="buysimply.logo.html"}
         {/if}
         </div> 
     </td>
@@ -17,26 +17,24 @@
       	{if $contact=$wa->block("`$themeId`.contact")}
             {$contact}
         {else}
-            {include file="contact.html"}
+            {include file="buysimply.contact.html"}
         {/if}
         </div>
     </td>
   </tr>
   <tr><td colspan="5">
-    <h1>Дорогие друзья!</h1>
-    <p class="hello">    
-	К сожалению, Ваш браузер не поддерживает современные технологии используемые на нашем сайте.
-  	</p>
+    <h1>[`Dear friends!`]</h1>
+    <p class="hello">[`Unfortunately, your browser does not support modern technology used on our website.`]</p>
   </td></tr>
   <tr><td colspan="5">
-    <p class="help-text">Пожалуйста, обновите браузер, скачав его по ссылкам ниже, или обратитесь к системному администратору, обслуживающему Ваш компьютер.</p>
+    <p class="help-text">[`Please refresh your browser by downloading it on the links below or contact your system administrator serving your computer.`]</p>
   </td></tr>
   <tr class="browser-icon align-center">
-    <td><a href="http://www.microsoft.com/rus/windows/internet-explorer/worldwide-sites.aspx" title="Internet Explorer"><span class="explorer"></span>Internet Explorer</a><p>от Microsoft</p></td>
-    <td><a href="http://www.google.com/chrome/" title="Chrome"><span class="chrome"></span>Chrome</a><p>от Google</p></td>
-    <td><a href="http://www.apple.com/ru/safari/" title="Safari"><span class="safari"></span>Safari</a><p>от Apple</p></td>
-    <td><a href="http://www.opera.com/" title="Opera"><span class="opera"></span>Opera</a><p>от Opera Software</p></td>
-    <td><a href="http://www.mozilla-europe.org/ru/firefox/" title="Firefox"><span class="firefox"></span>Firefox</a><p>от Mozilla</p></td>
+    <td><a href="http://www.microsoft.com/rus/windows/internet-explorer/worldwide-sites.aspx" title="Internet Explorer"><span class="explorer"></span>Internet Explorer</a><p>Microsoft</p></td>
+    <td><a href="http://www.google.com/chrome/" title="Chrome"><span class="chrome"></span>Chrome</a><p>Google</p></td>
+    <td><a href="http://www.apple.com/ru/safari/" title="Safari"><span class="safari"></span>Safari</a><p>Apple</p></td>
+    <td><a href="http://www.opera.com/" title="Opera"><span class="opera"></span>Opera</a><p>Opera Software</p></td>
+    <td><a href="http://www.mozilla-europe.org/ru/firefox/" title="Firefox"><span class="firefox"></span>Firefox</a><p>Mozilla</p></td>
   </tr>
 </table>
 </div>

@@ -1,4 +1,4 @@
-<div class="blogname"><span class="icon-pencil"></span><span class="separatornext"> </span> <b>[`Блоги`]</b></div>
+<div class="blogname"><span class="icon-pencil"></span><span class="separatornext"> </span> <b>[`Blogs`]</b></div>
 <div id="menu-vv" class="paddingbottom">
 	<ul class="menu">
     	<!-- blog list -->
@@ -19,7 +19,7 @@
  </ul>
  </div>
 <div class="filters border" id="menu-vv" style="display:none;">
-	<div class="filtername"><span class="icon-calendar"></span><span class="separatornext"> </span> <b>[`Категории`]</b></div>
+	<div class="filtername"><span class="icon-calendar"></span><span class="separatornext"> </span> <b>[`Categories`]</b></div>
 	<ul class="menu-v menu">
 		<li></li>
 	</ul>
@@ -28,7 +28,7 @@
 {$blog_pages=$wa->blog->pages()}
 {if $blog_pages}
  <div class="filters border" id="menu-vv">
-	<div class="filtername"><span class="icon-file"></span><span class="separatornext"> </span> <b>Страницы</b></div>
+	<div class="filtername"><span class="icon-file"></span><span class="separatornext"> </span> <b>[`Pages`]</b></div>
     {wa_print_tree tree=$blog_pages class="menu" elem ='
     <a href=":url" title=":title">:name</a>' collapsible_class='collapsible' selected=$wa->param('page_id')}
 </div>

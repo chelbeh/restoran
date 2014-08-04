@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd" >
-<theme id="flamingo" system="0" vendor="898299" author="wa-magazin.ru" app="site" version="1.1" parent_theme_id="shop:flamingo">
-    <name locale="en_US">Flamingo</name>
-    <name locale="ru_RU">Flamingo</name>
-	<description locale="ru_RU">Flamingo themes</description>	
-	<description locale="en_US">Flamingo themes</description>
+<theme id="flamingo" system="0" vendor="898299" author="wa-magazin.ru" app="site" version="1.2" parent_theme_id="shop:flamingo">
+    <name locale="en_US">Flamingo themes</name>
+    <name locale="ru_RU">Дизайн шаблон Flamingo</name>
+	<description locale="ru_RU">Дизайн шаблон Flamingo для Сайт</description>	
+	<description locale="en_US">Flamingo themes for Site</description>
   <files>
     <file path="index.html" custom="0" parent="1">
       <description locale="en_US">Common layout</description>
@@ -13,6 +13,10 @@
     <file path="page.html">
       <description locale="en_US">Page content</description>
       <description locale="ru_RU">Содержимое страницы</description>
+    </file>
+    <file path="head.html">
+        <description locale="en_US">Head page</description>
+        <description locale="ru_RU">Верх страницы</description>
     </file>
     <file path="content.html">
       <description locale="en_US">Content page</description>
@@ -23,4 +27,103 @@
       <description locale="ru_RU">404 и другие ошибки</description>
     </file>
   </files>
+    <locales>
+        <locale>
+            <msgid>News</msgid>
+            <msgstr locale="ru_RU">Новости</msgstr>
+        </locale>
+        <locale>
+            <msgid>Show by</msgid>
+            <msgstr locale="ru_RU">Показывать по</msgstr>
+        </locale>
+        <locale>
+            <msgid>All</msgid>
+            <msgstr locale="ru_RU">Все товары</msgstr>
+        </locale>
+        <locale>
+            <msgid>Show all features</msgid>
+            <msgstr locale="ru_RU">Показать все характеристики</msgstr>
+        </locale>
+        <locale>
+            <msgid>Clear filter</msgid>
+            <msgstr locale="ru_RU">Сбросить фильтр</msgstr>
+        </locale>
+        <locale>
+            <msgid>Account</msgid>
+            <msgstr locale="ru_RU">Личный кабинет</msgstr>
+        </locale>
+        <locale>
+            <msgid>Your Cart</msgid>
+            <msgstr locale="ru_RU">Ваша корзина</msgstr>
+        </locale>
+        <locale>
+            <msgid>Social</msgid>
+            <msgstr locale="ru_RU">Мы в социальных сетях</msgstr>
+        </locale>
+        <locale>
+            <msgid>Online fashion store</msgid>
+            <msgstr locale="ru_RU">Интернет-магазин модной одежды</msgstr>
+        </locale>
+        <locale>
+            <msgid>Sign up and get bonuses for purchases</msgid>
+            <msgstr locale="ru_RU">Зарегистрируйтесь и получайте бонусы за покупки</msgstr>
+        </locale>
+        <locale>
+            <msgid>Delivery</msgid>
+            <msgstr locale="ru_RU">Доставка</msgstr>
+        </locale>
+        <locale>
+            <msgid>Free shipping for orders of $1000</msgid>
+            <msgstr locale="ru_RU">Бесплатная доставка при заказе от 10 000 руб. </msgstr>
+        </locale>
+        <locale>
+            <msgid>Fast payment</msgid>
+            <msgstr locale="ru_RU">Быстрая оплата</msgstr>
+        </locale>
+        <locale>
+            <msgid>Instant payment online</msgid>
+            <msgstr locale="ru_RU">Моментальная оплата на сайте</msgstr>
+        </locale>
+        <locale>
+            <msgid>Support 24h</msgid>
+            <msgstr locale="ru_RU">Поддержка 24 часа</msgstr>
+        </locale>
+        <locale>
+            <msgid>Our consultants are always happy to help</msgid>
+            <msgstr locale="ru_RU">Наши консультанты всегда рады Вам помочь</msgstr>
+        </locale>
+        <locale>
+            <msgid>More 500 products</msgid>
+            <msgstr locale="ru_RU">Свыше 500 товаров</msgstr>
+        </locale>
+        <locale>
+            <msgid>Large selection of products in our store</msgid>
+            <msgstr locale="ru_RU">Большой выбор товаров в нашем магазине</msgstr>
+        </locale>
+        <locale>
+            <msgid>New products</msgid>
+            <msgstr locale="ru_RU">Новинки</msgstr>
+        </locale>
+        <locale>
+            <msgid>Add text about the company through the application of the "Site" -&gt; "Blocks". Create a new block ID</msgid>
+            <msgstr locale="ru_RU">Добавьте текст о компании через приложение "Сайт" -&gt; "Блоки". Создайте новый блок с ID</msgstr>
+        </locale>
+        <locale>
+            <msgid>Refresh</msgid>
+            <msgstr locale="ru_RU">Обновить код</msgstr>
+        </locale>
+        <locale>
+            <msgid>New template for Shop-Scipt 5</msgid>
+            <msgstr locale="ru_RU">Новый шаблон Shop-Script 5</msgstr>
+        </locale>
+        <locale>
+            <msgid>Download and edit the text</msgid>
+            <msgstr locale="ru_RU">Загрузите и измените текст</msgstr>
+        </locale>
+        <locale>
+            <msgid>Read more</msgid>
+            <msgstr locale="ru_RU">Читать далее</msgstr>
+        </locale>
+		
+	</locales>
 </theme>

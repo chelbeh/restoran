@@ -315,7 +315,7 @@ html, body {
 
 #footer {
     padding-top: 16px;
-    padding-bottom: 40px;
+    padding-bottom: 20px;
     font-size: 0.813em;
 }
 #copyright { margin-bottom: 12px; }
@@ -534,7 +534,7 @@ html, body {
 .breadcrumbs a:hover { text-decoration: none; color: #000; }
     /* 4.1 ГЛАВНАЯ */
 .content { margin-left: 239px; padding-top: 20px; }
-.content.left { margin-left: 0px;}
+.content.left { margin-left: 10px;}
 
 .content a { color: #427fed; text-decoration: underline;}
 

@@ -129,59 +129,28 @@
         {else}
             {$class = ''}
         {/if}
-                  <li class="image {$class}" itemscope itemtype ="http://schema.org/Photograph">
-          <a href="{$photo.frontend_link}">
-            <div class="corner top left">
-                {* @event prepare_photos_frontend.top_left.%plugin_id% *}
-                {foreach $photo.hooks.top_left as $plugin => $output}{$output}{/foreach}
-            </div>
-            <div class="corner top right">
-                {* @event prepare_photos_frontend.top_right.%plugin_id% *}
-                {foreach $photo.hooks.top_right as $plugin => $output}{$output}{/foreach}
-                {if $photo.stack_count > 0}<span class="indicator">{$photo.stack_count}</span>{/if}
-            </div>           
-            {$wa->photos->getImgHtml($photo, $brick.size, ['itemprop' => 'image'])}
-          </a>
+        <li class="image {$class}" itemscope itemtype ="http://schema.org/Photograph">
+            <a href="{$photo.frontend_link}">
+                <div class="corner top left">
+                    {* @event prepare_photos_frontend.top_left.%plugin_id% *}
+                    {foreach $photo.hooks.top_left as $plugin => $output}{$output}{/foreach}
+                </div>
+                <div class="corner top right">
+                    {* @event prepare_photos_frontend.top_right.%plugin_id% *}
+                    {foreach $photo.hooks.top_right as $plugin => $output}{$output}{/foreach}
+                    {if $photo.stack_count > 0}<span class="indicator">{$photo.stack_count}</span>{/if}
+                </div>           
+                {$wa->photos->getImgHtml($photo, $brick.size, ['itemprop' => 'image'])}
+            </a>
         </li>
         {$photos_rest = $photos_rest - 1}                 
     {/foreach}
     {if $brick_num != -1}</ul></LI>{/if}
 </UL>
-	<div class="clear-both"></div>
+<div class="clear-both"></div>
 
-    <div class="lazyloading-wrapper" style="display:none;">
-        {if $page < $pages_count}
-            {_w('%d photo', '%d photos', (count($photos) + $offset))}&nbsp;{_w('of %d', 'of %d', $total_photos_count)}
-            <br>
-            <a href="?page={$page+1}" class="lazyloading-link">[`Show more photos`]</a>
-        {elseif $page && $pages_count}
-            {_w('of %d', 'of %d', $total_photos_count)}
-        {/if}
-        <span class="lazyloading-progress" style="display:none">
-           <i class="icon16 loading"></i>
-           [`Loading`] {_w('%d photo', '%d photos', min($photos_per_page, 9999))}...
-        </span>
-    </div>
-
-    {* switch on/off lazy loading *}
-    {if !$lazy_load && !$wa->globals('disable_pageless')}
-        <script type="text/javascript">
-        $(function() {
-            $.photos.setLazyLoad({
-                auto: true, // auto load next pages(true|false) (if omitted than considered as true)
-                total_count: {$total_photos_count}
-            });
-        });
-        </script>
-    {/if}
-
-    {* and paging in case JS is disabled… *}
-    {if $pages_count > 1}
+{if isset($pages_count) && $pages_count > 1}
     <div class="block lazyloading-paging">
-        <ul class="menu-h">
-        {for $p=1 to $pages_count}
-            <li{if $p == $page} class="selected"{/if}><a href="?page={$p}">{$p}</a></li>
-        {/for}
-        </ul>
+        {wa_pagination total=$pages_count attrs=['class' => "menu-h"]}
     </div>
-    {/if}           
+{/if}

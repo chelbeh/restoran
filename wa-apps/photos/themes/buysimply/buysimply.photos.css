@@ -1,0 +1,203 @@
+.inline-link i { text-decoration:none; font-size:14px; }
+#gallery-nav li a>i { position: absolute; top: 50%; margin-top: -7px; right: 8px; }
+#gallery-nav li i.icon-angle-right { display: none; }
+#gallery-nav li:hover i.icon-angle-right { display: block; }
+#gallery-nav li:hover i.icon-angle-down { display: none; }
+
+.album-name { font-size: 30px; font-weight: bold; margin: 0; line-height: normal; text-transform: uppercase; }
+h1.search-criteria { margin-bottom: 1em; text-align: center; }
+.album-note { display: block; font-style: italic; }
+.album-description { margin:0px; padding:0 15px 15px; }
+.sub-albums { margin:0px; line-height: 1.3em; padding:0 15px 15px; }
+.sub-albums table { margin:0; }
+.sub-albums table td { max-width:33.33%; padding: 0 5px; }
+.sub-albums a { line-height: 20px; }
+.album-page { border: 1px solid; margin-bottom:40px; padding-top:15px; }
+.ie8 .album-page, .gt-ie8 .album-page { margin-top: 50px; }
+.lazyloading-wrapper { display:none !important; }
+
+/* photostream */
+ul.photostream { padding: 0; margin: 0; list-style: none; position: relative;}
+ul.photostream:after { content: ""; display: block; width: 100%; height: 0; clear: both; }
+ul.photostream li { float: left; padding-right: 7px;  }
+ul.photostream li img { width: 48px; height: 48px; vertical-align: middle; }
+ul.photostream li.selected img { border: 4px solid; margin: -4px -4px -2px; }
+ul.photostream li.stream-nav { position: absolute; top: 50%; float: none; margin-top: -7px; }
+ul.photostream li.stream-nav i { display: block; width: 12px; height: 14px; }
+ul.photostream li.stream-nav.rewind { left: -16px; padding: 0; }
+ul.photostream li.stream-nav.rewind i { background: url('img/photostream-rewind.png') no-repeat; }
+ul.photostream li.stream-nav.ff { right: -16px; padding: 0; }
+ul.photostream li.stream-nav.ff i { background: url('img/photostream-ff.png') no-repeat;}
+
+.photostream-divider { margin-top: 90px; border-width: 1px 0 0; border-style: solid; margin-bottom: 20px; }
+
+.product-social { margin-top: 20px; }
+.product-social div { display: inline-block; }
+
+/* one photo */
+.thumbs-photo-gallery { display: table; margin: 10px auto 30px; }
+.one-photo-page { padding:20px; border:1px solid; }
+.photo-description-table { display:table; width:100%; margin-bottom: 25px; }
+.photo-info-description { display: table-cell; width: 65%; }
+.photo-tags-and-categories { display: table-cell; width: 35%; padding-left: 20px; border-width: 0 0 0 1px; border-style: solid; }
+.photo { margin-bottom: 0; width: 100%; }
+.photo img { max-width: 100%; height: auto !important; }
+.hero.superhero { padding: 0; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+.stack-nav { font-size: 120%; margin-bottom: 10px; }
+
+.image { position: relative; display: block; max-width: 100%; }
+.image .corner { position:absolute; z-index:10; font-weight: bold; color: #fff; }
+.image .corner.top { top:7px; }
+.view-mixed2 .image .corner.top { top:15px; }
+.image .corner.left { left:10px; }
+.image .corner.right { right:10px; }
+.view-mixed2 .image .corner.right { right:15px; }
+.image .corner.bottom { bottom:5px; }
+.image .corner .indicator { color: #fff; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 3px 6px; }
+.image .stripe { position:absolute; z-index:9; bottom: 5px; left: 0; right: 0; background: rgba(0,0,0,0.3); color: #fff; padding: 10px; }
+.image .stripe h5 { margin-bottom: 0; text-shadow: 0 2px 2px #000; }
+.image .stripe p { margin: 0.3em 0 0; }
+.image .stack { position: absolute; top: 0px; right: 0; color: #fff; padding: 10px; }
+.one-photo-page .image .stack { left:0; right:auto; }
+
+/*photo-stack*/
+.stack .stack-nav { text-shadow: 1px 1px 1px #353535; }
+.photo-stack { display:table; width:100%; }
+.photo-stack .photo-stack-name { display:table-cell; text-align:left; padding-bottom:8px; vertical-align: middle; }
+.photo-stack .stack-nav { font-size: 100%; display:table-cell; padding-bottom:8px; text-align:right; vertical-align: middle; }
+.photo-stack a { text-decoration:none; width:24px; height:24px; display:inline-block; vertical-align: middle; border-radius: 50%; text-align: center; line-height: 22px; font-size: 20px; text-shadow:none; }
+.photo-stack a.ff:after, .photo-stack a.rewind:after { content: "\f105"; font-family: FontAwesome; font-weight: normal; font-style: normal; text-decoration: inherit; -webkit-font-smoothing: antialiased; display: inline-block; speak: none; }
+.photo-stack a.rewind:after { content: "\f104"; }
+.photo-stack a img { display:none; }
+
+.hero.superhero .image { text-align: center; }
+.hero.superhero .image img { display: block; margin: 0 auto; }
+.hero.superhero .image .stack img { display: inline-block; }
+
+#photo-name { margin:0px 0 10px; text-transform:uppercase; font-family:"Georgia"; font-size:16px; font-weight:normal; }
+#photo-author{margin: 30px 0 0;}
+#photo-albums a:hover, #photo-author a:hover { text-decoration:none; }
+
+/* photo lists */
+.view-plain { margin-top: 20px; }
+.view-plain p { margin-bottom: 0; }
+.view-plain .image { text-align: center; }
+.view-plain .image img { max-width: 100%; }
+.view-plain img.shadowed { box-shadow: 0 1px 3px #aaa; }
+.view-plain .stack { margin-top: 20px; }
+.view-plain h5 { font-family:"Georgia"; font-size:16px; text-transform:uppercase; font-weight:normal; margin:0px; padding-right:35px; }
+.view-plain p { margin-bottom:15px; }
+.view-plain hr { margin-top:0; margin-bottom:5px; }
+.view-plain>div { margin-bottom: 40px; }
+
+ul.view-thumbs { padding: 0; margin: 0; list-style: none; text-align: center; }
+ul.view-thumbs li a { text-decoration: none; }
+ul.view-thumbs li { display: inline-block; position: relative; vertical-align: top; margin-right: 15px; margin-bottom: 15px; }
+ul.view-thumbs li img.shadowed { box-shadow: 0 1px 3px #aaa; margin-bottom: 5px; }
+ul.view-thumbs.album-float-left-view { margin-top: 10px; }
+ul.view-thumbs.album-float-left-view li { display: block; margin-right: 22px; float: left; }
+
+ul.view-mixed { padding: 0; margin: 0 -16px 0 0; list-style: none; }
+ul.view-mixed li.brick { display: inline-block; position: relative; vertical-align: top; width: 360px; height: 360px; margin-right: 16px; margin-bottom: 20px; text-align: left; overflow: hidden; display: block\9; float: left\9; margin-right: 10px\9; }
+ul.view-mixed li.brick ul { padding: 0; margin: 0; }
+ul.view-mixed li.brick ul li { float: left; padding: 0; margin: 0; }
+ul.view-mixed li.brick ul li a { text-decoration: none; }
+ul.view-mixed li.brick ul li a img { display: block; max-width: none\9; }
+ul.view-mixed li.brick ul li a:hover img { box-shadow: 0 0 10px 2px #fd0; }
+ul.view-mixed li.brick ul li a img.margined-right { margin-right: 19px; }
+ul.view-mixed li.brick ul li a img.margined-bottom { margin-bottom: 20px; }
+ul.view-mixed.album-float-left-view { margin-top: 10px; }
+ul.view-mixed.album-float-left-view li.brick { display: block; margin-right: 10px; float: left; }
+/*two wariant*/
+ul.view-mixed2 { padding: 0; margin: 0; list-style: none;}
+ul.view-mixed2 li.brick { display: inline-block; position: relative; vertical-align: top; width: 740px; height: 740px; margin-bottom: 20px; text-align: left; display: block\9; float: left\9; }
+ul.view-mixed2 li.brick ul { padding: 0; margin: 0; }
+ul.view-mixed2 li.brick ul li { float: left; padding: 0; margin: 0; }
+ul.view-mixed2 li.brick ul li a { text-decoration: none; }
+ul.view-mixed2 li.brick ul li a img { display: block; max-width: none\9; }
+ul.view-mixed2 li.brick ul li a img.margined-right { margin-right: 20px; }
+ul.view-mixed2 li.brick ul li a img.margined-bottom { margin-bottom: 20px; }
+ul.view-mixed2 li.brick ul li.margined-right { margin-right: 20px; }
+ul.view-mixed2 li.brick ul li.margined-bottom { margin-bottom: 20px; }
+ul.view-mixed2.album-float-left-view { margin-top: 20px; }
+ul.view-mixed2.album-float-left-view li.brick { display: block;float: left; }
+
+.photo-tags-and-categories .tags { padding:0;margin: 0; }
+.photo-tags-and-categories .tags a { padding:0 !important; }
+.photo-tags-and-categories .tags a:hover { text-decoration:none; }
+/* comments */
+
+.credentials { overflow: hidden; }
+.credentials a,
+.credentials span { padding-left: 0 !important; }
+.credentials .userpic { min-width: 20px; display: block; float: left; margin-right: 2px; }
+.credentials .username { margin: 0; }
+.credentials .username, .credentials .username a { padding: 0; display: inline; }
+.credentials a.username:hover { color: #f1433f; }
+.credentials .date { margin: 0 3px; font-size:100% !important; }
+
+.comment-form { padding: 30px 0 0 0; border-width: 4px 0 0; border-style: double; }
+.comment-form h4 { margin: 0 0 20px; font-weight: normal; text-transform: uppercase; font-family: "Georgia"; font-size: 16px; }
+.comment-form-fields p { margin: 0 0 10px; }
+.comment-form-fields p a { display: inline !important; }
+.comment-form-fields label { width: 160px; display: block; clear: left; float: left; margin: 0 10px 0 0; }
+.comment-form-fields input { width: 20em; }
+.comment-form textarea {  min-height: 160px; min-width:70%; }
+.comment-form .comment-submit { padding:0 0 0px 170px; }
+.comment-form .userpic { width: 20px; height: 20px; float: left; margin-right: 5px; }
+.comment-form ul.menu-h.auth-type li a img { float: left; margin-right: 3px; position: relative; top: 2px; }
+.comment-form ul.menu-h.auth-type { padding-bottom: 20px; }
+.comment-form label { width: 160px; display: block; clear: left; float: left; margin: 0 10px 0 0; }
+
+.comments { margin-bottom: 30px; }
+.comments h3 { margin: 0 0 20px; text-transform: uppercase; font-family: "Georgia"; font-size: 16px; }
+.comments h4 { margin: 0 0 10px; }
+.comments .credentials{margin: 10px 0 5px;}
+.comments .credentials .date { margin: 0 5px; }
+.comments .actions i { font-style:normal; font-weight:normal; text-transform: capitalize; }
+.comments .credentials .userpic { margin-right: 5px; vertical-align: middle; }
+.comments .credentials .userpic.icon16 { min-width: 0; width: 16px; height: 16px; margin: 7px 4px 0; }
+.comments textarea { height: 100px; min-height: 100px; margin-top: 0; } 
+.comments ul,
+.comments ul.menu-v li { padding: 0; margin: 0; list-style: none; }
+.comments ul li { margin:0 0 20px 0; border-width: 1px 0 0; border-style: solid; }
+.comments ul li .comment-form textarea { min-height: 100px; min-width: auto; }
+.comments ul li ul { padding-left:20px; }
+.comments ul li span.hint a { text-decoration: underline; }
+.comments .text { margin: 0px 0 15px; }
+.comments .actions { margin: 0 0 5px; }
+.comments ul li a.comment-delete { margin: 0 0 0 5px; padding: 0; color: #f1433f; text-decoration: underline; }
+.comments ul li a.comment-delete:hover { background: #f1433f; color: #fff; }
+.comments ul li ul { padding-left: 25px; }
+.comments ul li .comment-form { padding: 10px 30px; }
+.comments ul li .comment-form textarea { min-height: 100px; }
+.comments ul.menu-h.auth-type { padding: 0 0 40px; margin-left: -5px;}
+.comments ul.menu-h.auth-type li { padding-right: 10px; }
+.comments ul.menu-h.auth-type li a { padding: 5px 6px; }
+.comments ul.menu-h.auth-type li a img { top: 0; }
+.comment.deleted s { color: #999; background: #eee; padding: 0 3px; }
+
+/* mayby plugins? */
+#photo-rate-votes-count,
+#clear-photo-rate,
+#photo-rate-error { position: relative; margin-left: 5px; margin-right: 5px; }
+#photo-rate-error { color: red; }
+
+.p-declined { color: red; }
+.p-declined img { border: 2px solid red; margin-top: -2px; }
+.p-awaiting-moderation { color: gray; font-style: italic; opacity: 0.5; }
+
+.image .p-declined { color: white; background: red; padding: 15px; font-size: 1.2em; }
+.image .p-awaiting-moderation { color: white; background: gray; padding: 15px; font-size: 1.2em; }
+
+/*rating*/
+#clear-photo-rate.inline-link i { font-size: 100%; }
+a .icon16 { height: auto; width: auto; background: none; text-indent: 0; vertical-align: middle; }
+.icon12, a .icon16 { position:relative; color: #e5e5e5; font-family: FontAwesome; font-weight: normal; font-style: normal; line-height:normal; font-size:12px; -webkit-font-smoothing: antialiased; margin-right: 5px; }
+.icon12.star-hover:before, a .icon16.star-hover:before,
+.icon12.star:before, a .icon16.star:before,
+.icon12.star-full:before, a .icon16.star-full:before { content: "\f005"; color: #fd0; }
+.icon12.star-half:before, a .icon16.star-half:before { content: "\f089"; color: #fd0; position: absolute; top:0; }
+.icon12.star-half:after, a .icon16.star-half:after { content: "\f005"; }
+.icon12.star-empty:before, a .icon16.star-empty:before { content: "\f005"; }
+.icon16.loading { background-image: url("/wa-content/img/loading16.gif"); background-position: 0 0; }

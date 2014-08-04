@@ -1,0 +1,167 @@
+<!-- filtering by product features -->
+{if !empty($theme_settings.display_type_filter) && $theme_settings.display_type_filter == 'new'}
+{$shop_filters = waRequest::cookie('shop_filters', '', waRequest::TYPE_STRING)}
+<div class="filters2{if !empty($theme_settings.filterAjax)} ajax{/if}">
+    <div class="caption acapitalize"><span>[`Filter products`]</span></div>
+    <form method="get" action="{$wa->currentUrl(0,1)}">
+    {foreach $filters as $fid => $filter}
+        <div{if $fid == 'price'} class="content_price"{/if}>
+        {if $fid == 'price'}
+            {$c = $wa->shop->currency(true)}
+            <b data-feature="{$fid}"><span>[`Price`]</span></b>
+            <p class="fslider">
+            [`from`] <input type="text" class="min" name="price_min" {if $wa->get('price_min')}value="{(int)$wa->get('price_min')}"{/if} placeholder="{floor($filter.min)}">
+            [`to`] <input type="text" class="max" name="price_max" {if $wa->get('price_max')}value="{(int)$wa->get('price_max')}"{/if} placeholder="{ceil($filter.max)}">
+            <span class="filter-price">{if $wa->shop->currency() == 'RUB' && !empty($theme_settings.sumbolRUB)}<span class="ruble">Р</span>{else}{$c.sign}{/if}</span>
+            </p>
+        {else}
+            <b data-feature="{$fid}"><span>{$filter.name|escape}</span><i class="{if in_array($fid, explode(',', $shop_filters))}icon-caret-up{else}icon-caret-down{/if}"></i></b>
+            <p class="{if isset($filter.min)}fslider{/if}{if in_array($fid, explode(',', $shop_filters))} active"{else}" style="display: none;"{/if}>
+            {if $filter.type == 'boolean'}
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code)} checked{/if} value="1"> [`Yes`]</label><br>
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code) === '0'} checked{/if} value="0"> [`No`]</label><br>
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code, '') === ''} checked{/if} value=""> [`Any`]</label><br>
+            {elseif isset($filter.min)}
+                {$_v = $wa->get($filter.code)}
+                [`from`] <input type="text" class="min" name="{$filter.code}[min]" placeholder="{$filter.min}" {if !empty($_v.min)}value="{$_v.min}"{/if}>
+                [`to`] <input type="text" class="max" name="{$filter.code}[max]" placeholder="{$filter.max}" {if !empty($_v.max)}value="{$_v.max}"{/if}>
+                {if !empty($filter.unit)}
+                    {$filter.unit.title}
+                    {if $filter.unit.value != $filter.base_unit.value}<input type="hidden" name="{$filter.code}[unit]" value="{$filter.unit.value}">{/if}
+                {/if}
+            {else}
+            {foreach $filter.values as $v_id => $v}
+                <label><input type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if} value="{$v_id}"> {$v}</label><br>
+            {/foreach}
+            {/if}
+            </p>
+        {/if}
+        </div>
+    {/foreach}
+        {if $wa->get('sort')}<input type="hidden" name="sort" value="{$wa->get('sort')|escape}">{/if}
+        {if $wa->get('order')}<input type="hidden" name="order" value="{$wa->get('order')|escape}">{/if}
+        {if empty($theme_settings.filterAjax)}<input type="submit" value="[`Show`]">{/if}
+    </form>
+    <script type="text/javascript">
+    $('.filters2 b').not('[data-feature="price"]').click(function(){
+        var p = $(this).next('p');
+        if(p.hasClass('active')){
+            p.removeClass('active').slideUp('slow');
+            $(this).find('i').removeClass('icon-caret-up').addClass('icon-caret-down');
+        }else{
+            p.addClass('active').slideDown('slow');
+            $(this).find('i').removeClass('icon-caret-down').addClass('icon-caret-up');
+        }
+        
+        var filters = $.cookie('shop_filters');
+        if (filters) { filters = filters.split(','); } else { filters = []; }
+        
+        var i = $.inArray($(this).data('feature') + '', filters);
+        if (i != -1) { filters.splice(i, 1) } else { filters[filters.length] = $(this).data('feature'); }
+        
+        if(filters){ $.cookie('shop_filters', filters.join(','), { expires: 30, path: '/'}); } else { $.cookie('shop_filters', null); }
+    });
+    $(function(){
+        $('.filters2 .fslider').each(function () {
+            if (!$(this).find('.filter-slider').length) {
+                $(this).append('<div class="filter-slider"></div>');
+            } else {
+                return;
+            }
+            var min = $(this).find('.min');
+            var max = $(this).find('.max');
+            var slider = $(this).find('.filter-slider');
+            slider.slider({
+                range: true,
+                min: parseFloat(min.attr('placeholder')),
+                max: parseFloat(max.attr('placeholder')),
+                step: (parseFloat(max.attr('placeholder')) - parseFloat(min.attr('placeholder'))) <= 5 ? 0.1 : 1,
+                values: [parseFloat(min.val().length ? min.val() : min.attr('placeholder')),
+                    parseFloat(max.val().length ? max.val() : max.attr('placeholder'))],
+                slide: function( event, ui ) {
+                    var v = ui.values[0] == $(this).slider('option', 'min') ? '' : ui.values[0];
+                    min.val(v ? v : '');
+                    v = ui.values[1] == $(this).slider('option', 'max') ? '' : ui.values[1];
+                    max.val(v ? v : '');
+                },
+                stop: function (event, ui) {
+                    min.change();
+                }
+            });
+            min.add(max).change(function () {
+                var v_min = parseFloat(min.val()) || slider.slider('option', 'min');
+                var v_max = parseFloat(max.val()) || slider.slider('option', 'max');
+                if (v_max >= v_min) {
+                    slider.slider('option', 'values', [v_min, v_max]);
+                }
+            });
+        });
+    });
+    </script>
+</div>
+{else}
+{$open_filter = waRequest::cookie('filters_popup')}
+{if $open_filter === null && !empty($theme_settings.initFilter)}{$open_filter = 1}{/if}
+<div class="filters{if !empty($theme_settings.filterAjax)} ajax{/if}">
+    <form method="get" action="{$wa->currentUrl(0,1)}">
+        {foreach $filters as $fid => $filter}
+        {if $filter@iteration == 2}
+            {if $open_filter}
+            <p class="filters-swith" data-text="[`Open filter`]">[`Close filter`]<i class="icon-angle-up"></i></p>
+            <div class="filters-popup" style="display: block;">
+            {else}
+            <p class="filters-swith" data-text="[`Close filter`]">[`Open filter`]<i class="icon-angle-down"></i></p>
+            <div class="filters-popup" style="display: none;">
+            {/if}
+        {/if}
+        <p>
+            <span>{if $fid == 'price'}[`Price`]{else}{$filter.name|escape}{/if}</span>
+            {if $fid == 'price'}
+                {$c = $wa->shop->currency(true)}
+                [`from`] <input type="text" class="min" name="price_min" {if $wa->get('price_min')}value="{(int)$wa->get('price_min')}"{/if} placeholder="{floor($filter.min)}">
+                [`to`] <input type="text" class="max" name="price_max" {if $wa->get('price_max')}value="{(int)$wa->get('price_max')}"{/if} placeholder="{ceil($filter.max)}">
+                <span class="filter-price" style="display: inline-block;">{if $wa->shop->currency() == 'RUB' && !empty($theme_settings.sumbolRUB)}<span class="ruble">Р</span>{else}{$c.sign}{/if}</span>
+            {elseif $filter.type == 'boolean'}
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code)} checked{/if} value="1"> [`Yes`]</label><br>
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code) === '0'} checked{/if} value="0"> [`No`]</label><br>
+                <label><input type="radio" name="{$filter.code}"{if $wa->get($filter.code, '') === ''} checked{/if} value=""> [`Any`]</label><br>
+            {elseif isset($filter.min)}
+                {$_v = $wa->get($filter.code)}
+                [`from`] <input type="text" class="min" name="{$filter.code}[min]" placeholder="{$filter.min}" {if !empty($_v.min)}value="{$_v.min}"{/if}>
+                [`to`] <input type="text" class="max" name="{$filter.code}[max]" placeholder="{$filter.max}" {if !empty($_v.max)}value="{$_v.max}"{/if}>
+                {if !empty($filter.unit)}
+                    {$filter.unit.title}
+                    {if $filter.unit.value != $filter.base_unit.value}<input type="hidden" name="{$filter.code}[unit]" value="{$filter.unit.value}">{/if}
+                {/if}
+            {else}
+                {foreach $filter.values as $v_id => $v}
+                <label>
+                    <input type="checkbox" name="{$filter.code}[]" {if in_array($v_id, (array)$wa->get($filter.code, array()))}checked{/if} value="{$v_id}"> {$v}
+                </label><br>
+                {/foreach}
+            {/if}
+        </p>
+        {if $filter@last && count($filters) > 1}</div>{/if}
+        {/foreach}
+        {if $wa->get('sort')}<input type="hidden" name="sort" value="{$wa->get('sort')|escape}">{/if}
+        {if $wa->get('order')}<input type="hidden" name="order" value="{$wa->get('order')|escape}">{/if}
+        {if empty($theme_settings.filterAjax)}<input type="submit" value="[`Apply`]">{/if}
+    </form>
+    <script type="text/javascript">
+    $(function (){
+    	$('.filters-swith').click(function(){
+    	    var text = $(this).data('text');
+    	    $(this).data('text', $(this).text());
+    	    if(!$('.filters-popup').is(':visible')) {
+    	        $.cookie('filters_popup', 1, { expires: 30, path: '/'});
+    	        $(this).html(text+'<i class="icon-angle-up"></i>');
+    	    }else{
+    	        $.cookie('filters_popup', 0, { expires: 30, path: '/'});
+    	        $(this).html(text+'<i class="icon-angle-down"></i>');	
+    	    }
+    	    $('.filters-popup').toggle();
+    	});
+    });
+    </script>
+</div>
+{/if}

@@ -1,0 +1,18 @@
+<!-- VK Widget -->
+<div id="vk_groups" class="{$place}"></div>
+<script type="text/javascript">
+if($('#vk_groups').is(':empty'))
+    VK.Widgets.Group(
+        "vk_groups",
+        {
+            mode: {if empty($theme_settings.communityVKmode)}0{else}{$theme_settings.communityVKmode}{/if},
+            {*if $theme_settings.communityVKmode == 2 && !empty($theme_settings.communityVKwide)}wide: 1,{/if*}
+            width: "220",
+            height: "{if empty($theme_settings.communityVKheight)}400{else}{$theme_settings.communityVKheight}{/if}",
+            color1: "{if empty($theme_settings.communityVKcolor1)}#FFFFFF{else}{$theme_settings.communityVKcolor1}{/if}",
+            color2: "{if empty($theme_settings.communityVKcolor2)}#2B587A{else}{$theme_settings.communityVKcolor2}{/if}",
+            color3: "{if empty($theme_settings.communityVKcolor3)}#5B7FA6{else}{$theme_settings.communityVKcolor3}{/if}"
+        },
+        {$theme_settings.communityVKid}
+    );
+</script>

@@ -5,6 +5,7 @@
 			<div class="margintop" id="plugin">
 				<!-- plugins -->
 				{* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.sidebar *}
+				{if isset($frontend_action)}
 					{foreach $frontend_action as $plugin => $output}
 					<ul class="menu-v" style="margin-top:20px;">
 					  {if !empty($output.sidebar)}
@@ -19,7 +20,7 @@
 					  {/if}
 					  </ul>
 				{/foreach}
-				
+				{/if}
 			</div>
 		</div>
 		<div class="span9">

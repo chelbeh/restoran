@@ -27,7 +27,7 @@ $(document).ready(function() {
     })
 });
 </script>
-  <div class="comments" itemscope itemtype="http://schema.org/UserComments">
+  <div class="comments">
     <a name="comments"></a>
 
         <h5 class="comment-count" {if $post.comment_count == 0}style="display: none;"{/if}>{_w('%d comment','%d comments',$post.comment_count)}</h5>
@@ -74,7 +74,7 @@ $(document).ready(function() {
 			<div class="span12 text-left">
 				<div class="review-form wa-form" style="width:100%;">
 						<div class="alert">
-							<h3>Добавить комментарий</h3>
+							<h3>[`Add comment`]</h3>
 							<!-- auth adapters -->
 								{if empty($current_user_id)}
 									{if $require_authorization}
@@ -133,10 +133,10 @@ $(document).ready(function() {
 										</div>
 										{if $request_captcha && empty($current_user_id)} 
 											<div class="wa-field wa-captcha">
-												<div class="wa-name"><a href="#" class="wa-captcha-refresh">Обновить код</a></div>
+												<div class="wa-name"><a href="#" class="wa-captcha-refresh">[`Refresh`]</a></div>
 													<div class="wa-value">
 														<div class="wa-captcha-input"><input type="text" name="captcha" style="width:100px;" class="wa-captcha-input" autocomplete="off"></div>
-														<img class="wa-captcha-img" src="{$wa->captchaUrl()}" alt="CAPTCHA" title="Обновить капчу (CAPTCHA)">
+														<img class="wa-captcha-img" src="{$wa->captchaUrl()}">
 													</div>
 											</div>						   
 										{/if}
@@ -183,10 +183,10 @@ $(document).ready(function() {
 										</div>
 										{if $request_captcha && empty($current_user_id)} 
 											<div class="wa-field wa-captcha">
-												<div class="wa-name"><a href="#" class="wa-captcha-refresh">Обновить код</a></div>
+												<div class="wa-name"><a href="#" class="wa-captcha-refresh">[`Refresh`]</a></div>
 													<div class="wa-value">
 														<div class="wa-captcha-input"><input type="text" name="captcha" style="width:100px;" class="wa-captcha-input" autocomplete="off"></div>
-														<img class="wa-captcha-img" src="{$wa->captchaUrl()}" alt="CAPTCHA" title="Обновить капчу (CAPTCHA)">
+														<img class="wa-captcha-img" src="{$wa->captchaUrl()}">
 													</div>
 											</div>						   
 										{/if}

@@ -29,7 +29,7 @@
                     {foreach $photo.hooks.top_right as $plugin => $output}{$output}{/foreach}
                 </div>
                 <a href="{$photo.frontend_link}">
-                    {$wa->photos->getImgHtml($photo, '970', ['class'=>'shadowed','itemprop' => 'image'])}
+                    {$wa->photos->getImgHtml($photo, '741', ['class'=>'shadowed','itemprop' => 'image'])}
                 </a>
                 {* @event prepare_photos_frontend.plain.%plugin_id% *}
                 {foreach $photo.hooks.plain as $plugin => $output}{$output}{/foreach}

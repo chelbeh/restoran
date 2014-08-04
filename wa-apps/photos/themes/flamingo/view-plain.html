@@ -2,7 +2,7 @@
     {* @event frontend_collection.%plugin_id%.plain_list *}
     {if !empty($frontend_collection)}{foreach $frontend_collection as $item}{if !empty($item.plain_list)}{$item.plain_list}{/if}{/foreach}{/if}
     {foreach $photos as $photo}
-        <div itemscope itemtype ="http://schema.org/Photograph">
+        <div>
         {if $photo.name}
             <h5 itemprop="name">{$photo.name}</h5>
         {/if}

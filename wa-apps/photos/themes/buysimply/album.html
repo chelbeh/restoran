@@ -7,20 +7,19 @@
     <em class="album-note">{$album.note}</em>
 {/if}
 {if $album.description || $childcrumbs}
-<span class="treangle"></span>
 <div class="album-page">
 {if $album.description}
 <p class="album-description">{$album.description}</p>
 {/if}
 {if $childcrumbs}
     <div class="sub-albums">
-      <table>
-      {foreach $childcrumbs as $child}
-      {if $child@first || $child@iteration is div by 4}<tr>{/if}
-      <td><a href="{$child.full_url}">{$child.name}</a></td>
-      {if $child@last || $child@iteration is div by 3}</tr>{/if}
-      {/foreach}
-      </table>
+        <table>
+        {foreach $childcrumbs as $child}
+            {if $child@first || ($child@index is div by 4)}<tr>{/if}
+                <td><a href="{$child.full_url}">{$child.name}</a></td>
+            {if $child@last || (($child@index+1) is div by 4)}</tr>{/if}
+        {/foreach}
+        </table>
     </div>
 {/if}
 </div>

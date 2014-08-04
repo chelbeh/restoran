@@ -1,0 +1,82 @@
+{if !empty($filters)}<!-- filtering by product features -->{include file="shop.filters.html"}{/if}
+<!-- category tree -->{include file="vertical.tree.html"}
+
+{if !empty($theme_settings.shopInfo)}
+    {if $theme_settings.top_menu_source == 'site'}
+        {$shop_pages=$wa->shop->pages(0,2,false)}
+        {$page_select = $wa->param('page_id')}
+    {else}
+        {$shop_pages=$wa->site->pages(0,2,false)}
+        {$page_select = null}
+    {/if}
+    {if $shop_pages}<!-- info pages -->
+    <div class="information-block">
+        <div class="caption"><span>[`Information`]</span></div>
+        <ul class="pages-navigation">
+        {foreach $shop_pages as $pageML}
+            {if !isset($pageML.menu_left)}
+            <li{if $pageML.id==$page_select} class="selected"{/if}>
+                <a href="{$pageML.url}">{$pageML.name}</a>
+                {if !empty($pageML.childs)}<ul>
+                {foreach $pageML.childs as $pageML_}
+                    {if !isset($pageML_.menu_left)}
+                    <li{if $pageML_.id==$page_select} class="selected"{/if}>
+                        <a href="{$pageML_.url}">{$pageML_.name}</a>
+                        {if !empty($pageML_.childs)}<ul>
+                        {foreach $pageML_.childs as $pageML__}
+                            {if !isset($pageML__.menu_left)}
+                            <li{if $pageML__.id==$page_select} class="selected"{/if}>
+                                <a href="{$pageML__.url}">{$pageML__.name}</a>
+                            </li>
+                            {/if}
+                        {/foreach}
+                        </ul>{/if}
+                    </li>
+                    {/if}
+                {/foreach}
+                </ul>{/if}
+            </li>
+            {/if}
+        {/foreach}
+        </ul>
+    </div>
+    {/if}
+{/if}
+
+{if isset($frontend_nav)}
+    {foreach $frontend_nav as $plugin => $_}
+        {if $plugin == 'brands-plugin' && !empty($_)}
+        <div class="information-block manufactured">
+            <div class="caption"><span>[`Brands`]</span></div>
+            {$_}
+        </div>
+        {/if}
+    {/foreach}
+{/if}
+
+{if isset($frontend_nav)}
+    <!-- plugin hook: 'frontend_nav' -->
+    {* @event frontend_nav.%plugin_id% *}
+    {foreach $frontend_nav as $plugin => $_}{if $plugin != 'brands-plugin'}{$_}{/if}{/foreach}
+{/if}
+
+{if !empty($theme_settings.shopTags)}
+    {if $cloud = $wa->shop->tags()}
+        <div class="tags-block{if !empty($theme_settings.tagsCloud)} hide-for-desktop{/if}"{if !empty($theme_settings.tagsCloud)} id="tagsCanvasContent"{/if}>
+            <div class="caption"><span>[`Tags`]</span></div>
+            <div class="tags">
+            {foreach $cloud as $tag}
+            {if $tag.name|escape != ''}
+                <a href="{$wa_app_url}tag/{$tag.uri_name}/" style="font-size: {$tag.size}%; opacity: {$tag.opacity};">{$tag.name|escape}</a>{if !$tag@last}, {/if}
+            {/if}    
+            {/foreach}
+            </div>
+        </div>
+        {if !empty($theme_settings.tagsCloud)}
+        <div class="tags-block hide-for-mobile">
+            <div class="caption"><span>[`Tags`]</span></div>
+            <canvas width="200" height="200" id="tagsCanvas"></canvas>
+        </div>
+        {/if}
+    {/if}
+{/if}

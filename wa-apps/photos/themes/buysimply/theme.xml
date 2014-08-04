@@ -1,73 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="buysimply" system="1" vendor="873332" author="wm-site" app="photos" parent_theme_id="site:buysimply" version="1.4">
+<theme id="buysimply" system="1" vendor="873332" author="wm-site" app="photos" parent_theme_id="site:buysimply" version="2.1">
     <name locale="en_US">BuySimply</name>
-    <name locale="ru_RU">BuySimply</name>
+    <name locale="ru_RU">Купить Просто</name>
     <files>
     	<file path="index.html" custom="0" parent="1"/>
-        <file path="custom.css" custom="0" parent="1"/>		
-        <file path="custom.photos.css" custom="0">
-            <description locale="en_US">Core Photos app CSS</description>
-            <description locale="ru_RU">Основной CSS приложения «Фото»</description>
+        <file path="buysimply.css" custom="0" parent="1"/>		
+        <file path="buysimply.photos.css" custom="0">
+            <description locale="en_US">The main application file CSS styles "Photo"</description>
+            <description locale="ru_RU">Основной файл стилей CSS приложения «Фото»</description>
         </file>
         <file path="content.html" custom="0">
-            <description locale="en_US">Main layout and navigation for the Photos app content</description>
-			<description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Фото»</description>
+            <description locale="en_US">Main template output the content in "Photo"</description>
+			<description locale="ru_RU">Основное шаблон вывода содержимого в приложении «Фото»</description>
         </file>
         <file path="head.html" custom="0">
-			<description locale="en_US">Photos app's &lt;head&gt; instructions</description>
-			<description locale="en_US">Блок &lt;head&gt; приложения «Фото»</description>
+			<description locale="en_US">a &lt;head&gt; application "Photo"</description>
+			<description locale="en_US">Элемент &lt;head&gt; приложения «Фото»</description>
         </file>
         <file path="view-thumbs.html" custom="0">
-            <description locale="en_US">Photo list thumbnails view</description>
+            <description locale="en_US">List of images thumbnails</description>
             <description locale="ru_RU">Список фотографий эскизами</description>
         </file>
         <file path="view-mixed.html" custom="0">
-            <description locale="en_US">Photo list mixed thumbnail blocks view</description>
-            <description locale="ru_RU">Список фотографий блоками с эскизами разного размера</description>
+            <description locale="en_US">List of images blocks with images of different sizes</description>
+            <description locale="ru_RU">Список фотографий блоками с изображениями разного размера</description>
         </file>
         <file path="view-plain.html" custom="0">
-            <description locale="en_US">Photo list plain view</description>
+            <description locale="en_US">Photos List "sheet"</description>
             <description locale="ru_RU">Список фотографий «простыней»</description>
         </file>
         <file path="photo.html" custom="0">
-            <description locale="en_US">One photo and its details</description>
-            <description locale="ru_RU">Просмотр фотографий по одной</description>
+            <description locale="en_US">Separate page template image</description>
+            <description locale="ru_RU">Шаблон страницы отдельного изображения</description>
         </file>
         <file path="home.html" custom="0">
-            <description locale="en_US">Wrapper for the main photo gallery homepage</description>
-            <description locale="ru_RU">Обертка для главной страницы фотогалереи</description>
+            <description locale="en_US">Template main gallery page</description>
+            <description locale="ru_RU">Шаблон главной страницы фотогалереи</description>
         </file>
         <file path="album.html" custom="0">
-            <description locale="en_US">Wrapper for photo album</description>
-            <description locale="ru_RU">Обертка для альбома фотографий</description>
+            <description locale="en_US">Template page album</description>
+            <description locale="ru_RU">Шаблон страницы альбома</description>
         </file>
         <file path="search.html" custom="0">
-            <description locale="en_US">Wrapper for photo search (filtering) results, e.g. by tag or by rating</description>
-            <description locale="ru_RU">Обертка для страницы поиска (фильтрации) фотографий, например, по тегу или автору</description>
+            <description locale="en_US">Search page template (filter) images, such as a tag or author</description>
+            <description locale="ru_RU">Шаблон страницы поиска (фильтрации) фотографий, например, по тегу или автору</description>
         </file>
         <file path="page.html" custom="0">
-            <description locale="en_US">Static page content</description>
-			<description locale="ru_RU">Содержимое информационной страницы</description>
+            <description locale="en_US">Template information page application "photo"</description>
+			<description locale="ru_RU">Шаблон информационной страницы приложения "фото"</description>
         </file>
-        <file path="login.html">
+        <file path="login.html" custom="0">
 			<description locale="en_US">Login page</description>
 			<description locale="ru_RU">Страница входа для пользователей</description>
 		</file>
-    	<file path="signup.html">
+    	<file path="signup.html" custom="0">
         	<description locale="en_US">Sign up page</description>
 	        <description locale="ru_RU">Страница регистрации пользователей</description>
     	</file>
-	    <file path="forgotpassword.html">
+	    <file path="forgotpassword.html" custom="0">
     	    <description locale="en_US">Forgot password page</description>
         	<description locale="ru_RU">Страница сброса пароля</description>
 	    </file>
-    	<file path="error.html">
-	      <description locale="en_US">404 and other errors</description>
-    	  <description locale="ru_RU">404 и другие ошибки</description>
+    	<file path="error.html" custom="0">
+			<description locale="en_US">404 and other errors</description>
+			<description locale="ru_RU">404 и другие ошибки</description>
 	    </file>
-		<file path="view-mixed2.html" custom="1">
-    	  <description locale="ru_RU">Список фотографий блоками с эскизами разного размера</description>
+		<file path="view-mixed2.html" custom="0">    	  
+			<description locale="en_US">List of images blocks with images of different sizes(v.2)</description>
+			<description locale="ru_RU">Список фотографий блоками с изображениями разного размера(v.2)</description>
 	    </file>
-	</files>    
+		<file path="lazyloading.js" custom="0">
+			<description locale="en_US">Lazy loading JS</description>
+			<description locale="ru_RU">Скрипты загрузки контента «на лету»</description>
+	    </file>
+		<file path="sidebar.photos.html" custom="1" parent="1"/>
+	</files>
+	
+	
+	<settings>	
+		<setting var="photosTags" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US"/>
+            <name locale="ru_RU">Отображать блок "Теги фотографий" в левом сайтбаре (для приложения "фото")
+			<![CDATA[
+			
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				 Блок "Информация" в левом сайтбаре (для приложения "фото") 
+				</p>
+			]]></name>
+        </setting>
+		<setting var="photosInfo" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US"/>
+            <name locale="ru_RU">Отображать блок "Информация" (в приложении "фото")
+			<![CDATA[
+			
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				Кнопки "поделиться от яндекса" на странице фотографии
+<br />
+Список кнопок "Поделиться"(социальные сети). 
+				</p>
+			]]>
+			</name>
+        </setting>
+		
+		<setting var="socialButtonPhotos" control_type="text">
+			<value>vkontakte,facebook,twitter,moimir,odnoklassniki,yaru,gplus,lj</value>
+			<name locale="en_US"/>
+			<name locale="ru_RU">Впишите через запятую без пробела нужные для отображения кнопки
+			<![CDATA[
+			
+				<p style="color:#000; font-weight:bold; margin: 50px -500px 10px 0;">
+				Тип кнопок "поделиться"
+				</p>
+			]]>
+			</name>
+		</setting>
+		<setting var="socialButtonTypePhotos" control_type="select">
+			<value>data-yashareTheme='counter'</value>
+			<name locale="en_US"/>
+			<name locale="ru_RU">Тип кнопок "Поделиться".</name>
+			<options>
+				<option value="data-yashareType='none'">
+					<name locale="en_US"/>
+					<name locale="ru_RU">Иконки</name>
+				</option>
+				<option value="data-yashareType='icon'">
+					<name locale="en_US"/>
+					<name locale="ru_RU">Иконки + меню</name>
+				</option>
+				<option value="data-yashareTheme='counter'">
+					<name locale="en_US"/>
+					<name locale="ru_RU">Счетчики</name>
+				</option>
+			</options>
+		</setting>
+		
+	</settings>
+	<locales>
+		<locale>
+			<msgid>Photo Gallery</msgid>
+			<msgstr locale="ru_RU">Фотогалерея</msgstr>
+			<msgstr locale="bg_BG">Галерия</msgstr>
+		</locale>
+		<locale>
+			<msgid>Share</msgid>
+			<msgstr locale="ru_RU">Поделиться</msgstr>
+			<msgstr locale="bg_BG">Сподели</msgstr>
+		</locale>
+	</locales>
 </theme>

@@ -257,7 +257,7 @@ html, body {
     background-color: #f1f1f1 !important;
 }
 
-#header .logo,
+#header .logo-container,
 #header .search,
 #header .contacts {
     display: table-cell;
@@ -265,14 +265,15 @@ html, body {
     height: 112px;
 }
 
-#header .logo { width: 370px;}
-#header .logo a { display: block; }
-#header .logo .slogan { color: #6b6b6b; }
+#header .logo-container { width: 370px;}
+#header .logo-container a { display: block; }
+#header .logo-container .slogan { color: #6b6b6b; }
+#header .logo {display: inline-block; line-height: 0}
 
 #header .search { padding: 0 18px; }
 #header .search form {
     position: relative;
-    width: 361px;
+    width: 291px;
     height: 33px;
     border: 1px solid #b5b4b4;
     background-color: #ffffff;
@@ -283,7 +284,7 @@ html, body {
     padding: 5px 0 4px 5px;
     margin: 3px 0;
     font-size: 0.875em;
-    width: 300px;
+    width: 251px;
 }
 
 .active_search {
@@ -295,29 +296,28 @@ html, body {
 
 .search button { 
     border: none;
-    background: none;
+    background-color: #383636;
     position: absolute;
-    top: 8px;
-    right: 10px;
+    top: -1px;
+    right: -1px;
+    height: 35px;
+    width: 35px;
     cursor: pointer;
 }
 
 #header .contacts { width: 214px; }
 .contacts p {
     text-align: right;
-    font-size: 1.625em;
+    font-size: 20px;
     text-shadow: 0 1px 0 #fff;
-    padding: 0 0 10px;
-    color: #333333;
 }
 .contacts p span {
-    font-size: 18px;
-    color: #636363;
+    font-size: 14px;
 }
 
 #footer {
     padding-top: 16px;
-    padding-bottom: 20px;
+    padding-bottom: 47px;
     font-size: 0.813em;
 }
 #copyright { margin-bottom: 12px; }
@@ -349,12 +349,12 @@ html, body {
 .shop-info li i.mail { position: relative; top: 1px; left: -6px;}
 
 /*Стилизация кнопки ВВЕРХ */
-#back-top{	
-	position:fixed;
-	bottom:15px;
-	right:15px;
-	/*left:50%;
-	margin-left:500px*/
+#back-top{  
+    position:fixed;
+    bottom:45px;
+    right:15px;
+    /*left:50%;
+    margin-left:500px*/
 }
 
 #back-top a{
@@ -382,6 +382,89 @@ html, body {
 }
 
 #back-top a:hover span{opacity:0.8;}
+
+.wrapper-toolbar {
+    background-color: #fff;
+    /*border-width: 1px 0;
+    border-color: #ddd;*/
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    /*width: 100%;
+    min-width: 980px;*/
+    -moz-box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    height: 47px;
+    line-height: 47px;
+}
+
+.user-toolbar {
+    color: #acacac;
+    font-size: 14px;
+    line-height: 47px;
+    /*margin-left: 53px;
+    width: 100%;
+    min-height: 47px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;*/
+}
+
+.user-toolbar ul>li {
+    display: inline-block;
+    /*vertical-align: top;*/
+    border-right: 1px solid #e4e4e4;
+    float: left;
+    height: 47px;
+}
+.user-toolbar ul>li:hover {
+    background-color: #f3f3f3;
+}
+.user-toolbar ul>li a {
+    display: block;
+    padding: 0 10px 0 20px;
+}
+.user-toolbar ul>li a  i.icon {
+    position: relative;
+    top: 4px;
+    margin-right: 4px;
+}
+
+.user-toolbar ul>li a .count {
+    background-color: #acacac;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    color: #fff;
+    display: inline-block;
+    font-weight: 600;
+    height: 27px;
+    line-height: 27px;
+    margin: 0 10px;
+    text-align: center;
+    width: 27px;
+}
+.user-toolbar ul>li.highlight a,
+.user-toolbar ul>li #cart-summary{
+    color: #272727;
+}
+.user-toolbar ul>li.highlight .count {
+    background-color: #333 !important;
+}
+
+.user-toolbar ul>li #cart-summary .count {
+    background-color: #cb4437;
+}
+.user-toolbar ul>li #cart-summary.empty .count {
+    background-color: #acacac;
+}
+.user-toolbar ul>li #cart-summary.empty {
+    color: #acacac;
+}
 
 /*****************************************************
 2.  ЦЕНТРАЛЬНОЕ МЕНЮ
@@ -676,7 +759,7 @@ i.icon {
 .icon.login { background-position: -16px 0px; width: 11px; height: 11px;}
 .icon.basket { background-position: -28px 0px; width: 27px; height: 17px;}
 .icon.warrow-right { background-position: -58px 0px; width: 4px; height: 9px;}
-.icon.lens { background-position: -66px -2px; width: 18px; height: 18px; }
+.icon.lens { background-position: -66px -2px; width: 18px; height: 18px; vertical-align: -2px;}
 .icon.categories { background-position: -86px -2px; width: 16px; height: 17px;}
 .icon.mail { background-position: -108px -1px; width: 15px; height: 10px; }
 .icon.phone { background-position: -146px -1px; width: 12px; height: 16px; }
@@ -690,6 +773,20 @@ i.icon {
 .icon.to-shop { background-position: -126px -40px; width: 24px; height: 23px; }
 .icon.arrow-checkout { background-position: -192px -1px; width: 27px; height: 16px;}
 .icon.photo_menu { background-position: -222px -1px; width: 18px; height: 17px; }
+.icon.toolbar-clock { 
+    background: url("img/dsv/userbar.png");
+    background-position: -2px -2px;
+    width: 20px;
+    height: 20px;
+}
+.icon.toolbar-compare { background: url("img/dsv/userbar.png"); background-position: -27px -3px; width: 24px; height: 19px; }
+.icon.toolbar-wishlist { background: url("img/dsv/userbar.png"); background-position: -56px -2px; width: 21px; height: 21px; }
+.icon.toolbar-cart { background: url("img/dsv/userbar.png"); background-position: -80px -30px; width: 23px; height: 21px; }
+
+.highlight .icon.toolbar-clock { background-position: -2px -31px;}
+.highlight .icon.toolbar-compare { background-position: -27px -32px; }
+.highlight .icon.toolbar-wishlist { background-position: -56px -31px; }
+.empty .icon.toolbar-cart {  background-position: -80px -1px; }
 
 i.icon10 { 
     background-repeat:no-repeat;

@@ -1,0 +1,176 @@
+<style>
+    .del-block {
+        display: inline-block;
+        padding-left: 300px;
+    }
+    .banner_img_preview {
+        max-height: 200px;
+        max-width: 600px;
+    }
+    .edit-link {
+        cursor: pointer;
+    }
+    
+</style>
+
+<div class="block">
+
+    <div class="dialog small width500px" id="item-del" style="display:none">
+    	<div class="dialog-background"></div>
+    	<div class="dialog-window">
+    		<form method="post" enctype="multipart/form-data"  action="?action=del">
+                <input type="hidden" value="" name="banner_id" id="delete_banner_id" />
+                <input type="hidden" value="" name="item_id" id="delete_item_id" />
+    		<div class="dialog-content">
+    			<div class="dialog-content-indent">
+    				<h1>[`Delete this image?`]</h1>
+                        <img src="" id="delete_img" style="max-height: 200px;">
+    			</div>
+    		</div>
+    		<div class="dialog-buttons">
+    			<div class="dialog-buttons-gradient">
+    				<input type="submit" class="button red" value="[`Delete`]" /> [`or`]
+    				<a href="javascript:void(0)" class="inline-link cancel"><b><i>[`cancel`]</i></b></a>
+    			</div>
+    		</div>
+    		</form>
+    	</div>		
+    </div>
+                    
+    <div class="dialog small width500px" id="banner-del" style="display:none">
+    	<div class="dialog-background"></div>
+    	<div class="dialog-window">
+    		<form method="post" enctype="multipart/form-data"  action="?action=bannerDel">
+                <input type="hidden" value="" name="banner_id" id="bannerdel_id" />
+    		<div class="dialog-content">
+    			<div class="dialog-content-indent">
+    				<h1>[`Delete this banner with all images?`]</h1>
+                        <br><br><h2></h2>
+    			</div>
+    		</div>
+    		<div class="dialog-buttons">
+    			<div class="dialog-buttons-gradient">
+    				<input type="submit" class="button red" value="[`Delete`]" /> [`or`]
+    				<a href="javascript:void(0)" class="inline-link cancel"><b><i>[`cancel`]</i></b></a>
+    			</div>
+    		</div>
+    		</form>
+    	</div>		
+    </div>
+
+	<div class="dialog medium width500px" id="item-add" style="display:none">
+		<div class="dialog-background"></div>
+		<div class="dialog-window">
+			<form method="post" enctype="multipart/form-data"  action="?action=load">
+            <input type="hidden" value="{$banner.id}" name="banner_id" />
+			<div class="dialog-content">
+				<div class="dialog-content-indent">
+					<h1>[`Add image to this banner`]</h1>
+					<div class="block fields form">
+					
+					   <div class="field-group">
+					      <div class="field">
+					         <div class="name">[`Image`]</div>
+					         <div class="value"><input type="file" value="" name="banner_img" id="add_file"/></div>
+					      </div>
+                          <div class="field">
+					         <div class="name">[`Link`]</div>
+					         <div class="value"><input type="text" value="" name="link" /></div>
+					      </div>
+                          <div class="field">
+					         <div class="name">[`'Alt' tag`]</div>
+					         <div class="value"><input type="text" value="" name="alt" /></div>
+					      </div>
+                          <div class="field">
+					         <div class="name">[`'Title' tag for the link`]</div>
+					         <div class="value"><input type="text" value="" name="title" /></div>
+					      </div>
+                          <div class="field">
+					         <div class="name">[`On/off`]</div>
+					         <div class="value"><input type="checkbox" value="1" name="on" checked/></div>
+					      </div>
+                          <div class="field">
+					         <div class="name">[`Open in the new window`]</div>
+					         <div class="value"><input type="checkbox" value="1" name="new_window"/></div>
+					      </div>
+					   </div>
+										
+					</div>
+				</div>
+			</div>
+			<div class="dialog-buttons">
+				<div class="dialog-buttons-gradient">
+					<input type="submit" class="button green" value="[`Add`]" /> [`or`]
+					<a href="javascript:void(0)" class="inline-link cancel"><b><i>[`cancel`]</i></b></a>
+				</div>
+			</div>
+			</form>
+		</div>		
+	</div>
+
+    
+    
+	<h1 class="wa-page-heading" style="display: inline-block; ">{$banner.id}. {$banner.title}</h1>
+    <div class="del-block">
+        <a class="banner-del-link" href="#" class="bold no-underline" id="{$i.id}">
+            <i class="icon16 delete"></i><strong class="underline">[`Delete this banner`]</strong>
+        </a>
+    </div>
+    <h4 style="padding-bottom: 40px;">[`Code to be placed on the page`]: {$code}</h4>
+
+    {if $items|count > 0}
+       	<table class="zebra">
+            <tr>
+                <th>[`Image`]</th>
+                <th>[`'Alt' tag`]</th>
+                <th>[`'Title' tag`]</th>
+                <th>[`Link`]</th>
+                <th>[`Show`]</th>
+                <th></th>
+            </tr>
+       		{foreach from=$items item=i}
+        	<tr>
+            	<td style="width: 1px;">
+            		<a href="{$i.url}" title="Full size" target="_blank" style="display: block;"><img src="{$i.url}" id="img_{$i.id}" class="banner_img_preview"></a><br />
+            	</td>
+                <td>{$i.alt}</td>
+                <td>{$i.title}</td>
+                <td><a href="{$i.link}" target="_blank">{$i.link}</a></td>
+                <td>
+                    {if $i.on > 0}
+                        <em>
+                            <i class="icon16 yes"></i>
+                            [`Enabled`]
+                        </em>
+                        <br>&nbsp;<br>
+                        <a class="link-enable inline-link edit-link" onclick="$.banner.itemEdit({$i.id}, 0);" ><b><i>[`Disable`]</i></b></a>
+                    {else}
+                        <em>
+                            <i class="icon16 no"></i>
+                            [`Disabled`]
+                        </em>
+                        <br>&nbsp;<br>
+                        <a class="link-enable inline-link edit-link" onclick="$.banner.itemEdit({$i.id}, 1);" ><b><i>[`Turn on`]</i></b></a>
+                    {/if}
+                </td>
+                <td>
+                    <a class="item-del-link" href="#" class="bold no-underline" id="{$i.id}">
+			            <i class="icon16 delete"></i><strong class="underline">[`Delete this image`]</strong>
+		            </a>
+                </td>
+          	</tr>
+          	{/foreach}
+        </table>
+    {else}
+        <div>[`No images found.`]</div>
+    {/if}
+    
+	
+	<div class="block"></div>
+	
+	<div class="block">
+		<a id="item-add-link" href="#" class="bold no-underline">
+			<i class="icon16 add"></i><strong class="underline">[`Add image for this banner`]</strong>
+		</a>
+	</div>
+</div>			

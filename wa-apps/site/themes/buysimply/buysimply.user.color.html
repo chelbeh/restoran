@@ -1,0 +1,10 @@
+{if !preg_match('/\/(\w+)\/$/', $wa_theme_url, $them)}{$them[1]='buysimply'}{/if}
+{*Пример смены цветовой гаммы наклеек.*}
+{$wa->globals("`$them[1]`_user_scheme", [
+    "badgecolor" => "#fff",
+    "badgebgcolor" => "#353535",
+    "badgebgcolorD" => "#555",
+    "badgebgcolorN" => "#0a0",
+    "badgebgcolorB" => "#3498db",
+    "badgebgcolorL" => "#f1433f"
+])}

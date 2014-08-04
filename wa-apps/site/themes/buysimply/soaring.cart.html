@@ -1,0 +1,41 @@
+{*$soaring_cart_items = $wa->shop->cart->items()*}{*krsort($soaring_cart_items)*}
+<div class="soaring-block">
+    <div id="soaring-cart">
+        <ul>
+            {foreach $wa->shop->cart->items() as $item}
+            <li data-id="{$item.id}">
+                <div class="soaring-cart-img">
+                    <a href="{$wa->shop->productUrl($item.product)}" title="{$item.product.name|escape}">
+                        {*fix image sku*}
+                        {$ip = $wa->shop->product($item.product_id)}
+                        {if $ip.skus[$item.sku_id].image_id}{$item.product.image_id = $ip.skus[$item.sku_id].image_id}{/if}
+                        {*/fix image sku*}
+                        {$wa->shop->productImgHtml($item.product, '96x96', ['default' => "`$wa_theme_url`img/dummy96.png"])}
+                    </a>
+                </div>
+                <div class="soaring-cart-name">
+                    <a href="{$wa->shop->productUrl($item.product)}">{$item.product.name|escape}</a>{*|truncate:70*}
+                    {if $item.sku_name && $item.sku_name != $item.product.name}{$item.sku_name|escape}{/if}
+                </div>
+                <div class="soaring-cart-price">
+                        {$item.price = $wa->shop->cart->getItemTotal($item.id)}
+                        <span class="price nowrap">{if empty($theme_settings.sumbolRUB)}{wa_currency($item.price, $wa->shop->currency())}{else}{wa_currency_html($item.price, $wa->shop->currency())}{/if}</span>
+                </div>
+                <div class="soaring-cart-quantity">
+                    {*<a class="soaring-cart-minus" href="#" onclick="return false;"><i class="icon-minus-sign"></i></a>*}
+                  	<input type="text" size="3" value="{$item.quantity}" class="soaring-cart-qty"> [`pcs.`]
+                    {*<a class="soaring-cart-plus" href="#" onclick="return false;"><i class="icon-plus-sign"></i></a>*}
+                </div>
+                <div class="soaring-cart-delete">
+                    <a href="javascript:void(0);" class="soaring-cart-del" title="[`Remove`]"><i class="icon-remove"></i></a>
+                </div>
+            </li>
+            {/foreach}
+        </ul>
+    </div>
+    <div id="soaring-cart-total">
+        <p><span class="bold">[`TOTAL`]</span> ([`with discount`])<span class="bold cart-total">{if !$cart_total}[`empty`]{else}{if empty($theme_settings.sumbolRUB)}{wa_currency($cart_total, $wa->shop->currency())}{else}{wa_currency_html($cart_total, $wa->shop->currency())}{/if}{/if}</span></p>
+        {if $wa_app == 'shop' && !empty($theme_settings.soaringQuickorder) && class_exists('shopQuickorderPlugin')}{shopQuickorderPlugin::submitCart()}{/if}
+        <a class="button" href="{$wa->getUrl('shop/frontend/cart')}">[`Go to cart`]</a>
+    </div>
+</div>

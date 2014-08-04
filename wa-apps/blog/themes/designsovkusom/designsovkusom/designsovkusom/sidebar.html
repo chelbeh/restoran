@@ -1,0 +1,169 @@
+<!-- NAVIGATION -->
+<div class="leftmenu clear-both">
+    <ul id="blog-list">
+        <li class="first"><i class="icon categories"></i>Блоги</li>
+    {if !$settlement_one_blog || $action == 'post'}
+        {if $settlement_one_blog}
+            <li><a href="{$wa->blog->url()}">[`All posts`]</a></li>
+        {else}
+            {$published_blogs = $wa->blog->blogs()}
+            {if count($published_blogs)>1}
+                <li class="{if is_array($wa->globals('blog_id')) && empty($is_search)}selected{/if}"><a href="{$wa->blog->url()}">[`All posts`]</a></li>
+                {foreach $published_blogs as $blog}
+                    <li class="{if $wa->globals('blog_id') eq $blog.id && empty($is_search)}selected{/if}">
+                        <a href="{$blog.link}">{$blog.name}</a>
+                    </li>
+                {/foreach}
+            {else}
+            {$blog=current($published_blogs)}
+            <li{if empty($is_search)} class="selected"{/if}>
+                <a href="{$wa->blog->url()}">{$blog.name}</a>
+            </li>
+            {/if}
+        {/if}
+    {/if}
+    {if ($action eq 'default') && empty($action_info.search)}
+        {* timeline navigation *}
+    
+        {$datetime = [
+            'year' => $wa->param('year'),
+            'month' => $wa->param('month')
+        ]}
+        {$sidebar_timeline = $wa->blog->timeline($wa->param('blog_id'), $datetime)}
+    <li class="category_tree" id="timeline">
+        <a href="">
+            Календарь
+        </a>
+        <ul>
+            {$year=null}
+            {foreach $sidebar_timeline as $year_month => $item}
+                {if $year neq $item.year}
+                    {if !$item@first}
+                            </ul>
+                        </li>
+                    {/if}
+                    <li {if $item.year_selected}class="selected"{/if}>
+                    {$year=$item.year}
+                    <a href="{$item.year_link}">{$item.year|default:'NULL'}</a>
+                    <ul>
+                {/if}
+                <li {if $item.selected}class="selected"{/if}>
+                    <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">{_ws(date("F",gmmktime(0,0,0,$item.month)))}</a>
+                </li>
+    {if $item@last}
+            </ul>
+        </li>
+            {/if}
+            {/foreach}
+        </ul>
+    </li><!-- timeline -->
+    {/if}
+    
+    {if $pages = $wa->blog->pages()}
+    <li class="category_tree">
+        <a href="#">Страницы</a>
+        <ul id="page-list">
+        {foreach $pages as $blog_page}
+            <li {if $blog_page@first}class="first"{/if}{if $blog_page@last}class="last"{/if}>
+                <a href="{$blog_page.url}">{$blog_page.name}</a>
+            </li>
+        {/foreach}
+        </ul>
+    </li>
+    {/if}
+    
+    </ul>
+</div><!-- leftmenu -->
+
+<!-- категории -->
+{$cats=$wa->shop->categories(0, null, true)}
+{if !empty($cats)}
+<div class="leftmenu">
+    <ul class="cat">
+        <li class="first"><i class="icon categories"></i>Категории</li>
+    {foreach from=$cats item=cat name=leftmenu}
+        {$subcats = $wa->shop->categories($cat.id,null,true)}
+        <li {if count($subcats)>0}class="category_tree"{/if}>
+            <a href="{$cat.url}">{$cat.name}</a>
+            {if count($subcats)>0}
+            <ul>
+                {foreach from=$subcats item=subcat name=subleftmenu}
+                    <li {if $smarty.foreach.subleftmenu.first}class="first"{/if}{if $smarty.foreach.subleftmenu.last}class="last"{/if}><a href="{$subcat.url}">{$subcat.name}</a></li>
+                {/foreach}
+            </ul>
+        {/if}
+        </li>
+    {/foreach}
+    </ul>
+</div>
+{/if}
+
+{if $theme_settings.photos}
+    <!-- посленднее фото -->
+    {$photos = $wa->photos->photos(null,null,8)}
+    {if !empty($photos)}
+    <div class="photos_container">
+    <a href="/photos/">Последние фото</a>
+    <ul>
+    {foreach $photos as $photo}
+        <li {if $photo@iteration is even}class="even"{/if}>
+            {if empty($photo.frontend_link)}
+              {$wa->photos->getImgHtml($photo, "95x95")}
+            {else}
+              <a href="{$photo.frontend_link|default:'#'}">
+                {$wa->photos->getImgHtml($photo, "95x95")}
+              </a>
+            {/if}
+        </li>
+    {/foreach}
+    </ul>
+    <div class="clear-both"></div>
+    </div>
+    {/if}
+{/if}
+
+
+{* @var $action string default|error|page|post Current action*}
+
+{*
+    <div id="search" role="search">
+        <form>
+            <input type="search" value="search" />
+            <input type="submit" value="Find" />
+        </form>
+    </div>
+*}
+
+
+<p class="small" role="contentinfo">
+    {if $action eq 'default'}
+        {if !empty($action_info.search.contact_id)}
+            {$c= $wa->contact($action_info.search.contact_id)}
+
+            <img width="96" src="{$c->getPhoto(96)}" title="{$c->get('name','html')}" alt=""><br>
+            <strong>{$c.name}</strong>
+
+            {$ca = $c->get('about','html')}
+            {if $ca}
+                <br><br>
+                {$ca}
+            {/if}
+
+            <br>
+            {$c->get('url','html')}
+        {/if}
+    {/if}
+</p>
+
+
+<div id="subscribe">
+    {if $rss}
+        <a href="{$rss}" title="[`Subscribe`]"><i class="icon16 rss"></i><strong>RSS</strong></a>
+    {/if}
+</div>
+
+
+{* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.sidebar *}
+{foreach $frontend_action as $plugin => $output}
+    {if !empty($output.sidebar)}{$output.sidebar}{/if}
+{/foreach}

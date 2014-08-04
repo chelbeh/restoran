@@ -236,3 +236,6 @@ ul.view-mixed.album-float-left-view li.brick { display: block; margin-right: 10p
 	.separatornext {
 		margin-left:10px;
 	}
+.catalog {
+	height:220px;
+}

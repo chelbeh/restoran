@@ -1,18 +1,23 @@
 <!-- navigation breadcrumbs -->
-    {*21.12.2013*}
-    {if isset($breadcrumbs)}
-        <div class="breadcrumbs">
-            <a href="{$wa_url}">Главная</a>
-            {if $breadcrumbs}
-                {foreach $breadcrumbs as $breadcrumb}
-                    » <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
-                {/foreach}
-                
-            {/if}
-             » {$page.name|escape} 
-        </div>
+<div class="breadcrumbs">
+    <a href="{$wa_url}">[`Home`]</a>
+    {if isset($breadcrumbs) && $breadcrumbs}
+        {foreach $breadcrumbs as $breadcrumb}
+            » <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
+        {/foreach}
     {/if}
- {*21.12.2013*}
+     » {$page.name|escape}
+</div>
+{if empty($theme_settings.noadaptive)}
+<div class="info-page menu hide-for-desktop" role="navigation">
+    {if $page.parent_id}
+        {$p_id = $page.parent_id}
+    {else}
+        {$p_id = $page.id}
+    {/if}
+    {wa_print_tree tree=$wa->site->pages($p_id, false) elem ='<a href=":url">:name</a>' selected=$page.id}
+</div>
+{/if}
 <div id="page" role="main">
 	<h1>{$page.name}</h1>
 	{$page.content}

@@ -20,8 +20,42 @@
     <link href="{$wa_theme_url}designsovkusom.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">
     <link href="{$wa_theme_url}dsv.user.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">
     <link href="{$wa_theme_url}mobile.css?v{$wa_theme_version}"{if !$wa->isMobile()} media="screen and (max-width: 760px)"{/if} rel="stylesheet" type="text/css">
-    {if $wa->isMobile()}
-        <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1; user-scalable=0;">
+
+    <!-- Цветовые схемы -->
+    {if $theme_settings.color_theme=="blue"}<link href="{$wa_theme_url}color.blue.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
+    {if $theme_settings.color_theme=="orange"}<link href="{$wa_theme_url}color.orange.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
+    {if $theme_settings.color_theme=="red"}<link href="{$wa_theme_url}color.red.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
+    {if $theme_settings.color_theme=="green"}<link href="{$wa_theme_url}color.green.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
+    {if $theme_settings.color_theme=="purple"}<link href="{$wa_theme_url}color.purple.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
+    
+    {if !empty($theme_settings.my_color)}
+    <style>
+        .apps li:hover { background-color: #{$theme_settings.my_color};}
+
+        .main_menu ul li a:hover,
+        .main_menu ul li a.active { border-bottom: 2px solid #{$theme_settings.my_color};}
+        .main_menu ul>li.first,
+         .leftmenu>ul>li.first { 
+            background-color: #{$theme_settings.my_color}; 
+        }
+        .leftmenu>ul>li.first:hover { background-color: #{$theme_settings.my_color}; }
+
+        .news_container,
+        .sidebar-block-container.white { 
+            border-top: 3px solid #{$theme_settings.my_color};
+        }
+
+        .news .post h3 a:hover { color: #{$theme_settings.my_color};}
+
+        .photos_container ul li:hover { 
+            border: 1px solid #{$theme_settings.my_color};
+        }
+
+        .product-navigation li.selected { 
+            border-bottom: 3px solid #{$theme_settings.my_color};
+            color: #{$theme_settings.my_color};
+        }
+    </style>
     {/if}
     {$wa->css()} {* links active plugins CSS *}
 
@@ -103,7 +137,7 @@
                 
                 <!-- Поиск -->
                 <div class="search">
-                     <form method="get" action="{$wa->getUrl('/frontend/search')}" class="searchform">
+                     <form method="get" action="{$wa->getUrl('shop/frontend/search')}" class="searchform">
                          <input type="search" name="query" {if !empty($query)}value="{$query}"{/if} id="search" placeholder="Поиск товара">
                          <button title="Найти"><i class="icon lens"></i></button>
                     </form>
@@ -122,7 +156,7 @@
             <div class="main_menu" role="navigation">
                 <ul>
                     {foreach from=$wa->shop->pages() item=p name=menu}
-                        {if !$p.nomenu}
+                        {if !isset($p.nomenu)}
                         <li><a href="{$p.url}" {if $smarty.foreach.menu.first}class="first"{/if}>{$p.name}</a></li>
                         {/if}
                     {/foreach}
@@ -166,15 +200,11 @@
                         <li><a href="{$a.url}">{$a.name}</a><li>
                     {/foreach}
                     {foreach from=$wa->shop->pages() item=a}
-                        {if !$a.nomenu}
+                        {if !isset($a.nomenu)}
                             <li><a href="{$a.url}">{$a.name}</a><li>
                         {/if}
                     {/foreach}
                 </ul>
-
-                <!-- plugin hook: 'frontend_footer' -->
-                {* @event frontend_footer.%plugin_id% *}
-                {foreach $frontend_footer as $_}{$_}{/foreach}
             </div>
             <div style="display: table-row;">
                 <div class="social">
@@ -192,5 +222,12 @@
     </div>
     
     <p id="back-top"><a href="#top" title="ВВЕРХ"><span></span></a></p>
+    {if $theme_settings.jivosite && !empty($theme_settings.widget_id)}
+        <!-- BEGIN JIVOSITE CODE -->
+    <script type='text/javascript'>
+    (function(){ var widget_id = '{$theme_settings.widget_id}';
+    var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();</script>
+        <!-- END JIVOSITE CODE -->
+    {/if}
 </body>
 </html>

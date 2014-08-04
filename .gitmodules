@@ -7,3 +7,6 @@
 [submodule "wa-apps/courier"]
 	path = wa-apps/courier
 	url = git@github.com:slowpokes/courier.git
+[submodule "wa-apps/prices"]
+	path = wa-apps/prices
+	url = git@github.com:slowpokes/prices.git

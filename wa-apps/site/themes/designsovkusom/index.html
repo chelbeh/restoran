@@ -11,44 +11,46 @@
   <!-- css -->
   <!--<link href="{$wa_theme_url}default.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>-->
   <link href="{$wa_theme_url}designsovkusom.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+  <link href="{$wa_theme_url}theme.color.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">
   <link href="{$wa_theme_url}dsv.user.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
-  <link href="{$wa_theme_url}mobile.css?v{$wa_theme_version}"{if !$wa->isMobile()} media="screen and (max-width: 760px)"{/if} rel="stylesheet" type="text/css">
+  {if $wa->shop->currency() == 'RUB'} <link href="{$wa_url}wa-content/font/ruble/georgia/fontface.css" rel="stylesheet" type="text/css">{/if}
 
     
     <!-- Цветовые схемы -->
-    {if $theme_settings.color_theme=="blue"}<link href="{$wa_theme_url}color.blue.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
-    {if $theme_settings.color_theme=="orange"}<link href="{$wa_theme_url}color.orange.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
-    {if $theme_settings.color_theme=="red"}<link href="{$wa_theme_url}color.red.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
-    {if $theme_settings.color_theme=="green"}<link href="{$wa_theme_url}color.green.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
-    {if $theme_settings.color_theme=="purple"}<link href="{$wa_theme_url}color.purple.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/blue.png"}{$theme_color = "blue"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/blue2.png"}{$theme_color = "blue2"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/blue3.png"}{$theme_color = "blue3"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/darkblue.png"}{$theme_color = "darkblue"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/green.png"}{$theme_color = "green"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/bermuda.png"}{$theme_color = "bermuda"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/sanmarino.png"}{$theme_color = "sanmarino"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/orange.png"}{$theme_color = "orange"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/red.png"}{$theme_color = "redtheme"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/purple.png"}{$theme_color = "purple"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/brown.png"}{$theme_color = "brown"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/sun.png"}{$theme_color = "sun"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/darkpink.png"}{$theme_color = "darkpink"}{/if}
+    {if $theme_settings.color_scheme=="img/themesettings/bluepurple.png"}{$theme_color = "bluepurple"}{/if}
     
     {if !empty($theme_settings.my_color)}
     <style>
-        .apps li:hover { background-color: #{$theme_settings.my_color};}
+        .search button { background-color: {$theme_settings.my_color} }
+        .search button:hover { background-color: {$theme_settings.my_color} }
+        .apps li:hover { background-color: {$theme_settings.my_color} }
 
         .main_menu ul li a:hover,
-        .main_menu ul li a.active { border-bottom: 2px solid #{$theme_settings.my_color};}
+        .main_menu ul li a.active { border-bottom: 2px solid {$theme_settings.my_color}}
         .main_menu ul>li.first,
-         .leftmenu>ul>li.first { 
-            background-color: #{$theme_settings.my_color}; 
-        }
-        .leftmenu>ul>li.first:hover { background-color: #{$theme_settings.my_color}; }
+         .leftmenu>ul>li.first { background-color: {$theme_settings.my_color} }
+        .leftmenu>ul>li.first:hover { background-color: {$theme_settings.my_color} }
 
-        .news_container,
-        .sidebar-block-container.white { 
-            border-top: 3px solid #{$theme_settings.my_color};
-        }
+        .news_container,.sidebar-block-container.white { border-top: 3px solid {$theme_settings.my_color} }
 
-        .news .post h3 a:hover { color: #{$theme_settings.my_color};}
+        .news .post h3 a:hover { color: {$theme_settings.my_color};}
 
-        .photos_container ul li:hover { 
-            border: 1px solid #{$theme_settings.my_color};
-        }
+        .photos_container ul li:hover { border: 1px solid {$theme_settings.my_color} }
 
-        .product-navigation li.selected { 
-            border-bottom: 3px solid #{$theme_settings.my_color};
-            color: #{$theme_settings.my_color};
-        }
+        .product-navigation li.selected { border-bottom: 3px solid #{$theme_settings.my_color}; color: #{$theme_settings.my_color} }
     </style>
     {/if}
 
@@ -56,13 +58,14 @@
 
   <!-- js -->
   <script type="text/javascript" src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
   <script type="text/javascript" src="{$wa_theme_url}designsovkusom.js?v{$wa_theme_version}"></script>
   {$wa->js()} {* links active plugins JS *}
 
   {$wa->headJs()} {* links Google Analytics tracking code and current site's custom JS (Site app) *}
     
 </head>
-<body id="top">
+<body id="top"{if $theme_settings.color_scheme && empty($theme_settings.my_color)} class="{$theme_color}"{/if}>
     <div class="wrapper_top">
         <div class="container">
             <div class="float-left">
@@ -72,33 +75,16 @@
                     {/foreach}
                 </ul>
             </div>
-            <div class="auth float-left">
+            <div class="auth float-right">
                 {if $wa->isAuthEnabled()}
                     {if $wa->user()->isAuth()}
-                        <a href="{$wa->getUrl('/frontend/my')}" class="bold">{$wa->user('firstname')}</a>
+                        <a href="{$wa->getUrl('shop/frontend/my')}" class="bold">{$wa->user('firstname')}</a>
                         <a href="?logout">[s`Log out`]</a>
                     {else}
                          <a href="{$wa->loginUrl()}"><i class="icon login"></i> [s`Log in`]</a>&nbsp;&nbsp;| <a href="{$wa->signupUrl()}">[s`Sign up`]</a>
                     {/if}
                 {/if}
             </div>
-              
-            {$cart_total = $wa->shop->cart->total()}
-            
-            <!-- cart summary -->
-            <a href="{$wa->getUrl('shop/frontend/cart')}" class="cart float-right {if !$cart_total} empty{/if}" id="cart-summary" title="Перейти в корзину">
-                <div class="basket float-left">
-                    <i class="icon basket"></i>
-                </div>
-                <div>
-                    <span class="cartlabel">корзина <i class="icon warrow-right"></i></span>
-                    <span class="cartempty">
-                        {$cartcount = $wa->shop->cart()->count()}
-                        <span class="cart-count">{$cartcount}</span>
-                        <span class="price nowrap cart-total">{wa_currency($cart_total, $wa->shop->currency())}</span>
-                    </span>
-                </div>
-            </a>
         </div><!-- container -->
     </div><!-- wrapper top -->
     
@@ -106,7 +92,7 @@
         <div class="container" style="position:relative;">
             <div id="header">
                 <!-- Логотип -->
-                <div class="logo">
+                <div class="logo-container">
                     <a href="/">
                         {include file="dsv.logo.html"}
                     </a>
@@ -188,6 +174,57 @@
             </div>
         </div>
     </div>
+    <div class="wrapper-toolbar">
+        <div class="container">
+            <div class="user-toolbar">
+                <ul>
+                    <li id="count-viewed">
+                        <a href="{$wa->getUrl('shop/frontend/search')}?func=viewed">
+                            <i class="icon toolbar-clock"></i>
+                            Недавно просмотренное
+                            <span class="count">0</span>
+                        </a>
+                    </li>
+                    <li id="count-compare">
+                        {if isset($smarty.cookies.shop_compare)}
+                            {$compare_products = $smarty.cookies.shop_compare}
+                            {assign var=compareproducts value=","|explode:$compare_products}
+                        {/if}
+                        <a href="{if isset($smarty.cookies.shop_compare)}{$wa->getUrl('shop/frontend/compare/', ['id' => $compare_products ])}{/if}">
+                            <i class="icon toolbar-compare"></i>
+                            Сравнение
+                            <span class="count">0</span>
+                        </a>
+                    </li>
+                    <li id="count-wishlist">
+                        <a href="{$wa->getUrl('shop/frontend/search')}?func=wishlist">
+                            <i class="icon toolbar-wishlist"></i>
+                            Избранное
+                            <span class="count">0</span>
+                        </a>
+                    </li>
+                    <li style="border: none;">
+                        {$cart_total = $wa->shop->cart->total()}
+                        {$cart_count = $wa->shop->cart()->count()} 
+    
+                        <a href="{$wa->getUrl('shop/frontend/cart')}" class="cart{if !$cart_total} empty{/if}" id="cart-summary">
+                            <i class="icon toolbar-cart"></i>
+                            Корзина
+                            <span class="count cart-count">{$cart_count}</span>
+                            <span class="cart-total price">
+                                {if $theme_settings.rub == "symbol"}
+                                    {shop_currency_html($cart_total)}
+                                {else}
+                                    {shop_currency($cart_total)}
+                                {/if}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
     
     <p id="back-top"><a href="#top" title="ВВЕРХ"><span></span></a></p>
     {if $theme_settings.jivosite && !empty($theme_settings.widget_id)}

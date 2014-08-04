@@ -1,7 +1,7 @@
 {* post list: default view mode *}
 
 {foreach $posts as $post}
-    <div class="blogpost" id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts" {/if}itemscope itemtype="http://schema.org/BlogPosting">
+    <div class="blogpost" id="post-{$post.id}">
         <h1>
             {$post.title}
 
@@ -21,7 +21,7 @@
             {$post.text}
 			<div class="row-fluid blogline">
 				<div class="span8 gray">{if $show_comments && $post.comments_allowed}<i class="icon-user"></i> <a href="{$post.user.posts_link}">{$post.user.name}</a>{else}<i class="icon-user"></i> {$post.user.name}</span>{/if} <span class="separator">|</span> {if $post.contact_id}<span class="gray" title="{$post.datetime|wa_datetime}"><i class="icon-time gray"></i> {$post.datetime|wa_datetime:"humandate"}</span>  <span class="separator">|</span><i class="icon-comment gray"></i> <a href="{$post.link}#comments">{_w('%d comment','%d comments',$post.comment_count)}</a>{/if}</div>
-				<div class="span4 text-right"><a href="{$post.link}" itemprop="url"  class="flamingo-1">Читать далее</a></div>
+				<div class="span4 text-right"><a href="{$post.link}" class="flamingo-1">[`Read more`]</a></div>
 			</div>
         </div>
 

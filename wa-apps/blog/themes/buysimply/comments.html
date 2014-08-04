@@ -19,7 +19,7 @@ $(document).ready(function() {
 </script>
 
 
-<div class="comments">
+<div class="comments" itemscope itemtype="http://schema.org/UserComments">
     <a name="comments"></a>
         <h3 class="comment-count" {if $post.comment_count == 0}style="display: none;"{/if}>{_w('%d comment','%d comments',$post.comment_count)}</h3>
 
@@ -115,14 +115,14 @@ $(document).ready(function() {
                         <p>
                           	<label for="name">[`Your name`]</label>
                             <strong><img src="{$adapter->getIcon()}" class="userpic" />{$current_auth.name}</strong>
-                            <a href="{$wa_app_url}logout">[`log out`]</a>
+                            <a href="{$wa_app_url}?logout">[`log out`]</a>
                       	</p>
                     </div>
                 {/foreach}
             {else}
                 <p>
                   <label>[`Your name`]</label>
-                    <img src="{$wa->user()->getPhoto(20)}" class="userpic" alt=""> <strong>{$wa->user('name')}</strong> <a href="{$wa_app_url}logout">[`log out`]</a>
+                    <img src="{$wa->user()->getPhoto(20)}" class="userpic" alt=""> <strong>{$wa->user('name')}</strong> <a href="{$wa_app_url}?logout">[`log out`]</a>
                 </p>
             {/if}
 

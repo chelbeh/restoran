@@ -1,0 +1,45 @@
+{*FUNCTION TREE*}
+{function name=tree_to_list tree=null level=null stage=2 escape=false title=false icon_=""}
+    {if !$level || $level >= $stage}
+        {foreach $tree as $t}
+            {if $escape}{$name=$t.name|escape}{else}{$name=$t.name}{/if}
+            {capture append="tree_list"}
+                <li class="level-{$t.depth}{if $selected == $t.id} selected{/if}">
+                    {if $icon_}{$icon_}{/if}<a href="{$t.url}"{if $title} title="{$name}"{/if}>{$name}</a>
+                </li>
+            {/capture}
+            {tree_to_list tree=$t.childs level=$level stage=$stage+1 escape=$escape title=$title icon_=$icon_}
+        {/foreach}
+    {/if}
+{/function}
+{function name=wm_print_tree tree=null selected=null class="" icon="" icon_="" escape=false title=false level=null stage=1 stwol=false column=1 wrap=false }
+    {if $tree && (!$level || $level >= $stage)}
+        {if $icon}{foreach explode(",", $icon) as $i}{$icon_ = $icon_|cat:"<i class='`$i`'></i>"}{/foreach}{/if}
+        <ul{if $class} class="{$class}"{/if}>
+            {foreach $tree as $t}
+                {if $escape}{$name=$t.name|escape}{else}{$name=$t.name}{/if}
+                <li{if $selected == $t.id} class="selected"{/if}>
+                    {if $wrap}<div class="wrp-fix">{/if}
+                    {if $icon_}{$icon_}{/if}<a href="{$t.url}"{if $title} title="{$name}"{/if}>{$name}</a>
+                    {if $stwol && $t.childs}
+                        {$tree_list = []}
+                        {call tree_to_list tree=$t.childs level=$level escape=$escape title=$title icon_=$icon_}
+                        {if $tree_list}
+                            {$ppc = ceil(count($tree_list)/$column)}
+                            <ul class="stage-2">
+                                {foreach $tree_list as $f}
+                                    {if $f@first || ($f@index is div by $ppc)}<li><ul>{/if}
+                                        {$f}
+                                    {if $f@last || (($f@index+1) is div by $ppc)}</ul></li>{/if}
+                                {/foreach}
+                            </ul>
+                        {/if}
+                    {else}
+                        {wm_print_tree tree=$t.childs selected=$selected class="stage-`$stage+1`" icon_=$icon_ escape=$escape title=$title level=$level stage=$stage+1}
+                    {/if}
+                    {if $wrap}</div>{/if}
+                </li>
+            {/foreach}
+        </ul>
+    {/if}
+{/function}

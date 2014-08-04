@@ -1,4 +1,10 @@
-<p><img src="{$wa_theme_url}img/dsv/logo.png" alt="{$wa->shop->settings('name')}" /></p>
+<div class="logo">
+    {if $theme_settings.logo}
+        <img src="{$wa_theme_url}{$theme_settings.logo}" alt="{$wa->accountName()}" />
+    {else}
+        <img src="{$wa_theme_url}img/dsv/logo.png" alt="{$wa->shop->settings('name')}" />
+    {/if}
+</div>
 <p class="slogan">
-    {if $theme_settings.logo_slogan ne ''}{$theme_settings.logo_slogan}{/if}
+  {if $theme_settings.logo_slogan ne ''}{$theme_settings.logo_slogan}{/if}
 </p>

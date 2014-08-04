@@ -1,0 +1,71 @@
+.inline-link i { text-decoration:none; font-size:14px; }
+#blog-nav li a>i { position: absolute; top: 50%; margin-top: -7px; right: 5px; }
+#blog-nav li i.icon-angle-right { display: none; }
+#blog-nav li:hover i.icon-angle-right { display: block; }
+#blog-nav li:hover i.icon-angle-down { display: none; }
+
+.caption-name { text-transform: uppercase; font-size: 16px; font-family: Georgia; border-bottom: 1px solid; padding-bottom: 5px; }
+
+.product-social { margin-top: 10px; }
+.product-social div { display: inline-block; }
+
+.post { margin-bottom: 40px; }
+.post h3.caption-name { margin-bottom:15px; }
+.post h3 a { text-decoration: none; }
+.post img { max-width: 100%; height: auto !important; }
+.post .text { margin-bottom: 10px; }
+.post textarea { width: 100%; min-height: 400px; margin-top: 10px; height: 450px; }
+.post.search-match { margin-top: 20px; margin-bottom: 50px; }
+.post.search-match h3 { font-size: 1.5em; }
+
+.button.view-post { line-height: normal; background-image: none; box-shadow: none; text-transform: none; }
+
+.credentials { overflow: hidden; line-height: 1.3em; }
+.credentials a i { font-size:16px; text-decoration:none; margin-right:5px; width:auto; }
+.credentials .userpic { min-width: 20px; display: block; float: left; margin-right: 5px; vertical-align:middle; }
+.credentials .username { margin: 0; line-height:19px; }
+.credentials a.username:hover { color: #f1433f; }
+.credentials .date { margin: 0 5px; }
+.post .credentials { margin-bottom: 15px; display:table; width:100%; }
+
+.comment-form { padding: 30px 0 0 0; border-width: 4px 0 0; border-style: double; }
+.comment-form h4 { margin: 0 0 20px; font-weight: normal; text-transform:uppercase; font-family: "Georgia"; font-size: 16px; }
+.comment-form-fields p { margin: 0 0 10px; }
+.comment-form-fields p i { margin-right:5px; font-size:16px; }
+.comment-form-fields p a { display: inline !important; }
+.comment-form-fields label { width: 160px; display: block; float: left; margin: 0 10px 0 0; }
+.comment-form-fields input { width: 20em; }
+.comment-form textarea { min-width: 75%; min-height: 160px; }
+.comment-form .comment-submit { padding:0 0 20px 170px; }
+.comment-form .userpic { width: 20px; height: 20px; float: left; margin-right: 5px; }
+.comment-form ul.menu-h.auth-type li a img { float: left; margin-right: 3px; position: relative; top: 2px; }
+.comment-form ul.menu-h.auth-type { padding-bottom: 20px; }
+
+.comments { margin-bottom: 30px; padding-top:30px; border-width: 4px 0 0; border-style: double; }
+.comments h3 { margin: 0 0 20px; text-transform:uppercase; font-family: "Georgia"; font-size: 16px; }
+.comments h4 { margin: 0 0 20px; }
+.comments .credentials .date { margin: 0 5px; }
+.comments .credentials .userpic.icon16 { min-width: 0; width: 16px; height: 16px; margin: 7px 4px 0; }
+.comments textarea { height: 100px; min-height: 100px; margin-top: 0; } 
+.comments ul { margin: 0; list-style: none; padding:0; }
+.comments ul li { margin:0 0 20px 0; border-width: 1px 0 0; border-style: solid; padding:10px 0 0 0; }
+.comments ul li ul { margin:20px 0 0 0;}
+.comments ul li span.hint a { text-decoration: underline; }
+.comments .text { margin: 15px 0 15px 0px; }
+.comments .actions { margin: 0 0 5px 0px; }
+.comments .actions a { padding-left:0 !important; padding-bottom:15px !important; }
+.comments .actions a i { font-weight:normal; font-style:normal; text-transform:capitalize; }
+.comments ul li a.comment-delete { margin: 0 0 0 5px; padding: 0; color: #d99; text-decoration: underline; }
+.comments ul li a.comment-delete:hover { background: #f1433f; color: white; }
+.comments ul li ul { padding-left: 25px; }
+.comments ul li .comment-form textarea { min-height: 100px; min-width:auto; }
+.comments ul.menu-h.auth-type { padding: 0 0 40px; margin-left: -5px; }
+.comments ul.menu-h.auth-type li { padding-right: 10px; }
+.comments ul.menu-h.auth-type li a { padding: 5px 6px; }
+.comments ul.menu-h.auth-type li a img { top: 0; }
+
+.pageless-wrapper { display:block; visibility:hidden; }
+#post-stream h1 { font-size: 36px; font-weight: bold; line-height: normal; margin-bottom: 30px; }
+
+/* Plugins
+---------- */

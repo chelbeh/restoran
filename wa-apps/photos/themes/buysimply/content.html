@@ -1,8 +1,20 @@
+{if $action == 'page'}
+<div class="breadcrumbs">
+    <a href="{$wa_url}">[`Home`]</a>
+    {if isset($breadcrumbs) && $breadcrumbs}
+        {foreach $breadcrumbs as $breadcrumb}
+            » <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a>
+        {/foreach}
+    {/if}
+     » {*{$page.name|escape}*}
+</div>
+{/if}
+
 <!-- plugin hook -->
 {* @event frontend_layout.%plugin_id%.header *}
 {foreach $frontend_layout as $item}{if !empty($item.header)}{$item.header}{/if}{/foreach}
 
 <!-- photos app content -->
-<div {if $action == 'photo'} itemscope itemtype="http://schema.org/Photograph"{/if} class="content-old">
+<div{if $action == 'photo'} itemscope itemtype="http://schema.org/Photograph"{/if}>
     {$content}
 </div>

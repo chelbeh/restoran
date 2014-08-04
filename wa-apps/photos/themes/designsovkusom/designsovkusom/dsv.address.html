@@ -1,3 +1,9 @@
-<li><i class="icon address"></i>{$theme_settings.address}</li>
-<li><i class="icon phone"></i>{$wa->shop->settings('phone')}</li>
-<li><i class="icon mail"></i><a href="mailto:{$wa->shop->settings('email')}">{$wa->shop->settings('email')}</a></li>
+{if $theme_settings.address ne ''}
+    <li><i class="icon address"></i>{$theme_settings.address}</li>
+{/if}
+{if $wa->shop->settings('phone') ne ''}
+    <li><i class="icon phone"></i>{$wa->shop->settings('phone')}</li>
+{/if}
+{if $wa->shop->settings('email') ne ''}
+    <li><i class="icon mail"></i><a href="mailto:{$wa->shop->settings('email')}">{$wa->shop->settings('email')}</a></li>
+{/if}

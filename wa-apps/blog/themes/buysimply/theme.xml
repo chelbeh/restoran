@@ -1,53 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="buysimply" system="1" vendor="873332" author="wm-site" app="blog" parent_theme_id="site:buysimply" version="1.4">
+<theme id="buysimply" system="1" vendor="873332" author="wm-site" app="blog" parent_theme_id="site:buysimply" version="2.1">
     <name locale="en_US">BuySimply</name>
-    <name locale="ru_RU">BuySimply</name>
+    <name locale="ru_RU">Купить Просто</name>
     <files>
         <file path="index.html" custom="0" parent="1"/>
-		<file path="custom.css" custom="0" parent="1"/>
-        <file path="custom.blog.css" custom="0">
-            <description locale="en_US">Core Blog app CSS</description>
-            <description locale="ru_RU">Основной CSS приложения «Блог»</description>
+		<file path="buysimply.css" custom="0" parent="1"/>
+        <file path="buysimply.blog.css" custom="0">
+            <description locale="en_US">The main application file CSS styles "Blog"</description>
+            <description locale="ru_RU">Основной файл стилей CSS приложения «Блог»</description>
         </file>
         <file path="content.html" custom="0">
-            <description locale="en_US">Main layout and navigation for the Blog app content</description>
-			<description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Блог»</description>
-        </file>
-		<file path="blog.js" custom="0">
-            <description locale="en_US">The main application JS "blog"</description>
-			<description locale="ru_RU">Основной JS приложения «Блог»</description>
+            <description locale="en_US">Main layout output the content in "Blog"</description>
+			<description locale="ru_RU">Основное макет вывода содержимого в приложении «Блог»</description>
         </file>
         <file path="head.html" custom="0">
-			<description locale="en_US">Blog app's &lt;head&gt; instructions</description>
-			<description locale="en_US">Блок &lt;head&gt; приложения «Блог»</description>
+			<description locale="en_US">a &lt;head&gt; application "Blog"</description>
+			<description locale="en_US">Элемент &lt;head&gt; приложения «Блог»</description>
         </file>
         <file path="stream.html" custom="0">
-            <description locale="en_US">Post stream wrapper</description>
-            <description locale="ru_RU">Обертка для страницы вывода списка записей</description>
+            <description locale="en_US">Template the list of entries</description>
+            <description locale="ru_RU">Шаблон вывода списка записей</description>
         </file>
         <file path="stream_search.html" custom="0">
-            <description locale="en_US">Post search (filtering) results, e.g. custom search, by tag, by author</description>
+            <description locale="en_US">Search Result (filtering) records, such as a tag or author</description>
             <description locale="ru_RU">Результат поиска (фильтрации) записей, например, по тегу или автору</description>
         </file>
         <file path="stream_posts.html" custom="0">
-            <description locale="en_US">Default post list view mode</description>
+            <description locale="en_US">Main list view blog posts</description>
             <description locale="ru_RU">Основной вид списка записей блога</description>
         </file>
         <file path="post.html" custom="0">
-            <description locale="en_US">Dedicated post page</description>
-            <description locale="ru_RU">Страница одной записи блога</description>
+            <description locale="en_US">One page template blog entry</description>
+            <description locale="ru_RU">Шаблон страницы одной записи блога</description>
         </file>
         <file path="page.html" custom="0">
-            <description locale="en_US">Static info page</description>
-            <description locale="ru_RU">Информационная страница</description>
+            <description locale="en_US">Template information page application "blog"</description>
+            <description locale="ru_RU">Шаблон информационной страницы приложения "блог"</description>
         </file>
         <file path="comments.html" custom="0">
-            <description locale="en_US">Post comment list</description>
-            <description locale="ru_RU">Комментарии к записи блога</description>
+            <description locale="en_US">List template comments to blog posts</description>
+            <description locale="ru_RU">Шаблон списка комментариев к записи блога</description>
         </file>
         <file path="comment.html" custom="0">
-            <description locale="en_US">One comment template</description>
+            <description locale="en_US">Withdrawal from the list of comments
+			</description>
             <description locale="ru_RU">Вывод одного комментария из списка</description>
         </file>
         <file path="login.html" custom="0">
@@ -66,5 +63,89 @@
             <description locale="en_US">404 and other errors</description>
             <description locale="ru_RU">404 и другие ошибки</description>
         </file>
-    </files>  
+		<file path="sidebar.blog.html" custom="1" parent="1"/>
+	</files>
+	<settings>	
+		<setting var="blogTags" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US"/>
+            <name locale="ru_RU">
+			Отображать блок "Теги записей блога" в левом сайтбаре (для приложения "блог")
+			<![CDATA[
+			
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				 Блок "Информация" в левом сайтбаре (для приложения "блог") 
+				</p>
+			]]>
+			</name>
+        </setting>
+		
+				<setting var="blogInfo" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US"/>
+            <name locale="ru_RU">Отображать блок "Информация" (в приложении "блог")
+			<![CDATA[
+			
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				Кнопки "поделиться от яндекса" на странице записи блога
+<br />
+Список кнопок "Поделиться"(социальные сети). 
+				</p>
+			]]>
+			</name>
+        </setting>
+		
+		<setting var="socialButtonBlog" control_type="text">
+			<value>vkontakte,facebook,twitter,moimir,odnoklassniki,yaru,gplus,lj</value>
+			<name locale="en_US"/>
+			<name locale="ru_RU">
+			Впишите через запятую без пробела нужные для отображения кнопки
+			<![CDATA[
+			
+				<p style="color:#000; font-weight:bold; margin: 50px -500px 10px 0;">
+				Тип кнопок "поделиться"
+				</p>
+			]]>
+			</name>
+		</setting>
+		
+		<setting var="socialButtonTypeBlog" control_type="select">
+			<value>data-yashareTheme='counter'</value>
+			<name locale="en_US"/>
+			<name locale="ru_RU">Тип кнопок "Поделиться".</name>
+			<options>
+				<option value="data-yashareType='none'">
+					<name locale="en_US"/>
+					<name locale="ru_RU">Иконки</name>
+				</option>
+				<option value="data-yashareType='icon'">
+					<name locale="en_US"/>
+					<name locale="ru_RU">Иконки + меню</name>
+				</option>
+				<option value="data-yashareTheme='counter'">
+					<name locale="en_US"/>
+					<name locale="ru_RU">Счетчики</name>
+				</option>
+			</options>
+		</setting>
+		
+
+	</settings>
+	<locales>
+		<locale>
+			<msgid>Links blog</msgid>
+			<msgstr locale="ru_RU">Ссылки блога</msgstr>
+			<msgstr locale="bg_BG">Връзки към блога</msgstr>
+		</locale>
+		<locale>
+			<msgid>Share</msgid>
+			<msgstr locale="ru_RU">Поделиться</msgstr>
+			<msgstr locale="bg_BG">Сподели</msgstr>
+		</locale>
+		<locale>
+			<msgid>Read more →</msgid>
+			<msgstr locale="ru_RU">Читать далее →</msgstr>
+			<msgstr locale="bg_BG">Прочети повече →</msgstr>
+		</locale>
+	</locales>
 </theme>

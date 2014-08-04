@@ -1,0 +1,68 @@
+<div class="header-navigation" role="navigation sitemap">
+{if !empty($theme_settings.top_menu_content) && $theme_settings.top_menu_content == 'category_tree'}
+    {if !empty($theme_settings.top_menu_type)}{$class_tree=$theme_settings.top_menu_type}{else}{$class_tree='3'}{/if}
+
+    {$tree = $wa->shop->categories(0, null, true)}
+    {if isset($category)}{$selected_category=$category.id}{else}{$selected_category=null}{/if}
+    {if isset($product) && $product.categories}
+        {$selected_category = $product.categories}
+        {$selected_category = current($selected_category)}
+        {$selected_category = $selected_category.id}
+    {/if}
+    {if $tree}{$stwol = false}{$wrap = false}
+        {if $class_tree == '2'}
+            {$class_tree = 'horizontal-tree-two'}
+        {elseif $class_tree == '4'}
+            {$class_tree = 'horizontal-tree-four'}{$stwol = true}
+        {else}
+            {$class_tree = 'horizontal-tree-one'}{$wrap = true}
+        {/if}
+        {call wm_print_tree class="buysimply-horizontal-tree `$class_tree`" level=3 tree=$tree selected=$selected_category stwol=$stwol column=4 wrap=$wrap}
+    {/if}
+{else}
+    {if $wa->shop && $theme_settings.top_menu_source == 'shop'}
+        {$site_pages=$wa->shop->pages(0,2,false)}
+        {if $wa_app == 'shop'}{$page_select = $wa->param('page_id')}{else}{$page_select = null}{/if}
+    {else}
+        {$site_pages=$wa->site->pages(0,2,false)}
+        {if $wa_app == 'site' && isset($page.id)}{$page_select = $page.id}{else}{$page_select = null}{/if}
+    {/if}
+    <ul class="buysimply-horizontal-tree horizontal-tree-one">
+    {if !empty($theme_settings.top_menu_index)}
+        <!--home link-->
+        <li{if $wa_url == $wa->currentUrl()} class="selected"{/if}><div class="wrp-fix"><a href="{$wa_url}">[`Home`]</a></div></li>
+    {/if}<!--pages-->
+    {foreach $site_pages as $pageMT}
+        {if !isset($pageMT.menu_top)}
+        <li{if $pageMT.id==$page_select} class="selected"{/if}><div class="wrp-fix">
+            <a href="{$pageMT.url}">{$pageMT.name}</a>
+            {if !empty($pageMT.childs)}<ul>
+            {foreach $pageMT.childs as $pageMT_}
+                {if !isset($pageMT_.menu_top)}
+                <li{if $pageMT_.id==$page_select} class="selected"{/if}>
+                    <a href="{$pageMT_.url}">{$pageMT_.name}</a>
+                    {if !empty($pageMT_.childs)}<ul>
+                    {foreach $pageMT_.childs as $pageMT__}
+                        {if !isset($pageMT__.menu_top)}
+                        <li{if $pageMT__.id==$page_select} class="selected"{/if}>
+                            <a href="{$pageMT__.url}">{$pageMT__.name}</a>
+                        </li>
+                        {/if}
+                    {/foreach}
+                    </ul>{/if}
+                </li>
+                {/if}
+            {/foreach}
+            </ul>{/if}
+        </div></li>
+        {/if}
+    {/foreach}
+    {if empty($theme_settings.hideAPPS)}
+        <!-- wa apps -->
+        {foreach $wa->apps() as $a}
+            <li{if $a.url==$wa_app_url} class="selected"{/if}><div class="wrp-fix"><a href="{$a.url}">{$a.name}</a></div></li>
+        {/foreach}
+    {/if}
+    </ul>
+{/if}
+</div>
