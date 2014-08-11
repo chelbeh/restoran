@@ -580,6 +580,7 @@ class russianpostShipping extends waShipping
      */
     public function tracking($tracking_id = null)
     {
+        return $this->myTracking($tracking_id); //VADIM CODE
         return 'Отслеживание отправления: <a href="http://www.russianpost.ru/Tracking20/" target="_blank">http://www.russianpost.ru/Tracking20/</a>';
     }
 
@@ -758,5 +759,25 @@ class russianpostShipping extends waShipping
                 break;
         }
         return !$srcIm ? false : $srcIm;
+    }
+
+    //VADIM CODE START
+    private function myTracking($barcode){
+        $model = new shipmentCodeCheckModel();
+        $data = $model->where("barcode = '$barcode'")->order('operation_date, datetime, id')->fetchAll();
+        $result = "";
+        if(count($data)>0){
+            $result = "<table class='tracking_table'>";
+            foreach($data as $line){
+                $result .= "<tr>";
+                $result .= "<td>".date('d.m.Y H:i', strtotime($line['operation_date']))."</td>";
+                $result .= "<td>{$line['operation_place']}</td>";
+                $result .= "<td>{$line['operation_type']}</td>";
+                $result .= "<td>{$line['operation_text']}</td>";
+                $result .= "</tr>";
+            }
+            $result .= "</table>";
+        }
+        return $result;
     }
 }
