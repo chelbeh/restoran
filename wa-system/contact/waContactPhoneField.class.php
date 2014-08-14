@@ -20,6 +20,7 @@ class waContactPhoneField extends waContactStringField
         parent::init();
         $this->options['formats']['js'] = new waContactPhoneJsFormatter();
         $this->options['formats']['value'] = $this->options['formats']['html'] = new waContactPhoneFormatter();
+        $this->options['formats']['top'] = new waContactPhoneTopFormatter();
     }
 
     protected function setValue($value)
@@ -41,6 +42,34 @@ class waContactPhoneField extends waContactStringField
             $params['value'] = $this->format($params['value'], 'value');
         }
         return parent::getHtmlOne($params, $attrs);
+    }
+
+    public function format($data, $format = null)
+    {
+        $data = parent::format($data, $format);
+
+        if ($format && in_array('html', explode(',', $format))) {
+            if ($this->isMulti()) {
+                if (is_array($data)) {
+                    $result = htmlspecialchars($data['value']);
+                    if (isset($data['ext']) && $data['ext']) {
+                        $ext = $data['ext'];
+                        if (isset($this->options['ext'][$ext])) {
+                            $ext = _ws($this->options['ext'][$ext]);
+                        }
+                        $result .= ' <em class="hint">'.htmlspecialchars($ext).'</em>';
+                    }
+                    $data = $result;
+                } else {
+                    $data = htmlspecialchars($data);
+                }
+            } else {
+                if (!is_array($data) || isset($data['value'])) {
+                    $data = htmlspecialchars(is_array($data) ? $data['value'] : $data);
+                }
+            }
+        }
+        return $data;
     }
 }
 
@@ -152,5 +181,21 @@ class waContactPhoneJsFormatter extends waContactPhoneFormatter
             return parent::format($data);
         }
     }
+}
 
+class waContactPhoneTopFormatter extends waContactPhoneFormatter
+{
+    public function format($data)
+    {
+        $result = '';
+        if (is_array($data)) {
+            $result = parent::format($data);
+            if (!empty($data['ext'])) {
+                $result .= " <em class='hint'>" . _ws($data['ext']) . "</em>";
+            }
+        } else {
+            $result = parent::format($data);
+        }
+        return $result;
+    }
 }
