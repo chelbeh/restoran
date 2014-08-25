@@ -51,7 +51,7 @@ class regionShipping extends waShipping
         if ($regions = $rm->getByCountry('rus')) {
 
             $control .= "<table class=\"zebra\"><thead>";
-            $string = '<tr><td>%s</td><td>%s</td><td>%s</td></tr>';
+            $string = '<tr><td>%s</td><td class="inp_price">%s</td><td class="inp_time">%s</td></tr>';
             $c_params = array();
             $control .= "<tr class=\"gridsheader\">";
             $control .= "<th>Регион</th>";
