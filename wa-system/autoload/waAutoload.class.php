@@ -295,5 +295,8 @@ class waAutoload
         'waPageActions'            => 'page/actions/waPage.actions.php',
 
         'waDesignActions'          => 'design/actions/waDesign.actions.php',
+
+        'Geoip'                    => 'geoip/waGeoip.class.php',
+        'GeoipModel'               => 'geoip/waGeoip.model.php',
     );
 }
