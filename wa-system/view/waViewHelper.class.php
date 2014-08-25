@@ -985,4 +985,31 @@ HTML;
         }
         return self::$helpers[$app];
     }
+
+    //VADIM CODE START
+
+    public function regionBlock(){
+        $geoip = new Geoip();
+        $region_id = $geoip->getRegion();
+        if($region_id>0){
+        }
+        else{
+            $region_id = 77;
+        }
+        $region = $geoip->getRegionName($region_id);
+        return "<span id='region_name' class='region_name region_handler' data-id='$region_id'>$region</span>";
+    }
+
+    public function regionsList(){
+        $geoip = new Geoip();
+        $data = $geoip->allRegions();
+        $str = "<ul>";
+        foreach($data as $region){
+            $str .= "<li><a href='#' data-code='{$region['code']}'>{$region['name']}</a></li>";
+        }
+        $str .= "</ul>";
+        return $str;
+    }
+
+    //VADIM CODE END
 }
