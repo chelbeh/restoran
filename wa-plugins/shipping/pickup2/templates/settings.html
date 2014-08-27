@@ -1,4 +1,6 @@
-
+<script>
+var point_template = "{$point_template}";
+</script>
 {literal}
 <style>
     .points_block{
@@ -8,7 +10,15 @@
         display: inline-block;
     }
     .point{
-        margin: 5px 0 0 25px;
+        margin: 0;
+    }
+
+    .points{
+        border: 1px solid #999;
+    }
+
+    table.points td{
+        vertical-align: top;
     }
 
     table.zebra a.inline{
@@ -19,18 +29,17 @@
     $( document ).ready(function() {
         $(".add_point").click(function(){
             var container = $(this).parents(".points_block");
-            var address = prompt("Укажите адрес пункта самовывоза");
             var code = container.data('code');
             var point_id = container.data('points')+1;
-            if(address){
-                var html = "<div class='point'>";
-                html += address;
-                html += "<input type='hidden' name='shipping[settings][regions]["+code+"][points]["+point_id+"]' value='"+address+"'>";
-                html += " <a class='delete_point' href='#'><i class='icon16 delete'></i></a>";
-                html += "</div>";
-                container.find('.points').append(html);
-                container.data('points', point_id);
-            }
+            var html = point_template;
+
+            html = html.replace(/%address%/g, '');
+            html = html.replace(/%id%/g, point_id);
+            html = html.replace(/%code%/g, code);
+            html = html.replace(/%comment%/g, '');
+
+            container.find('.points').append(html);
+            container.data('points', point_id);
             return false;
         });
         $(".points_block").each(function(){

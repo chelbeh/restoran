@@ -18,12 +18,13 @@ class pickup2Shipping extends waShipping
                     }
                     if(isset($this->regions[$region_id]['points'])){
                         $result = array();
-                        foreach($this->regions[$region_id]['points'] as $id=>$name){
+                        foreach($this->regions[$region_id]['points'] as $id=>$params){
                             $result['point_'.$id] = array(
                                 'est_delivery' => $time,
                                 'currency'     => 'RUB',
                                 'rate'         => $rate,
-                                'name' => $name,
+                                'name' => $params['address'],
+                                'comment' => str_replace("\n", "<br>", $params['comment']),
                             );
                         }
                         return $result;
@@ -52,9 +53,18 @@ class pickup2Shipping extends waShipping
     public function getSettingsHTML($params = array()){
         $view = wa()->getView();
         $html = '';
+        $view->assign('point_template', self::getPointHTML());
         $html .= $view->fetch($this->path.'/templates/settings.html');
         $html .= parent::getSettingsHTML($params);
         return $html;
+    }
+
+    public static function getPointHTML(){
+        return "<tr class='point'>".
+            "<td><input type='text' name='shipping[settings][regions][%code%][points][%id%][address]' value='%address%'></td>".
+            "<td><textarea name='shipping[settings][regions][%code%][points][%id%][comment]'>%comment%</textarea></td>".
+            "<td><a href='#' class='delete_point'><i class='icon16 delete'></a></td>".
+            "</tr>";
     }
 
     public static function settingRegionControl($name, $params = array()){
@@ -62,6 +72,8 @@ class pickup2Shipping extends waShipping
         $values = $params['value'];
         $rm = new waRegionModel();
         if ($regions = $rm->getByCountry('rus')) {
+
+            $point_html = self::getPointHTML();
 
             $control .= "<table class=\"zebra\"><thead>";
             $string = '<tr><td>%s</td><td class="inp_price">%s</td><td class="inp_time">%s</td></tr>';
@@ -80,18 +92,21 @@ class pickup2Shipping extends waShipping
                 $count = 0;
                 $points_block = '';
                 if(isset($values[$region['code']]['points'])){
-                    foreach($values[$region['code']]['points'] as $key=>$value){
-                        $html = "<div class='point'>";
-                        $html .= $value;
-                        $html .= "<input type='hidden' name='shipping[settings][regions][{$region['code']}][points][$key]' value='{$value}'>";
-                        $html .= " <a class='delete_point' href='#'><i class='icon16 delete'></i></a>";
-                        $html .= "</div>";
+                    foreach($values[$region['code']]['points'] as $key=>$params){
+                        $html = str_replace(
+                            array('%address%', '%code%', '%comment%', '%id%'),
+                            array($params['address'], $region['code'], $params['comment'], $key),
+                            $point_html);
                         $points_block .= $html;
                         $count = $key;
                     }
                 }
-                $points_block = "<div class='points_block' data-code='{$region['code']}' data-points='{$count}'><a href='#' class='add_point'><i class='icon16 add'></i> добавить пункт самовывоза</a><div class='points'>".$points_block."</div></div>";
+                $title .= "<div class='points_block' data-code='{$region['code']}' data-points='{$count}'>";
+                $title .= "<a href='#' class='add_point'><i class='icon16 add'></i> добавить пункт самовывоза</a>";
+                $title .= "<table class='points zebra'>";
+                $title .= "<tr><th>Название</th><th>Комментарий</th><th> </th></tr>";
                 $title .= $points_block;
+                $title .= "</table></div>";
                 $c_params['namespace'] = $name."[{$region['code']}]";
 
                 $c_params['value'] = '';
@@ -138,5 +153,9 @@ class pickup2Shipping extends waShipping
             $result .= "</table>";
         }
         return $result;
+    }
+
+    public function requestedAddressFields(){
+        return false;
     }
 }
