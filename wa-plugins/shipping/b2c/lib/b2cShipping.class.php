@@ -18,8 +18,8 @@ class b2cShipping extends waShipping
                         $rate = 0;
                     }
                     $cities = self::getCities();
-                    if(isset($cities[$region_id])){
-                        if(in_array($city, $cities[$region_id])){
+                    if(isset($cities[$region_id])||($city=='*')){
+                        if(in_array($city, $cities[$region_id])||($city=='*')){
                             $result['delivery'] = array(
                                 'est_delivery' => $time,
                                 'currency'     => 'RUB',
