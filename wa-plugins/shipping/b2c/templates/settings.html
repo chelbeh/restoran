@@ -1,0 +1,32 @@
+{literal}
+<style>
+    .cities{
+        padding: 10px 0 0 20px;
+    }
+    table.zebra a.inline{
+        margin-left: 20px;
+    }
+</style>
+<script>
+    $( document ).ready(function() {
+        $(".cities").each(function(){
+            var that = $(this);
+            var count = that.find(".city").length;
+            that.hide();
+            var link = $("<a href='#' class='inline'/>");
+            link.text(plural(count, ['город', 'города', 'городов']));
+            link.click(function(){
+                that.show();
+                $(this).hide();
+                return false;
+            });
+            that.before(link);
+        });
+    });
+    function plural(number, titles)
+    {
+        var cases = [2, 0, 1, 1, 1, 2];
+        return number+' '+titles[ (number%100>4 && number%100<20)? 2 : cases[(number%10<5)?number%10:5] ];
+    }
+</script>
+{/literal}
