@@ -5,8 +5,9 @@ class b2cShipping extends waShipping
 
     public function calculate(){
         $region_id = $this->getAddress('region');
+        $region_int = intval($region_id);
         $city = $this->getAddress('city');
-        if ($region_id) {
+        if ($region_id>0) {
             if (isset($this->regions[$region_id]['price'])) {
                 $price = $this->regions[$region_id]['price'];
                 $time = $this->regions[$region_id]['time'];
@@ -18,8 +19,8 @@ class b2cShipping extends waShipping
                         $rate = 0;
                     }
                     $cities = self::getCities();
-                    if(isset($cities[$region_id])||($city=='')){
-                        if(in_array($city, $cities[$region_id])||($city=='')){
+                    if(isset($cities[$region_int])){
+                        if(in_array($city, $cities[$region_int])){
                             $result['delivery'] = array(
                                 'est_delivery' => $time,
                                 'currency'     => 'RUB',
@@ -27,6 +28,14 @@ class b2cShipping extends waShipping
                             );
                             return $result;
                         }
+                    }
+                    if($city==''){
+                        $result['delivery'] = array(
+                            'est_delivery' => $time,
+                            'currency'     => 'RUB',
+                            'rate'         => $rate,
+                        );
+                        return $result;
                     }
                 }
             }
