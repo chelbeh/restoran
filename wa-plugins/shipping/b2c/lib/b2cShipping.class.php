@@ -103,9 +103,9 @@ class b2cShipping extends waShipping
                 }
 
                 $cities_block = '';
-                if(isset($cities[$region['code']])){
+                if(isset($cities[intval($region['code'])])){
                     $cities_block .= '<div class="cities">';
-                    foreach($cities[$region['code']] as $city){
+                    foreach($cities[intval($region['code'])] as $city){
                         $cities_block .= "<div class='city'>$city</div> ";
                     }
                 }
