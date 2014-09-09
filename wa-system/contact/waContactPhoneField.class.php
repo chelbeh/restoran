@@ -19,7 +19,8 @@ class waContactPhoneField extends waContactStringField
     {
         parent::init();
         $this->options['formats']['js'] = new waContactPhoneJsFormatter();
-        $this->options['formats']['value'] = $this->options['formats']['html'] = new waContactPhoneFormatter();
+        $this->options['formats']['value'] = new waContactPhoneFormatter();
+        $this->options['formats']['html'] = new waContactPhoneTopFormatter();
         $this->options['formats']['top'] = new waContactPhoneTopFormatter();
     }
 
@@ -60,8 +61,6 @@ class waContactPhoneField extends waContactStringField
                         $result .= ' <em class="hint">'.htmlspecialchars($ext).'</em>';
                     }
                     $data = $result;
-                } else {
-                    $data = htmlspecialchars($data);
                 }
             } else {
                 if (!is_array($data) || isset($data['value'])) {
@@ -176,6 +175,9 @@ class waContactPhoneJsFormatter extends waContactPhoneFormatter
     {
         if (is_array($data)) {
             $data['value'] = parent::format($data);
+            // No htmlspecialchars, because isn't needed here
+            // This formatted data means to be used in js code, 
+            // make escape there by yourself
             return $data;
         } else {
             return parent::format($data);
@@ -190,8 +192,9 @@ class waContactPhoneTopFormatter extends waContactPhoneFormatter
         $result = '';
         if (is_array($data)) {
             $result = parent::format($data);
+            $result = htmlspecialchars($result);
             if (!empty($data['ext'])) {
-                $result .= " <em class='hint'>" . _ws($data['ext']) . "</em>";
+                $result .= " <em class='hint'>" . _ws(htmlspecialchars($data['ext'])) . "</em>";
             }
         } else {
             $result = parent::format($data);
