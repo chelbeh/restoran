@@ -1,10 +1,13 @@
 <script>
 var point_template = "{$point_template}";
+{foreach $point_fields as $field}
+    point_template = point_template.replace(/%{$field}%/g, '');
+{/foreach}
 </script>
 {literal}
 <style>
     .points_block{
-        margin: 10px 0 0 0;
+        padding: 0px 0 10px 20px;
     }
     table.zebra .point a{
         display: inline-block;
@@ -24,6 +27,13 @@ var point_template = "{$point_template}";
     table.zebra a.inline{
         margin-left: 20px;
     }
+    .field .value .point textarea{
+        min-width: 200px;
+    }
+    .field .value .point input{
+        min-width: 130px;
+        width: 130px!important;
+    }
 </style>
 <script>
     $( document ).ready(function() {
@@ -33,10 +43,8 @@ var point_template = "{$point_template}";
             var point_id = container.data('points')+1;
             var html = point_template;
 
-            html = html.replace(/%address%/g, '');
             html = html.replace(/%id%/g, point_id);
             html = html.replace(/%code%/g, code);
-            html = html.replace(/%comment%/g, '');
 
             container.find('.points').append(html);
             container.data('points', point_id);

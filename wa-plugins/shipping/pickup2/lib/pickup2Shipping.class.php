@@ -5,6 +5,7 @@ class pickup2Shipping extends waShipping
 
     public function calculate(){
         $region_id = $this->getAddress('region');
+        $city = $this->getAddress('city');
         if ($region_id) {
             if (isset($this->regions[$region_id]['price'])) {
                 $price = $this->regions[$region_id]['price'];
@@ -19,13 +20,15 @@ class pickup2Shipping extends waShipping
                     if(isset($this->regions[$region_id]['points'])){
                         $result = array();
                         foreach($this->regions[$region_id]['points'] as $id=>$params){
-                            $result['point_'.$id] = array(
-                                'est_delivery' => $time,
-                                'currency'     => 'RUB',
-                                'rate'         => $rate,
-                                'name' => $params['address'],
-                                'comment' => str_replace("\n", "<br>", $params['comment']),
-                            );
+                            if($city==''||($city==$params['city'])){
+                                $result['point_'.$id] = array(
+                                    'est_delivery' => $time,
+                                    'currency'     => 'RUB',
+                                    'rate'         => $rate,
+                                    'name' => $params['name']." (".$params['address'].")",
+                                    'comment' => self::getComment($params),
+                                );
+                            }
                         }
                         return $result;
                     }
@@ -33,6 +36,17 @@ class pickup2Shipping extends waShipping
             }
         }
         return null;
+    }
+
+    private static function getComment($params){
+        $str = '';
+        $str .= "<b>Адрес:</b>\n";
+        $str .= $params['address']."\n";
+        $str .= "<b>Время работы:</b>\n";
+        $str .= $params['hours']."\n";
+        $str .= "<b>Телефон:</b>\n";
+        $str .= $params['phone']."\n";
+        return str_replace("\n", "<br>", $str);
     }
 
     public function allowedCurrency()
@@ -54,6 +68,7 @@ class pickup2Shipping extends waShipping
         $view = wa()->getView();
         $html = '';
         $view->assign('point_template', self::getPointHTML());
+        $view->assign('point_fields', self::getFields());
         $html .= $view->fetch($this->path.'/templates/settings.html');
         $html .= parent::getSettingsHTML($params);
         return $html;
@@ -61,10 +76,29 @@ class pickup2Shipping extends waShipping
 
     public static function getPointHTML(){
         return "<tr class='point'>".
-            "<td><input type='text' name='shipping[settings][regions][%code%][points][%id%][address]' value='%address%'></td>".
-            "<td><textarea name='shipping[settings][regions][%code%][points][%id%][comment]'>%comment%</textarea></td>".
+            "<td><input type='text' name='shipping[settings][regions][%code%][points][%id%][name]' value='%name%'></td>".
+            "<td><input type='text' name='shipping[settings][regions][%code%][points][%id%][city]' value='%city%'></td>".
+            "<td><textarea name='shipping[settings][regions][%code%][points][%id%][address]'>%address%</textarea></td>".
+            "<td><textarea name='shipping[settings][regions][%code%][points][%id%][hours]'>%hours%</textarea></td>".
+            "<td><textarea name='shipping[settings][regions][%code%][points][%id%][phone]'>%phone%</textarea></td>".
             "<td><a href='#' class='delete_point'><i class='icon16 delete'></a></td>".
             "</tr>";
+    }
+
+    public static function getFields($for_replace = false){
+        $fields = array(
+            'name',
+            'address',
+            'hours',
+            'phone',
+            'city',
+        );
+        if($for_replace){
+            foreach($fields as &$field){
+                $field = '%'.$field.'%';
+            }
+        }
+        return $fields;
     }
 
     public static function settingRegionControl($name, $params = array()){
@@ -76,7 +110,7 @@ class pickup2Shipping extends waShipping
             $point_html = self::getPointHTML();
 
             $control .= "<table class=\"zebra\"><thead>";
-            $string = '<tr><td>%s</td><td class="inp_price">%s</td><td class="inp_time">%s</td></tr>';
+            $string = '<tr><td>%s</td><td class="inp_price">%s</td><td class="inp_time">%s</td></tr><tr><td colspan="3">%s</td></tr>';
             $c_params = array();
             $control .= "<tr class=\"gridsheader\">";
             $control .= "<th>Регион</th>";
@@ -93,20 +127,29 @@ class pickup2Shipping extends waShipping
                 $points_block = '';
                 if(isset($values[$region['code']]['points'])){
                     foreach($values[$region['code']]['points'] as $key=>$params){
-                        $html = str_replace(
-                            array('%address%', '%code%', '%comment%', '%id%'),
-                            array($params['address'], $region['code'], $params['comment'], $key),
-                            $point_html);
+                        $replace = array();
+                        foreach(self::getFields() as $field){
+                            if(isset($params[$field])){
+                                $replace[] = $params[$field];
+                            }
+                            else{
+                                $replace[] = '';
+                            }
+                        }
+                        $html = str_replace(self::getFields(true),$replace,$point_html);
+                        $html = str_replace('%id%',$key,$html);
+                        $html = str_replace('%code%',$region['code'],$html);
                         $points_block .= $html;
                         $count = $key;
                     }
                 }
-                $title .= "<div class='points_block' data-code='{$region['code']}' data-points='{$count}'>";
-                $title .= "<a href='#' class='add_point'><i class='icon16 add'></i> добавить пункт самовывоза</a>";
-                $title .= "<table class='points zebra'>";
-                $title .= "<tr><th>Название</th><th>Комментарий</th><th> </th></tr>";
-                $title .= $points_block;
-                $title .= "</table></div>";
+                $points = '';
+                $points .= "<div class='points_block' data-code='{$region['code']}' data-points='{$count}'>";
+                $points .= "<a href='#' class='add_point'><i class='icon16 add'></i> добавить пункт самовывоза</a>";
+                $points .= "<table class='points zebra'>";
+                $points .= "<tr><th>Название</th><th>Город</th><th>Адрес</th><th>Часы работы</th><th>Телефон</th><th> </th></tr>";
+                $points .= $points_block;
+                $points .= "</table></div>";
                 $c_params['namespace'] = $name."[{$region['code']}]";
 
                 $c_params['value'] = '';
@@ -120,7 +163,7 @@ class pickup2Shipping extends waShipping
                     $c_params['value'] = $values[$region['code']]['time'];
                 }
                 $time = waHtmlControl::getControl(waHtmlControl::INPUT, 'time', $c_params);
-                $control .= sprintf($string, $title, $price, $time);
+                $control .= sprintf($string, $title, $price, $time, $points);
             }
             $control .= "</tbody>";
             $control .= "</table>";
