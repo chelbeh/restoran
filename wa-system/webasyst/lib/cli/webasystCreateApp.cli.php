@@ -7,7 +7,21 @@ class webasystCreateAppCli extends waCliController
         $app_id = waRequest::param(0);
         $params = waRequest::param();
         if (empty($app_id) || isset($params['help'])) {
-            print("Usage: php wa.php APP_ID[ -name APP_NAME][ -version APP_VERSION][ -vendor VENDOR_ID][ -frontend[ -themes]][ -plugins][ -cli][ -api[ API_VERSION]]\n");
+            $help = <<<HELP
+Usage: php wa.php createApp [app_id] [parameters] 
+    app_id - App id (string in lower case)
+Optional parameters:
+    -name (App name; if comprised of several words, enclose in quotes; e.g., 'My app')
+    -version (App version; e.g., 1.0.0)
+    -vendor (Numerical vendor id)
+    -frontend (Has frontend)
+    -themes (Supports design themes)
+    -plugins (Supports plugins)
+    -cli (Has CLI handlers)
+    -api (Has API)
+Example: php wa.php createApp myapp -name 'My app' -version 1.0.0 -vendor 123456 -frontend -themes -plugins -cli -api
+HELP;
+            print $help."\n";
         } else {
             $errors = array();
             if (!empty($params['version']) && !preg_match('@^[\d]+(\.\d+)*$@', $params['version'])) {
@@ -25,6 +39,7 @@ class webasystCreateAppCli extends waCliController
 
     protected function create($app_id, $path, $params = array())
     {
+        $report = '';
         if (!file_exists($path)) {
             $path .= '/';
             mkdir($path);
@@ -45,6 +60,8 @@ class webasystCreateAppCli extends waCliController
                 mkdir($path.'lib/api');
                 if ($params['api'] !== true) {
                     mkdir($path.'lib/api/'.$params['api']);
+                } else {
+                    mkdir($path.'lib/api/v1');
                 }
             }
 
@@ -111,12 +128,35 @@ class webasystCreateAppCli extends waCliController
                 touch($path.'themes/default/default.css');
                 $theme->version = $version;
                 $theme->save();
-
+                waFiles::move($theme->path.'/theme.xml', $path.'themes/default/theme.xml');
             }
-            print("App with id {$app_id} created");
+
+            $report .= <<<REPORT
+App with id "{$app_id}" created!
+
+Useful commands:
+    #generate app's database description file db.php
+    php wa.php generateDb $app_id
+
+    #generate app's locale files
+    php wa-system/locale/locale.php $app_id
+REPORT;
+
+            if (isset($params['plugins'])) {
+                $report .= "\n\n".<<<REPORT
+    #create a plugin with specified 'plugin_id' for your app
+    php wa.php createPlugin $app_id plugin_id
+REPORT;
+            }
+
+            //TODO add hint about compress command
+
         } else {
-            print("App with id {$app_id} already exists");
+            $report .= <<<REPORT
+App with id "$app_id" already exists.
+REPORT;
         }
+        print $report."\n";
     }
 
 }

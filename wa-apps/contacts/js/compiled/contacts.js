@@ -1,135 +1,4713 @@
-(function(b){b.wa.controller={free:!0,init:function(a){this.frontend_url=a&&a.url||"/";this.backend_url=a&&a.backend_url||"/webasyst/";b.storage=new b.store;b.ajaxSetup({cache:!1});this.lastView={title:null,hash:null};this.options=a;this.random=null;b.wa.dropdownsCloseEnable();"undefined"!=typeof b.History&&b.History.bind(function(a){b.wa.controller.dispatch(a)});b.wa.errorHandler=function(a){return 404==a.status?(b.wa.setHash("/contacts/all/"),!1):!0};b("#contacts-container .contacts-data input.selector").live("click",
-function(){b(this).is(":radio")&&b(this).parents(".contact-row").siblings().removeClass("selected");b(this).is(":checked")?b(this).parents(".contact-row").addClass("selected"):b(this).parents(".contact-row").removeClass("selected");b.wa.controller.updateSelectedCount()});b(".collapse-handler",b("#wa-app")).die("click").live("click",function(){b.wa.controller.collapseSidebarSection(this,"toggle")});this.restoreCollapsibleStatusInSidebar();b("ul.collapsible i.darr").click(function(){b(this).hasClass("darr")?
-(b(this).parent("li").children("ul").hide(),b(this).removeClass("darr").addClass("rarr")):(b(this).parent("li").children("ul").show(),b(this).removeClass("rarr").addClass("darr"))});var c=null,d=function(a){if(a.hasClass("animated"))return!1;a.addClass("animated");a.hoverIntent({over:function(){c=setTimeout(function(){c=null},500);a.removeClass("disabled")},timeout:0.3,out:function(){a.addClass("disabled");c&&(clearTimeout(c),c=null)}});return!0};b("#c-list-toolbar-menu",b("#c-core")[0]).live("mouseover",
-function(){var a=b(this);d(a)&&a.mouseover()});b("#c-list-toolbar-menu",b("#c-core")[0]).live("click",function(a){var g=b(this);if((!c||g.hasClass("disabled"))&&!(0<b(a.target).parents("ul#c-list-toolbar-menu ul").size()))g.toggleClass("disabled"),!d(g)&&c&&(clearTimeout(c),c=null)});b(document).ajaxError(function(){b.storage.del("contacts/last-hash")});this.initFull&&this.initFull(a)},stopDispatch:function(a){this.stopDispatchIndex=a},previousHash:null,redispatch:function(){this.previousHash=null;
-this.dispatch()},dispatch:function(a){if(0<this.stopDispatchIndex)return this.stopDispatchIndex--,!1;a=void 0===a?this.getHash():this.cleanHash(a);if(this.previousHash!=a){var c=this.previousHash;this.previousHash=a;var d=new b.Event("wa_before_dispatched");b(window).trigger(d);if(d.isDefaultPrevented())return this.previousHash=c,window.location.hash=c,!1;if(a=a.replace(/^[^#]*#\/*/,"")){c=!0;a=a.split("/");if(a[0]){for(var d="",e=a.length,g=0;g<a.length;g++){var h=a[g];if(2>g)if(0===g)d=h;else if(parseInt(h,
-10)!=h)d+=h.substr(0,1).toUpperCase()+h.substr(1);else{e=g;break}else{e=g;break}}e=a.slice(e);this[d+"Action"]?(this.currentAction=d,this.currentActionAttr=e,this[d+"Action"](e)):(c=!1,console&&console.log("Invalid action name:",d+"Action"))}else this.defaultAction();a.join&&(a=a.join("/"));c&&b.storage.set("contacts/last-hash",a)}else this.defaultAction(),b.storage.del("contacts/last-hash");this.highlightSidebar();b(document).trigger("hashchange",[a]);b(window).trigger("wa-dispatched")}},lastPage:function(){var a=
-b.storage.get("contacts/last-hash");a?b.wa.setHash("#/"+a):this.defaultAction()},defaultAction:function(){this.contactsAllAction()},groupsRightsAction:function(a){!a||!a[0]?console&&console.log("Group id not specified for groupsRightsAction."):this.loadHTML("?module=groups&action=rights&id="+a[0],null,function(){this.setBlock()})},groupsCreateAction:function(){this.groupsEditAction()},groupsEditAction:function(a){this.loadHTML("?module=groups&action=editor"+(a&&a[0]?"&id="+a[0]:""),null,function(){this.setBlock()})},
-categoriesCreateAction:function(){this.categoriesEditAction()},categoriesEditAction:function(a){this.loadHTML("?module=categories&action=editor"+(a&&a[0]?"&id="+a[0]:""),null,function(){this.setBlock()})},categoriesDeleteAction:function(a){var c=!0;if(!a||!a[0])a=[this.current_category_id],c=!1;b.wa.dialogCreate("delete-dialog",{content:b("<h2>"+$_("Delete this category?")+"</h2><p>"+$_("No contacts will be deleted.")+"</p>"),buttons:b("<div></div>").append(b('<input type="submit" class="button red" value="'+
-$_("Delete category")+'">').click(function(){0>=b(this).find(".loading").size()&&b('<i style="margin: 8px 0 0 10px" class="icon16 loading"></i>').insertAfter(this);b.post("?module=categories&action=delete",{id:a[0]},function(){b.wa.controller.reloadSidebar();b.wa.dialogHide();b.wa.setHash("#/users/all/")})})).append(" "+$_("or")+" ").append(b('<a href="javascript:void(0)">'+$_("cancel")+"</a>").click(function(){b.wa.dialogHide();c&&(b.wa.controller.stopDispatch(1),b.wa.back())})),small:!0});return!1},
-contactsGroupAction:function(a){if(a&&a[0]){this.showLoading();var c=this.parseParams(a.slice(1),"contacts/group/"+a[0]);c.fields=["name","email","company","_access"];c.query="group/"+a[0];this.loadGrid(c,"/contacts/group/"+a[0]+"/",!1,{afterLoad:function(c){b('#list-group li[rel="group'+a[0]+'"]').children("span.count").html(c.count)},beforeLoad:function(){this.current_group_id=a[0];this.setBlock("contacts-list",null,["group-actions"])}})}},groupsDeleteAction:function(a){var c=!0;if(!a||!a[0])a=
-[this.current_group_id],c=!1;b.wa.dialogCreate("delete-dialog",{content:b("<h2>"+$_("Delete this group?")+"</h2><p>"+$_("No contacts will be deleted.")+"</p>"),buttons:b("<div></div>").append(b('<input type="submit" class="button red" value="'+$_("Delete group")+'">').click(function(){b('<i style="margin: 8px 0 0 10px" class="icon16 loading"></i>').insertAfter(this);b.post("?module=groups&action=delete",{id:a[0]},function(){b('#wa-app .sidebar a[href="#/contacts/group/'+a[0]+'/"]').parent().remove();
-0>=b("#list-group").children().size()&&b.wa.controller.reloadSidebar();b.wa.dialogHide();b.wa.setHash("#/users/all/")})})).append(" "+$_("or")+" ").append(b('<a href="javascript:void(0)">'+$_("cancel")+"</a>").click(function(){b.wa.dialogHide();c&&(b.wa.controller.stopDispatch(1),b.wa.back())})),small:!0});return!1},contactsAddAction:function(a){this.loadHTML("?module=contacts&action=add"+(a&&a[0]?"&company=1":""),null,function(){this.setBlock("contacts-info")})},contactAction:function(a){var b={};
-a[1]&&(b={tab:a[1]});this.showLoading();this.load("#c-core","?module=contacts&action=info&id="+a[0],b,function(){this.setBlock("contacts-info")})},contactPhotoAction:function(a){this.showLoading();this.loadHTML("?module=photo&action=editor&id="+a[0]+(a[1]?"&uploaded=1":""),{},function(){this.setBlock("contacts-info")})},contactsAllAction:function(a){this.showLoading();this.loadGrid(this.parseParams(a,"contacts/all"),"/contacts/all/",!1,{beforeLoad:function(){this.setBlock("contacts-list")},afterLoad:function(a){b("#sb-all-contacts-li span.count").html(a.count)}})},
-contactsSearchAction:function(a,c){if(!a||!a[0]||"form"==a[0]){if(!this.contactsSearchForm){console&&(console.log("No advanced search in free contacts."),setTimeout(function(){b.wa.setHash("#/")},1));return}return this.contactsSearchForm(a&&"form"===a[0]?a.slice(1):[])}this.showLoading();"results"==a[0]&&(c||(c={search:!0}),a=a.slice(1));var d=a[0];"?"==d.substr(0,1)&&(d=d.substr(1));var e=this.parseParams(a.slice(1),"contacts/search/"+d);e.query=d;c&&c.search&&(e.search=1);d=this.cleanHash("#/contacts/search/"+
-d);this.loadGrid(e,d.substr(1),null,{beforeLoad:function(){this.setBlock("contacts-list",false,["search-actions"]);this.setTitle();if(c&&c.search){b("#list-main .item-search").show();b("#list-main .item-search a").attr("href","#/contacts/search/results/"+a[0]+"/");e.search=1}}})},contactsCategoryAction:function(a){if(a&&a[0]){this.showLoading();var c=this.parseParams(a.slice(1),"contacts/category/"+a[0]);c.query="/category/"+a[0];this.loadGrid(c,"/contacts/category/"+a[0]+"/",!1,{beforeLoad:function(b){this.current_category_id=
-a[0];this.setBlock("contacts-list",null,b&&b.system_category?[]:["category-actions"])},afterLoad:function(c){b('#list-category li[rel="category'+a[0]+'"]').children("span.count").html(c.count)}})}},usersAllAction:function(a){this.showLoading();a=this.parseParams(a,"users/all");a.query="/users/all/";a.fields=["name","email","company","_access"];this.loadGrid(a,"/users/all/",!1,{beforeLoad:function(){this.setBlock("contacts-list")},afterLoad:function(a){b("#sb-all-users-li span.count").html(a.count)}})},
-contactsMerge:function(){var a=b.wa.grid.getSelected();if(2>a.length)return!1;this.loadHTML("?module=contacts&action=mergeSelectMaster",{ids:a})},simpleSearch:function(){var a=b.trim(b("#search-text").val());if(a){var c="",a=a.replace(/\\/g,"\\\\").replace(/%/g,"\\%").replace(/_/g,"\\_").replace(/&/g,"\\&").replace(/\+/g,"%2B").replace(/\//g,"%2F"),c=-1!=a.indexOf("@")?"email*="+a:"name*="+a;b.wa.controller.stopDispatch(1);b.wa.setHash("#/contacts/search/"+c+"/");b.wa.controller.contactsSearchAction([c],
-{search:!0})}},addToCategory:function(a,c){c=c||b.wa.grid.getSelected();b.wa.controller.showMessage("",!0);c.length&&a&&b.post("?module=categories&type=add",{contacts:c,categories:a},function(a){if(a.data&&a.data.count)for(var c in a.data.count)b('#list-category li[rel="category'+c+'"] span.count').html(a.data.count[c]);b.wa.controller.showMessage(a.data.message,!0)},"json")},dialogAddSelectedToCategory:function(){0>=b.wa.grid.getSelected().length||0>=b("#list-category li:not(.empty):not(.selected):not(.hint)").size()?
-b.wa.controller.showMessage('<span class="errormsg">'+$_("No categories available")+"</span>",!0):b('<div id="add-to-category-dialog"></div>').waDialog({url:"?module=categories&action=addSelected"+(this.current_category_id?"&disabled="+this.current_category_id:"")})},dialogRemoveSelectedFromCategory:function(a){a=a||b.wa.grid.getSelected();!(0>=a.length)&&b.wa.controller.current_category_id&&b('<div id="confirm-remove-from-category-dialog" class="small"></div>').waDialog({content:b("<h2></h2>").text($_('Exclude contacts from category "%s"?').replace("%s",
-b("h1.wa-page-heading").text())),buttons:b("<div></div>").append(b('<input type="submit" class="button red" value="'+$_("Exclude")+'">').click(function(){b('<i style="margin: 8px 0 0 10px" class="icon16 loading"></i>').insertAfter(this);b.post("?module=categories&type=del",{categories:[b.wa.controller.current_category_id],contacts:a},function(a){b.wa.dialogHide();b.wa.controller.afterInitHTML=function(){b.wa.controller.showMessage(a.data.message)};b.wa.controller.redispatch()},"json")})).append(" "+
-$_("or")+" ").append(b('<a href="javascript:void(0)">'+$_("cancel")+"</a>").click(b.wa.dialogHide))})},excludeFromGroup:function(){b.post("?module=contacts&action=groups&type=del",{group_id:b.wa.grid.settings.group,"id[]":b.wa.grid.getSelected()},function(a){"ok"==a.status&&(b.wa.controller.afterInitHTML=function(){b.wa.controller.showMessage(a.data.message)},b.wa.controller.redispatch())},"json")},contactsDelete:function(a){a=a||b.wa.grid.getSelected();0>=a.length||b.wa.dialogCreate("delete-dialog",
-{content:"<h2>"+$_("Checking links to other applications...")+' <i class="icon16 loading"></i></h2>',url:"?module=contacts&action=links",small:!0,post:{"id[]":a}})},listTabs:[],addListTab:function(a){this.listTabs.push(a)},setBlock:function(a,c,d){a||(a="default");void 0===c&&(c=$_("Loading..."));var e=this.block;this.block=a;b("#c-core .c-core-header").remove();var g=b("#c-core .c-core-content");0>=g.size()&&(g=b("#c-core").empty().append(b('<div class="contacts-background"><div class="block not-padded c-core-content"></div></div>')).find(".c-core-content"));
-g.html('<div class="block"><h1 class="wa-page-heading">'+c+' <i class="icon16 loading"></i></h1></div>');b.scrollTo(0);d&&0<=d.indexOf("group-actions")&&this.current_group_id?g.find("div.block").prepend('<ul class="menu-h c-actions"><li><a href="#/groups/edit/'+this.current_group_id+'/"><i class="icon16 edit"></i>'+$_("Edit group")+'</a></li><li><a href="#/groups/rights/'+this.current_group_id+'/"><i class="icon16 lock-unlocked"></i>'+$_("Customize access")+'</a></li><li><a href="#/groups/delete/'+
-this.current_group_id+'/" onclick="return $.wa.controller.groupsDeleteAction();"><i class="icon16 delete"></i>'+$_("Delete")+"</a></li></ul>"):d&&0<=d.indexOf("category-actions")&&this.current_category_id&&this.global_admin?g.find("div.block").prepend('<ul class="menu-h c-actions"><li><a href="#/categories/edit/'+this.current_category_id+'/"><i class="icon16 edit"></i>'+$_("Edit category")+'</a></li><li><a href="#/categories/delete/'+this.current_category_id+'/" onclick="return $.wa.controller.categoriesDeleteAction();"><i class="icon16 delete"></i>'+
-$_("Delete")+"</a></li></ul>"):d&&0<=d.indexOf("search-actions")&&!this.free?g.find("div.block").prepend('<ul class="menu-h c-actions"><li><a href="#" onclick="return $.wa.controller.saveSearchAsFilter()"><i class="icon16 save-as-filter"></i>'+$_("Save as a filter")+"</a></li></ul>"):d&&0<=d.indexOf("list-actions")&&this.current_view_id?g.find("div.block").prepend('<ul class="menu-h c-actions"><li><a href="#/lists/edit/'+this.current_view_id+'/"><i class="icon16 edit"></i>'+$_("Edit list")+'</a></li><li><a href="#" onclick="return $.wa.controller.deleteList('+
-this.current_view_id+')"><i class="icon16 delete"></i>'+$_("Delete")+"</a></li></ul>"):d&&(0<=d.indexOf("view-actions")&&this.current_view_id)&&g.find("div.block").prepend('<ul class="menu-h c-actions"><li><a href="#/filters/edit/'+this.current_view_id+'/"><i class="icon16 edit"></i>'+$_("Edit filter")+'</a></li><li><a href="#" onclick="return $.wa.controller.deleteList('+this.current_view_id+', true)"><i class="icon16 delete"></i>'+$_("Delete")+"</a></li></ul>");switch(a){case "contacts-duplicates":case "contacts-list":if(0<
-this.listTabs.length){var e=b('<ul class="tabs" id="c-list-tabs"></ul>'),h=(b("#wa-app .sidebar .selected a").attr("href")||"").replace(/^[^#]*#/g,"");"/"!==h[0]&&(h="/"+h);for(var i=0;i<this.listTabs.length;i++)"function"==typeof this.listTabs[i]&&this.listTabs[i].call(b.wa.controller,e,h);0<e.children().size()&&(e.prepend(b('<li class="selected"></li>').append(b('<a href="#'+h+'">'+$_("Contacts")+"</a>").click(function(){b("#c-list-tabs .selected").removeClass("selected");b(this).parent().addClass("selected");
-b.wa.controller.showLoading();return!0}))),g.append(e))}g.append('<div id="contacts-container" class="tab-content"></div>');g.next().hasClass("clear-left")||b('<div class="clear-left"></div>').insertAfter(g);this.showMenus(d?d:[]);g.find("#contacts-container").append('<div class="block not-padded contacts-data"></div>');break;case "contacts-info":case "default":break;default:throw this.block=e,Error("Unknown block: "+a);}this.afterInitHTML&&(this.afterInitHTML(),this.afterInitHTML="");b(window).trigger("wa_after_init_html",
-[a,c,d])},showMenus:function(a){var a='<li><a href="javascript:void(0)" class="inline-link"><b><i><strong>'+$_("Actions with selected")+'</strong></i></b><i class="icon10 darr"></i></a><ul class="menu-v" id="actions-with-selected"><li class="line-after"><span id="selected-count">0</span> <span id="selected-count-word-form">'+$_(0,"contacts selected")+'</span></li><li id="add-to-category-link"><a href="#" onclick="$.wa.controller.dialogAddSelectedToCategory(); return false"><i class="icon16 contact"></i>'+
-$_("Add to category")+"</a></li>"+(0<=a.indexOf("category-actions")&&this.current_category_id?'<li><a href="#" onclick="$.wa.controller.dialogRemoveSelectedFromCategory(); return false"><i class="icon16 contact"></i>'+$_("Exclude from this category")+"</a></li>":"")+(0<=a.indexOf("list-actions")&&this.current_view_id?'<li><a href="#" onclick="$.wa.controller.dialogRemoveSelectedFromList(); return false"><i class="icon16 from-list"></i>'+$_("Exclude from this list")+"</a></li>":"")+(b.wa.controller.addToListDialog?
-'<li><a href="#" onclick="$.wa.controller.addToListDialog(); return false"><i class="icon16 add-to-list"></i>'+$_("Add to list")+"</a></li>":"")+(b.wa.controller.contactsMerge&&b.wa.controller.admin?'<li class="two-or-more"><a href="#" onClick="$.wa.controller.contactsMerge(); return false"><i class="icon16 merge"></i>'+$_("Merge contacts")+"</a></li>":"")+(b.wa.controller.exportDialog?'<li><a href="#" onclick="$.wa.controller.exportDialog(); return false"><i class="icon16 export"></i>'+$_("Export")+
-"</a></li>":"")+'<li><a href="#" onclick="$.wa.controller.contactsDelete(); return false" class="red" id="show-dialog-delete"><i class="icon16 delete"></i>'+$_("Delete")+"</a></li></ul></li>",a='<ul id="list-views" class="menu-h float-right"><li rel="table"><a href="#" onclick="return $.wa.grid.setView(\'table\');"><i class="icon16 only view-table"></i></a></li><li rel="list"><a href="#" onclick="return $.wa.grid.setView(\'list\');"><i class="icon16 only view-thumb-list"></i></a></li><li rel="thumbs"><a href="#" onclick="return $.wa.grid.setView(\'thumbs\');"><i class="icon16 only view-thumbs"></i></a></li></ul><ul id="c-list-toolbar-menu" class="menu-h dropdown disabled">'+
-a+"</ul>",c=b("#contacts-container").find(".c-list-toolbar");0>=c.size()&&(c=b('<div class="block c-list-toolbar"></div>').prependTo(b("#contacts-container")));c.html(a);b.wa.controller.updateSelectedCount()},showLoading:function(){var a=b("h1");0>=a.size()||(a=b(a[0]),0<a.find(".loading").size()||a.append('<i class="icon16 loading"></i>'))},hideLoading:function(){b("h1 .loading").remove()},updateSelectedCount:function(){var a=b("input.selector:checked").size();b("#selected-count").text(a);b("#selected-count-word-form").text($_(a,
-"contacts selected"));0>=a?b("#actions-with-selected li").addClass("disabled"):(b("#actions-with-selected li").removeClass("disabled"),0>=b("#list-category li:not(.empty):not(.selected)").size()&&b("#add-to-category-link").addClass("disabled"),2>a&&b("#actions-with-selected li.two-or-more").addClass("disabled"))},getUrl:function(){return this.options.url},loadHTML:function(a,b,d,e){this.showLoading();this.load(e||"#c-core .c-core-content",a,b,d)},load:function(a,c,d,e){var g=Math.random();this.random=
-g;b.get(c,d,function(h){b.wa.controller.random==g&&(e&&e.call(b.wa.controller),b(window).trigger("wa_before_load",[a,c,d,h]),b(a).html(h),b(window).trigger("wa_after_load",[a,c,d,h]))})},parseParams:function(a,c){var d={};a&&a[0]&&(d.offset=a[0]);a&&a[1]&&(d.sort=a[1]);a&&a[2]&&(d.order=a[2]);a&&a[3]?(d.view=a[3],c&&b.storage.set("contacts/view/"+c,d.view)):d.view=b.storage.get("contacts/view/"+c)||"table";a&&a[4]?(d.limit=a[4],c&&b.storage.set("contacts/limit/"+c,d.limit)):d.limit=b.storage.get("contacts/limit/"+
-c);return d},setBrowserTitle:function(a){document.title=a+" \u2014 "+this.accountName},setTitle:function(a,c){var d=b("#c-core h1.wa-page-heading");"undefined"!=typeof a&&(this.lastView={title:a,hash:window.location.hash.toString()},d.text(a),this.setBrowserTitle(a),c&&c.click&&d.click(c.click));return d},loadGrid:function(a,c,d,e){this.current_category_id=this.current_group_id=this.current_view_id=null;d||(d="?module=contacts&action=list");e||(e={});b.wa.grid.load(d,a,"#contacts-container .contacts-data",
-c,e)},showMessage:function(a,c){var d=b("#c-core .wa-message");c&&(d.remove(),d=b());if(a){var e=b('<div class="wa-message wa-success"><a onclick="$(this).parent().empty().hide();"><i class="icon16 close"></i></a></div>').prepend(b('<span class="wa-message-text"></span>').append(a));d.size()?b(d[0]).empty().append(e):b("#c-core h1:first").size()?e.insertAfter(b("#c-core h1:first")):b("#c-core").prepend(e)}},setHash:function(a){return b.wa.setHash(this.cleanHash(a))},getHash:function(){return this.cleanHash()},
-cleanHash:function(a){"undefined"==typeof a&&(a=window.location.hash.toString());for(a.length||(a=""+a);0<a.length&&"/"===a[a.length-1];)a=a.substr(0,a.length-1);a+="/";"#"!=a[0]?("/"!=a[0]&&(a="/"+a),a="#"+a):a[1]&&"/"!=a[1]&&(a="#/"+a.substr(1));return"#/"==a?"":a},switchToTab:function(a,c,d,e){"string"==typeof a&&("t-"==a.substr(0,2)?a="#"+a:"#"!=a[0]&&(a="#t-"+a));a=b(a);if(!(0>=a.size()||a.hasClass("selected"))){if(!e){var g=a.attr("id");if(!g||"t-"!=g.substr(0,2))return;e=b("#tc-"+g.substr(2))}d&&
-(g=a.parent().children(".selected"),0<g.size()&&g.each(function(a,b){d.call(b)}));var h=function(){a.parent().find("li.selected").removeClass("selected");a.removeClass("hidden").css("display","").addClass("selected");e.siblings(".tab-content").addClass("hidden");e.removeClass("hidden");c&&c.call(a[0])};b.effects&&b.effects.slideDIB&&!a.is(":visible")?(b.wa.controller.loadTabSlidingAnimation(),a.hide().removeClass("hidden").show("slideDIB",{direction:"down"},300,function(){h()})):h()}},initCheckboxList:function(a){var a=
-b(a),c=function(a,c){var g=b(c||this);g.is(":checked")?g.parent().addClass("highlighted"):g.parent().removeClass("highlighted")};a.find('input[type="checkbox"]').click(c).each(c);return a},collapseSidebarSection:function(a,c){c||(c="coollapse");a=b(a);if(!(0>=a.size())){var d=a.find(".darr, .rarr");0>=d.size()&&(d=b('<i class="icon16 darr">'),a.prepend(d));var e,g=a.attr("id"),h=d.hasClass("darr")?"shown":"hidden",i=function(){a.parent().find("ul.collapsible").hide();d.removeClass("darr").addClass("rarr");
-e="hidden"},j=function(){a.parent().find("ul.collapsible").show();d.removeClass("rarr").addClass("darr");e="shown"};switch(c){case "toggle":"shown"==h?i():j();break;case "restore":g&&("hidden"==b.storage.get("contacts/collapsible/"+g)?i():j());break;case "uncollapse":j();break;default:i()}g&&e&&b.storage.set("contacts/collapsible/"+g,e)}},restoreCollapsibleStatusInSidebar:function(){b("#wa-app .collapse-handler").each(function(a,c){b.wa.controller.collapseSidebarSection(c,"restore")})},reloadSidebar:function(){b.post("?module=backend&action=sidebar",
-null,function(a){var c=b("#wa-app .sidebar");c.css("height",c.height()+"px").html(a).css("height","");b.wa.controller.highlightSidebar();b.wa.controller.restoreCollapsibleStatusInSidebar();b.wa.controller.initSidebarDragAndDrop&&b.wa.controller.initSidebarDragAndDrop()})},highlightSidebar:function(){var a=this.cleanHash(location.hash),c=!1,d=!1;b("#wa-app .sidebar li a").each(function(e,h){var h=b(h),i=b.wa.controller.cleanHash(h.attr("href"));if(i==a)return d=h,!1;!c&&(2<i.length&&a.substr(0,i.length)===
-i)&&(c=h)});!d&&c&&(d=c);if(d&&(b("#wa-app .sidebar .selected").removeClass("selected"),0>=d.parents("ul.dropdown").size())){for(var e=d.parent();0<e.size()&&"li"!=e[0].tagName.toLowerCase();)e=e.parent();0<e.size()&&e.addClass("selected")}},loadTabSlidingAnimation:function(){b.effects&&!b.effects.slideDIB&&(b.effects.slideDIB=function(a){return this.queue(function(){var c=b(this),d="position top left width height margin".split(" "),e=b.effects.setMode(c,a.options.mode||"show"),g=a.options.direction||
-"left";b.effects.save(c,d);c.show();b.effects.createWrapper(c).css({overflow:"hidden",display:"inline-block",width:"auto"});var h="up"==g||"down"==g?"top":"left",g="up"==g||"left"==g?"pos":"neg",i=a.options.distance||("top"==h?c.outerHeight({margin:!0}):c.outerWidth({margin:!0}));"show"==e&&c.css(h,"pos"==g?-i:i);var j={};j[h]=("show"==e?"pos"==g?"+=":"-=":"pos"==g?"-=":"+=")+i;c.animate(j,{queue:!1,duration:a.duration,easing:a.options.easing,complete:function(){"hide"==e&&c.hide();b.effects.restore(c,
-d);b.effects.removeWrapper(c);a.callback&&a.callback.apply(this,arguments);c.dequeue()}})})})}}})(jQuery);(function(b){b.wa.grid={init:function(a){a&&(this.config=a);this.defaultSettings={limit:30,offset:0,sort:"name",order:1,view:"table"};this.settings=b.extend({},this.defaultSettings);this.fields=[{id:"photo",title:$_("Photo"),filter:function(a){var c;c=!a.photo||a.photo=="0"?b.wa.controller.options.url+"wa-content/img/userpic96.jpg":""+parseInt(a.photo)==a.photo?b.wa.controller.options.url+"wa-data/public/contacts/photo/"+a.id+"/"+a.photo+".96x96.jpg":a.photo;return'<div class="image"><a href="#/contact/'+
-a.id+'"><img src="'+c+'" /></a></div>'}},{id:"f",title:"Field",filter:function(a,b){var c=b.hash.replace(/duplicates/,"search");return'<a href="#'+c.substr(0,c.length-1)+"="+encodeURIComponent(a.f)+'/0/~data/0/list/">'+a.f+"</a>"},sorted:!0},{id:"n",title:"Number",sorted:!0}];for(var c in this.config.fields)f={id:c,title:this.config.fields[c].name},"email"==c?(f.filter=function(a,c){return c&&c.value?'<a href="mailto:'+encodeURIComponent(c.value.value||c.value)+'">'+b.wa.encodeHTML(c.value.value||
-c.value)+"</a>":""},f.attrs='class="alist"'):"company"==c?(f.filter=function(a){return a.company&&!b.wa.controller.free?'<a href="#/contacts/search/company='+encodeURIComponent(a.company)+'/">'+b.wa.encodeHTML(a.company)+"</a>":b.wa.encodeHTML(a.company)},f.sorted=!0):"name"==c&&(f.attrs='class="wa-c-name"',f.filter=function(a){return'<a href="#/contact/'+a.id+'">'+b.wa.encodeHTML(a.name||"")+"</a>"},f.sorted=!0),this.fields.push(f);this.fields.push({id:"_access",title:$_("Access"),filter:function(a){return a._access==
-"admin"?"<strong>"+$_("Administrator")+"</strong>":a._access?a._access=="custom"?'<span style="white-space: nowrap">'+$_("Limited access")+"</span>":a._access:'<span style="color: red; white-space: nowrap">'+$_("No access")+"</span>"}});this.fields.push({id:"_online_status",title:"",filter:function(a){switch(a._online_status){case "online":return'<i class="icon10 online"></i>';default:return""}}});var d=this;b("#records-per-page").die(b.browser.msie?"click":"change");b("#records-per-page").live(b.browser.msie?
-"click":"change",function(){var a=b(this).val(),c=0;d.settings&&d.settings.offset&&(c=Math.floor(d.settings.offset/a)*a);b.wa.setHash(b.wa.grid.hash+b.wa.grid.getHash({limit:a,offset:c}))})},load:function(a,c,d,e,g){this.url=a;this.options=g;this.hash=e;this.settings=b.extend({},this.defaultSettings);var h=["id","name","email","company"],i;for(i in c)"fields"!=i?null!==c[i]&&(this.settings[i]=c[i]):h=c[i];this.settings.fields="string"!=typeof h&&h.join?h.join(","):h;var j=this,k=Math.random();b.wa.controller.random=
-k;b.post(a,this.settings,function(a){if(b.wa.controller.random!=k||"ok"!=a.status)return!1;if(a.data.count&&a.data.contacts&&!a.data.contacts.length)return a=Math.floor((a.data.count-1)/j.settings.limit)*j.settings.limit,a!=j.settings.offset&&b.wa.setHash(b.wa.grid.hash+b.wa.grid.getHash({offset:a})),!1;j.options&&j.options.beforeLoad&&j.options.beforeLoad.call(b.wa.controller,a.data);b("#contacts-container .tools-view li.selected").removeClass("selected");b("#contacts-container .tools-view li[rel="+
-j.settings.view+"]").addClass("selected");a.data.title&&b.wa.controller.setTitle(a.data.title);a.data.desc&&b.wa.controller.setDesc(a.data.desc);a.data.fields&&(h=a.data.fields);a.data.history&&b.wa.history.updateHistory(a.data.history);d=b(d);d.html(j.view(j.settings.view,a.data,h));if(!g.hide_head){var c=j.topLineHtml(j.settings.view);c&&d.before(b(c))}j.options&&j.options.afterLoad&&j.options.afterLoad(a.data)},"json")},getSelected:function(){var a=[];b("input.selector:checked").each(function(){a.push(this.value)});
-return a},setView:function(a){b.wa.setHash(this.hash+this.getHash({view:a}));return!1},selectItems:function(a){b(a).is(":checked")?b("#contacts-container").find("input.selector").attr("checked","checked").parents(".contact-row").addClass("selected"):b("#contacts-container").find("input.selector").removeAttr("checked").parents(".contact-row").removeClass("selected");b.wa.controller.updateSelectedCount()},viewtable:function(a,c){for(var d='<table class="zebra full-width bottom-bordered"><thead><tr><th class="wa-check-td min-width"><input onclick="$.wa.grid.selectItems(this)" type="checkbox" /></th><th class="min-width"></th>',
-e=0;e<this.fields.length;e++)if(-1!=c.indexOf(this.fields[e].id))if(this.fields[e].sorted){var g={sort:this.fields[e].id,order:1};this.settings.sort==g.sort&&(g.order=1-this.settings.order);d+='<th><a style="white-space:nowrap" href="#'+this.hash+this.getHash(g)+'">'+this.fields[e].title+(this.settings.sort==g.sort?g.order?' <i class="icon10 darr"></i>':' <i class="icon10 uarr"></i>':"")+"</a></th>"}else d+="<th>"+this.fields[e].title+"</th>";d+="</tr></thead>";for(e=0;e<a.contacts.length;e++){for(var g=
-a.contacts[e],d=d+('<tr class="contact-row"><td><input class="selector" type="checkbox" value="'+g.id+'" /></td><td></td>'),h=0;h<this.fields.length;h++)if(-1!=c.indexOf(this.fields[h].id)){var i=g[this.fields[h].id];if(void 0==i)i="";else if("object"==typeof i){for(var j=[],k=0;k<i.length;k++)"object"==typeof i[k]?j.push('<span title="'+i[k].ext+'">'+(this.fields[h].filter?this.fields[h].filter(g,{hash:this.hash,value:i[k].value}):i[k].value)+"</span>"):j.push(b.trim(this.fields[h].filter?this.fields[h].filter(g,
-{hash:this.hash,value:i[k]}):i[k]));i=j.join(", ")}else i=this.fields[h].filter?this.fields[h].filter(g,{hash:this.hash,value:i}):b.wa.encodeHTML(i);d+="<td "+(this.fields[h].attrs?this.fields[h].attrs:"")+">"+i+"</td>"}d+="</tr>"}return d=d+"</table>"+this.getPaging(a.count)},getFieldById:function(a){for(var b=0;b<this.fields.length;b++)if(this.fields[b].id==a)return this.fields[b];return{}},topLineHtml:function(a){if("list"!=a&&"thumbs"!=a)return"";var a='<div class="c-list-top-line"><input onclick="$.wa.grid.selectItems(this)" type="checkbox"><span>'+
-$_("Sort by")+":</span>",b={name:$_("Name"),company:$_("Company")},d;for(d in b){var e={sort:d,order:1};this.settings.sort==e.sort&&(e.order=1-this.settings.order);a+='<a href="#'+this.hash+this.getHash(e)+'">'+b[d]+(this.settings.sort==e.sort?e.order?'<i class="icon10 darr"></i>':'<i class="icon10 uarr"></i>':"")+"</a>"}return a},viewthumbs:function(a){b("#contacts-container .contacts-data").removeClass("not-padded").addClass("padded");for(var c='<ul class="thumbs li100px">',d=0;d<a.contacts.length;d++){var e=
-a.contacts[d],g=this.getFieldById("photo"),h=e.photo;g.filter&&(h=g.filter(e,{hash:this.hash,value:h}));var i="#/contact/"+e.id;name=e.name;g=this.getFieldById("name");g.filter&&(name=g.filter(e,{hash:this.hash,value:name}));c+='<li class="contact-row">'+h+'<div class="c-name-check"><input class="selector" value="'+e.id+'" type="checkbox"><a href="'+i+'">'+name+'</a></div><div class="status"></div></li>'}return c=c+"</ul>"+this.getPaging(a.count)},viewlist:function(a){b("#contacts-container .contacts-data").removeClass("padded").addClass("not-padded");
-for(var c='<ul class="zebra">',d=0;d<a.contacts.length;d++){var e=this.getFieldById("photo");contact=a.contacts[d];var g=contact.photo;e.filter&&(g=e.filter(contact,{hash:this.hash,value:g}));name=contact.name;e=this.getFieldById("name");e.filter&&(name=e.filter(contact,{hash:this.hash,value:name}));var c=c+('<li class="contact-row"><div class="profile image96px">'+g+'<div class="details"><input class="selector" name="c_list_selector" value="'+contact.id+'" type="'+("radio"==this.options.selector?
-"radio":"checkbox")+'"><p class="contact-name"><a href="'+("#/contact/"+contact.id)+'">'+name+"</a></p>"),g={title:!0,name:!0,photo:!0,firstname:!0,middlename:!0,lastname:!0,locale:!0,timezone:!0},h;for(h in this.config.fields)if(!g[h]&&contact[h]&&!("0000-00-00"==contact[h]||"undefined"!=typeof contact[h].length&&!contact[h].length))if(e=this.config.fields[h],e.fields)if("object"==typeof contact[h])for(var i=0;i<contact[h].length;i++)c+='<p><span class="c-details-label">'+e.name,b.trim(contact[h][i].ext)&&
-(c=e.ext&&e.ext[contact[h][i].ext]?c+(" <span>("+e.ext[contact[h][i].ext]+")</span>"):c+(" <span>("+b.wa.encodeHTML(contact[h][i].ext)+")</span>")),c+=":</span> "+this.viewlistvalue(contact[h][i],e)+"</p>";else c+='<p><span class="c-details-label">'+e.name+":</span> "+this.viewlistvalue(contact[h],!0)+"</p>";else{c+='<p><span class="c-details-label">'+e.name+":</span> ";if("object"==typeof contact[h]){v=[];for(i=0;i<contact[h].length;i++)v.push(this.viewlistvalue(contact[h][i],e));c+=v.join(", ")}else c+=
-this.viewlistvalue(contact[h],e);c+="</p>"}c+="</div></div></li>"}c+="</ul>";this.options.hide_foot||(c+=this.getPaging(a.count));return c},viewlistvalue:function(a,c){if("object"!=typeof a)return b.wa.encodeHTML(a);var d="",e=!0,g;for(g in a)if("ext"!=g&&"value"!=g){e=!1;break}a.value&&(d+=e?b.wa.encodeHTML(a.value):a.value);b.trim(a.ext)&&!c.fields&&(d=c.ext&&c.ext[a.ext]?d+(' <em class="hint">'+c.ext[a.ext]+"</em>"):d+(' <em class="hint">'+b.wa.encodeHTML(a.ext)+"</em>"));return d},view:function(a,
-c,d){this["view"+a]||(a="table");b("#list-views li.selected").removeClass("selected");b("#list-views li[rel="+a+"]").addClass("selected");return this["view"+a](c,d)},getHash:function(a){var b={},d;for(d in this.settings)b[d]=this.settings[d];for(d in a)b[d]=a[d];return b.offset+"/"+b.sort+"/"+b.order+"/"+b.view+"/"+b.limit+"/"},getPaging:function(a){var b;b="";for(var d=[30,50,100,200,500],e=0;e<d.length;e++)b+='<option value="'+d[e]+'"'+(this.settings.limit==d[e]?' selected="selected"':"")+">"+d[e]+
-"</option>";b='<div class="block paging">'+('<span class="c-page-num">'+$_("Show %s records on a page").replace("%s",'<select id="records-per-page">'+b+"</select>")+"</span>");b+='<span class="total">'+$_("Contacts")+": "+a+"</span>";a=Math.ceil(a/parseInt(this.settings.limit));d=Math.ceil(parseInt(this.settings.offset)/parseInt(this.settings.limit))+1;if(1<a){"/"!=this.hash[this.hash.length-1]&&(this.hash+="/");b+="<span>"+$_("Pages")+":</span>";if(1==a)return"";for(var g=0,e=1;e<=a;e++)3>Math.abs(d-
-e)||5>e||3>a-e?(b+="<a "+(e==d?'class="selected"':"")+' href="#'+this.hash+this.getHash({offset:(e-1)*this.settings.limit})+'">'+e+"</a>",g=0):3>g++&&(b+=".")}1<d&&(b+='<a href="#'+this.hash+this.getHash({offset:(d-2)*this.settings.limit})+'" class="prevnext"><i class="icon10 larr"></i> '+$_("prev")+"</a>");d<a&&(b+='<a href="#'+this.hash+this.getHash({offset:d*this.settings.limit})+'" class="prevnext">'+$_("next")+' <i class="icon10 rarr"></i></a>');return b+"</div>"}}})(jQuery);$.wa.history={data:null,updateHistory:function(b){this.data=b;var a=$("#wa-search-history").empty(),c=$("#wa-creation-history").empty();$.wa.controller.cleanHash(location.hash);for(var d=0;d<b.length;d++){var e=b[d];e.hash=$.wa.controller.cleanHash(e.hash);var g=$('<li rel="'+e.id+'">'+(0<=e.cnt?'<span class="count">'+e.cnt+"</span>":"")+'<a href="'+e.hash+'"><i class="icon16 '+e.type+'"></i></a></li>');("search"==e.type||"import"==e.type)&&g.addClass("wa-h-type-search");g.children("a").append($("<b>").text(e.name));
-if("import"==e.type)c.append(g);else if("add"==e.type){var h=parseInt(g.find("a").attr("href").substr(10)),h=$.wa.controller.backend_url+"?action=photo&size=20x20&id="+h,h=h+("&__t="+e.cnt);g.find(".icon16").removeClass(e.type).addClass("userpic20").css("background-image","url("+h+")");c.append(g)}else"search"==e.type&&a.append(g)}b=[a,c];for(a=0;a<b.length;a++)c=b[a],0<c.children().size()?c.parents(".block.wrapper").show():c.parents(".block.wrapper").hide();$.wa.controller.highlightSidebar()},clear:function(b){!b||
-"search"==b?($("#wa-search-history").parents(".block.wrapper").hide(),$("#wa-search-history").empty(),b="&ctype="+b):b&&"creation"==b?($("#wa-creation-history").parents(".block.wrapper").hide(),$("#wa-creation-history").empty(),b="&ctype[]=import&ctype[]=add"):b="";$.get("?module=contacts&action=history&clear=1"+b);return!1}};$.wa.contactEditor={contact_id:null,contactType:"person",baseFieldType:null,saveUrl:"?module=contacts&action=save",factoryTypes:{},editorFactories:{},fieldEditors:{},initFactories:function(b){this.editorFactories={};this.fieldEditors={};for(var a in b){if("object"!=typeof b[a]||!b[a].type)throw Error("Field data error for "+a);if("undefined"==typeof this.factoryTypes[b[a].type])throw Error("Unknown factory type: "+b[a].type);this.editorFactories[a]=b[a].multi?$.extend({},this.factoryTypes.Multifield):
-$.extend({},this.factoryTypes[b[a].type]);this.editorFactories[a].initializeFactory(b[a])}},initAllEditors:function(){for(var b in $.wa.contactEditor.editorFactories)"undefined"==typeof this.fieldEditors[b]?this.fieldEditors[b]=this.editorFactories[b].createEditor():this.fieldEditors[b].reinit()},initFieldEditors:function(b){if(!(b instanceof Array))for(var a in b){if("undefined"==typeof this.editorFactories[a]){$.wa.controller.contactAction([this.contact_id]);break}"undefined"==typeof this.fieldEditors[a]&&
-(this.fieldEditors[a]=this.editorFactories[a].createEditor());this.fieldEditors[a].setValue(b[a])}},initContactInfoBlock:function(b){this.switchMode(b,!0)},switchMode:function(b,a){var c=$("#contact-info-block");a&&(c.html(""),c.removeClass("edit-mode"),c.removeClass("view-mode"));if(!("edit"==b&&c.hasClass("edit-mode"))&&!("view"==b&&c.hasClass("view-mode"))){c.find("div.field.buttons").remove();var d=[],e;for(e in this.fieldEditors){d.push(e);var g=this.fieldEditors[e].setMode(b);a&&c.append(g)}"edit"==
-b?($("#c-editor-edit-link").hide(),d=this.inplaceEditorButtons(d,function(a){if(typeof a!="undefined"&&!a)return false;if(typeof $.wa.contactEditor.justCreated!="undefined"&&$.wa.contactEditor.justCreated){a=$("#sb-all-contacts-li .count");a.text(1+parseInt(a.text()));$.wa.setHash("/contact/"+$.wa.contactEditor.contact_id);return false}$.wa.contactEditor.switchMode("view");$.scrollTo(0);return false},function(){if($.wa.contactEditor.contact_id==null)$.wa.back();else{$.wa.contactEditor.switchMode("view");
-$.scrollTo(0)}}),c.append(d),c.removeClass("view-mode"),c.addClass("edit-mode")):($("#c-editor-edit-link").show(),c.removeClass("edit-mode"),c.addClass("view-mode"))}},saveFields:function(b,a){for(var c={},d=!1,e=0;e<b.length;e++){var g=b[e],h=this.fieldEditors[g].validate();if(h){if(!d)for(d=this.fieldEditors[g].domElement;!d.is(":visible");)d=d.parent();this.fieldEditors[g].showValidationErrors(h)}else this.fieldEditors[g].showValidationErrors(null);c[g]=this.fieldEditors[g].getValue()}if(d)$.scrollTo(d),
-$.scrollTo("-=100px"),a(!1);else{var i=this;$.post(this.saveUrl,{data:$.JSON.encode(c),type:this.contactType,id:null!=this.contact_id?this.contact_id:0},function(b){if("ok"!=b.status)throw new Exception("AJAX error: "+$.JSON.encode(b));b=b.data;b.history&&$.wa.history.updateHistory(b.history);if(b.data&&b.data.top){for(var c="",d=0;d<b.data.top.length;d++)var e=b.data.top[d],c=c+("<li>"+("im"==e.id?"":'<i class="icon16 '+e.id+'"></i>')+e.value+"</li>");$("#contact-info-top").html(c);delete b.data.top}"company"==
-$.wa.contactEditor.contactType&&b.data.name&&delete b.data.name;null!=$.wa.contactEditor.contact_id&&$.wa.contactEditor.initFieldEditors(b.data);c=!1;for(e in i.fieldEditors)if("undefined"!=typeof b.errors[e]){if(i.fieldEditors[e].showValidationErrors(b.errors[e]),!c)for(c=i.fieldEditors[e].domElement;!c.is(":visible");)c=c.parent()}else"edit"==i.fieldEditors[e].currentMode&&i.fieldEditors[e].showValidationErrors(null);if(c)$.scrollTo(c),$.scrollTo("-=100px");else if($.wa.contactEditor.contact_id&&
-b.data.reload){window.location.reload();return}null==$.wa.contactEditor.contact_id&&!c&&($.wa.contactEditor.contact_id=b.data.id,$.wa.contactEditor.justCreated=!0);a(!c)},"json")}},createExtSelect:function(b,a){var c="",d=!0,e;for(e in b){var g="";if(b[e]===a||e===a)g=' selected="selected"',d=!1;var h=this.htmlentities(b[e]),c=c+('<option value="'+("undefined"===typeof b.length?e:h)+'"'+g+">"+h+"</option>")}var i;d?(c+='<option value="%custom" selected="selected">'+$_("other")+"...</option>",i='<input type="text" class="small ext">'):
-(c+='<option value="%custom">'+$_("other")+"...</option>",i='<input type="text" class="small empty ext">');var c=$('<span><select class="ext">'+c+"</select><span>"+i+"</span></span>"),j=c.children("select");i=c.find("input");i.val(a);"%custom"!==j.val()&&i.hide();var a=$_("which?"),k=function(){if(!i.val()&&!i.hasClass("empty")){i.val(a);i.addClass("empty")}};i.blur(k);i.focus(function(){if(i.hasClass("empty")){i.val("");i.removeClass("empty")}});j.change(function(){var b=j.val();if(b==="%custom"){i.hasClass("empty")&&
-i.val(a);i.show()}else{i.hide();i.addClass("empty");i.val(b||"")}k()});i[0].getExtValue=function(){return j.val()==="%custom"&&i.hasClass("empty")?"":i.val()};i[0].setExtValue=function(a){b[a]?j.val(a):j.val("%custom");i.val(a)};return c},inplaceEditorButtons:function(b,a,c){var d=$('<div class="field buttons"><div class="value submit"><em class="errormsg" id="validation-notice"></em></div></div>'),e=function(){d.find(".loading").show();$.wa.contactEditor.saveFields(b,function(b){d.find(".loading").hide();
-a(b)});return!1},g=$('#contact-info-block.edit-mode input[type="text"]',$("#c-core")[0]);g.die("keyup");g.live("keyup",function(a){13==a.keyCode&&e()});var g=$('<input type="submit" class="button green" value="'+$_("Save")+'" />').click(e),h=this,i=$('<a href="javascript:void(0)">'+$_("cancel")+"</a>").click(function(){d.find(".loading").hide();"function"!=typeof c?a():c();h.fieldEditors.name.showValidationErrors(null);$.scrollTo(0);return!1});d.children("div.value.submit").append(g).append(" "+$_("or")+
-" ").append(i).append($('<i class="icon16 loading" style="margin-left: 16px; display: none;"></i>'));return d},wrapper:function(b,a,c){c=$('<div class="field'+("undefined"!=typeof c&&c?" "+c:"")+'"></div>');"undefined"!=typeof a&&a&&c.append('<div class="name">'+a+"</div>");if("object"!=typeof b||!(b instanceof jQuery)||0>=b.find("div.value").size())b=$('<div class="value"></div>').append(b);c.append(b);return c},htmlentities:function(b){var a=document.createElement("div"),b=document.createTextNode(b);
-a.appendChild(b);return a.innerHTML}};$.wa.contactEditor.baseFieldType={createEditor:function(){var b=$.extend({},this);delete b.createEditor;delete b.initializeFactory;b.parentEditorData={};b.initialize();return b},fieldValue:"",initializeFactory:function(b){this.fieldData=b},initialize:function(){this.setValue("")},reinit:function(){this.currentMode="null";this.initialize()},setValue:function(b){this.fieldValue=b;"null"==this.currentMode||null===this.domElement||("edit"==this.currentMode?this.domElement.find(".val").val(this.fieldValue):
-this.domElement.find(".val").html(this.fieldValue))},getValue:function(){var b=this.fieldValue;if("edit"==this.currentMode&&null!==this.domElement){var a=this.domElement.find(".val");if(0<a.length&&(b="",!a.hasClass("empty")&&("checkbox"!=a.attr("type")||a.attr("checked"))))b=a.val()}return b},isModified:function(){return this.fieldValue!=this.getValue()},validate:function(b){var a=this.getValue();return!b&&this.fieldData.required&&!a?$_("This field is required."):null},newFieldElement:function(b){this.fieldData.read_only&&
-(b="view");var a=this.newInlineFieldElement(b);if(null===a&&(!this.fieldData.show_empty||"edit"==b))return $('<div style="display: none"></div>');var c="";"edit"==b&&(c=(this.fieldData.required?'<span class="req-star">*</span>':"")+":");return $.wa.contactEditor.wrapper(a,this.fieldData.name+c)},newInlineFieldElement:function(b){if("view"==b&&!this.fieldValue)return null;var a=null;"edit"==b?(a=$('<span><input class="val" type="text"></span>'),a.find(".val").val(this.fieldValue)):(a=$('<span class="val"></span>'),
-a.text(this.fieldValue));return a},showValidationErrors:function(b){if(null!==this.domElement){var a=this.domElement.find(".val");a.parents(".value").children("em.errormsg").remove();null!==b?(a.parents(".value").append($('<em class="errormsg">'+b+"</em>")),a.addClass("error")):a.removeClass("error")}},fieldData:null,domElement:null,currentMode:"null",parentEditor:null,parentEditorData:null,setMode:function(b,a){"undefined"==typeof a&&(a=!0);if("view"!=b&&"edit"!=b)throw Error("Unknown mode: "+b);
-if(this.currentMode!=b&&(this.currentMode=b,a)){var c=this.domElement;this.domElement=this.newFieldElement(b);null!==c&&c.replaceWith(this.domElement)}return this.domElement}};
-$.wa.contactEditor.factoryTypes.String=$.extend({},$.wa.contactEditor.baseFieldType,{setValue:function(b){this.fieldValue=b;"null"==this.currentMode||null===this.domElement||("edit"==this.currentMode?this.domElement.find(".val").val(this.fieldValue):this.domElement.find(".val").html(this.fieldValue))},getValue:function(){var b=this.fieldValue;if("edit"==this.currentMode&&null!==this.domElement){var a=this.domElement.find(".val"),b="";a.hasClass("empty")||(b=a.val())}return b},newInlineFieldElement:function(b){if("view"==
-b&&!this.fieldValue)return null;var a=null,c=this.fieldValue;"edit"==b?(a=1>=this.fieldData.input_height?$('<span><input class="val" type="text"></span>'):$('<span><textarea class="val" rows="'+this.fieldData.input_height+'"></textarea></span>'),a.find(".val").val(c)):a=$('<span class="val"></span>').text(c);return a}});$.wa.contactEditor.factoryTypes.Text=$.extend({},$.wa.contactEditor.factoryTypes.String);$.wa.contactEditor.factoryTypes.Phone=$.extend({},$.wa.contactEditor.baseFieldType);
-$.wa.contactEditor.factoryTypes.Select=$.extend({},$.wa.contactEditor.baseFieldType,{notSet:function(){return"&lt;"+(this.fieldData.defaultOption||$_("not set"))+"&gt;"},newInlineFieldElement:function(b){if("view"==b&&!this.fieldValue)return null;if("view"==b)return $('<span class="val"></span>').text(this.fieldData.options[this.fieldValue]||this.fieldValue);for(var b="",a=!1,c,d=0;d<this.fieldData.oOrder.length;d++){var e=this.fieldData.oOrder[d];!a&&e==this.fieldValue&&this.fieldValue?(a=!0,c=" selected"):
-c="";""===e&&(c+=" disabled");b+='<option value="'+e+'"'+c+">"+this.fieldData.options[e]+"</option>"}return $('<div><select class="val"><option value=""'+(a?"":" selected")+">"+this.notSet()+"</option>"+b+"</select></div>")}});
-$.wa.contactEditor.factoryTypes.Conditional=$.extend({},$.wa.contactEditor.factoryTypes.Select,{unbindEventHandlers:function(){},getValue:function(){var b=this.fieldValue;if("edit"==this.currentMode&&null!==this.domElement){var a=this.domElement.find(".val:visible");0<a.length&&(b=a.hasClass("empty")?"":a.val())}return b},newInlineFieldElement:function(b){if("view"==b&&!this.fieldValue)return null;this.unbindEventHandlers();if("view"==b)return $("<div></div>").append($('<span class="val"></span>').text(this.fieldData.options&&
-this.fieldData.options[this.fieldValue]||this.fieldValue));for(var a=this,b=(a.fieldData.parent_field||"").split(":"),c=$.wa.contactEditor.fieldEditors[b.shift()];c&&b.length;)if(subfields=c.subfieldEditors,subfields instanceof Array)for(var c=null,d=0;d<subfields.length;d++){if(subfields[d]===a.parentEditor){c=subfields[d];break}}else c=subfields[b.shift()];if(c){var e=this.fieldData.options&&this.fieldData.options[this.fieldValue]||this.fieldValue,g=$('<input type="text" class="hidden val">').val(e),
-h=$('<select class="hidden val"></select>').hide(),i;setTimeout(function(){c.domElement?(c.domElement.on("change",".val",i=function(){var b=$(this),c=g.is(":visible")?g.val():h.is(":visible")?h.val():e,b=(b.val()||"").toLowerCase();if(b=a.fieldData.parent_options[b]){g.hide();h.show().children().remove();for(d=0;d<b.length;d++)h.append($("<option></option>").attr("value",b[d]).text(b[d]).attr("selected",a.fieldValue==b[d]));h.val(c)}else g.val(c||"").show().blur(),h.hide()}),i.call(c.domElement.find(".val:visible")[0])):
-g.show()},0);a.unbindEventHandlers=function(){i&&c.domElement&&c.domElement.find(".val").unbind("change",i);a.unbindEventHandlers=function(){}};return $("<div></div>").append(g).append(h)}return $("<div></div>").append($('<input type="text" class="val">').val(a.fieldValue))}});
-$.wa.contactEditor.factoryTypes.Region=$.extend({},$.wa.contactEditor.factoryTypes.Select,{notSet:function(){return this.fieldData.options&&this.fieldValue&&!this.fieldData.options[this.fieldValue]?this.fieldValue:"&lt;"+$_("select region")+"&gt;"},unbindEventHandlers:function(){},setCurrentCountry:function(){var b=this.current_country;this.current_country=this.parentEditorData.parent.subfieldEditors.country.getValue();return b!==this.current_country?(delete this.fieldData.options,!0):!1},getRegionsControllerUrl:function(b){return($.wa.contactEditor.regionsUrl||
-"?module=backend&action=regions&country=")+b},newInlineFieldElement:function(b){if("view"==b&&!this.fieldValue)return null;this.unbindEventHandlers();if("view"==b)return $("<div></div>").append($('<span class="val"></span>').text(this.fieldData.options&&this.fieldData.options[this.fieldValue]||this.fieldValue));var a=this;if(this.parentEditorData.parent&&this.parentEditorData.parent.subfieldEditors.country){this.setCurrentCountry();var c;$("#contact-info-block").on("change","select",c=function(){a.setCurrentCountry()&&
-a.domElement.empty().append(a.newInlineFieldElement(b).children())});a.unbindEventHandlers=function(){$("#contact-info-block").off("change","select",c);a.unbindEventHandlers=function(){}}}if(void 0===this.fieldData.options&&this.current_country&&this.fieldData.region_countries[this.current_country]){var d=this.current_country;$.get(this.getRegionsControllerUrl(d),function(c){b!==a.currentMode||d!==a.current_country||(a.fieldData.options=c.data.options||!1,a.fieldData.oOrder=c.data.oOrder||[],a.domElement.empty().append(a.newInlineFieldElement(b).children()))},
-"json");return $("<div></div>").append($('<i class="icon16 loading"></i>'))}if(this.fieldData.options)return $("<div></div>").append($.wa.contactEditor.factoryTypes.Select.newInlineFieldElement.call(this,b));var e=$("<div></div>").append($.wa.contactEditor.baseFieldType.newInlineFieldElement.call(this,b));$.wa.defaultInputValue(e.find(".val"),this.fieldData.name+(this.fieldData.required?" ("+$_("required")+")":""),"empty");return e}});$.wa.contactEditor.factoryTypes.Country=$.extend({},$.wa.contactEditor.factoryTypes.Select);
-$.wa.contactEditor.factoryTypes.Checklist=$.extend({},$.wa.contactEditor.baseFieldType,{validate:function(b){return!b&&this.fieldData.required&&0>=this.getValue().length?$_("This field is required."):null},setValue:function(b){this.fieldValue=b;if("edit"==this.currentMode&&this.domElement){this.domElement.find('input[type="checkbox"]').attr("checked",!1);for(var a in this.fieldValue)this.domElement.find('input[type="checkbox"][value="'+a+'"]').attr("checked",!0)}else"view"==this.currentMode&&this.domElement&&
-this.domElement.find(".val").html(this.getValueView())},getValue:function(){if("edit"!=this.currentMode||!this.domElement)return this.fieldValue;var b=[];this.domElement.find('input[type="checkbox"]:checked').each(function(a,c){b.push($(c).val())});return b},getValueView:function(){for(var b="",a=0;a<this.fieldData.oOrder.length;a++){var c=this.fieldData.oOrder[a];0>this.fieldValue.indexOf(c)||(b+=(b?", ":"")+'<a href="'+(this.fieldData.hrefPrefix||"#")+c+'">'+(this.fieldData.options[c]&&$.wa.contactEditor.htmlentities(this.fieldData.options[c])||
-$_("&lt;no name&gt;"))+"</a>")}return b||$_("&lt;none&gt;")},newInlineFieldElement:function(b){if("view"==b&&(!this.fieldValue||!this.fieldValue.length))return null;if("view"==b)return $('<span class="val"></span>').html(this.getValueView());var b=0,a;for(a in this.fieldData.options)if(b++,1<b)break;if(!b)return null;for(var c="",d=0;d<this.fieldData.oOrder.length;d++){a=this.fieldData.oOrder[d];c+='<li><label><input type="checkbox" value="'+a+'"';if(0<=this.fieldValue.indexOf(a-0)||!$.wa.contactEditor.contact_id&&
-$.wa.contactEditor.limitedCategories&&2>b)c+=' checked="checked"';this.fieldData.disabled&&this.fieldData.disabled[a]&&(c+=' disabled="disabled"');c+=" />"+(this.fieldData.options[a]&&$.wa.contactEditor.htmlentities(this.fieldData.options[a])||$_("&lt;no name&gt;"))+"</label></li>"}return $.wa.controller.initCheckboxList('<div class="c-checkbox-menu-container val"><div><ul class="menu-v compact with-icons c-checkbox-menu">'+c+"</ul></div></div>")}});
-$.wa.contactEditor.factoryTypes.Name=$.extend({},$.wa.contactEditor.baseFieldType,{newInlineFieldElement:null,newFieldElement:function(){var b="";$.wa.contactEditor.fieldEditors.title&&(b=$.wa.contactEditor.fieldEditors.title.getValue()+" ");$("#contact-fullname").text(""+b+(this.fieldValue?this.fieldValue:"<"+$_("no name")+">"));$.wa.controller.setBrowserTitle($("#contact-fullname").text());$.wa.contactEditor.contact_id&&$.wa.contactEditor.contact_id==$.wa.contactEditor.current_user_id&&$("#wa-my-username").text(""+
-(this.fieldValue?this.fieldValue:"<"+$_("no name")+">"));return $('<div style="display: none"></div>')},setValue:function(b){this.fieldValue=b},getValue:function(b){if(this.fieldValue&&!b)return this.fieldValue;b=$.wa.contactEditor.fieldEditors.firstname.getValue();b+=(b?" ":"")+$.wa.contactEditor.fieldEditors.middlename.getValue();return b+=(b?" ":"")+$.wa.contactEditor.fieldEditors.lastname.getValue()},validate:function(b){var a=this.getValue(!0);if(!b&&this.fieldData.required&&!a){b=$("#contact-info-block input:visible:text[value]:not(.empty)").val();
-if(!b)return $_("At least one of these fields must be filled");$.wa.contactEditor.fieldEditors.firstname.setValue(b)}return null},showValidationErrors:function(b){var a=$("#contact-info-block");a.children("div.wa-errors-block").remove();if(null!==b){var c=$('<div class="field wa-errors-block"><div class="value"><em class="errormsg">'+b+"</em></div></div>");$.wa.contactEditor.fieldEditors.lastname?$.wa.contactEditor.fieldEditors.lastname.domElement.after(c):a.prepend(c)}a=["firstname","middlename",
-"lastname"];for(c=0;c<a.length;c++)df=a[c],$.wa.contactEditor.fieldEditors[df]&&(null!==b?$.wa.contactEditor.fieldEditors[df].domElement.find(".val").addClass("external-error"):$.wa.contactEditor.fieldEditors[df].domElement.find(".val").removeClass("external-error"))}});$.wa.contactEditor.factoryTypes.NameSubfield=$.extend({},$.wa.contactEditor.baseFieldType,{});
-$.wa.contactEditor.factoryTypes.Multifield=$.extend({},$.wa.contactEditor.baseFieldType,{subfieldEditors:null,subfieldFactory:null,emptySubValue:null,initializeFactory:function(b){this.fieldData=b;if("undefined"!=typeof this.fieldData.ext){this.fieldData.extKeys=[];this.fieldData.extValues=[];for(var a in this.fieldData.ext)this.fieldData.extKeys[this.fieldData.extKeys.length]=a,this.fieldData.extValues[this.fieldData.extValues.length]=this.fieldData.ext[a]}},initialize:function(){this.subfieldFactory=
-$.extend({},$.wa.contactEditor.factoryTypes[this.fieldData.type]);this.subfieldFactory.parentEditor=this;this.subfieldFactory.initializeFactory($.extend({},this.fieldData));this.fieldData=$.extend({},this.fieldData,{required:this.subfieldFactory.fieldData.required});this.subfieldEditors=[this.subfieldFactory.createEditor()];this.emptySubValue="object"==typeof this.subfieldEditors[0].fieldValue?$.extend({},this.subfieldEditors[0].fieldValue):{value:this.subfieldEditors[0].fieldValue};this.fieldData.ext&&
-(this.emptySubValue.ext=this.fieldData.extKeys[0]);this.fieldValue=[this.emptySubValue]},setValue:function(b){if(!b||"undefined"==typeof b[0])b=[this.emptySubValue];this.fieldValue=b;var a=0;do{this.subfieldEditors.length<=a&&(this.subfieldEditors[a]=this.subfieldFactory.createEditor(),"null"!=this.currentMode&&this.subfieldEditors[a].setMode(this.currentMode).insertAfter(this.subfieldEditors[a-1].parentEditorData.domElement));if("undefined"!=typeof b[a]){var c=!1,d;for(d in b[a])if("value"!=d&&"ext"!=
-d){c=!0;break}this.subfieldEditors[a].setValue(c?b[a]:b[a].value?b[a].value:"");if("undefined"!=typeof this.fieldData.ext&&(c=b[a].ext,"null"!=this.currentMode&&this.subfieldEditors[a].parentEditorData.domElement)){var e=this.subfieldEditors[a].parentEditorData.domElement.find("input.ext");0<e.size()&&e[0].setExtValue(c)}}else throw Error("At least one record must exist in data at this time.");a++}while(a<b.length);if(b.length<this.subfieldEditors.length){for(a=b.length;a<this.subfieldEditors.length;a++)0!==
-a&&"null"!=this.currentMode&&this.subfieldEditors[a].parentEditorData.domElement.remove();b=0<b.length?b.length:1;this.subfieldEditors.splice(b,this.subfieldEditors.length-b)}this.origFieldValue=null},getValue:function(){if("null"==this.currentMode)return $.extend({},this.fieldValue);for(var b=[],a=0;a<this.subfieldEditors.length;a++){var c=this.subfieldEditors[a];b[a]={value:c.getValue()};if("undefined"!=typeof this.fieldData.ext){var d=this.fieldValue[a].ext,e=c.parentEditorData.domElement.find("input.ext")[0];
-"edit"==c.currentMode&&e&&(d=e.getExtValue());b[a].ext=d}}return b},isModified:function(){for(var b=0;b<this.subfieldEditors.length;b++)if(this.subfieldEditors[b].isModified())return!0;return!1},validate:function(b){for(var a=[],c=!0,d=0;d<this.subfieldEditors.length;d++){var e=this.subfieldEditors[d],g=e.validate(!0);g&&(a[d]=g);if((e=e.getValue())||"string"!=typeof e)c=!1}!b&&(this.fieldData.required&&c)&&(a[0]="This field is required.");return 0>=a.length?null:a},showValidationErrors:function(b){for(var a=
-0;a<this.subfieldEditors.length;a++){var c=this.subfieldEditors[a];null!==b&&"undefined"!=typeof b[a]?c.showValidationErrors(b[a]):c.showValidationErrors(null)}},deleteSubfieldButton:function(b){var a=this,c=$('<a class="delete-subfield hint" href="javascript:void(0)">'+$_("delete")+"</a>").click(function(){if(1>=a.subfieldEditors.length)return!1;var c=a.subfieldEditors.indexOf(b);"null"!=a.currentMode&&a.subfieldEditors[c].parentEditorData.domElement.remove();a.subfieldEditors.splice(c,1);1>=a.subfieldEditors.length&&
-a.domElement.find(".delete-subfield").hide();return!1});1>=this.subfieldEditors.length&&c.hide();return c},newSubFieldElement:function(b,a){var a=a-0,c=this.subfieldEditors[a];c.parentEditorData||(c.parentEditorData={});c.parentEditorData.parent=this;c.parentEditorData.empty=!1;var d;if("function"!=typeof c.newInlineFieldElement){d="";"edit"==b&&(d=(this.fieldData.required?'<span class="req-star">*</span>':"")+":");var e=$.wa.contactEditor.wrapper('<span class="replace-me-with-value"></span>',0===
-a?this.fieldData.name+d:"","no-bot-margins"),g=e.find("span.replace-me-with-value");d=this.fieldValue[a].ext;"edit"==b?d=$.wa.contactEditor.createExtSelect(this.fieldData.ext,d):(d=this.fieldData.ext[this.fieldValue[a].ext]||d,d=$("<strong>"+$.wa.contactEditor.htmlentities(d)+"</strong>"));g.before(d);"edit"==b&&g.before(this.deleteSubfieldButton(c));g.remove();c.domElement=this.subfieldEditors[a].newFieldElement(b);self=this;c.domElement.find("div.name").each(function(a,b){if(b.innerHTML.substr(0,
-self.fieldData.name.length)===self.fieldData.name)b.innerHTML=""});c.parentEditorData.domElement=$("<div></div>").append(e).append(c.domElement);return c.parentEditorData.domElement}d=c.newInlineFieldElement(b);if(null===d)return c.parentEditorData.domElement=c.domElement=$("<div></div>"),c.parentEditorData.empty=!0,c.parentEditorData.domElement;c.domElement=d;e=$('<div class="value"></div>').append(d);g=e.find(".replace-with-ext");0>=g.size()&&(e.append('<span><span class="replace-with-ext"></span></span>'),
-g=e.find(".replace-with-ext"));"undefined"!=typeof this.fieldData.ext&&(d=this.fieldValue[a].ext,"edit"==b?g.before($.wa.contactEditor.createExtSelect(this.fieldData.ext,d)):(d=this.fieldData.ext[this.fieldValue[a].ext]||d,0<g.parents(".ext").size()?g.before($.wa.contactEditor.htmlentities(d)):g.before($('<em class="hint"></em>').text(" "+d))));"edit"==b&&g.before(this.deleteSubfieldButton(c));g.remove();return c.parentEditorData.domElement=e},newInlineFieldElement:null,newFieldElement:function(b){this.fieldData.read_only&&
-(b="view");for(var a=$('<div class="multifield-subfields"></div>'),c="function"==typeof this.subfieldFactory.newInlineFieldElement,d=!0,e=0;e<this.subfieldEditors.length;e++){var g=this.newSubFieldElement(b,e);a.append(g);d=d&&this.subfieldEditors[e].parentEditorData.empty}if(d&&!this.fieldData.show_empty)return $('<div style="display: none"></div>');d=$("<div></div>").append(a);if("edit"==b){var e=c?$('<div class="value"><span class="replace-me-with-value"></span></div>'):$.wa.contactEditor.wrapper('<span class="replace-me-with-value"></span>'),
-h=this;e.find(".replace-me-with-value").replaceWith($('<a href="javascript:void(0)" class="small inline-link"><b><i>'+$_("Add another")+"</i></b></a>").click(function(){var c=h.subfieldFactory.createEditor(),d=h.subfieldEditors.length;val={value:c.getValue(),temp:!0};"undefined"!=typeof h.fieldData.ext&&(val.ext="");h.fieldValue[d]=val;h.subfieldEditors[d]=c;"null"!=h.currentMode&&c.setMode(h.currentMode);a.append(h.newSubFieldElement(b,d));h.domElement.find(".delete-subfield").css("display","inline")}));
-d.append(e)}c&&(c="","edit"==b&&(c=(this.fieldData.required?'<span class="req-star">*</span>':"")+":"),d=$.wa.contactEditor.wrapper(d,this.fieldData.name+c));return d},setMode:function(b,a){"undefined"==typeof a&&(a=!0);if("view"!=b&&"edit"!=b)throw Error("Unknown mode: "+b);if(this.currentMode!=b){if("view"==b&&"edit"==this.currentMode&&this.origFieldValue)this.setValue(this.origFieldValue);else if("view"==this.currentMode&&!this.origFieldValue){this.origFieldValue=[];for(var c=0;c<this.fieldValue.length;c++)this.origFieldValue.push($.extend({},
-this.fieldValue[c]))}this.currentMode=b;a&&(c=this.domElement,this.domElement=this.newFieldElement(b),null!==c&&c.replaceWith(this.domElement))}for(c=0;c<this.subfieldEditors.length;c++)this.subfieldEditors[c].setMode(b,!1);return this.domElement}});
-$.wa.contactEditor.factoryTypes.Composite=$.extend({},$.wa.contactEditor.baseFieldType,{subfieldEditors:null,initializeFactory:function(b){this.fieldData=b;if(this.fieldData.required){for(var a in this.fieldData.required)if(this.fieldData.required[a]){this.fieldData.required=!0;break}!0!==this.fieldData.required&&(this.fieldData.required=!1)}},initialize:function(){var b={data:{},value:""};this.subfieldEditors={};this.fieldData.subfields=this.fieldData.fields;for(var a in this.fieldData.subfields){var c=
-$.extend({},$.wa.contactEditor.factoryTypes[this.fieldData.subfields[a].type]),d=this.fieldData.fields[a];this.fieldData.required&&this.fieldData.required[a]&&(d.required=!0);d=$.extend({},d,{id:null,multi:!1});c.initializeFactory(d);c.parentEditor=this;c.parentEditorData={};c.initialize();c.parentEditorData.sfid=a;c.parentEditorData.parent=this;this.subfieldEditors[a]=c;b.data[a]=c.getValue()}this.fieldValue=b},setValue:function(b){if(b){this.fieldValue=b;for(var a in this.subfieldEditors){var c=
-this.subfieldEditors[a];"undefined"==typeof b.data?(c.initialize(),c.setValue(c.getValue())):"undefined"!=typeof b.data[a]?c.setValue(b.data[a]):c.setValue(c.getValue())}}},getValue:function(){if("null"==this.currentMode)return $.extend({},this.fieldValue.data);var b={},a;for(a in this.subfieldEditors)b[a]=this.subfieldEditors[a].getValue();return b},isModified:function(){for(var b in this.subfieldEditors)if(this.subfieldEditors[b].isModified())return!0;return!1},validate:function(b){var a={},c=!1,
-d;for(d in this.subfieldEditors){var e=this.subfieldEditors[d].validate(b);e&&(a[d]=e,c=!0)}return!c?null:a},showValidationErrors:function(b){if(null!==this.domElement)for(var a in this.subfieldEditors){var c=this.subfieldEditors[a];null!==b&&"undefined"!=typeof b[a]?c.showValidationErrors(b[a]):c.showValidationErrors(null)}},newInlineFieldElement:null,newFieldElement:function(b){this.fieldData.read_only&&(b="view");if("view"==b&&!this.fieldValue.value&&!this.fieldData.show_empty)return $('<div style="display: none"></div>');
-var a=$('<div class="composite '+b+'"></div>').append($.wa.contactEditor.wrapper('<span style="display:none" class="replace-with-ext"></span>',this.fieldData.name,"hdr")),c;for(c in this.subfieldEditors){var d=this.subfieldEditors[c],e=d.newFieldElement(b);d.domElement=e;a.append(e)}return a},setMode:function(b,a){"undefined"==typeof a&&(a=!0);if("view"!=b&&"edit"!=b)throw Error("Unknown mode: "+b);if(this.currentMode!=b&&(this.currentMode=b,a)){var c=this.domElement;this.domElement=this.newFieldElement(b);
-null!==c&&c.replaceWith(this.domElement)}for(var d in this.subfieldEditors)this.subfieldEditors[d].setMode(b,!1);return this.domElement}});
-$.wa.contactEditor.factoryTypes.Address=$.extend({},$.wa.contactEditor.factoryTypes.Composite,{showValidationErrors:function(b){if(null!==this.domElement&&(this.domElement.find("em.errormsg").remove(),this.domElement.find(".val").removeClass("error"),b))for(var a in this.subfieldEditors){var c=this.subfieldEditors[a];"undefined"!=typeof b[a]&&c.domElement.find(".val").addClass("error").parents(".address-subfield").append($('<em class="errormsg">'+b[a]+"</em>"))}},newInlineFieldElement:function(b){if("view"==
-b)return!this.fieldValue.value?null:$('<div class="address-field"></div>').append(this.fieldValue.value).append('<span style="display:none" class="replace-with-ext"></span>');b=$('<div class="address-field"></div>');b.append('<span style="display:none" class="replace-with-ext"></span>');for(var a in this.subfieldEditors){var c=this.subfieldEditors[a],d=c.newInlineFieldElement("edit");c.domElement=d;b.append($('<div class="address-subfield"></div>').append(d));$.wa.defaultInputValue(d.find("input.val"),
-c.fieldData.name+(c.fieldData.required?" ("+$_("required")+")":""),"empty")}return b}});
-$.wa.contactEditor.factoryTypes.Date=$.extend({},$.wa.contactEditor.baseFieldType,{datepickerOptions:function(b){return{altField:b.find("input.val"),dateFormat:this.fieldData.format,altFormat:"yy-mm-dd",yearRange:"-99:+1",changeYear:!0,changeMonth:!0}},newInlineFieldElement:function(b){if("view"==b&&!this.fieldValue)return null;var a=null,c=this.fieldValue;if("edit"==b){var a=$('<span><input class="datepicker" type="text"><input class="val" type="hidden"></span>'),d=a.find("input.datepicker").val(c);
-d.datepicker(this.datepickerOptions(a)).blur(function(){$(this).val()||a.find("input.val").val("")});d.datepicker("setDate",d.datepicker("getDate"));d.datepicker("widget").hide();$(document).one("hashchange",function(){for(var a=d[0];a=a.parentNode;)if(a===document){d.datepicker("hide").datepicker("destroy");break}})}else a=$('<span class="val"></span>').text(c);return a}});
-$.wa.contactEditor.factoryTypes.IM=$.extend({},$.wa.contactEditor.baseFieldType,{setValue:function(b){"undefined"==typeof b&&(b="");"object"==typeof b?(this.fieldValue=b.data,this.viewValue=b.value):this.fieldValue=this.viewValue=b;"null"!=this.currentMode&&this.domElement&&("edit"==this.currentMode?this.domElement.find("input.val").val(this.fieldValue):this.domElement.find(".val").html(this.viewValue))},newInlineFieldElement:function(b){if("view"==b&&!this.fieldValue)return null;var a=null;"edit"==
-b?(a=$('<span><input class="val" type="text"></span>'),a.find(".val").val(this.fieldValue)):a=$('<span class="val"></span>').html(this.viewValue);return a}});
-$.wa.contactEditor.factoryTypes.Url=$.extend({},$.wa.contactEditor.factoryTypes.IM,{validate:function(b){var a=$.trim(this.getValue());if(!b&&this.fieldData.required&&!a)return $_("This field is required.");if(!a)return null;/^(https?|ftp|gopher|telnet|file|notes|ms-help)/.test(a)||(a="http://"+a,this.setValue(a));b=RegExp("^(https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\\\\\))+[^`!\\[\\]{}'\"<>\u00ab\u00bb\u201c\u201d\u2018\u2019\\s]*$","i");return!b.test(a)||/^(http|ftp)/.test(a.toLowerCase())&&
-(b=RegExp("^(https?|ftp):((//)|(\\\\\\\\))+((?:[^`!()\\[\\]{};:'\".,<>?\u00ab\u00bb\u201c\u201d\u2018\u2019\\s+]+\\.)+[^`!()\\[\\]{};:'\".,<>?\u00ab\u00bb\u201c\u201d\u2018\u2019\\s+]{2,6})((/|\\\\|#)[^`!\\[\\]{}'\"<>\u00ab\u00bb\u201c\u201d\u2018\u2019\\s]*)?$","i"),!b.test(a))?$_("Incorrect URL format."):null}});
-$.wa.contactEditor.factoryTypes.Email=$.extend({},$.wa.contactEditor.factoryTypes.Url,{validate:function(b){var a=$.trim(this.getValue());return!b&&this.fieldData.required&&!a?$_("This field is required."):!a?null:!/^([^@\s]+)@[^\s@]+\.[^\s@\.]{2,}$/i.test(a)?$_("Incorrect Email address format."):null}});
-$.wa.contactEditor.factoryTypes.Checkbox=$.extend({},$.wa.contactEditor.baseFieldType,{setValue:function(b){this.fieldValue=parseInt(b);"null"!=this.currentMode&&this.domElement&&("edit"==this.currentMode?this.domElement.find("input.val").attr("checked",!!this.fieldValue):this.domElement.find(".val").text(this.fieldValue?"Yes":"No"))},newInlineFieldElement:function(b){var a=null;"edit"==b?(a=$('<span><input class="val" type="checkbox" value="1" checked="checked"></span>'),this.fieldValue||a.find(".val").removeAttr("checked")):
-a=$('<span class="val"></span>').text(this.fieldValue?"Yes":"No");return a}});$.wa.contactEditor.factoryTypes.Number=$.extend({},$.wa.contactEditor.baseFieldType,{validate:function(b){var a=$.trim(this.getValue());return!b&&this.fieldData.required&&!a&&0!==a?$_("This field is required."):a&&!/^-?[0-9]+([\.,][0-9]+$)?/.test(a)?$_("Must be a number."):null}});
+(function ($) {
+    $.wa.controller = {
+        /** Remains true for free (not premium) version of Contacts app. */
+        free: true,
+        
+        // last 10 hashes
+        hashes: [],
+
+        /** Kinda constructor. All the initialization stuff. */
+        init: function (options) {
+            this.frontend_url = (options && options.url) || '/';
+            this.backend_url = (options && options.backend_url) || '/webasyst/';
+
+            // Initialize "persistent" storage
+            $.storage = new $.store();
+
+            // Set up AJAX to never use cache
+            $.ajaxSetup({
+                cache: false
+            });
+
+            this.lastView = {
+                title: null,
+                hash: null,
+                sort: null,
+                order: null,
+                offset: null
+            };
+            this.options = options;
+            this.random = null;
+
+            $.wa.dropdownsCloseEnable();
+
+            // call dispatch when hash changes
+            if (typeof($.History) != "undefined") {
+                $.History.bind(function (hash) {
+                    $.wa.controller.dispatch(hash);
+                });
+            }
+
+            $.wa.errorHandler = function (xhr) {
+                if (xhr.status == 404) {
+                    $.wa.setHash('/contacts/all/');
+                    return false;
+                }
+                return true;
+            };
+
+            // .selected class for selected items in list
+            $("#contacts-container .contacts-data input.selector").live('click', function () {
+                if ($(this).is(':radio')) {
+                    $(this).parents('.contact-row').siblings().removeClass('selected');
+                }
+
+                if ($(this).is(":checked")) {
+                    $(this).parents('.contact-row').addClass('selected');
+                } else {
+                    $(this).parents('.contact-row').removeClass('selected');
+                }
+
+                $.wa.controller.updateSelectedCount();
+            });
+
+            // Collapsible sidebar sections
+            var toggleCollapse = function () {
+                $.wa.controller.collapseSidebarSection(this, 'toggle');
+            };
+            $(".collapse-handler", $('#wa-app')).die('click').live('click', toggleCollapse);
+
+            // Restore collapsible sections status
+            this.restoreCollapsibleStatusInSidebar();
+
+            // Collapsible subsections
+            $("ul.collapsible i.darr").click(function () {
+                if ($(this).hasClass('darr')) {
+                    $(this).parent('li').children('ul').hide();
+                    $(this).removeClass('darr').addClass('rarr');
+                } else {
+                    $(this).parent('li').children('ul').show();
+                    $(this).removeClass('rarr').addClass('darr');
+                }
+            });
+
+            // Smart menu.
+            // Implement a delay before mouseover and showing menu contents.
+            var recentlyOpened = null;
+            var animate = function(menu) {
+                if (menu.hasClass('animated')) {
+                    return false;
+                }
+                menu.addClass('animated');
+                menu.hoverIntent({
+                    over: function() {
+                        recentlyOpened = setTimeout(function() {
+                            recentlyOpened = null;
+                        }, 500);
+                        menu.removeClass('disabled');
+                    },
+                    timeout: 0.3, // out() is called after 0.3 sec after actual mouseout
+                    out: function() {
+                        menu.addClass('disabled');
+                        if (recentlyOpened) {
+                            clearTimeout(recentlyOpened);
+                            recentlyOpened = null;
+                        }
+                    }
+                });
+                return true;
+            };
+            $('#c-list-toolbar-menu', $('#c-core')[0]).live('mouseover', function() {
+                var menu = $(this);
+                if (animate(menu)) {
+                    menu.mouseover();
+                }
+            });
+            // Open/close menu by mouse click
+            $('#c-list-toolbar-menu', $('#c-core')[0]).live('click', function(e) {
+                var menu = $(this);
+
+                // do not close menu if it was just opened via mouseover
+                if (recentlyOpened && !menu.hasClass('disabled')) {
+                    return;
+                }
+
+                // do not count clicks in nested menus
+                if ($(e.target).parents('ul#c-list-toolbar-menu ul').size() > 0) {
+                    return;
+                }
+
+                menu.toggleClass('disabled');
+                if (!animate(menu) && recentlyOpened) {
+                    clearTimeout(recentlyOpened);
+                    recentlyOpened = null;
+                }
+            });
+
+            // Do not save 404 pages as last hashes
+            $(document).ajaxError(function() {
+                $.storage.del('contacts/last-hash');
+            });
+
+            $('#c-core').off('click.contact-choose', '.contact-row a.contact').on('click.contact-choose', '.contact-row a.contact', function() {
+                $.wa.controller.setLastView({
+                    offset: $(this).data('offset') || 0,
+                    sort: $.wa.grid.settings.sort,
+                    order: $.wa.grid.settings.order,
+                    title: $.wa.controller.getTitle(),
+                    hash: location.hash || ''
+                });
+            });
+            $('#c-core').off('click.contact-choose', 'a.contact.next, a.contact.prev').on('click.contact-choose', 'a.contact.next, a.contact.prev', function() {
+                $.wa.controller.setLastView({
+                    offset: $(this).data('offset') || 0,
+                });
+            });
+            
+        }, // end of init()
+
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // *   Dispatch-related
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+        /** 
+         * Cancel the next n automatic dispatches when window.location.hash changes 
+         * {Number} n
+         * */
+        stopDispatch: function (n, push_hash) {
+            this.stopDispatchIndex = n;
+        },
+
+
+        // last hash processed by this.dispatch()
+        previousHash: null,
+
+        /** Force reload current hash-based 'page'. */
+        redispatch: function() {
+            this.previousHash = null;
+            this.dispatch();
+        },
+
+        /**
+          * Called automatically when window.location.hash changes.
+          * Call a corresponding handler by concatenating leading non-int parts of hash,
+          * e.g. for #/aaa/bbb/ccc/111/dd/12/ee/ff
+          * a method $.wa.controller.AaaBbbCccAction(['111', 'dd', '12', 'ee', 'ff']) will be called.
+          */
+        dispatch: function (hash, args) {
+            if (hash === undefined) {
+                hash = this.getHash();
+            } else {
+                hash = this.cleanHash(hash);
+            }
+            var h = hash.replace(/^[^#]*#\/*/, '');
+            var prev_h = (this.previousHash || '').replace(/^[^#]*#\/*/, '');
+            if (h !== prev_h) {
+                this.hashes.unshift(hash.replace(/^[^#]*#\/*/, ''));
+            }
+            if (this.hashes.length > 10) {
+                this.hashes.pop();
+            }
+            
+            if (this.stopDispatchIndex > 0) {
+                this.previousHash = hash;
+                this.stopDispatchIndex--;
+                return false;
+            }
+
+            if (this.previousHash == hash) {
+                return;
+            }
+            var old_hash = this.previousHash;
+            this.previousHash = hash;
+
+            var e = new $.Event('wa_before_dispatched');
+            $(window).trigger(e, [hash]);
+            if (e.isDefaultPrevented()) {
+                this.previousHash = old_hash;
+                window.location.hash = old_hash;
+                return false;
+            }
+
+            hash = hash.replace(/^[^#]*#\/*/, '');
+
+            if (hash) {
+                var save_hash = true;
+                hash = hash.split('/');
+                if (hash[0]) {
+                    var actionName = "";
+                    var attrMarker = hash.length;
+                    for (var i = 0; i < hash.length; i++) {
+                        var h = hash[i];
+                        if (i < 2) {
+                            if (i === 0) {
+                                actionName = h;
+                            } else if (parseInt(h, 10) != h && h.indexOf('.') == -1) {
+                                actionName += h.substr(0,1).toUpperCase() + h.substr(1);
+                            } else {
+                                attrMarker = i;
+                                break;
+                            }
+                        } else {
+                            attrMarker = i;
+                            break;
+                        }
+                    }
+                    var attr = hash.slice(attrMarker);
+
+                    if (this[actionName + 'Action']) {
+                        this.currentAction = actionName;
+                        this.currentActionAttr = attr;
+                        this[actionName + 'Action'].apply(this, [].concat([attr], args || []));
+                        //this[actionName + 'Action'](attr);
+                    } else {
+                        save_hash = false;
+                        if (console) {
+                            console.log('Invalid action name:', actionName+'Action');
+                        }
+                        $.wa.setHash('#/contacts/all/');
+                    }
+                } else {
+                    //if (console) console.log('DefaultAction');
+                    this.defaultAction();
+                }
+
+                if (hash.join) {
+                    hash = hash.join('/');
+                }
+
+                // save last page to return to by default later
+                if(save_hash) {
+                    $.storage.set('contacts/last-hash', hash);
+                }
+            } else {
+                //if (console) console.log('DefaultAction');
+                this.defaultAction();
+                $.storage.del('contacts/last-hash');
+            }
+
+            // Highlight current item in history, if exists
+            this.highlightSidebar();
+
+            $(document).trigger('hashchange', [hash]); // Kinda legacy
+            $(window).trigger('wa-dispatched');
+        },
+
+        /** Load last page  */
+        lastPage: function() {
+            var hash = $.storage.get('contacts/last-hash');
+            if (hash) {
+                $.wa.setHash('#/'+hash);
+            } else {
+                this.defaultAction();
+            }
+        },
+
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // *   Actions (called by dispatch() when hash changes)
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+        /** Called when action is not found */
+        defaultAction: function () {
+            this.contactsAllAction();
+        },
+
+        /** Empty form to create a user group */
+        groupsCreateAction: function(params) {
+            this.current_group_id = 0;
+            this.groupsEditAction(params, $_('New user group'));
+        },
+
+        /** Form to edit or create a user group */
+        groupsEditAction: function(params, title) {
+            var title = $_('New user group');
+            if (params[0]) {
+                //title = $_('Edit user group');
+                this.current_group_id = params[0];
+                title = this.groups[this.current_group_id].name;
+            }
+            if ($('#c-users-sidebar-menu').length) {
+                this.showLoading();
+            } else {
+                this.setBlock('contacts-users', title);
+            }
+            this.setTitle(title);
+            this.load(
+                '#c-core .c-core-content', "?module=groups&action=editor"+(params && params[0] ? '&id='+params[0] : ''), 
+                null, 
+                null,
+                function() {
+                    this.setTitle(title);
+                    $('#c-group-edit-name').focus();
+                    $('.wa-page-heading .loading').hide();
+                    $('#c-users-sidebar-menu li.selected').removeClass('selected');
+                    if (!params || !params[0]) {
+                        $('#c-create-group-toggle').addClass('selected');
+                    } else {
+                        $('#list-group li[rel=group' + params[0] + ']').addClass('selected');
+                    }
+                }
+            );
+        },
+
+        /** Empty form to create a contacts category */
+        categoriesCreateAction: function(params) {
+            this.categoriesEditAction();
+        },
+
+        /** Form to edit or create a contacts category */
+        categoriesEditAction: function(params) {
+            this.loadHTML("?module=categories&action=editor"+(params && params[0] ? '&id='+params[0] : ''), null, function() {
+                this.setBlock();
+            });
+        },
+
+        /** Dialog to confirm deletion of a category. */
+        categoriesDeleteAction: function(params) {
+            var backOnCancel = true;
+            if (!params || !params[0]) {
+                params = [this.current_category_id];
+                backOnCancel = false;
+            }
+
+            $.wa.dialogCreate('delete-dialog', {
+                content: $('<h2>'+$_('Delete this category?')+'</h2><p>'+$_('No contacts will be deleted.')+'</p>'),
+                buttons: $('<div></div>')
+                    .append(
+                        $('<input type="submit" class="button red" value="'+$_('Delete category')+'">').click(function() {
+                            if ($(this).find('.loading').size() <= 0) {
+                                $('<i style="margin: 8px 0 0 10px" class="icon16 loading"></i>').insertAfter(this);
+                            }
+                            $.post('?module=categories&action=delete', {'id': params[0]}, function() {
+                                // Remove deleted category from sidebar
+                                $.wa.controller.reloadSidebar();
+                                $.wa.dialogHide();
+                                $.wa.setHash('#/users/all/');
+                            });
+                        })
+                    )
+                    .append(' '+$_('or')+' ')
+                    .append($('<a href="javascript:void(0)">'+$_('cancel')+'</a>').click(function() {
+                        $.wa.dialogHide();
+                        if (backOnCancel) {
+                            $.wa.controller.stopDispatch(1);
+                            $.wa.back();
+                        }
+                    })),
+                small: true
+            });
+            return false;
+        },
+
+        deleteCustomField: function(field_id) {
+            $('.custom-field-th[data-field-id="'+field_id+'"]').remove();
+            $('.custom-field-td[data-field-id="'+field_id+'"]').remove();
+            var len = $('.custom-field-th').length;
+            if (!len) {
+                $('.with-custom-fields').removeClass('with-custom-fields');
+                $('.list-with-custom-fields').removeClass('list-with-custom-fields');
+            } else {
+                var bounds = ['first', 'last'];
+                for (var i = 0; i < bounds.length; i+= 1) {
+                    var bound = bounds[i];
+                    var th = $('.custom-field-th.' + bound);
+                    if (!th.length) {
+                        th.removeClass(bound);
+                        $('.custom-field-td.' + bound).removeClass(bound);
+                        $('.custom-field-th:' + bound).addClass(bound);
+                        $('.contact-row').each(function() {
+                            $(this).find('.custom-field-td:' + bound).addClass(bound);
+                        });
+                    }
+                }
+            }
+        },
+        
+        contactsGroupAction: function (params) {
+            if (!params || !params[0]) {
+                return;
+            }
+            var p = this.parseParams(params.slice(1), 'contacts/group/'+params[0]);
+            p.fields = ['name', 'email', 'company', '_access'];
+            p.query = 'group/' + params[0];
+            $('.wa-page-heading').css({
+                width: ''
+            });
+            this.loadGrid(p, '/contacts/group/' + params[0] + '/', false, {
+                beforeLoad: function(data) {
+                    this.current_group_id = params[0];
+                    if (data.count > 0) {
+                        this.setBlock('contacts-users', null, ['group-settings', 'group-actions']);
+                    } else {
+                        this.setBlock('contacts-users', null, 'group-settings');
+                        
+                        $('#contacts-container').html(
+                            '<div class="block double-padded" style="margin-top: 35px;">' + 
+                                '<p>' + $_('No users in this group.') + '</p> <p>' + 
+                                    $_('To add users to group, go to <a href="#/users/all/">All users</a>, select them, and click <strong>Actions with selected / Add to group</strong>.') +
+                                '</p>' + 
+                            '</div>'
+                        );
+                        return false;
+                    }
+                },
+                afterLoad: function (data) {
+                    $('#list-group li[rel="group'+params[0]+'"]').children('span.count').html(data.count);
+                }
+            });
+        },
+
+        /** Dialog to confirm deletion of a user group. */
+        groupsDeleteAction: function(params) {
+            var backOnCancel = true;
+            if (!params || !params[0]) {
+                params = [this.current_group_id];
+                backOnCancel = false;
+            }
+
+            $.wa.dialogCreate('delete-dialog', {
+                content: $('<h2>'+$_('Delete this group?')+'</h2><p>'+$_('No contacts will be deleted.')+'</p>'),
+                buttons: $('<div></div>')
+                    .append(
+                        $('<input type="submit" class="button red" value="'+$_('Delete group')+'">').click(function() {
+                            $('<i style="margin: 8px 0 0 10px" class="icon16 loading"></i>').insertAfter(this);
+                            $.post('?module=groups&action=delete', {'id': params[0]}, function() {
+                                // Remove deleted group from sidebar
+                                $('#wa-app .sidebar a[href="#/contacts/group/'+params[0]+'/"]').parent().remove();
+                                if ($('#list-group').find('.c-group').length <= 0) {
+                                    $('#list-group').find('.c-shown-on-no-groups').show();
+                                }
+                                delete $.wa.controller.groups[params[0]];
+                                $.wa.dialogHide();
+                                $.wa.setHash('#/users/all/');
+                            });
+                        })
+                    )
+                    .append(' '+$_('or')+' ')
+                    .append($('<a href="javascript:void(0)">'+$_('cancel')+'</a>').click(function() {
+                        $.wa.dialogHide();
+                        if (backOnCancel) {
+                            $.wa.controller.stopDispatch(1);
+                            $.wa.back();
+                        }
+                    })),
+                small: true
+            });
+            return false;
+        },
+
+        clearLastView: function() {
+            this.lastView = {
+                title: null,
+                hash: null,
+                sort: null,
+                order: null,
+                offset: null
+            };
+        },
+
+        /** Empty form to create a new contact. */
+        contactsAddAction: function (params) {
+            this.setBlock('contacts-info');
+            this.load($("#c-core .c-core-content"), "?module=contacts&action=add"+(params && params[0] ? '&company=1' : ''), {}, null, function() {
+                $.wa.controller.setTitle($_('New contact'), true);
+                $.wa.controller.clearLastView();
+            });
+        },
+
+        /** Contact profile */
+        contactAction: function (params) {
+            var p = {};
+            if (params[1]) {
+                p = {'tab': params[1]};
+            }
+            if (this.lastView && this.lastView.hash !== null) {
+                p['last_hash'] = this.lastView.hash;
+                p['sort'] = this.lastView.sort;
+                p['offset'] = this.lastView.offset;
+            }
+            this.showLoading();
+            this.load("#c-core", "?module=contacts&action=info&id=" + params[0], p, function() {
+                this.setBlock('contacts-info');
+            });
+        },
+
+        /** Contact photo editor */
+        contactPhotoAction: function (params) {
+            this.showLoading();
+            this.loadHTML("?module=photo&action=editor&id=" + params[0] + (params[1] ? '&uploaded=1' : ''), {}, function() {
+                this.setBlock('contacts-info');
+            });
+        },
+
+        /** List of all contacts */
+        contactsAllAction: function (params) {
+            this.showLoading();
+            this.loadGrid(this.parseParams(params, 'contacts/all'), '/contacts/all/', false, {
+                beforeLoad: function() {
+                    this.setBlock('contacts-list');
+                },
+                afterLoad: function (data) {
+                    $('#sb-all-contacts-li span.count').html(data.count);
+                }
+            });
+        },
+
+        /** Anvanced search form (in premium contacts) or search results list, including simple search. */
+        contactsSearchAction: function (params, options) {
+            this.showLoading();
+            if (params[0] == 'results') {
+                if (!options) {
+                    options = {search: true};
+                }
+                params = params.slice(1);
+            }
+            var filters = params[0];
+            if (filters.substr(0,1) == '?') {
+                filters = filters.substr(1);
+            }
+            var p = this.parseParams(params.slice(1), 'contacts/search/'+filters);
+            p.query = filters;
+            if (options && options.search) {
+                p.search = 1;
+            }
+            if (!params[5]) {
+                p.view = 'list';
+            }
+            var hash = this.cleanHash('#/contacts/search/'+filters);
+            $.wa.controller.setBlock('contacts-list', null, ['search-actions']);
+            this.loadGrid(p, hash.substr(1), null, {
+                afterLoad: function(data) {
+                    $.wa.controller.hideLoading();
+                    if (options && options.search) {
+                        $("#list-main .item-search").show();
+                        $("#list-main .item-search a").attr('href', '#/contacts/search/results/' + params[0] + '/');
+                        p.search = 1;
+                    }
+                }
+            });
+        },
+
+        /** List of contacts in a category */
+        contactsCategoryAction: function (params) {
+            if(!params || !params[0]) {
+                return;
+            }
+
+            this.showLoading();
+            var p = this.parseParams(params.slice(1), 'contacts/category/'+params[0]);
+            p.query = '/category/' + params[0];
+            this.loadGrid(p, '/contacts/category/' + params[0] + '/', false, {
+                beforeLoad: function(data) {
+                    this.current_category_id = params[0];
+                    this.setBlock('contacts-list', null, data && data.system_category ? [] : ['category-actions']);
+                },
+                afterLoad: function (data) {
+                    $('#list-category li[rel="category'+params[0]+'"]').children('span.count').html(data.count);
+                }
+            });
+        },
+
+        /** List of all users */
+        usersAllAction: function (params) {
+            this.showLoading();
+            var p = this.parseParams(params, 'users/all');
+            p.query = '/users/all/';
+            p.fields = ['name', 'email', 'company', '_access'];
+            this.loadGrid(p, '/users/all/', false, {
+                beforeLoad: function() {
+                    this.setBlock('contacts-users', $_('All users'), ['group-actions']);
+                },
+                afterLoad: function (data) {
+                    $('#sb-all-users-li span.count').html(data.count);
+                    $('#c-core .sidebar ul.stack li:first').addClass('selected');
+                }
+            });
+        },
+        
+        usersAddAction: function(params) {
+            this.setBlock('contacts-users', $_('New user'), false);
+            this.setTitle($_('New user'));
+            $('.wa-page-heading').find('.loading').hide();
+            $('.contacts-data').html(
+                '<div class="block double-padded">' + 
+                    '<p>' + 
+                        $_('You can grant access to your account backend to any existing contact.') + '<br><br>' +
+                        $_('Find a contact, or <a href="#/contacts/add/">create a new contact</a>, and then customize their access rights on Access tab.') + 
+                    '</p>' + 
+                '</div>');
+        },
+
+        addToGroupDialog: function () {
+            if ($.wa.grid.getSelected().length <= 0) {
+                return false;
+            }
+            $.wa.controller.last_selected = $.wa.grid.getSelected();
+            $.wa.dialogCreate('c-d-add-to-group', {
+                url: "?module=groups&action=add"
+            });
+        },
+                
+        addToGroup: function(ids) {
+            $.post('?module=groups&action=contactSave', {
+                    'id[]': $.wa.grid.getSelected(),
+                    'groups[]': ids || []
+                }, function (response) {
+                    $.wa.controller.last_selected = [];
+                    if (response.status === "ok") {
+                        $.wa.controller.updateGroupCounters(response.data.counters || {});
+                        $.wa.controller.afterInitHTML = function () {
+                            $.wa.controller.showMessage(response.data.message, true, 'float-left max-width');
+                        };
+                        $.wa.controller.redispatch();
+                        $.wa.dialogHide();
+                        $.wa.grid.selectItems($('#c-select-all-items').attr('checked', false));
+                    } else {
+                        $.wa.controller.showMessage(response.data.message);
+                    }
+            }, "json");
+        },
+        
+        updateGroupCounters: function(counters) {
+            if (!$.isEmptyObject(counters)) {
+                for (var id in counters) {
+                    if (counters.hasOwnProperty(id)) {
+                        var cnt = counters[id] || 0;
+                        $('#list-group').find('li[rel=group'+id+'] .count').text(cnt);
+                        if (this.groups[id]) {
+                            this.groups[id].cnt = cnt;
+                        }
+                    }
+                }
+            }
+        },
+
+        merge: function() {
+            var selected = $.wa.grid.getSelected();
+            if (selected.length < 2) {
+                return false;
+            }
+            var hash = selected.join(',');
+            $.wa.setHash('/contacts/merge/' + hash);
+        },
+
+        contactsMergeAction: function (params) {
+            if (params[0]) {
+                var ids = [];
+                var items = params[0].split(',');
+                for (var i = 0; i < items.length; i += 1) {
+                    if (parseInt(items[i], 10)) {
+                        ids.push(items[i]);
+                    }
+                }
+                $('#c-abc-index').remove();
+                this.showLoading();
+                this.load( "#c-core .c-core-content", '?module=contacts&action=mergeSelectMaster', { ids: ids });
+            } else {
+                $.wa.setHash('/contacts/all/');
+            }
+        },
+
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // *   Other UI-related stuff: dialogs, form submissions etc.
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+        /** Simple search submit. */
+        simpleSearch: function () {
+            var s = $.trim($("#search-text").val());
+            if (!s) {
+                return;
+            }
+
+            var q = '';
+            /*if (s.indexOf('=') == -1) {*/
+                s = s.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_').replace(/&/g, '\\&').replace(/\+/g, '%2B').replace(/\//g, '%2F');
+                if (s.indexOf('@') != -1) {
+                    q = "email*=" + s; //encodeURIComponent(s);
+                } else {
+                    q = "name*=" + s; //encodeURIComponent(s);
+                }
+            /*} else {
+                q = s;
+            }*/
+            $.wa.controller.stopDispatch(1);
+            $.wa.setHash("#/contacts/search/" + q + '/');
+            $.wa.controller.contactsSearchAction([q], {search: true});
+        },
+
+        /**
+         * Add contacts to categories and show success message above contacts list.
+         * @param {Array|Number} category_ids
+         * @param {Array|Number} contact_ids defaults to selected contacts
+         **/
+        addToCategory: function(category_ids, contact_ids) {
+            contact_ids = contact_ids || $.wa.grid.getSelected();
+            $.wa.controller.showMessage('', true);
+            if (!contact_ids.length || !category_ids) {
+                return;
+            }
+
+            $.post('?module=categories&type=add', {
+                contacts: contact_ids,
+                categories: category_ids
+            }, function(response) {
+                if (response.data && response.data.count) {
+                    for (var category_id in response.data.count) {
+                        $('#list-category li[rel="category' + category_id+ '"] span.count').html(response.data.count[category_id]);
+                    }
+                }
+                $.wa.controller.showMessage(response.data.message, true);
+            }, 'json');
+        },
+
+        /** Dialog to choose categories to add selected contacts to. */
+        dialogAddSelectedToCategory: function() {
+            if ($.wa.grid.getSelected().length <= 0 || $('#list-category li:not(.empty):not(.selected):not(.hint)').size() <= 0) {
+                //$.wa.controller.showMessage('<span class="errormsg">'+$_('No categories available')+'</span>', true);
+                return;
+            }
+            var self = this;
+            $('<div id="add-to-category-dialog"></div>').waDialog({
+                url: '?module=categories&action=addSelected'+(self.current_category_id ? '&disabled='+self.current_category_id : '')
+            });
+        },
+
+        /** Confirm to remove selected contacts from current category. */
+        dialogRemoveSelectedFromCategory: function(ids) {
+            ids = ids || $.wa.grid.getSelected();
+            if (ids.length <= 0 || !$.wa.controller.current_category_id) {
+                return;
+            }
+            $('<div id="confirm-remove-from-category-dialog" class="small"></div>').waDialog({
+                content: $('<h2></h2>').text($_('Exclude contacts from category "%s"?').replace('%s', $('h1.wa-page-heading').text())),
+                buttons: $('<div></div>')
+                .append(
+                    $('<input type="submit" class="button red" value="'+$_('Exclude')+'">').click(function() {
+                        $('<i style="margin: 8px 0 0 10px" class="icon16 loading"></i>').insertAfter(this);
+                        $.post('?module=categories&action=deleteFrom', {
+                                categories: [$.wa.controller.current_category_id], 
+                                contacts: ids
+                            },
+                            function(response) {
+                                $.wa.dialogHide();
+                                if (response.status === 'ok') {
+                                    $.wa.controller.afterInitHTML = function () {
+                                        $.wa.controller.showMessage(response.data.message);
+                                    };
+                                    $.wa.controller.redispatch();
+                                }
+                            }, 'json');
+                    })
+                )
+                .append(' '+$_('or')+' ')
+                .append($('<a href="javascript:void(0)">'+$_('cancel')+'</a>').click($.wa.dialogHide))
+            });
+        },
+        
+        /** Confirm to remove selected contacts from current category. */
+        dialogRemoveSelectedFromGroup: function(ids) {
+            ids = ids || $.wa.grid.getSelected();
+            if (ids.length <= 0 || !$.wa.controller.current_group_id) {
+                return;
+            }
+            $('<div id="confirm-remove-from-category-dialog" class="small"></div>').waDialog({
+                content: $('<h2></h2>').text($_('Exclude users from group "%s"?').replace('%s', $('h1.wa-page-heading').text())),
+                buttons: $('<div></div>')
+                .append(
+                    $('<input type="submit" class="button red" value="'+$_('Exclude')+'">').click(function() {
+                        $('<i style="margin: 8px 0 0 10px" class="icon16 loading"></i>').insertAfter(this);
+                        $.post('?module=groups&action=deleteFrom', {
+                                groups: [$.wa.controller.current_group_id], 
+                                contacts: ids
+                            }, 
+                            function(response) {
+                                $.wa.dialogHide();
+                                if (response.status === 'ok') {
+                                    $.wa.controller.updateGroupCounters(response.data.counters || {});
+                                    $.wa.controller.afterInitHTML = function () {
+                                        $.wa.controller.showMessage(response.data.message, null);
+                                    };
+                                    $.wa.controller.redispatch();
+                                }
+                            }, 
+                        'json');
+                    })
+                )
+                .append(' '+$_('or')+' ')
+                .append($('<a href="javascript:void(0)">'+$_('cancel')+'</a>').click($.wa.dialogHide))
+            });
+        },
+
+        /** For a set of contact ids (defaults to currently selected) show a delete confirm dialog
+          * with list of links to other applications. */
+        contactsDelete: function (ids) {
+            ids = ids || $.wa.grid.getSelected();
+            if (ids.length <= 0) {
+                return;
+            }
+            $.wa.dialogCreate('delete-dialog', {
+                content: '<h2>'+$_('Checking links to other applications...')+' <i class="icon16 loading"></i></h2>',
+                url: '?module=contacts&action=links',
+                small: true,
+                post: {
+                    'id[]': ids
+                }
+            });
+        },
+
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // *   Helper functions
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+        listTabs: [],
+        addListTab: function(showCallback) {
+            this.listTabs.push(showCallback);
+        },
+                
+        addGroup: function(group) {
+            if (!$.isEmptyObject(group)) {
+                $.wa.controller.groups[group.id] = group;
+                $('#list-group').replaceWith(this.renderGroups($.wa.controller.groups));
+            }
+        },
+                
+        renderGroups: function(groups) {
+            var groups_html = '<ul class="menu-v with-icons collapsible" id="list-group">';
+            groups_html 
+                += '<li class="hint c-shown-on-no-groups" style="padding:0 20px; ' + (!$.isEmptyObject(groups) ? 'display: none;' : '') + '">'
+                    + $_('User groups are for organizing Webasyst users and setting common access rights for groups.')
+                + '</li>';
+            
+            if (!$.isEmptyObject(groups)) {
+                var grps = [];
+                for (var i in groups) {
+                    if (groups.hasOwnProperty(i)) {
+                        grps.push(groups[i]);
+                    }
+                }
+                grps = grps.sort(function (s1, s2) {
+                    return s1.name.toString().localeCompare(s2.name.toString());
+                });
+                for (var i = 0, n = grps.length; i < n; i += 1) {
+                    var group = grps[i];
+                    groups_html += '<li rel="group' + group.id + '" class="c-group">';
+                    groups_html += '<span class="count">' + group.cnt + '</span>';
+                    groups_html += '<a href="#/contacts/group/' + group.id + '/"><img src="../../wa-content/img/users/' + group.icon + '.png"> <b class="name">' + group.name + '</b></a>';
+                    groups_html += '</li>';
+                }
+            }
+            groups_html += '</ul>';
+            return groups_html;
+        },
+                
+        updateGroup: function(id, group) {
+            this.groups[id] = group;
+            var item = $('#list-group').find('li[rel=group' + id + ']');
+            item.html(
+                '<span class="count">' + group.cnt + '</span>' + 
+                '<a href="#/contacts/group/' + group.id + '"><img src="../../wa-content/img/users/' + group.icon + '.png"> <b>' + group.name + '</b></a>'
+            );
+        },
+
+        /** Prepare application layout to load new content. */
+        setBlock: function (name, title, menus, options) {
+            if (!name) {
+                name = 'default';
+            }
+
+            if (title === undefined || title === null) {
+                title = $_('Loading...');
+            }
+
+            var prevBlock = this.block;
+            this.block = name;
+            $("#c-core .c-core-header").remove();
+
+            options = options || {};
+            menus = typeof menus === 'undefined' ? [] : menus;
+            
+            var el = '';
+            
+            if (name === 'contacts-users') {
+                el = $('#c-core .c-core-content');
+                var groups_html = '';
+                if (options.groups !== false) {
+                    groups_html += this.renderGroups(options.groups || this.groups);
+                }
+                $('#c-core').html(
+                    '<div class="shadowed" id="c-users-page">' + 
+                        '<div class="sidebar left200px" style="min-height: 300px;">' + 
+                            '<ul class="menu-v with-icons stack" id="c-users-sidebar-menu">' + 
+                                '<li class="selected" style="margin-left: 17px;"><a class="" href="#/users/all/"><i class="icon16 user"></i>' + $_('All users') + '</a></li>' + 
+                                '<li style="margin-left: 15px;"><a class="small" href="#/users/add/"><i class="icon10 add"></i>' + $_('New user') + '</a></li>' + 
+                                '<li class="" style="text-transform: uppercase;"><h5 class="heading">' + $_('Groups') + '</h5></li>' + 
+                                    groups_html +  
+                                '<li class="small" id="c-create-group-toggle" style="margin-left: 14px;">' + 
+                                    '<a href="#/groups/create/"><i class="icon10 add"></i>' + $_('New group') + '</a>' + 
+                                '</li>' + 
+                            '</ul>' + 
+                        '</div>' + 
+                        '<div class="content left200px bordered-left blank">' +
+                            '<div class="block not-padded c-core-content">' + 
+                                '<div class="block" style="overflow:hidden;">' + 
+                                    '<div class="c-actions-wrapper float-right" style="margin: 8px;"></div>' + 
+                                    '<h1 class="wa-page-heading">' + (title || $_('All users')) + ' <i class="icon16 loading"></i></h1>' +  
+                                '</div>' + 
+                                '<div class="block not-padded tab-content float-left" style="width: 100%;" id="contacts-container">'  + 
+                                    '<div class="block not-padded contacts-data"></div>' + 
+                                '</div>' + 
+                            '</div>' + 
+                            '<div class="clear"></div>' + 
+                        '</div>' + 
+                        '<div class="clear"></div>' + 
+                    '</div>');
+                el = $('#c-core .c-core-content');
+                $('#c-create-group-toggle').click(function() {
+                    $.wa.controller.last_selected = [];
+                });
+                if ($.isArray(menus)) {
+                    this.showMenus(menus);
+                } else {
+                    el.find('.c-list-toolbar').remove();
+                }
+            } else {
+                el = $('#c-core').empty().
+                    append(
+                        $(
+                            '<div class="contacts-background">' + 
+                                '<div class="block not-padded c-core-content"></div>' + 
+                            '</div>'
+                        )
+                    ).find(
+                        '.c-core-content'
+                    );
+                el.html('<div class="block"><div class="c-actions-wrapper"></div><h1 class="wa-page-heading">' + title + ' <i class="icon16 loading"></i></h1></div>');
+            }
+
+            // Scroll to window top
+            $.scrollTo(0);
+
+            //
+            // Some menus need to be shown near the header
+            //
+            // Actions with group
+            if (menus && menus.indexOf('group-settings') >= 0 && this.current_group_id) {
+                el.find('.c-actions-wrapper').html(
+                    '<a href="#/groups/edit/' + this.current_group_id + '/"><i class="icon16 settings"></i></a>'
+                );
+            } else
+            // Actions with category
+            if (menus && menus.indexOf('category-actions') >= 0 && this.current_category_id && this.global_admin) {
+                el.find('div.block').prepend(
+                    '<ul class="menu-h c-actions">'+
+                        '<li>'+
+                            '<a href="#/categories/edit/'+this.current_category_id+'/"><i class="icon16 edit"></i>'+$_('Edit category')+'</a>'+
+                        '</li>'+
+                        '<li>'+
+                            '<a href="#/categories/delete/'+this.current_category_id+'/" onclick="return $.wa.controller.categoriesDeleteAction();"><i class="icon16 delete"></i>'+$_('Delete')+'</a>'+
+                        '</li>'+
+                    '</ul>');
+            } else
+            // actions with search
+            if (menus && menus.indexOf('search-actions') >= 0 && !this.free) {
+                el.find('div.block').prepend(
+                    '<ul class="menu-h c-actions">'+
+                        '<li>'+
+                            '<a href="#" onclick="return $.wa.controller.saveSearchAsFilter()"><i class="icon16 save-as-filter"></i>'+$_('Save as a filter')+'</a>'+
+                        '</li>'+
+                    '</ul>');
+            } else
+            // actions with filter
+            if (menus && menus.indexOf('view-actions') >= 0 && this.current_view_id) {
+                el.find('div.block').prepend(
+                    '<ul class="menu-h c-actions">'+
+                        '<li>'+
+                            '<a href="#/filters/edit/'+this.current_view_id+'/"><i class="icon16 edit"></i>'+$_('Edit filter')+'</a>'+
+                        '</li>'+
+                        '<li>'+
+                            '<a href="#" onclick="return $.wa.controller.deleteList('+this.current_view_id+', true)"><i class="icon16 delete"></i>'+$_('Delete')+'</a>'+
+                        '</li>'+
+                    '</ul>');
+            }
+
+            switch (name) {
+                case 'contacts-duplicates':
+                case 'contacts-list':
+                    // Tabs above contacts list
+                    if (this.listTabs.length > 0) {
+                        var tabs = $('<ul class="tabs" id="c-list-tabs"></ul>');
+
+                        // currently selected view in sidebar
+                        var currentView = ($('#wa-app .sidebar .selected a').attr('href') || '').replace(/^[^#]*#/g, '');
+                        if (currentView[0] !== '/') {
+                            currentView = '/'+currentView;
+                        }
+
+                        // Plugin tabs
+                        for(var i = 0; i < this.listTabs.length; i++) {
+                            if (typeof this.listTabs[i] == 'function') {
+                                this.listTabs[i].call($.wa.controller, tabs, currentView);
+                            }
+                        }
+
+                        if (tabs.children().size() > 0) {
+                            // Contacts tab
+                            tabs.prepend($('<li class="selected"></li>').append(
+                                    $('<a href="#'+currentView+'">'+$_('Contacts')+'</a>').click(function() {
+                                        $('#c-list-tabs .selected').removeClass('selected');
+                                        $(this).parent().addClass('selected');
+                                        $.wa.controller.showLoading();
+                                        return true;
+                                    })
+                                )
+                            );
+                            el.append(tabs);
+                        }
+                    }
+
+                    el.append('<div id="contacts-container" class="tab-content"></div>');
+                    if (!el.next().hasClass('clear-left')) {
+                        $('<div class="clear-left"></div>').insertAfter(el);
+                    }
+                    this.showMenus((menus || []).concat(['merge', 'delete']));
+                    el.find('#contacts-container').append('<div class="block not-padded contacts-data"></div>');
+                    break;
+                case 'contacts-users':
+                case 'contacts-info':
+                case 'default':
+                    break;
+                default:
+                    this.block = prevBlock;
+                    throw new Error('Unknown block: '+name);
+            }
+
+            // Kinda legacy
+            if (this.afterInitHTML) {
+                this.afterInitHTML();
+                this.afterInitHTML = '';
+            }
+            $(window).trigger('wa_after_init_html', [name, title, menus]);
+        },
+
+        /** Add or update a toolbar above contacts list. */
+        showMenus: function (show) {
+            // Actions with selected
+            var toolbar =
+                '<li>' +
+                    '<a href="javascript:void(0)" class="inline-link"><b><i>'+$_('Actions with selected')+' (<span id="selected-count" class="selected-count">0</span>)</i></b><i class="icon10 darr"></i></a>' +
+                        '<ul class="menu-v" id="actions-with-selected">' +
+                            ((show.indexOf('group-actions') >= 0) ?
+                                '<li>' +
+                                    '<a href="#" onclick="$.wa.controller.addToGroupDialog(); return false"><i class="icon16 contact"></i>'+$_('Add to group')+'</a>'+
+                                '</li>' : '') +
+                            '<li id="add-to-category-link">' +
+                                '<a href="#" onclick="$.wa.controller.dialogAddSelectedToCategory(); return false"><i class="icon16 contact"></i>'+$_('Add to category')+'</a>' +
+                            '</li>' +
+                            ((show.indexOf('group-actions') >= 0 && this.current_group_id) ?
+                                '<li>' +
+                                    '<a href="#" onclick="$.wa.controller.dialogRemoveSelectedFromGroup(); return false"><i class="icon16 contact"></i>'+$_('Exclude from this group')+'</a>'+
+                                '</li>' : '') +
+                            ((show.indexOf('category-actions') >= 0 && this.current_category_id) ?
+                                '<li>' +
+                                    '<a href="#" onclick="$.wa.controller.dialogRemoveSelectedFromCategory(); return false"><i class="icon16 contact"></i>'+$_('Exclude from this category')+'</a>'+
+                                '</li>' : '') +
+                            ((show.indexOf('merge') >= 0 && $.wa.controller.merge && $.wa.controller.admin) ?
+                                '<li class="two-or-more disabled">' +
+                                    '<a href="#" onClick="$.wa.controller.merge(); return false"><i class="icon16 merge"></i>'+$_('Merge contacts')+'</a>' +
+                                '</li>' : '') + 
+                            (show.indexOf('delete') >= 0 ?
+                                '<li>' +
+                                    '<a href="#" onclick="$.wa.controller.contactsDelete(); return false" class="red" id="show-dialog-delete"><i class="icon16 delete"></i>'+$_('Delete')+'</a>' +
+                                '</li>' : '' )+
+                        '</ul>' +
+                    '</li>';
+
+            // View selection
+            toolbar =
+                '<ul id="list-views" class="menu-h float-right">' +
+                    '<li rel="table"><a href="#"><i class="icon16 only view-table" title="' + $_('List') + '"></i></a></li>' +
+                    '<li rel="list"><a href="#" title="' + $_('Details') + '"><i class="icon16 only view-thumb-list"></i></a></li>' +
+                    '<li rel="thumbs"><a href="#" title="' + $_('Userpics') + '"><i class="icon16 only view-thumbs"></i></a></li>' +
+                '</ul>' +
+                '<div id="c-list-toolbar-menu-wrapper">' + 
+                    '<input id="c-select-all-items" onclick="$.wa.grid.selectItems(this)" type="checkbox">' + 
+                    '<ul id="c-list-toolbar-menu" class="menu-h dropdown disabled" style="display:inline-block;">' + toolbar + '</ul>' + 
+                '</div>';
+            var el = $('#contacts-container').find('.c-list-toolbar');
+            if (el.size() <= 0) {
+                el = $('<div class="block c-list-toolbar"></div>').prependTo($('#contacts-container'));
+            }
+            el.html(toolbar);
+            
+            $('#contacts-container').off('click.contacts_view', '#list-views > li').on('click.contacts_view', '#list-views > li', function() {
+                $.wa.grid.setView($(this).closest('li').attr('rel'));
+                return false;
+            });
+            $.wa.controller.updateSelectedCount();
+        },
+
+        /** Show the loading indicator in the header */
+        showLoading: function() {
+            var h1 = $('h1');
+            if(h1.size() <= 0) {
+                return; // could show it somewhere else in theory...
+            }
+            h1 = $(h1[0]);
+            if (h1.find('.loading').size() > 0) {
+                return;
+            }
+            h1.append('<i class="icon16 loading"></i>');
+        },
+
+        /** Hide indicator shown by this.showLoading() */
+        hideLoading: function() {
+            $('h1 .loading').remove();
+        },
+
+        /** Update number of selected contacts shown in Actions with selected menu. */
+        updateSelectedCount: function() {
+            var cnt = $("input.selector:checked").size();
+            $('#selected-count').text(cnt);
+            $('#selected-count-word-form').text($_(cnt, 'contacts selected'));
+            if (cnt <= 0) {
+                $('#actions-with-selected li').addClass('disabled');
+            } else {
+                $('#actions-with-selected li').removeClass('disabled');
+
+                // if there are no categories then leave add to category link disabled
+                if ($('#list-category li:not(.empty):not(.selected)').size() <= 0) {
+                    $('#add-to-category-link').addClass('disabled');
+                }
+                // Merge link is only active when there are 2 or more contacts selected
+                if (cnt < 2) {
+                    $('#actions-with-selected li.two-or-more').addClass('disabled');
+                }
+            }
+        },
+
+        getUrl: function () {
+            return this.options.url;
+        },
+
+        /** Load html from url into main content block. */
+        loadHTML: function (url, params, beforeLoadCallback, el) {
+            this.showLoading();
+            this.load(el || "#c-core .c-core-content", url, params, beforeLoadCallback);
+        },
+
+        /** Load content from url and put it into elem. Params are passed to url as get parameters. */
+        load: function (elem, url, params, beforeLoadCallback, afterLoadCallback) {
+            $.wa.contactEditor.load.apply(this, Array.prototype.slice.apply(arguments));
+        },
+
+        /** Helper function to parse contacts list params from a hash */
+        parseParams: function (params, hashkey) {
+            var p = {};
+            if (params && params[0]) {
+                p.offset = params[0];
+            }
+            if (params && params[1]) {
+                p.sort = params[1];
+            }
+            if (params && params[2]) {
+                p.order = params[2];
+            }
+
+            if (params && params[3]) {
+                p.view = params[3];
+                if (hashkey) {
+                    $.storage.set('contacts/view/'+hashkey, p.view);
+                }
+            } else {
+                // If view is not explicitly set then use the last opened view, if present
+                p.view = $.storage.get('contacts/view/'+hashkey) || 'table';
+            }
+            if (params && params[4]) {
+                p.limit = params[4];
+                if (hashkey) {
+                    $.storage.set('contacts/limit/'+hashkey, p.limit);
+                }
+            } else {
+                p.limit = $.storage.get('contacts/limit/'+hashkey) || 30;
+            }
+            return p;
+        },
+
+        /** Helper to set browser window title. */
+        setTitle: function(title, page_header) {
+            this.title = title;
+            if (this.accountName) {
+                document.title = title + ' — ' + this.accountName;
+            } else {
+                document.title = title;
+            }
+            if (page_header) {
+                $("#c-core h1.wa-page-heading").text(typeof page_header === 'string' ? page_header : title);
+            }
+        },
+                
+        getTitle: function() {
+            return this.title || '';
+        },
+                
+        setLastView: function(options) {
+            this.lastView = $.extend(this.lastView, options);
+        },
+                
+        clearLastView: function() {
+            this.lastView = {
+                title: null,
+                hash: null,
+                sort: null,
+                order: null,
+                offset: null
+            };
+        },
+
+        /** Helper to load contacts list */
+        loadGrid: function (params, hash, url, options) {
+            this.current_category_id = this.current_group_id = this.current_view_id = null;
+            if (!url) {
+                url = '?module=contacts&action=list';
+            }
+            if (!options) {
+                options = {};
+            }
+            $.wa.grid.load(url, params, "#contacts-container .contacts-data", hash, options);
+        },
+
+        /** Append a message above contacts list. */
+        showMessage: function (message, deleteContent, style) {
+            var oldMessages = $('#c-core .wa-message');
+            if (deleteContent) {
+                oldMessages.remove();
+                oldMessages = $();
+            }
+
+            if (!message) {
+                return;
+            }
+
+            style = style || '';
+            var html = $('<div class="wa-message wa-success ' + style + '"><a onclick="$(this).parent().empty().hide();"><i class="icon16 close"></i></a></div>')
+                .prepend($('<span class="wa-message-text"></span>').append(message));
+
+            if (oldMessages.size()) {
+                $(oldMessages[0]).empty().append(html);
+            } else {
+                if ($("#c-core h1:first").size()) {
+                    html.insertAfter($("#c-core h1:first"));
+                } else {
+                    $("#c-core").prepend(html);
+                }
+            }
+        },
+
+        /** Change current hash */
+        setHash: function (hash) {
+            return $.wa.setHash(this.cleanHash(hash));
+        },
+
+        /** Current hash */
+        getHash: function () {
+            return this.cleanHash();
+        },
+
+        /** Make sure hash has a # in the begining and exactly one / at the end.
+          * For empty hashes (including #, #/, #// etc.) return an empty string.
+          * Otherwise, return the cleaned hash.
+          * When hash is not specified, current hash is used. */
+        cleanHash: function (hash) {
+            if(typeof hash == 'undefined') {
+                hash = window.location.hash.toString();
+            }
+
+            if (!hash.length) {
+                hash = ''+hash;
+            }
+            while (hash.length > 0 && hash[hash.length-1] === '/') {
+                hash = hash.substr(0, hash.length-1);
+            }
+            hash += '/';
+
+            if (hash[0] != '#') {
+                if (hash[0] != '/') {
+                    hash = '/' + hash;
+                }
+                hash = '#' + hash;
+            } else if (hash[1] && hash[1] != '/') {
+                hash = '#/' + hash.substr(1);
+            }
+
+            if(hash == '#/') {
+                return '';
+            }
+
+            return hash;
+        },
+
+        collapseSidebarSection: function(el, action) {
+            if (!action) {
+                action = 'coollapse';
+            }
+            el = $(el);
+            if(el.size() <= 0) {
+                return;
+            }
+
+            var arr = el.find('.darr, .rarr');
+            if (arr.size() <= 0) {
+                arr = $('<i class="icon16 darr">');
+                el.prepend(arr);
+            }
+            var newStatus;
+            var id = el.attr('id');
+            var oldStatus = arr.hasClass('darr') ? 'shown' : 'hidden';
+
+            var hide = function() {
+                el.parent().find('ul.collapsible').hide();
+                arr.removeClass('darr').addClass('rarr');
+                newStatus = 'hidden';
+                el.trigger('collapsible', ['hide']);
+            };
+            var show = function() {
+                el.parent().find('ul.collapsible').show();
+                arr.removeClass('rarr').addClass('darr');
+                newStatus = 'shown';
+                el.trigger('collapsible', ['show']);
+            };
+
+            switch(action) {
+                case 'toggle':
+                    if (oldStatus == 'shown') {
+                        hide();
+                    } else {
+                        show();
+                    }
+                    break;
+                case 'restore':
+                    if (id) {
+                        var status = $.storage.get('contacts/collapsible/'+id);
+                        if (status == 'hidden') {
+                            hide();
+                        } else {
+                            show();
+                        }
+                    }
+                    break;
+                case 'uncollapse':
+                    show();
+                    break;
+                //case 'collapse':
+                default:
+                    hide();
+                    break;
+            }
+
+            // save status in persistent storage
+            if (id && newStatus) {
+                $.storage.set('contacts/collapsible/'+id, newStatus);
+            }
+        },
+
+        /** Collapse sections in sidebar according to status previously set in $.storage */
+        restoreCollapsibleStatusInSidebar: function() {
+            $("#wa-app .collapse-handler").each(function(i,el) {
+                $.wa.controller.collapseSidebarSection(el, 'restore');
+            });
+        },
+
+        /** Gracefully reload sidebar. */
+        reloadSidebar: function() {
+            $.post("?module=backend&action=sidebar", null, function (response) {
+                var sb = $("#wa-app .sidebar");
+                sb.css('height', sb.height()+'px') // prevents blinking in some browsers
+                  .html(response)
+                  .css('height', '');
+                $.wa.controller.highlightSidebar();
+                $.wa.controller.restoreCollapsibleStatusInSidebar();
+                if ($.wa.controller.initSidebarDragAndDrop) {
+                    $.wa.controller.initSidebarDragAndDrop();
+                }
+            });
+        },
+
+        /** Add .selected css class to li with <a> whose href attribute matches current hash.
+          * If no such <a> found, then the first partial match is highlighted.
+          * Hashes are compared after this.cleanHash() applied to them. */
+        highlightSidebar: function() {
+            var currentHash = this.cleanHash(location.hash);
+            var partialMatch = false;
+            var match = false;
+            $('#wa-app .sidebar li a').each(function(k, v) {
+                v = $(v);
+                var h = $.wa.controller.cleanHash(v.attr('href'));
+
+                // Perfect match?
+                if (h == currentHash) {
+                    match = v;
+                    return false;
+                }
+
+                // Partial match? (e.g. for urls that differ in paging only)
+                if (!partialMatch && h.length > 2 && currentHash.substr(0, h.length) === h) {
+                    partialMatch = v;
+                }
+            });
+
+            if (!match && partialMatch) {
+                match = partialMatch;
+            }
+
+            if (match) {
+                $('#wa-app .sidebar .selected').removeClass('selected');
+
+                // Only highlight items that are outside of dropdown menus
+                if (match.parents('ul.dropdown').size() <= 0) {
+                    var p = match.parent();
+                    while(p.size() > 0 && p[0].tagName.toLowerCase() != 'li') {
+                        p = p.parent();
+                    }
+                    if (p.size() > 0) {
+                        p.addClass('selected');
+                    }
+                }
+            }
+        },
+
+        // Custom sliding animation to hide and show tabs
+        loadTabSlidingAnimation: function() {
+            if ($.effects && !$.effects.slideDIB) {
+                $.effects.slideDIB = function(o) {
+                    return this.queue(function() {
+                        // Create element
+                        var el = $(this), props = ['position','top','left','width','height','margin'];
+
+                        // Set options
+                        var mode = $.effects.setMode(el, o.options.mode || 'show'); // Set Mode
+                        var direction = o.options.direction || 'left'; // Default Direction
+
+                        // Adjust
+                        $.effects.save(el, props); el.show(); // Save & Show
+                        $.effects.createWrapper(el).css({overflow:'hidden',display: 'inline-block',width:'auto'}); // Create Wrapper
+                        var ref = (direction == 'up' || direction == 'down') ? 'top' : 'left';
+                        var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
+                        var distance = o.options.distance || (ref == 'top' ? el.outerHeight({margin:true}) : el.outerWidth({margin:true}));
+                        if (mode == 'show') {
+                            el.css(ref, motion == 'pos' ? -distance : distance); // Shift
+                        }
+
+                        // Animation
+                        var animation = {};
+                        animation[ref] = (mode == 'show' ? (motion == 'pos' ? '+=' : '-=') : (motion == 'pos' ? '-=' : '+=')) + distance;
+
+                        // Animate
+                        el.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
+                            if(mode == 'hide') {
+                                el.hide(); // Hide
+                            }
+                            $.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
+                            if(o.callback) {
+                                o.callback.apply(this, arguments); // Callback
+                            }
+                            el.dequeue();
+                        }});
+                    });
+                }; // end of $.effects.slideDIB
+            }
+        }
+    }; // end of $.wa.controller
+})(jQuery);
+;
+(function($) {
+    $.wa.grid = {
+        
+        count: 0,
+        
+        // last loaded data by grid
+        data: {},
+        
+        highlight_terms: [],
+        
+        init: function () {
+            
+            this.defaultSettings = {
+                limit: 30, 
+                offset: 0, 
+                sort: 'name', 
+                order: 1, 
+                view: 'table'
+            };
+            this.settings = $.extend({}, this.defaultSettings);
+
+            // Since 'change' does not propagate in IE, we cannot use it with live events.
+            // In IE have to use 'click' instead.
+            var that = this;
+            $('#records-per-page').die($.browser.msie ? 'click' : 'change');
+            $('#records-per-page').live($.browser.msie ? 'click' : 'change', function() {
+                var newLimit = $(this).val();
+                var newOffset = 0;
+                if (that.settings && that.settings.offset) {
+                    newOffset = that.settings.offset;
+                }
+                $.wa.setHash($.wa.grid.hash + $.wa.grid.getHash({limit: newLimit, offset: newOffset}));
+            });
+        },
+
+        formatFieldValue: function(v, f) {
+            if (f.id === '_access') {
+                if (v == 'admin') {
+                    return '<strong>'+$_('Administrator')+'</strong>';
+                } else if (!v) {
+                    return '<span style="color: red; white-space: nowrap">'+$_('No access')+'</span>';
+                } else if (v == 'custom') {
+                    return '<span style="white-space: nowrap">'+$_('Limited access')+'</span>';
+                } else {
+                    return v; // not used and should not be
+                }
+            }
+            if (v) {
+                return $.wa.encodeHTML(v);
+            } else {
+                return '';
+            }
+        },
+                
+        setHightlightTerms: function(terms) {
+            var q = [];
+            //var terms = data.q || ((data.info && data.info.q) ? data.info.q : []) || [];
+            if ($.isArray(terms) && terms.length) {
+                for (var i = 0, n = terms.length; i < n; i += 1) {
+                    q.push(terms[i] || '');
+                }
+            } else if (typeof terms === 'string') {
+                q.push(terms || '');
+            }
+            return this.highlight_terms = terms;
+        },
+                
+        highlight: function(t) {
+            var r = t;
+            var q = this.highlight_terms;
+            if (r && !$.isEmptyObject(q)) {
+                var parser = $.parseXML ? $.parseXML : $.parseHTML;
+                var replacer = function(r) {
+                    for (var i = 0, n = q.length; i < n; i += 1) {
+                        if (q[i]) {
+                            r = ('' + r).replace(
+                                new RegExp('(' + 
+                                    q[i].replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&") + 
+                                ')', 'ig'), 
+                                '<span class="highlighted">$1</span>'
+                            );
+                        }
+                    }
+                    return r;
+                };
+                try {
+                    var id = 'wrapper' + ('' + Math.random()).slice(2);
+                    var elem = parser.call($, '<div id="' + id + '">' + r + '</div>');
+                    var workup = function(elem) {
+                        return elem.contents().map(function(i, el) {
+                            if (el.nodeType == 3) {
+                                return replacer($.wa.encodeHTML($(el).text()));
+                            } else {
+                                if ($(el).contents().length) {
+                                    var html = $('<div>');
+                                    workup($(el)).each(function(i, e) {
+                                        html.append(e);
+                                    });
+                                    return html.find(':first').get(0);
+                                } else {
+                                    return el;
+                                }
+                            }
+                        });
+                    };
+                    var html = $('<div>');
+                    workup($(elem).find('#' + id)).each(function(i, el) {
+                        html.append(el);
+                    });
+                    return html.html();
+                } catch (error) {
+                    if (console) {
+                        console.log([r, error]);
+                    }
+                    return replacer(r);
+                }
+            }
+            return r;
+        },
+                
+        formNamesHtml: function(contact) {
+            var name = this.highlight($.wa.encodeHTML(contact.name));
+            var lastname = this.highlight($.wa.encodeHTML(contact.lastname));
+            var middlename = this.highlight($.wa.encodeHTML(contact.middlename));
+            var firstname = this.highlight($.wa.encodeHTML(contact.firstname));
+
+            var strong = false;
+
+            var contacted = [
+                    firstname,
+                    middlename,
+                    lastname
+            ].join(' ').trim();
+
+            if (contact.lastname) {
+                lastname = '<strong>' + lastname + '</strong>';
+                strong = true;
+            } else if (contact.firstname) {
+                firstname = '<strong>' + firstname + '</strong>';
+                strong = true;
+            } else if (contact.middlename) {
+                middlename = '<strong>' + middlename + '</strong>';
+                strong = true;
+            }
+
+            var contacted_html = [
+                firstname,
+                middlename,
+                lastname
+            ].join(' ').trim();
+
+            var name_html = [];
+
+            // person
+            if (!parseInt(contact.is_company, 10)) {
+
+                if (contact.title) {
+                    name_html.push("<span class='title'>" + this.highlight($.wa.encodeHTML(contact.title)) + "</span>");
+                }
+                if (contacted) {
+                    name_html.push(contacted_html);
+                } else if (name) {
+                    name_html.push(name);
+                } else {
+                    name_html.push($('<span></span>').text($_("<no-name>")).html());
+                }
+
+                name_html = name_html.join(' ').trim();
+
+                var company_html = '';
+                if (contact.jobtitle || contact.company) {
+                    if (contact.jobtitle) {
+                        company_html += '<span class="title">' + this.highlight($.wa.encodeHTML(contact.jobtitle)) + '</span>';
+                    }
+                    if (contact.jobtitle && contact.company) {
+                        company_html += ' <span class="at">'+$_('@')+'</span> ';
+                    }
+                    if (contact.company) {
+                        if (strong) {
+                            company_html += '<span class="company">' + this.highlight($.wa.encodeHTML(contact.company))  + '</span>';
+                        } else {
+                            company_html += '<span class="company"><strong>' + this.highlight($.wa.encodeHTML(contact.company))  + '</strong></span>';
+                        }
+                    }
+                }
+
+                return [name_html, company_html];
+
+            } else {
+                company_html = '';
+                if (strong) {
+                    company_html += (contact.company ? this.highlight($.wa.encodeHTML(contact.company)) : name);
+                } else {
+                    company_html += (contact.company ? "<strong>" + this.highlight($.wa.encodeHTML(contact.company)) : name) + "</strong>";
+                }
+
+                return [company_html];
+            }
+
+        },
+
+        viewtable: function(data, no_pading) {
+            var html = tmpl('template-contacts-list-table', data);
+            this.count = data.count;
+            if (!no_pading) {
+                html += this.getPaging(data.count);
+            }
+            return html;
+        },
+
+        viewlist: function(data) {
+            var html = tmpl('template-contacts-list-list', data);
+            this.count = data.count;
+            html += this.getPaging(data.count);
+            return html;
+        },
+
+        viewthumbs: function(data) {
+            var html = tmpl('template-contacts-list-thumbs', data);
+            this.count = data.count;
+            html += this.getPaging(data.count);
+            return html;
+        },
+
+        load: function (url, ps, elem, hash, options) {
+            this.url = url;
+            this.options = options;
+            this.hash = hash;
+            this.settings = $.extend({}, this.defaultSettings);
+            
+            for (var n in ps) {
+                if (ps[n] !== null) {
+                    this.settings[n] = ps[n];
+                }
+            }
+            
+            var self = this;
+            var r = Math.random();
+            $.wa.controller.random = r; // prevents a lost request from updating a page
+
+            $.post(url, this.settings, function (response) {
+                if ($.wa.controller.random != r || response.status != 'ok') {
+                    return false;
+                }
+                
+                if (response.data.contacts) {
+                    $.wa.grid.data = response.data;
+                }
+
+                // if there's no contacts on current page, but there are contacts in this view
+                // then we need to change current page
+                if (response.data.count && response.data.contacts && !response.data.contacts.length) {
+                    var newOffset = Math.floor((response.data.count-1)/self.settings.limit)*self.settings.limit;
+                    if (newOffset != self.settings.offset) {
+                        $.wa.setHash($.wa.grid.hash + $.wa.grid.getHash({offset: newOffset}));
+                    }
+                    return false;
+                }
+
+                var beforeLoadReturn = null;
+                if (self.options && self.options.beforeLoad) {
+                    beforeLoadReturn = self.options.beforeLoad.call($.wa.controller, response.data);
+                }
+                
+                if (response.data.title) {
+                    $.wa.controller.setTitle(response.data.title, true);
+                }
+                if (response.data.desc) {
+                    $.wa.controller.setDesc(response.data.desc);
+                }
+
+                // Update history
+                if (response.data.history) {
+                    $.wa.history.updateHistory(response.data.history);
+                }
+
+                elem = $(elem);
+                if (beforeLoadReturn !== false) {
+                    elem.html(self.view(self.settings.view, response.data/*, active_fields*/));
+                }
+                if (self.options && self.options.afterLoad) {
+                    self.options.afterLoad(response.data);
+                }
+                
+                $.wa.controller.clearLastView();
+                
+            }, "json");
+        },
+
+        getSelected: function (int) {
+            var data = [];
+            $("input.selector:checked").each(function () {
+                if (int) {
+                    var value = parseInt(this.value, 10);
+                    if (!isNaN(value)) {
+                        data.push(value);
+                    }
+                } else {
+                    data.push(this.value);
+                }
+            });
+            return data;
+        },
+
+        setView: function (view) {
+            $.wa.setHash(this.hash + this.getHash({view: view}));
+            return false;
+        },
+
+        selectItems: function (obj, container) {
+            container = $('#' + (container || 'contacts-container'));
+            if ($(obj).is(":checked")) {
+                container.find('input.selector').attr('checked', 'checked').parents('.contact-row,.item-row').addClass('selected');
+            } else {
+                container.find('input.selector').removeAttr('checked').parents('.contact-row,.item-row').removeClass('selected');
+            }
+            $.wa.controller.updateSelectedCount();
+        },
+
+//        getFieldById: function (id) {
+//            for (var i = 0; i < this.fields.length; i++) {
+//                if (this.fields[i].id == id) {
+//                    return this.fields[i];
+//                }
+//            }
+//            return {};
+//        },
+
+        viewlistvalue: function (v, f) {
+            if (typeof v !== 'object') {
+                if (f.type === 'Select') {
+                    var options = f.options || {};
+                    if (options[v] !== undefined) {
+                        v = options[v];
+                    }
+                }
+                return $.wa.encodeHTML(v);
+            }
+
+            var html = '';
+            if (f.icon) {
+                html += '<i class="icon16 ' + f.icon + '"></i>';
+            }
+            
+            // value should be encoded only if there's only value and ext
+            var enc = true;
+            for(var i in v) {
+                if (i != 'ext' && i != 'value') {
+                    enc = false;
+                    break;
+                }
+            }
+            
+            if (v.value) {
+                html += enc ? $.wa.encodeHTML(v.value) : v.value;
+            }
+            if ($.trim(v.ext) && !f.fields) {
+                // is it a predefined extension?
+                if (f.ext && f.ext[v.ext]) {
+                    html += ' <em class="hint">' + f.ext[v.ext] + '</em>';
+                } else {
+                    html += ' <em class="hint">' + $.wa.encodeHTML(v.ext) + '</em>';
+                }
+            }
+            return html;
+        },
+
+        view: function (view, data, params) {
+            if (!this['view' + view]) {
+                view = 'table';
+            }
+            $("#list-views li.selected").removeClass('selected');
+            $("#list-views li[rel=" + view + "]").addClass('selected');
+            $("#contacts-container .contacts-data").removeClass('padded').addClass('not-padded');
+            var q = data.highlight_terms || ((data.info && data.info.highlight_terms) ? data.info.highlight_terms : []) || [];
+            if (typeof q === 'string') {
+                q = [q];
+            }
+            $.wa.grid.setHightlightTerms(q);
+            return this['view' + view](data, params);
+        },
+
+        getHash: function (ps) {
+            var p = {};
+            for (var n in this.settings) {
+                p[n] = this.settings[n];
+            }
+            for (var n in ps) {
+                p[n] = ps[n];
+            }
+            var hash = p.offset + '/' + p.sort + '/' + p.order + '/' + p.view + '/' + p.limit + '/';
+            return hash;
+        },
+
+        /**
+         * Make paginator
+         * 
+         * @param {Number} n
+         * @param {Boolean} show_total need to show "Total contacts" area. Default: true
+         * @param {Boolean} show_options need to show "Show X records on page" selector: Default: true
+         * @returns {String} html block if paginator
+         */
+        getPaging: function (n, show_total, show_options) {
+    
+            show_total = typeof show_total === 'undefined' ? true : show_total;
+            show_options = typeof show_options === 'undefined' ? true : show_options;
+            var html = '<div class="block paging">';
+
+            var type = $.wa.controller.options.paginator_type;
+
+            // "Show X records on page" selector
+            if (show_options) {
+                var options = '';
+                var o = [30, 50, 100, 200, 500];
+                for(var i = 0; i < o.length; i++) {
+                    options += '<option value="'+o[i]+'"'+(this.settings.limit == o[i] ? ' selected="selected"' : '')+'>'+o[i]+'</option>';
+                }
+                if (n > o[0]) {
+                    html += '<span class="c-page-num">'+$_('Show %s records on a page').replace('%s', '<select id="records-per-page">'+
+                            options+
+                        '</select>')+'</span>';
+                }
+            }
+
+            // Total number of contacts in view
+            if (show_total && type === 'page') {
+                html += '<span class="total">'+$_('Contacts')+': '+n+'</span>';
+            }
+
+            // Pagination
+            var pages = Math.ceil(n / parseInt(this.settings.limit));
+            var p = Math.ceil(parseInt(this.settings.offset) / parseInt(this.settings.limit)) + 1;
+            if (pages > 1) {
+                if (this.hash[this.hash.length-1] != '/') {
+                    this.hash += '/';
+                }
+                if (type === 'page') {
+                    html += '<span>'+$_('Pages')+':</span>';
+                }
+                if (pages == 1) {
+                    return '';
+                }
+                
+                if (type === 'page') {
+                    var f = 0;
+                    for (var i = 1; i <= pages; i++) {
+                        if (Math.abs(p - i) < 2 || i < 2 || pages - i < 1) {
+                            html += '<a ' + (i == p ? 'class="selected"' : '') + ' href="#' + this.hash + this.getHash({offset: (i - 1) * this.settings.limit}) + '">' + i + '</a>';
+                            f = 0;
+                        } else if (f++ < 3) {
+                            html += '.';
+                        }
+                    }
+                } else {
+                    html += (parseInt(this.settings.offset, 10) + 1) + '&mdash;' + Math.min(n, (parseInt(this.settings.offset, 10) + parseInt(this.settings.limit, 10)));
+                    html += ' ' + $_('of') + ' '  + n;
+                }
+            } else if (type !== 'page') {
+                if (pages <= 0) {
+                    html += $_('No contacts.');
+                } else {
+                    html += Math.min(parseInt(this.settings.offset, 10) + 1, n) + '&mdash;' + Math.min(n, (parseInt(this.settings.offset, 10) + parseInt(this.settings.limit, 10)));
+                    html += ' ' + $_('of') + ' '  + n;
+                }
+            }
+
+            // Prev and next links
+            if (p > 1) {
+                html += '<a href="#' + this.hash + this.getHash({offset: (p - 2) * this.settings.limit}) +	'" class="prevnext"><i class="icon10 larr"></i> '+$_('prev')+'</a>';
+            }
+            if (p < pages) {
+                html += '<a href="#' + this.hash + this.getHash({offset: p * this.settings.limit}) +	'" class="prevnext">'+$_('next')+' <i class="icon10 rarr"></i></a>';
+            }
+
+            return html + '</div>';
+        }
+
+    };
+    //$.wa.grid.init();
+
+})(jQuery);;
+$.wa.history = {
+    data: null,
+    updateHistory: function(historyData) {
+        this.data = historyData;
+        var searchUl = $('#wa-search-history').empty();
+        var creationUl = $('#wa-creation-history').empty();
+        var currentHash = $.wa.controller.cleanHash(location.hash);
+        for(var i = 0; i < historyData.length; i++) {
+            var h = historyData[i];
+            h.hash = $.wa.controller.cleanHash(h.hash);
+            var li = $('<li rel="'+h.id+'">'+
+                            (h.cnt >= 0 ? '<span class="count">'+h.cnt+'</span>' : '')+
+                            '<a href="'+h.hash+'"><i class="icon16 '+h.type+'"></i></a>'+
+                        '</li>');
+
+            if (h.type == 'search' || h.type == 'import') {
+                li.addClass('wa-h-type-search');
+            }
+
+            li.children('a').append($('<b>').text(h.name));
+
+            if (h.type == 'import') {
+                creationUl.append(li);
+            } else if (h.type == 'add') {
+                li.find('.icon16').removeClass(h.type).addClass('userpic20').css('background-image', 'url('+h.icon+')');
+                creationUl.append(li);
+            } else if (h.type == 'search') {
+                searchUl.append(li);
+            }
+        }
+
+        var lists = [searchUl, creationUl];
+        for(var l = 0; l < lists.length; l++) {
+            var ul = lists[l];
+            if (ul.children().size() > 0) {
+                ul.parents('.block.wrapper').show();
+            } else {
+                ul.parents('.block.wrapper').hide();
+            }
+        }
+        $.wa.controller.highlightSidebar();
+    },
+    clear: function(type) {
+        if (!type || type == 'search') {
+            $('#wa-search-history').parents('.block.wrapper').hide();
+            $('#wa-search-history').empty();
+            type = '&ctype='+type
+        } else if (type && type == 'creation') {
+            $('#wa-creation-history').parents('.block.wrapper').hide();
+            $('#wa-creation-history').empty();
+            type = '&ctype[]=import&ctype[]=add';
+        } else {
+            type = '';
+        }
+        $.get('?module=contacts&action=history&clear=1'+type);
+        return false;
+    }
+};
+
+// EOF;
+/**
+  * Base classs for all editor factory types, all editor factories and all editors.
+  * Implements JS counterpart of contactsFieldEditor with no validation.
+  *
+  * An editor factory can be created out of factory type (see $.wa.contactEditorFactory.initFactories())
+  *
+  * Editor factories create editors using factory.createEditor() method. Under the hood
+  * a factory simply copies self, removes .createEditor() method from the copy and calls
+  * its .initialize() method.
+  */
+$.wa.fieldTypesFactory = function(contactEditor, fieldType) {
+    
+    contactEditor = contactEditor || $.wa.contactEditorFactory();
+    
+    contactEditor.baseFieldType = {
+
+        //
+        // Public editor factory functions. Not available in editor instances.
+        //
+
+        contactType: 'person',
+                
+        options: {},
+
+        /** For multifields, return a new (empty) editor for this field. */
+        createEditor: function(contactType) {
+            this.contactType = contactType || 'person';
+            var result = $.extend({}, this);
+            delete result.createEditor; // do not allow to use instance as a factory
+            delete result.initializeFactory;
+            result.parentEditorData = {};
+            result.initialize();
+            return result;
+        },
+
+        //
+        // Editor properties set in subclasses.
+        //
+
+        /** Last value set by setValue() (or constructor).
+          * Default implementation expects fieldValue to be string.
+          * Subclasses may store anything here. */
+        fieldValue: '',
+
+        //
+        // Editor functions that should be redefined in subclasses
+        //
+
+        /** Factory constructor. */
+        initializeFactory: function(fieldData, options) {
+            this.fieldData = fieldData;
+            this.options = options || {};
+        },
+
+        /** Editor constructor. Should set all appropriate fields as if
+          * this.setValue() got called with an empty data (with no record in db).
+          * this.fieldData is available for standalone fields,
+          * or empty {} for subfields of a multifield. */
+        initialize: function() {
+            this.setValue('');
+        },
+
+        reinit: function() {
+            this.currentMode = 'null';
+            this.initialize();
+        },
+
+        /** Load field contents from given data and update DOM. */
+        setValue: function(data) {
+            this.fieldValue = data;
+            if (this.currentMode == 'null' || this.domElement === null) {
+                return;
+            }
+
+            if (this.currentMode == 'edit') {
+                this.domElement.find('.val').val(this.fieldValue);
+            } else {
+                this.domElement.find('.val').html(this.fieldValue);
+            }
+        },
+
+        /** Get data from this field after (possible) user modifications.
+          * @return mixed Data object as accepted by this.setValue() and server-side handler. */
+        getValue: function() {
+            var result = this.fieldValue;
+            if (this.currentMode == 'edit' && this.domElement !== null) {
+                var input = this.domElement.find('.val');
+                if (input.length > 0) {
+                    result = '';
+                    if (!input.hasClass('empty')) { // default values use css class .empty to grey out value
+                        if (input.attr('type') != 'checkbox' || input.attr('checked')) {
+                            result = input.val();
+                        }
+                    }
+                }
+            }
+            return result;
+        },
+
+        /** true if this field was modified by user and now needs to save data */
+        isModified: function() {
+            return this.fieldValue != this.getValue();
+        },
+
+        /** Validate field value (and possibly change it if needed)
+          * @param boolean skipRequiredCheck (default false) set to true to skip check required fields to be not empty
+          * @return mixed Validation data accepted by showValidationErrors(), or null if no errors. Default implementation accepts simple string. */
+        validate: function(skipRequiredCheck) {
+            var val = this.getValue();
+            if (!skipRequiredCheck && this.fieldData.required && !val) {
+                return $_('This field is required.');
+            }
+            return null;
+        },
+
+        /** Return a new jQuery object that represents this field in given mode.
+          * Use of contactEditor.wrapper is recommended if apropriate.
+          * In-place editors are initialized here.
+          * Must contain exactly one element, even when field is currently not visible.
+          * Default implementation uses this.newInlineFieldElement(), wraps it and initializes in-place editor.
+          */
+        newFieldElement: function(mode) {
+            if(this.fieldData.read_only) {
+                mode = 'view';
+            }
+            var inlineElement = this.newInlineFieldElement(mode);
+
+            // Do not show anything if there's no inline element
+            if(inlineElement === null && (!this.fieldData.show_empty || mode == 'edit')) {
+                return $('<div style="display: none" class="field" data-field-id="' + this.fieldData.id + '"></div>');
+            }
+
+            var nameAddition = '';
+            if (mode == 'edit') {
+                //nameAddition = (this.fieldData.required ? '<span class="req-star">*</span>' : '')+':';
+            }
+            var cssClass;
+            if (this.contactType === 'person') {
+                if (['firstname', 'middlename', 'lastname'].indexOf(this.fieldData.id) >= 0) {
+                    cssClass = 'subname';
+                    inlineElement.find('.val').attr('placeholder', this.fieldData.name);
+                } else if (this.fieldData.id === 'title') {
+                    cssClass = 'subname title';
+                    inlineElement.find('.val').attr('placeholder', this.fieldData.name);
+                } else if (this.fieldData.id === 'jobtitle') {
+                    cssClass = 'jobtitle-company jobtitle';
+                    //inlineElement.find('.val').attr('placeholder', this.fieldData.name);
+                } else if (this.fieldData.id === 'company') {
+                    cssClass = 'jobtitle-company company';
+                    //inlineElement.find('.val').attr('placeholder', this.fieldData.name);
+                }
+            } else if (this.fieldData.id === 'company') {
+                cssClass = 'company';
+            }
+            return contactEditor.wrapper(inlineElement, this.fieldData.name+nameAddition, cssClass).attr('data-field-id', this.fieldData.id);
+        },
+
+        /** When used as a part of multi or composite field, corresponding wrapper
+          * uses this function (if defined and not null) instead of newFieldElement().
+          * Unwrapped value (but still $(...) wrapped) is expected. If null returned, field is not shown.
+          */
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+            var result = null;
+            if (mode == 'edit') {
+                result = $('<span><input class="val" type="text"></span>');
+                result.find('.val').val(this.fieldValue);
+            } else {
+                result = $('<span class="val"></span>');
+                result.text(this.fieldValue);
+            }
+            return result;
+        },
+
+        /** Remove old validation errors if any and show given error info for this field.
+          * Optional to redefine in subclasses.
+          * Must be redefined for editors that do not use the default contactEditor.wrapper().
+          * Default implementation accepts simple string.
+          * @param errors mixed Validation error data as generated by this.validate() (or server), or null to hide all errors. */
+        showValidationErrors: function(errors) {
+            if (this.domElement === null) {
+                return;
+            }
+
+            var input = this.domElement.find('.val');
+            input.parents('.value').children('em.errormsg').remove();
+
+            if (errors !== null) {
+                input.parents('.value').append($('<em class="errormsg">'+errors+'</em>'));
+                input.addClass('error');
+            } else {
+                input.removeClass('error');
+            }
+        },
+
+        //
+        // Public properties that can be used in editors
+        //
+
+        /** Field data as returned from $typeClass->getValue() for this class in PHP.
+          * When this field is a subfield for a multifield, this var contains
+          * {id: null, multi: false, name: 'Subfield Name'} */
+        fieldData: null,
+
+        /** jQuery object that contains wrapping DOM element that currently
+          * represents this field in #contact-info-block. When not null,
+          * always contains exactly one element, even if field is currently not visible. */
+        domElement: null,
+
+        /** Is domElement in 'view', 'edit' or 'null' mode. */
+        currentMode: 'null',
+
+        /** Editor that uses this one as a subfield */
+        parentEditor: null,
+
+        /** Any data that parent would want to put here. */
+        parentEditorData: null,
+
+        //
+        // Public editor functions
+        //
+
+        /** Set given editor mode and return DOM element that represents this field.
+          * If this editor is already initialized (i.e. this.currentMode is not 'null'),
+          * this function replaces old this.domElement in DOM with new value.
+          * @param mode string 'edit' or 'view'
+          * @param replaceEditor boolean (optional, default true) pass false to avoid creating dom element (e.g. to use as a subfield)
+          */
+        setMode: function(mode, replaceEditor) {
+            if (typeof replaceEditor == 'undefined') {
+                replaceEditor = true;
+            }
+            if (mode != 'view' && mode != 'edit') {
+                throw new Error('Unknown mode: '+mode);
+            }
+
+            if (this.currentMode != mode) {
+                this.currentMode = mode;
+                if (replaceEditor) {
+                    var oldDom = this.domElement;
+                    this.domElement = this.newFieldElement(mode);
+                    if (oldDom !== null) {
+                        oldDom.replaceWith(this.domElement);
+                    }
+                }
+            }
+
+            return this.domElement;
+        }
+    }; // end of baseFieldType
+
+    //
+    // Factory Types
+    //
+
+    contactEditor.factoryTypes.Hidden = $.extend({}, contactEditor.baseFieldType, {
+        newFieldElement: function(mode) {
+            var inlineElement = this.newInlineFieldElement(mode);
+            return contactEditor.wrapper(inlineElement, this.fieldData.name).attr('data-field-id', this.fieldData.id).hide();
+        },
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+            var result = null;
+            if (mode == 'edit') {
+                result = $('<span><input type="hidden" class="val" type="text"></span>');
+                result.find('.val').val(this.fieldValue);
+            }
+            return result;
+        }
+    });
+
+    contactEditor.factoryTypes.String = $.extend({}, contactEditor.baseFieldType, {
+        setValue: function(data) {
+            this.fieldValue = data;
+            if (this.currentMode == 'null' || this.domElement === null) {
+                return;
+            }
+
+            if (this.currentMode == 'edit') {
+                this.domElement.find('.val').val(this.fieldValue);
+            } else {
+                this.domElement.find('.val').html(this.fieldValue);
+            }
+        },
+
+        getValue: function() {
+            var result = this.fieldValue;
+            if (this.currentMode == 'edit' && this.domElement !== null) {
+                var input = this.domElement.find('.val');
+                result = '';
+                if (!input.hasClass('empty')) { // default values use css class .empty to grey out value
+                    result = input.val();
+                }
+            }
+            return result;
+        },
+
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+
+            var result = null;
+            var value = this.fieldValue;
+            if (mode == 'edit') {
+                if (this.fieldData.input_height <= 1) {
+                    result = $('<span><input class="val" type="text"><i class="icon16 loading" style="display:none;"></i></span>');
+                } else {
+                    result = $('<span><textarea class="val" rows="'+this.fieldData.input_height+'"></textarea></span>');
+                }
+                result.find('.val').val(value);
+            } else {
+                result = $('<span class="val"></span><i class="icon16 loading" style="display:none;">').text(value);
+            }
+            return result;
+        },
+        
+        setMode: function(mode, replaceEditor) {
+            if (typeof replaceEditor == 'undefined') {
+                replaceEditor = true;
+            }
+            if (mode != 'view' && mode != 'edit') {
+                throw new Error('Unknown mode: '+mode);
+            }
+
+            if (this.currentMode != mode) {
+                this.currentMode = mode;
+                if (replaceEditor) {
+                    var oldDom = this.domElement;
+                    this.domElement = this.newFieldElement(mode);
+                    if (oldDom !== null) {
+                        oldDom.replaceWith(this.domElement);
+                    }
+                }
+            }
+
+            return this.domElement;
+        },
+        
+        
+        
+    });
+    contactEditor.factoryTypes.Text = $.extend({}, contactEditor.factoryTypes.String);
+    contactEditor.factoryTypes.Phone = $.extend({}, contactEditor.baseFieldType);
+    contactEditor.factoryTypes.Select = $.extend({}, contactEditor.baseFieldType, {
+        notSet: function() {
+            return '';
+        },
+
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+
+            if(mode == 'view') {
+                return $('<span class="val"></span>').text(this.fieldData.options[this.fieldValue] || this.fieldValue);
+            } else {
+                var options = '';
+                var selected = false, attrs;
+                for(var i = 0; i<this.fieldData.oOrder.length; i++) {
+                    var id = this.fieldData.oOrder[i];
+                    if (!selected && id == this.fieldValue && this.fieldValue) {
+                        selected = true;
+                        attrs = ' selected';
+                    } else {
+                        attrs = '';
+                    }
+                    if (id === '') {
+                        attrs += ' disabled';
+                    }
+                    options += '<option value="'+id+'"'+attrs+'>' + $.wa.encodeHTML(this.fieldData.options[id]) + '</option>';
+                }
+                return $('<div><select class="val '  + (this.fieldData.type + '').toLowerCase() + '"><option value=""'+(selected ? '' : ' selected')+'>'+this.notSet()+'</option>'+options+'</select></div>');
+            }
+        }
+    });
+    contactEditor.factoryTypes.Conditional = $.extend({}, contactEditor.factoryTypes.Select, {
+
+        unbindEventHandlers: function() {},
+
+        getValue: function() {
+            var result = this.fieldValue;
+            if (this.currentMode == 'edit' && this.domElement !== null) {
+                var input = this.domElement.find('.val:visible');
+                if (input.length > 0) {
+                    if (input.hasClass('empty')) {
+                        result = '';
+                    } else {
+                        result = input.val();
+                    }
+                }
+            }
+            return result;
+        },
+
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+            this.unbindEventHandlers();
+
+            if(mode == 'view') {
+                return $('<div></div>').append($('<span class="val"></span>').text((this.fieldData.options && this.fieldData.options[this.fieldValue]) || this.fieldValue));
+            } else {
+                var cond_field = this;
+
+                // find the the field we depend on
+                var parent_field_id_parts = (cond_field.fieldData.parent_field || '').split(':');
+                var parent_field = contactEditor.fieldEditors[parent_field_id_parts.shift()];
+                while (parent_field && parent_field_id_parts.length) {
+                    var subfields = parent_field.subfieldEditors;
+                    if (subfields instanceof Array) {
+                        // This is a multi-field. Select the one that we're part of (if any)
+                        parent_field = null;
+                        for (var i = 0; i < subfields.length; i++) {
+                            if (subfields[i] === cond_field.parentEditor) {
+                                parent_field = subfields[i];
+                                break;
+                            }
+                        }
+                    } else {
+                        // This is a composite field. Select subfield by the next id part
+                        parent_field = subfields[parent_field_id_parts.shift()];
+                    }
+                }
+
+                if (parent_field) {
+                    var initial_value = (this.fieldData.options && this.fieldData.options[this.fieldValue]) || this.fieldValue;
+                    var input = $('<input type="text" class="hidden val">').val(initial_value);
+                    var select = $('<select class="hidden val"></select>').hide();
+                    var change_handler;
+
+                    var getVal = function() {
+                        if (input.is(':visible')) {
+                            return input.val();
+                        } else if (select.is(':visible')) {
+                            return select.val();
+                        } else {
+                            return initial_value;
+                        }
+                    };
+
+                    // Listen to change events from field we depend on.
+                    // setTimeout() to ensure that field created its new domElement.
+                    setTimeout(function() {
+                        if (!parent_field.domElement) {
+                            input.show();
+                            return;
+                        }
+                        parent_field.domElement.on('change', '.val', change_handler = function() {
+                            var parent_val_element = $(this);
+                            var old_val = getVal();
+                            var parent_value = (parent_val_element.val() || '').toLowerCase();
+                            var values = cond_field.fieldData.parent_options[parent_value];
+                            if (values) {
+                                input.hide();
+                                select.show().children().remove();
+                                for (i = 0; i < values.length; i++) {
+                                    select.append($('<option></option>').attr('value', values[i]).text(values[i]).attr('selected', cond_field.fieldValue == values[i]));
+                                }
+                                select.val(old_val);
+                            } else {
+                                input.val(old_val || '').show().blur();
+                                select.hide();
+                            }
+                        });
+                        change_handler.call(parent_field.domElement.find('.val:visible')[0]);
+                    }, 0);
+
+                    cond_field.unbindEventHandlers = function() {
+                        if (change_handler && parent_field.domElement) {
+                            parent_field.domElement.find('.val').unbind('change', change_handler);
+                        }
+                        cond_field.unbindEventHandlers = function() {};
+                    };
+
+                    return $('<div></div>').append(input).append(select);
+                } else {
+                    return $('<div></div>').append($('<input type="text" class="val">').val(cond_field.fieldValue));
+                }
+            }
+        }
+    });
+    contactEditor.factoryTypes.Region = $.extend({}, contactEditor.factoryTypes.Select, {
+        notSet: function() {
+//            if (this.fieldData.options && this.fieldValue && !this.fieldData.options[this.fieldValue]) {
+//                return this.fieldValue;
+//            }
+            return '';
+        },
+
+        unbindEventHandlers: function() {},
+
+        setCurrentCountry: function() {
+            var old_country = this.current_country;
+            this.current_country = this.parentEditorData.parent.subfieldEditors.country.getValue();
+            if (old_country !== this.current_country) {
+                delete this.fieldData.options;
+                return true;
+            }
+            return false;
+        },
+
+        getRegionsControllerUrl: function(country) {
+            return (contactEditor.regionsUrl || '?module=backend&action=regions&country=')+country;
+        },
+
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+
+            this.unbindEventHandlers();
+
+            var options = this.options || {};
+            if (options.country !== undefined) {
+                this.current_country = options.country;
+            }
+
+            if(mode == 'view') {
+                return $('<div></div>').append($('<span class="val"></span>').text((this.fieldData.options && this.fieldData.options[this.fieldValue]) || this.fieldValue));
+            } else {
+                var region_field = this;
+
+                // This field depends on currently selected country in address
+                if (this.parentEditorData.parent && this.parentEditorData.parent.subfieldEditors.country) {
+                    this.setCurrentCountry();
+                    var handler;
+                    $(document).on('change', 'select.country', handler = function() {
+                        if (region_field.setCurrentCountry()) {
+                            var prev_val = '';
+                            var prev_val_el = region_field.domElement.find('.val');
+                            if (prev_val_el.is('input')) {
+                                prev_val = prev_val_el.val().trim();
+                            } else {
+                                prev_val = prev_val_el.find(':selected').text().trim();
+                            }
+                            
+                            var lookup = function(select, val) {
+                                var v = val.toLocaleLowerCase();
+                                select.find('option').each(function() {
+                                    if ($(this).text().trim().toLocaleLowerCase() === v) {
+                                        $(this).attr('selected', true);
+                                        return false;
+                                    }
+                                });
+                            };
+                            
+                            region_field.domElement.empty().append(region_field.newInlineFieldElement(mode).children());
+
+                            var val_el = region_field.domElement.find('.val');
+                            if (val_el.is('input') && !val_el.val()) {
+                                val_el.val(prev_val);
+                            } else if (val_el.is('select') && prev_val) {
+                                lookup(val_el, prev_val);
+                            } else {
+                                region_field.domElement.unbind('load.fieldTypes').bind('load.fieldTypes', function() {
+                                    var val_el = region_field.domElement.find('.val');
+                                    if (val_el.is('select') && prev_val) {
+                                        lookup(val_el, prev_val);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    region_field.unbindEventHandlers = function() {
+                        $(document).off('change', 'select.country', handler);
+                        region_field.unbindEventHandlers = function() {};
+                    };
+                }
+
+                if (!options.no_ajax_select && this.fieldData.options === undefined && this.current_country && this.fieldData.region_countries[this.current_country]) {
+                    // Load list of regios via AJAX and then show select
+                    var country = this.current_country;
+                    $.get(this.getRegionsControllerUrl(country), function(r) {
+                        if (mode !== region_field.currentMode || country !== region_field.current_country) {
+                            return;
+                        }
+                        region_field.fieldData.options = r.data.options || false;
+                        region_field.fieldData.oOrder = r.data.oOrder || [];
+                        if ($.isPlainObject(region_field.options) && region_field.options.country !== undefined) {
+                            delete region_field.options.country;
+                        }
+                        var d = $('<div></div>');
+                        d.append(region_field.newInlineFieldElement(mode).children());
+                        region_field.domElement.empty().append(region_field.newInlineFieldElement(mode).children());
+                        region_field.domElement.trigger('load');
+                    }, 'json');
+                    return $('<div></div>').append($('<i class="icon16 loading"></i>'));
+                } else if (this.fieldData.options) {
+                    // Show as select
+                    return $('<div></div>').append(contactEditor.factoryTypes.Select.newInlineFieldElement.call(this, mode));
+                } else {
+                    // show as input
+                    var result = $('<div></div>').append(contactEditor.baseFieldType.newInlineFieldElement.call(this, mode));
+                    
+                    result.find('.val').val('');
+                    
+                    //$.wa.defaultInputValue(result.find('.val'), this.fieldData.name+(this.fieldData.required ? ' ('+$_('required')+')' : ''), 'empty');
+                    result.find('.val').attr('placeholder', this.fieldData.name+(this.fieldData.required ? ' ('+$_('required')+')' : ''));
+                    return result;
+                }
+            }
+        }
+    });
+
+    contactEditor.factoryTypes.Country = $.extend({}, contactEditor.factoryTypes.Select);
+    contactEditor.factoryTypes.Checklist = $.extend({}, contactEditor.baseFieldType, {
+        validate: function(skipRequiredCheck) {
+//            if (!skipRequiredCheck && this.fieldData.required && this.getValue().length <= 0) {
+//                return $_('This field is required.');
+//            }
+            return null;
+        },
+        setValue: function(data) {
+            this.fieldValue = data;
+
+            if(this.currentMode == 'edit' && this.domElement) {
+                this.domElement.find('input[type="checkbox"]').attr('checked', false);
+                for (var id in this.fieldValue) {
+                    this.domElement.find('input[type="checkbox"][value="'+id+'"]').attr('checked', true);
+                }
+            } else if (this.currentMode == 'view' && this.domElement) {
+                this.domElement.find('.val').html(this.getValueView());
+            }
+        },
+        getValue: function() {
+            if(this.currentMode != 'edit' || !this.domElement) {
+                return this.fieldValue;
+            }
+
+            var result = [];
+            this.domElement.find('input[type="checkbox"]:checked').each(function(k,input) {
+                result.push($(input).val());
+            });
+            return result;
+        },
+        getValueView: function() {
+            var options = '';
+            // Show categories in alphabetical (this.fieldData.oOrder) order
+            for(var i = 0; i<this.fieldData.oOrder.length; i++) {
+                var id = this.fieldData.oOrder[i];
+                if (this.fieldValue.indexOf(id) < 0) {
+                    continue;
+                }
+                options += (options ? ', ' : '')+'<a href="'+(this.fieldData.hrefPrefix || '#')+id+'">'+((this.fieldData.options[id] && contactEditor.htmlentities(this.fieldData.options[id])) || $_('&lt;no name&gt;'))+'</a>';
+            }
+            return options || $_('&lt;none&gt;');
+        },
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !(this.fieldValue && this.fieldValue.length)) {
+                return null;
+            }
+
+            if(mode == 'view') {
+                return $('<span class="val"></span>').html(this.getValueView());
+            }
+
+            //
+            // Edit mode
+            //
+
+            // Is there more than one option to select from?
+            var optionsAvailable = 0; // 0, 1 or 2
+            var id;
+            for(id in this.fieldData.options) {
+                optionsAvailable++;
+                if (optionsAvailable > 1) {
+                    break;
+                }
+            }
+            // Do not show the field at all if there's no options to select from
+            if (!optionsAvailable) {
+                return null;
+            }
+
+            var options = '';
+            for(var i = 0; i<this.fieldData.oOrder.length; i++) {
+                id = this.fieldData.oOrder[i];
+                options += '<li><label><input type="checkbox" value="'+id+'"';
+
+                // Checkboxes for system categories are disabled
+                if (this.fieldData.disabled && this.fieldData.disabled[id]) {
+                    options += ' disabled="disabled"';
+                }
+                
+                if ((this.fieldValue || []).indexOf(id) !== -1) {
+                    options += ' checked="checked"';
+                }
+                
+                options += ' />'+((this.fieldData.options[id] && contactEditor.htmlentities(this.fieldData.options[id])) || $_('&lt;no name&gt;'))+'</label></li>';
+            }
+            return contactEditor.initCheckboxList('<div class="c-checkbox-menu-container val"><div><ul class="menu-v compact with-icons c-checkbox-menu">'+options+'</ul></div></div>');
+        }
+    });
+
+    contactEditor.factoryTypes.Name = $.extend({}, contactEditor.baseFieldType, {
+        /** Cannot be used inline */
+        newInlineFieldElement: null,
+
+        newFieldElement: function(mode) {
+            return $('<div style="display: none;" class="field" data-field-id="'+this.fieldData.id+'"></div>');
+        },
+        setValue: function(data) {
+            this.fieldValue = data;
+        },
+        getValue: function(forced) {
+            if (this.fieldValue && !forced) {
+                return this.fieldValue;
+            }
+
+            // Have to build it manually for new contacts
+            var val = [];
+            if (this.contactType == 'person') {
+                if (contactEditor.fieldEditors.firstname) {
+                    val.push(contactEditor.fieldEditors.firstname.getValue());
+                }
+                if (contactEditor.fieldEditors.middlename) {
+                    val.push(contactEditor.fieldEditors.middlename.getValue());
+                }
+                if (contactEditor.fieldEditors.lastname) {
+                    val.push(contactEditor.fieldEditors.lastname.getValue());
+                }
+            } else {
+                if (contactEditor.fieldEditors.company) {
+                    val.push(contactEditor.fieldEditors.company.getValue());
+                }
+            }
+            return val.join(' ').trim();
+        },
+
+        validate: function(skipRequiredCheck) {
+            var val = this.getValue(true);
+            if (!skipRequiredCheck && this.fieldData.required && !val) {
+                // If all name parts are empy then set firstname to be value of the first visible non-empty input:text
+                var newfname = $('#contact-info-block input:visible:text[value]:not(.empty)').val();
+                if (!newfname) {
+                    return $_('At least one of these fields must be filled');
+                }
+                contactEditor.fieldEditors.firstname.setValue(newfname);
+            }
+            return null;
+        },
+
+        showValidationErrors: function(errors) {
+            var el = $('#contact-info-block');
+            el.find('div.wa-errors-block').remove();
+            if (errors !== null) {
+                var err = $('<div class="field wa-errors-block"><div class="value"><em class="errormsg">'+errors+'</em></div></div>');
+                if (contactEditor.fieldEditors.lastname) {
+                    contactEditor.fieldEditors.lastname.domElement.after(err);
+                } else {
+                    el.prepend(err);
+                }
+            }
+            var a = ['firstname', 'middlename', 'lastname'];
+            for(var i=0; i<a.length; i++) {
+                var df = a[i];
+                if (contactEditor.fieldEditors[df]) {
+                    if (errors !== null) {
+                        contactEditor.fieldEditors[df].domElement.find('.val').addClass('external-error');
+                    } else {
+                        contactEditor.fieldEditors[df].domElement.find('.val').removeClass('external-error');
+                    }
+                }
+            }
+        },
+                
+        setMode: function(mode, replaceEditor) {
+            if (typeof replaceEditor == 'undefined') {
+                replaceEditor = true;
+            }
+            if (mode != 'view' && mode != 'edit') {
+                throw new Error('Unknown mode: '+mode);
+            }
+
+            if (this.currentMode != mode) {
+                this.currentMode = mode;
+                if (replaceEditor) {
+                    var oldDom = this.domElement;
+                    this.domElement = this.newFieldElement(mode);
+                    if (oldDom !== null) {
+                        oldDom.replaceWith(this.domElement);
+                    }
+                }
+            }
+
+            var title = '';
+            if (contactEditor.fieldEditors.title) {
+                title = contactEditor.fieldEditors.title.getValue()+' ';
+            }
+            
+            if (mode === 'view' && !contactEditor.not_update_name) {
+
+                var contact_fullname = $('#contact-fullname');
+
+                var firstname = '';
+                var middlename = '';
+                var lastname = '';
+                if (contactEditor.fieldEditors.firstname) {
+                    var prev_mode = contactEditor.fieldEditors.firstname.currentMode;
+                    contactEditor.fieldEditors.firstname.currentMode = mode;
+                    firstname = contactEditor.fieldEditors.firstname.getValue();
+                    contactEditor.fieldEditors.firstname.currentMode = prev_mode;
+                }
+                if (contactEditor.fieldEditors.middlename) {
+                    var prev_mode = contactEditor.fieldEditors.middlename.currentMode;
+                    contactEditor.fieldEditors.middlename.currentMode = mode;
+                    middlename = contactEditor.fieldEditors.middlename.getValue();
+                    contactEditor.fieldEditors.middlename.currentMode = prev_mode;
+                }
+                if (contactEditor.fieldEditors.lastname) {
+                    var prev_mode = contactEditor.fieldEditors.lastname.currentMode;
+                    contactEditor.fieldEditors.lastname.currentMode = mode;
+                    lastname = contactEditor.fieldEditors.lastname.getValue();
+                    contactEditor.fieldEditors.lastname.currentMode = prev_mode;
+                }
+                var name = [
+                    firstname,
+                    middlename,
+                    lastname
+                ].join(' ').trim();
+                if (!name) {
+                    name = this.fieldValue || '<'+$_('no name')+'>';
+                }
+
+                // Update page header
+                var h1 = contact_fullname.find('h1.name').html('<span class="title">' + $.wa.encodeHTML(title) + '</span>' + $.wa.encodeHTML(name));
+
+                if (this.contactType === 'person') {
+                    var jobtitle_company = '';
+                    var jobtitle = '';
+                    var company = '';
+
+                    if (contactEditor.fieldEditors.jobtitle) {
+                        var prev_mode = contactEditor.fieldEditors.jobtitle.currentMode;
+                        contactEditor.fieldEditors.jobtitle.currentMode = mode;
+                        jobtitle = contactEditor.fieldEditors.jobtitle.getValue();
+                        contactEditor.fieldEditors.jobtitle.currentMode = prev_mode;
+                    }
+                    if (contactEditor.fieldEditors.company) {
+                        var prev_mode = contactEditor.fieldEditors.company.currentMode;
+                        contactEditor.fieldEditors.company.currentMode = mode;
+                        company = contactEditor.fieldEditors.company.getValue();
+                        contactEditor.fieldEditors.company.currentMode = prev_mode;
+                    }
+                    if (jobtitle) {
+                        jobtitle_company += '<span class="title">' + $.wa.encodeHTML(jobtitle) + '</span> ';
+                    }
+                    if (jobtitle && company) {
+                        jobtitle_company += '<span class="at">' + $_('@') + '</span> ';
+                    }
+                    if (company) {
+                        jobtitle_company += '<span class="company">' + $.wa.encodeHTML(company) + '</span> ';
+                    }
+                    contact_fullname.find('h1.jobtitle-company').html(jobtitle_company);
+                }
+                // Update browser title
+                if (contactEditor.update_title) {
+                    $.wa.controller.setTitle(h1.text());
+                }
+            }
+
+            if (contactEditor.contact_id && contactEditor.contact_id == contactEditor.current_user_id) {
+                // Update user name in top right hand corner
+                $('#wa-my-username').text(''+(this.fieldValue ? this.fieldValue : '<'+$_('no name')+'>'));
+            }
+
+            return this.domElement;
+        }
+                
+    });
+
+    contactEditor.factoryTypes.NameSubfield = $.extend({}, contactEditor.baseFieldType, {});
+
+    contactEditor.factoryTypes.Multifield = $.extend({}, contactEditor.baseFieldType, {
+        subfieldEditors: null,
+        subfieldFactory: null,
+        emptySubValue: null,
+
+        initializeFactory: function(fieldData) {
+
+            this.fieldData = fieldData;
+            if (typeof this.fieldData.ext != 'undefined') {
+                this.fieldData.extKeys = [];
+                this.fieldData.extValues = [];
+                for(var i in this.fieldData.ext) {
+                    this.fieldData.extKeys[this.fieldData.extKeys.length] = i;
+                    this.fieldData.extValues[this.fieldData.extValues.length] = this.fieldData.ext[i];
+                }
+            }
+        },
+
+        initialize: function() {
+            this.subfieldFactory = $.extend({}, contactEditor.factoryTypes[this.fieldData.type]);
+            this.subfieldFactory.parentEditor = this;
+            this.subfieldFactory.initializeFactory($.extend({}, this.fieldData));
+            this.fieldData = $.extend({}, this.fieldData, {'required': this.subfieldFactory.fieldData.required});
+            this.subfieldEditors = [this.subfieldFactory.createEditor(this.contactType)];
+            if (typeof this.subfieldEditors[0].fieldValue == 'object') {
+                this.emptySubValue = $.extend({}, this.subfieldEditors[0].fieldValue);
+                if (this.fieldData.ext) {
+                    this.emptySubValue.ext = this.fieldData.extKeys[0];
+                }
+            } else {
+                this.emptySubValue = {value: this.subfieldEditors[0].fieldValue};
+                if (this.fieldData.ext) {
+                    this.emptySubValue.ext = this.fieldData.extKeys[0];
+                }
+            }
+            this.fieldValue = [this.emptySubValue];
+        },
+
+        setValue: function(data) {
+            // Check if there's at least one value
+            if (!data || typeof data[0] == 'undefined') {
+                data = [this.emptySubValue];
+            }
+            this.fieldValue = data;
+
+            // Update data in existing editors
+            // (If there's no data from PHP, still need to have at least one editor. Therefore, do-while.)
+            var i = 0;
+            do {
+                // Add an editor if needed
+                if (this.subfieldEditors.length <= i) {
+                    this.subfieldEditors[i] = this.subfieldFactory.createEditor(this.contactType);
+                    if (this.currentMode != 'null') {
+                        this.subfieldEditors[i].setMode(this.currentMode).insertAfter(this.subfieldEditors[i-1].parentEditorData.domElement);
+                    }
+                }
+                if (typeof data[i] != 'undefined') {
+                    // if data[i] contain only ext and value, then pass value to child;
+                    // if there's something else, then pass the whole object.
+                    var passObject = false;
+                    for(var k in data[i]) {
+                        if (k != 'value' && k != 'ext') {
+                            passObject = true;
+                            break;
+                        }
+                    }
+
+                    this.subfieldEditors[i].setValue(passObject ? data[i] : (data[i].value ? data[i].value : ''));
+
+                    // save ext
+                    if (typeof this.fieldData.ext != 'undefined') {
+                        var ext = data[i].ext;
+                        if (this.currentMode != 'null' && this.subfieldEditors[i].parentEditorData.domElement) {
+                            var el = this.subfieldEditors[i].parentEditorData.domElement.find('input.ext');
+                            if (el.size() > 0) {
+                                el[0].setExtValue(ext);
+                            }
+                        }
+                    }
+                } else {
+                    throw new Error('At least one record must exist in data at this time.');
+                }
+                i++;
+
+            } while(i < data.length);
+
+            // Remove excess editors if needed
+            if (data.length < this.subfieldEditors.length) {
+                // remove dom elements
+                for(i = data.length; i < this.subfieldEditors.length; i++) {
+                    if (i === 0) { // Never remove the first
+                        continue;
+                    }
+                    if (this.currentMode != 'null') {
+                        this.subfieldEditors[i].parentEditorData.domElement.remove();
+                    }
+                }
+
+                // remove editors
+                var a = data.length > 0 ? data.length : 1; // Never remove the first
+                this.subfieldEditors.splice(a, this.subfieldEditors.length - a);
+            }
+
+            this.origFieldValue = null;
+        },
+
+        getValue: function() {
+            if (this.currentMode == 'null') {
+                return $.extend({}, this.fieldValue);
+            }
+
+            var val = [];
+            for(var i = 0; i < this.subfieldEditors.length; i++) {
+                var sf = this.subfieldEditors[i];
+                val[i] = {
+                    'value': sf.getValue()
+                };
+
+                // load ext
+                if (typeof this.fieldData.ext != 'undefined') {
+                    var ext = this.fieldValue[i].ext;
+                    var el = sf.parentEditorData.domElement.find('input.ext')[0];
+                    if (sf.currentMode == 'edit' && el) {
+                        ext = el.getExtValue();
+                    }
+                    val[i].ext = ext;
+                }
+            }
+
+            return val;
+        },
+
+        isModified: function() {
+            for(var i = 0; i < this.subfieldEditors.length; i++) {
+                var sf = this.subfieldEditors[i];
+                if (sf.isModified()) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        validate: function(skipRequiredCheck) {
+            var result = [];
+
+            // for each subfield add a record subfieldId => its validate() into result
+            var allEmpty = true;
+            for(var i = 0; i < this.subfieldEditors.length; i++) {
+                var sf = this.subfieldEditors[i];
+                var v = sf.validate(true);
+                if (v) {
+                    result[i] = v;
+                }
+
+                var val = sf.getValue();
+                if (val || typeof val != 'string') {
+                    allEmpty = false;
+                }
+            }
+
+            if (!skipRequiredCheck && this.fieldData.required && allEmpty) {
+                result[0] = 'This field is required.';
+            }
+
+            if (result.length <= 0) {
+                return null;
+            }
+            return result;
+        },
+
+        showValidationErrors: function(errors) {
+            for(var i = 0; i < this.subfieldEditors.length; i++) {
+                var sf = this.subfieldEditors[i];
+                if (errors !== null && typeof errors[i] != 'undefined') {
+                    sf.showValidationErrors(errors[i]);
+                } else {
+                    sf.showValidationErrors(null);
+                }
+            }
+        },
+
+        /** Return button to delete subfield. */
+        deleteSubfieldButton: function(sf) {
+            var that = this;
+            var r = $('<a class="delete-subfield hint" href="javascript:void(0)">'+$_('delete')+'</a>').click(function() {
+                if (that.subfieldEditors.length <= 1) {
+                    return false;
+                }
+
+                var i = that.subfieldEditors.indexOf(sf);
+
+                // remove dom element
+                if (that.currentMode != 'null') {
+                    that.subfieldEditors[i].parentEditorData.domElement.remove();
+                }
+
+                // remove editor
+                that.subfieldEditors.splice(i, 1);
+
+                // Hide delete button if only one subfield left
+                // have to do this because IE<9 lacks :only-child support
+                if (that.subfieldEditors.length <= 1) {
+                    that.domElement.find('.delete-subfield').hide();
+                }
+
+                // (leaves a record in this.fieldValue to be able to restore it if needed)
+                return false;
+            });
+
+            if (this.subfieldEditors.length <= 1) {
+                r.hide();
+            }
+
+            return r;
+        },
+
+        newSubFieldElement: function(mode, i) {
+            i = i-0;
+            var sf = this.subfieldEditors[i];
+            if(!sf.parentEditorData) {
+                sf.parentEditorData = {};
+            }
+            sf.parentEditorData.parent = this;
+            sf.parentEditorData.empty = false;
+            var ext;
+
+            // A (composite) field with no inline mode?
+            if (typeof sf.newInlineFieldElement != 'function') {
+                var nameAddition = '';
+                if (mode == 'edit') {
+                    //nameAddition = (this.fieldData.required ? '<span class="req-star">*</span>' : '')+':';
+                }
+                var wrapper = contactEditor.wrapper('<span class="replace-me-with-value"></span>', i === 0 ? (this.fieldData.name+nameAddition) : '', 'no-bot-margins');
+                var rwv = wrapper.find('span.replace-me-with-value');
+
+                // extension
+                ext = this.fieldValue[i].ext;
+                if (mode == 'edit') {
+                    ext = contactEditor.createExtSelect(this.fieldData.ext, ext);
+                } else {
+                    ext = this.fieldData.ext[this.fieldValue[i].ext] || ext;
+                    ext = $('<strong>'+contactEditor.htmlentities(ext)+'</strong>');
+                }
+                rwv.before(ext);
+
+                // button to delete this subfield
+                if (mode == 'edit') {
+                    rwv.before(this.deleteSubfieldButton(sf));
+                }
+                rwv.remove();
+
+                sf.domElement = this.subfieldEditors[i].newFieldElement(mode);
+                var self = this;
+                sf.domElement.find('div.name').each(function(i, el) {
+                    if (el.innerHTML.substr(0, self.fieldData.name.length) === self.fieldData.name) {
+                        el.innerHTML = '';
+                    }
+                });
+
+                sf.parentEditorData.domElement = $('<div></div>').append(wrapper).append(sf.domElement);
+
+                if (mode == 'edit') {
+                    sf.parentEditorData.empty = false;
+                } else {
+                    sf.parentEditorData.empty = !sf.fieldValue.value && !sf.fieldData.show_empty;
+                }
+
+                //this.initInplaceEditor(sf.parentEditorData.domElement, i);
+                return sf.parentEditorData.domElement;
+            }
+
+            // Inline mode is available
+            var value = sf.newInlineFieldElement(mode);
+            if (value === null) {
+                // Field is empty, return stub.
+                sf.parentEditorData.domElement = sf.domElement = $('<div></div>');
+                sf.parentEditorData.empty = true;
+                return sf.parentEditorData.domElement;
+            }
+
+            sf.domElement = value;
+            sf.domElement.data('subfield-index', i).attr('data-subfield-index', i);
+            var result = $('<div class="value"></div>').append(value);
+            var rwe = result.find('.replace-with-ext');
+            if (rwe.size() <= 0) {
+                result.append('<span><span class="replace-with-ext"></span></span>');
+                rwe = result.find('.replace-with-ext');
+            }
+
+            // Extension
+            if (typeof this.fieldData.ext != 'undefined') {
+                ext = this.fieldValue[i].ext;
+                if (mode == 'edit') {
+                    rwe.before(contactEditor.createExtSelect(this.fieldData.ext, ext));
+                } else {
+                    ext = this.fieldData.ext[this.fieldValue[i].ext] || ext;
+                    if (rwe.parents('.ext').size() > 0) {
+                        rwe.before(contactEditor.htmlentities(ext));
+                    } else {
+                        rwe.before($('<em class="hint"></em>').text(' '+ext));
+                    }
+                }
+            }
+
+            // button to delete this subfield
+            if (mode == 'edit') {
+                rwe.before(this.deleteSubfieldButton(sf));
+            }
+            rwe.remove();
+
+            sf.parentEditorData.domElement = result;
+            //this.initInplaceEditor(sf.parentEditorData.domElement, i);
+            return result;
+        },
+
+        newInlineFieldElement: null,
+
+        newFieldElement: function(mode) {
+            if(this.fieldData.read_only) {
+                mode = 'view';
+            } 
+           
+            var childWrapper = $('<div class="multifield-subfields"></div>');
+            var inlineMode = typeof this.subfieldFactory.newInlineFieldElement == 'function';
+
+            var allEmpty = true;
+            for(var i = 0; i < this.subfieldEditors.length; i++) {
+                var result = this.newSubFieldElement(mode, i);
+                childWrapper.append(result);
+                allEmpty = allEmpty && this.subfieldEditors[i].parentEditorData.empty;
+            }
+
+            // do not show anything if there are no values
+            if (allEmpty && !this.fieldData.show_empty) {
+                return $('<div style="display: none;" class="field" data-field-id="'+this.fieldData.id+'"></div>');
+            }
+
+            // Wrap over for all subfields to be in separate div
+            var wrapper;
+            if (inlineMode) {
+                wrapper = $('<div></div>').append(childWrapper);
+            } else {
+                wrapper = $('<div class="field" data-field-id="'+this.fieldData.id+'"></div>').append(childWrapper);
+            }
+
+            // A button to add more fields
+            if (mode == 'edit') {
+                var adder;
+                if (inlineMode) {
+                    adder = $('<div class="value multifield-subfields-add-another"><span class="replace-me-with-value"></span></div>');
+                } else {
+                    adder = contactEditor.wrapper('<span class="replace-me-with-value"></span>');
+                }
+                var that = this;
+                adder.find('.replace-me-with-value').replaceWith(
+                    $('<a href="javascript:void(0)" class="small inline-link"><b><i>'+$_('Add another')+'</i></b></a>').click(function (e) {
+                        var newLast = that.subfieldFactory.createEditor(this.contactType);
+                        var index = that.subfieldEditors.length;
+
+                        val = {
+                            value: newLast.getValue(),
+                            temp: true
+                        };
+                        if (typeof that.fieldData.ext != 'undefined') {
+                            val.ext = '';
+                        }
+                        that.fieldValue[index] = val;
+
+                        that.subfieldEditors[index] = newLast;
+                        if (that.currentMode != 'null') {
+                            newLast.setMode(that.currentMode);
+                        }
+                        childWrapper.append(that.newSubFieldElement(mode, index));
+                        that.domElement.find('.delete-subfield').css('display', 'inline');
+                    })
+                );
+                wrapper.append(adder);
+            }
+
+            if (inlineMode) {
+                var nameAddition = '';
+//                if (mode == 'edit') {
+//                    nameAddition = (this.fieldData.required ? '<span class="req-star">*</span>' : '')+':';
+//                }
+                wrapper = contactEditor.wrapper(wrapper, this.fieldData.name+nameAddition).attr('data-field-id', this.fieldData.id);
+            }
+            return wrapper;
+        },
+
+        setMode: function(mode, replaceEditor) {
+            if (typeof replaceEditor == 'undefined') {
+                replaceEditor = true;
+            }
+            if (mode != 'view' && mode != 'edit') {
+                throw new Error('Unknown mode: '+mode);
+            }
+
+            if (this.currentMode != mode) {
+                // When user switches from edit to view, we need to restore
+                // deleted editors, if any. So we set initial value here to ensure that.
+                if (mode == 'view' && this.currentMode == 'edit' && this.origFieldValue) {
+                    this.setValue(this.origFieldValue);
+                } else if (this.currentMode == 'view' && !this.origFieldValue) {
+                    this.origFieldValue = [];
+                    for (var i = 0; i < this.fieldValue.length; i++) {
+                        this.origFieldValue.push($.extend({}, this.fieldValue[i]));
+                    }
+                }
+
+                this.currentMode = mode;
+                if (replaceEditor) {
+                    var oldDom = this.domElement;
+                    this.domElement = this.newFieldElement(mode);
+                    if (oldDom !== null) {
+                        oldDom.replaceWith(this.domElement);
+                    }
+                }
+            }
+
+            for(var i = 0; i < this.subfieldEditors.length; i++) {
+                this.subfieldEditors[i].setMode(mode, false);
+            }
+
+            return this.domElement;
+        }
+    }); // end of Multifield type
+
+    contactEditor.factoryTypes.Composite = $.extend({}, contactEditor.baseFieldType, {
+        subfieldEditors: null,
+
+        initializeFactory: function(fieldData, options) {
+            this.fieldData = fieldData;
+            if (this.fieldData.required) {
+                for(var i in this.fieldData.required) {
+                    if (this.fieldData.required[i]) {
+                        this.fieldData.required = true;
+                        break;
+                    }
+                }
+                if (this.fieldData.required !== true) {
+                    this.fieldData.required = false;
+                }
+            }
+            this.options = options || {};
+        },
+
+        initialize: function() {
+            var val = {
+                'data': {},
+                'value': ''
+            };
+
+            this.subfieldEditors = {};
+            this.fieldData.subfields = this.fieldData.fields;
+            for(var sfid in this.fieldData.subfields) {
+                var sf = this.fieldData.subfields[sfid];
+                var editor = $.extend({}, contactEditor.factoryTypes[sf.type]);
+                var sfData = this.fieldData.fields[sfid];
+                if (this.fieldData.required && this.fieldData.required[sfid]) {
+                    sfData.required = true;
+                }
+                var data = $.extend({}, sfData, {id: null, multi: false});
+                editor.initializeFactory(data, this.options);
+                editor.parentEditor = this;
+                editor.parentEditorData = {};
+                editor.initialize();
+                editor.parentEditorData.sfid = sfid;
+                editor.parentEditorData.parent = this;
+                this.subfieldEditors[sfid] = editor;
+                val.data[sfid] = editor.getValue();
+            }
+
+            this.fieldValue = val;
+        },
+
+        setValue: function(data) {
+            if (!data) {
+                return;
+            }
+
+            this.fieldValue = data;
+
+            // Save subfields
+            for(var sfid in this.subfieldEditors) {
+                var sf = this.subfieldEditors[sfid];
+                if (typeof data.data == 'undefined') {
+                    sf.initialize();
+                    sf.setValue(sf.getValue());
+                } else if (typeof data.data[sfid] != 'undefined') {
+                    sf.setValue(data.data[sfid]);
+                } else {
+                    sf.setValue(sf.getValue());
+                }
+            }
+        },
+
+        getValue: function() {
+            if (this.currentMode == 'null') {
+                return $.extend({}, this.fieldValue.data);
+            }
+
+            var val = {};
+
+            for(var sfid in this.subfieldEditors) {
+                var sf = this.subfieldEditors[sfid];
+                val[sfid] = sf.getValue();
+            }
+
+            return val;
+        },
+
+        isModified: function() {
+            for(var sfid in this.subfieldEditors) {
+                if (this.subfieldEditors[sfid].isModified()) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        validate: function(skipRequiredCheck) {
+            var result = {};
+
+            // for each subfield add a record subfieldId => its validate() into result
+            var errorsFound = false;
+            for(var sfid in this.subfieldEditors) {
+                var v = this.subfieldEditors[sfid].validate(skipRequiredCheck);
+                if (v) {
+                    result[sfid] = v;
+                    errorsFound = true;
+                }
+            }
+
+            if (!errorsFound) {
+                return null;
+            }
+            return result;
+        },
+
+        showValidationErrors: function(errors) {
+            if (this.domElement === null) {
+                return;
+            }
+
+            // for each subfield call its showValidationErrors with errors[subfieldId]
+            for(var sfid in this.subfieldEditors) {
+                var sf = this.subfieldEditors[sfid];
+                if (errors !== null && typeof errors[sfid] != 'undefined') {
+                    sf.showValidationErrors(errors[sfid]);
+                } else {
+                    sf.showValidationErrors(null);
+                }
+            }
+        },
+
+        /** Cannot be used inline */
+        newInlineFieldElement: null,
+
+        newFieldElement: function(mode) {
+            if(this.fieldData.read_only) {
+                mode = 'view';
+            }
+            if (mode == 'view') {
+                // Do not show anything in view mode if field is empty
+                if(!this.fieldValue.value && !this.fieldData.show_empty) {
+                    return $('<div style="display: none;" class="field" data-field-id="'+this.fieldData.id+'"></div>');
+                }
+            }
+
+            var wrapper = $('<div class="composite '+mode+' field" data-field-id="'+this.fieldData.id+'"></div>').append(contactEditor.wrapper('<span style="display:none" class="replace-with-ext"></span>', this.fieldData.name, 'hdr'));
+            
+            // For each field call its newFieldElement and add to wrapper
+            for(var sfid in this.subfieldEditors) {
+                var sf = this.subfieldEditors[sfid];
+                var element = sf.newFieldElement(mode);
+                element.attr('data-field-id', sfid);
+                element.data('fieldId', sfid);
+                sf.domElement = element;
+                wrapper.append(element);
+            }
+
+            // In-place editor initialization (when not part of a multifield)
+            /*if (mode == 'edit' && this.parent == null) {
+                var that = this;
+                result.find('span.info-field').click(function() {
+                    var buttons = contactEditor.inplaceEditorButtons([that.fieldData.id], function(noValidationErrors) {
+                        if (typeof noValidationErrors != 'undefined' && !noValidationErrors) {
+                            return;
+                        }
+                        that.setMode('view');
+                        buttons.remove();
+                    });
+                    result.after(buttons);
+                    that.setMode('edit');
+                });
+            }*/
+
+            return wrapper;
+        },
+
+        setMode: function(mode, replaceEditor) {
+            if (typeof replaceEditor == 'undefined') {
+                replaceEditor = true;
+            }
+            if (mode != 'view' && mode != 'edit') {
+                throw new Error('Unknown mode: '+mode);
+            }
+
+            if (this.currentMode != mode) {
+                this.currentMode = mode;
+                if (replaceEditor) {
+                    var oldDom = this.domElement;
+                    this.domElement = this.newFieldElement(mode);
+                    if (oldDom !== null) {
+                        oldDom.replaceWith(this.domElement);
+                    }
+                }
+            }
+            for(var sfid in this.subfieldEditors) {
+                this.subfieldEditors[sfid].setMode(mode, false);
+            }
+
+            return this.domElement;
+        }
+    }); // end of Composite field type
+
+    contactEditor.factoryTypes.Address = $.extend({}, contactEditor.factoryTypes.Composite, {
+        showValidationErrors: function(errors) {
+            if (this.domElement === null) {
+                return;
+            }
+
+            // remove old errors
+            this.domElement.find('em.errormsg').remove();
+            this.domElement.find('.val').removeClass('error');
+
+            if (!errors) {
+                return;
+            }
+
+            // Show new errors
+            for(var sfid in this.subfieldEditors) {
+                var sf = this.subfieldEditors[sfid];
+                if (typeof errors[sfid] == 'undefined') {
+                    continue;
+                }
+                var input = sf.domElement.find('.val').addClass('error');
+                input.parents('.address-subfield').append($('<em class="errormsg">'+errors[sfid]+'</em>'));
+            }
+        },
+
+        newInlineFieldElement: function(mode) {
+            var result = '';
+
+            if (mode == 'view') {
+                // Do not show anything in view mode if field is empty
+                if(!this.fieldValue.value) {
+                    return null;
+                }
+                var map_url = '';
+                if (typeof this.fieldValue.for_map === 'string') {
+                    map_url = this.fieldValue.for_map;
+                } else {
+                    if (this.fieldValue.for_map.coords) {
+                        map_url = this.fieldValue.for_map.coords;
+                    } else {
+                        map_url = this.fieldValue.for_map.with_street;
+                    }
+                }
+                result = $('<div class="address-field"></div>')
+                    //.append('<div class="ext"><strong><span style="display:none" class="replace-with-ext"></span></strong></div>')
+                    .append(this.fieldValue.value)
+                    .append('<span style="display:none" class="replace-with-ext"></span> ')
+                    .append('<a target="_blank" href="//maps.google.ru/maps?q=' + encodeURIComponent(map_url) + '&z=15" class="small map-link">' + $_('map') + '</a>');
+                return result;
+            }
+
+            //
+            // edit mode
+            //
+            var wrapper = $('<div class="address-field"></div>');
+            wrapper.append('<span style="display:none" class="replace-with-ext"></span>');
+
+
+            // Add fields
+            // For each field call its newFieldElement and add to wrapper
+            for(var sfid in this.subfieldEditors) {
+                var sf = this.subfieldEditors[sfid];
+                var element = sf.newInlineFieldElement('edit');
+                sf.domElement = element;
+                wrapper.append($('<div class="address-subfield"></div>').append(element));
+                if (sf.fieldData.type !== 'Hidden') {
+                    //$.wa.defaultInputValue(element.find('input.val'), sf.fieldData.name+(sf.fieldData.required ? ' ('+$_('required')+')' : ''), 'empty');
+                    element.find('input.val').attr(
+                        'placeholder', 
+                        sf.fieldData.name+(sf.fieldData.required ? ' ('+$_('required')+')' : '')
+                    );
+                }
+            }
+            return wrapper;
+        }
+    });
+
+    contactEditor.factoryTypes.Birthday = contactEditor.factoryTypes.Date = $.extend({}, contactEditor.baseFieldType, {
+        
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue.value) {
+                return null;
+            }
+            var result = null;
+            var data = this.fieldValue.data || {};
+            var that = this;
+            if (mode == 'edit') {
+                var day_html = $('<select class="val" data-part="day"><option data=""></option></select>');
+                for (var d = 1; d <= 31; d += 1) {
+                    var o = $('<option data="' + d + '" value="' + d + '">' + d + '</option>');
+                    if (d == data["day"]) {
+                        o.attr('selected', true);
+                    }
+                    day_html.append(o);
+                }
+                
+                var month_html = $('<select class="val" data-part="month"><option data=""></option></select>');
+                var months = [
+                    'January',
+                    'February',
+                    'March',
+                    'April',
+                    'May',
+                    'June',
+                    'July',
+                    'August',
+                    'September',
+                    'October',
+                    'November',
+                    'December'
+                ];
+                for (var m = 0; m < 12; m += 1) {
+                    var v = $_(months[m]);
+                    var o = $('<option data="' + (m + 1) + '"  value="' + (m + 1) + '">' + v + '</option>');
+                    if ((m + 1) == data["month"]) {
+                        o.attr('selected', true);
+                    }
+                    month_html.append(o);
+                }
+                
+                var year_html = $('<input type="text" data-part="year" class="val" style="min-width: 32px; width: 32px;" placeholder="' + $_('year') + '">');
+                if (data['year']) {
+                    year_html.val(data['year']);
+                }
+                result = $('<span></span>').
+                        append(day_html).
+                        append(' ').
+                        append(month_html).
+                        append(' ').
+                        append(year_html);
+            } else {
+                result = $('<span class="val"></span>').text(this.fieldValue.value);
+            }
+            return result;
+        },
+                
+        getValue: function() {
+            var result = this.fieldValue;
+            if (this.currentMode == 'edit' && this.domElement !== null) {
+                var input = this.domElement.find('.val');
+                if (input.length > 0) {
+                    result = {
+                        value: {
+                            day: null,
+                            month: null,
+                            year: null
+                        }
+                    };
+                    input.each(function() {
+                        var el = $(this);
+                        var p = el.data('part');
+                        result.value[p] = parseInt(el.val(), 10) || null;
+                    });
+                }
+            }
+            return result;
+        },
+                
+        setValue: function(data) {
+            this.fieldValue = data;
+            if (this.currentMode == 'null' || this.domElement === null) {
+                return;
+            }
+            if (this.currentMode == 'edit') {
+                this.domElement.find('.val').each(function() {
+                    var el = $(this);
+                    var part = el.data('part');
+                    el.val(data.data[part] || '');
+                });
+            } else {
+                this.domElement.find('.val').html(this.fieldValue);
+            }
+        }
+                
+    });
+
+    contactEditor.factoryTypes.IM = $.extend({}, contactEditor.baseFieldType, {
+        /** Accepts both a simple string and {value: previewHTML, data: stringToEdit} */
+        setValue: function(data) {
+            if (typeof data == 'undefined') {
+                data = '';
+            }
+            if (typeof(data) == 'object') {
+                this.fieldValue = data.data;
+                this.viewValue = data.value;
+            } else {
+                this.fieldValue = this.viewValue = data;
+            }
+            if (this.currentMode == 'null' || !this.domElement) {
+                return;
+            }
+
+            if (this.currentMode == 'edit') {
+                this.domElement.find('input.val').val(this.fieldValue);
+            } else {
+                this.domElement.find('.val').html(this.viewValue);
+            }
+        },
+
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+            var result = null;
+            if (mode == 'edit') {
+                result = $('<span><input class="val" type="text"></span>');
+                result.find('.val').val(this.fieldValue);
+            } else {
+                result = $('<span class="val"></span>').html(this.viewValue);
+            }
+            return result;
+        }
+    });
+
+    contactEditor.factoryTypes.SocialNetwork = $.extend({}, contactEditor.baseFieldType, {
+        /** Accepts both a simple string and {value: previewHTML, data: stringToEdit} */
+        setValue: function(data) {
+            if (typeof data == 'undefined') {
+                data = '';
+            }
+            if (typeof(data) == 'object') {
+                this.fieldValue = data.data;
+                this.viewValue = data.value;
+            } else {
+                this.fieldValue = this.viewValue = data;
+            }
+            if (this.currentMode == 'null' || !this.domElement) {
+                return;
+            }
+
+            if (this.currentMode == 'edit') {
+                this.domElement.find('input.val').val(this.fieldValue);
+            } else {
+                this.domElement.find('.val').html(this.viewValue);
+            }
+        },
+
+        newInlineFieldElement: function(mode) {
+            // Do not show anything in view mode if field is empty
+            if(mode == 'view' && !this.fieldValue) {
+                return null;
+            }
+            var result = null;
+            if (mode == 'edit') {
+                result = $('<span><input class="val" type="text"></span>');
+                result.find('.val').val(this.fieldValue);
+            } else {
+                result = $('<span class="val"></span>').html(this.viewValue);
+            }
+            return result;
+        }
+    });
+
+    contactEditor.factoryTypes.Url = $.extend({}, contactEditor.factoryTypes.IM, {
+        validate: function(skipRequiredCheck) {
+            var val = $.trim(this.getValue());
+
+            if (!skipRequiredCheck && this.fieldData.required && !val) {
+                return $_('This field is required.');
+            }
+            if (!val) {
+                return null;
+            }
+
+            if (!(/^(https?|ftp|gopher|telnet|file|notes|ms-help)/.test(val))) {
+                val = 'http://'+val;
+                this.setValue(val);
+            }
+
+            var l = '[^`!()\\[\\]{};:\'".,<>?«»“”‘’\\s+]'; // letter allowed in url, including IDN
+            var p = '[^`!\\[\\]{}\'"<>«»“”‘’\\s]'; // punctuation or letter allowed in url
+            var regex = new RegExp('^(https?|ftp|gopher|telnet|file|notes|ms-help):((//)|(\\\\\\\\))+'+p+'*$', 'i');
+            if (!regex.test(val)) {
+                return $_('Incorrect URL format.');
+            }
+
+            // More restrictions for common protocols
+            if (/^(http|ftp)/.test(val.toLowerCase())) {
+                regex = new RegExp('^(https?|ftp):((//)|(\\\\\\\\))+((?:'+l+'+\\.)+'+l+'{2,6})((/|\\\\|#)'+p+'*)?$', 'i');
+                if (!regex.test(val)) {
+                    return $_('Incorrect URL format.');
+                }
+            }
+
+            return null;
+        }
+    });
+
+    contactEditor.factoryTypes.Email = $.extend({}, contactEditor.factoryTypes.Url, {
+        validate: function(skipRequiredCheck) {
+            var val = $.trim(this.getValue());
+
+            if (!skipRequiredCheck && this.fieldData.required && !val) {
+                return $_('This field is required.');
+            }
+            if (!val) {
+                return null;
+            }
+            var regex = new RegExp('^([^@\\s]+)@[^\\s@]+\\.[^\\s@\\.]{2,}$', 'i');
+            if (!regex.test(val)) {
+                return $_('Incorrect Email address format.');
+            }
+            return null;
+        }
+    });
+
+    contactEditor.factoryTypes.Checkbox = $.extend({}, contactEditor.baseFieldType, {
+        /** Load field contents from given data and update DOM. */
+        setValue: function(data) {
+            this.fieldValue = parseInt(data);
+            if (this.currentMode == 'null' || !this.domElement) {
+                return;
+            }
+
+            if (this.currentMode == 'edit') {
+                this.domElement.find('input.val').attr('checked', !!this.fieldValue);
+            } else {
+                this.domElement.find('.val').text(this.fieldValue ? 'Yes' : 'No');
+            }
+        },
+
+        newInlineFieldElement: function(mode) {
+            var result = null;
+            if (mode == 'edit') {
+                result = $('<span><input class="val" type="checkbox" value="1" checked="checked"></span>');
+                if (!this.fieldValue) {
+                    result.find('.val').removeAttr('checked');
+                }
+            } else {
+                result = $('<span class="val"></span>').text(this.fieldValue ? 'Yes' : 'No');
+            }
+            return result;
+        }
+    });
+
+    contactEditor.factoryTypes.Number = $.extend({}, contactEditor.baseFieldType, {
+        validate: function(skipRequiredCheck) {
+            var val = $.trim(this.getValue());
+            if (!skipRequiredCheck && this.fieldData.required && !val && val !== 0) {
+                return $_('This field is required.');
+            }
+            if (val && !(/^-?[0-9]+([\.,][0-9]+$)?/.test(val))) {
+                return $_('Must be a number.');
+            }
+            return null;
+        }
+    });
+    
+    if (fieldType) {
+        return contactEditor.factoryTypes[fieldType];
+    } else {
+        return contactEditor.factoryTypes;
+    }
+};
+
+$.wa.fieldTypeFactory = function(fieldType) {
+    return $.extend({}, $.wa.fieldTypesFactory(null, fieldType));
+};
+
+// EOF
+;
+$.wa.contactEditorFactory = function(options) {
+    
+    // OPTIONS
+    
+    options = $.extend({
+        contact_id: null,
+        current_user_id: null,
+        contactType: 'person', // person|company
+        baseFieldType: null, // defined in fieldTypes.js
+        saveUrl: '?module=contacts&action=save', // URL to send data when saving contact
+        el: '#contact-info-block',
+        with_inplace_buttons: true,
+        update_title: true
+    }, options);
+    
+    
+    // INSTANCE OF EDITOR
+    
+    var contactEditor = $.extend({
+
+        fields: {},
+
+        /** Editor factory templates, filled below */
+        factoryTypes: {},
+
+
+        /** Editor factories by field id, filled by this.initFactories() */
+        editorFactories: {/*
+            ...,
+            field_id: editorFactory // Factory to get editor for given type from
+            ...,
+        */},
+
+        /** Fields that we need to show. All fields available for editing or viewing present here
+          * (possibly with empty values). Filled by this.initFieldEditors() */
+        fieldEditors: {/*
+            ...,
+            // field_id as specified in field metadata file
+            // An editor for this field instance. If field exists, but there's no data
+            // in DB, a fully initialized editor with empty values is present anyway.
+            field_id: fieldEditor,
+            ...
+        */},
+
+        /** Empty and reinit this.editorFactories given data from php.
+          * this.factoryTypes must already be set.*/
+        initFactories: function(fields) {
+            this.fields = fields;
+            this.editorFactories = {};
+            this.fieldEditors = {};
+            for(var fldId in fields) {
+                if (typeof fields[fldId] != 'object' || !fields[fldId].type) {
+                    throw new Error('Field data error for '+fldId);
+                }
+
+                if (typeof this.factoryTypes[fields[fldId].type] == 'undefined') {
+                    throw new Error('Unknown factory type: '+fields[fldId].type);
+                }
+                if (fields[fldId].multi) {
+                    this.editorFactories[fldId] = $.extend({}, this.factoryTypes['Multifield']);
+                } else {
+                    this.editorFactories[fldId] = $.extend({}, this.factoryTypes[fields[fldId].type]);
+                }
+                this.editorFactories[fldId].initializeFactory(fields[fldId]);
+            }            
+        },
+
+        /** Init (or reinit existing) editors with empty data. */
+        initAllEditors: function() {
+            for(var f in this.editorFactories) {
+                if (typeof this.fieldEditors[f] == 'undefined') {
+                    this.fieldEditors[f] = this.editorFactories[f].createEditor(this.contactType, f);
+                } else {
+                    this.fieldEditors[f].reinit();
+                }
+            }
+        },
+
+        /** Reinit (maybe not all) of this.fieldEditors using data from php. */
+        initFieldEditors: function(newData) {
+            if (newData instanceof Array) {
+                // must be an empty array that came from json
+                return;
+            }
+            for(var f in newData) {
+                if (typeof this.editorFactories[f] == 'undefined') {
+                    // This can happen when a new field type is added since user opened the page.
+                    // Need to reload. (This should not happen often though.)
+                    $.wa.controller.contactAction([this.contact_id]);
+                    //console.log(this.editorFactories);
+                    //console.log(newData);
+                    //throw new Error('Unknown field type: '+f);
+                    return;
+                }
+
+                if (typeof this.fieldEditors[f] == 'undefined') {
+                    this.fieldEditors[f] = this.editorFactories[f].createEditor(this.contactType);
+                }
+                this.fieldEditors[f].setValue(newData[f]);
+            }
+
+        },
+
+        /** Empty #contact-info-block and add editors there in given mode.
+          * this.editorFactories and this.fieldEditors must already be initialized. */
+        initContactInfoBlock: function (mode) {
+            this.switchMode(mode, true);
+        },
+
+
+        /** Switch mode for all editors */
+        switchMode: function (mode, init) {
+            var el = $(this.el);
+            var self = this;
+            if (init) {
+                el.html('');
+                el.removeClass('edit-mode');
+                el.removeClass('view-mode');
+                $(el).add('#contact-info-top').off('click.map', '.map-link').on('click.map', '.map-link', function() {
+                    var i = $(this).parent().data('subfield-index');
+                    if (i !== undefined) {
+                        var fieldValue = self.fieldEditors.address.fieldValue;
+                        self.geocodeAddress(fieldValue, i);
+                    }
+                });
+            }
+            if (mode == 'edit' && el.hasClass('edit-mode')) {
+                return;
+            }
+            if (mode == 'view' && el.hasClass('view-mode')) {
+                return;
+            }
+
+            $('#tc-contact').trigger('before_switch_mode');
+
+            // Remove all buttons
+            el.find('div.field.buttons').remove();
+
+            var fieldsToUpdate = [];
+            for(var f in this.fieldEditors) {
+                fieldsToUpdate.push(f);
+                var fld = this.fieldEditors[f].setMode(mode);
+                $(this).trigger('set_mode', [{
+                    mode: mode,
+                    el: el,
+                    field_id: f,
+                    field: this.fieldEditors[f]
+                }]);
+                if (init) {
+                    el.append(fld);
+                }
+            }
+
+            var that = this;
+            // Editor buttons
+            if(mode == 'edit') {
+                
+                el.find('.subname').wrapAll('<div class="subname-wrapper"></div>');
+                el.find('.jobtitle-company').wrapAll('<div class="jobtitle-company-wrapper"></div>');
+                
+                if (this.with_inplace_buttons) {
+                    var buttons = this.inplaceEditorButtons(fieldsToUpdate, function(noValidationErrors) {
+                        if (typeof noValidationErrors != 'undefined' && !noValidationErrors) {
+                            return false;
+                        }
+
+                        if (typeof that.justCreated != 'undefined' && that.justCreated) {
+                            // new contact created
+                            var c = $('#sb-all-contacts-li .count');
+                            c.text(1+parseInt(c.text()));
+                            
+                            // Redirect to profile just created
+                            $.wa.setHash('/contact/' + that.contact_id);
+                            return false;
+                        }
+
+                        that.switchMode('view');
+                        $.scrollTo(0);
+                        return false;
+                    }, function() {
+                        if (that.contact_id == null) {
+                            $.wa.back();
+                            return;
+                        }
+                        that.switchMode('view');
+                        $.scrollTo(0);
+                    });
+                    if (that.contact_id === null) {
+                        buttons.find('.cancel, .or').remove();
+                    }
+                    el.append(buttons);
+                    el.removeClass('view-mode');
+                    el.addClass('edit-mode');
+                    $('#edit-contact-double').hide();
+
+                    el.find('.buttons').sticky({
+                        fixed_css: { bottom: 0, background: '#fff', width: '100%', margin: '0' },
+                        fixed_class: 'sticky-bottom',
+                        isStaticVisible: function(e) {
+                            var win = $(window);
+                            var element_top = e.element.offset().top;
+                            var window_bottom = win.scrollTop() + win.height();
+                            return window_bottom > element_top;
+                        }
+                    });
+                    el.find('.sticky-bottom .cancel').click(function() {
+                        el.find('.buttons:not(.sticky-bottom) .cancel').click();
+                        return false;
+                    });
+                    el.find('.sticky-bottom :submit').click(function() {
+                        el.find('.buttons:not(.sticky-bottom) :submit').click();
+                        return false;
+                    });
+                }
+            } else {
+                el.removeClass('edit-mode');
+                el.addClass('view-mode');
+                $('#edit-contact-double').show();
+            }
+
+            $('#tc-contact').trigger('after_switch_mode', [mode, this]);
+
+        },
+
+        /** Save all modified editors, reload data from php and switch back to view mode. */
+        saveFields: function(ids, callback) {
+            if (!ids) {
+                ids = [];
+                for (var k in this.fields) {
+                    if (this.fields.hasOwnProperty(k)) {
+                        ids.push(k);
+                    }
+                }
+            }
+            var data = {};
+            var validationErrors = false;
+            for(var i = 0; i < ids.length; i++) {
+                var f = ids[i];
+                var err = this.fieldEditors[f].validate();
+                if (err) {
+                    if (!validationErrors) {
+                        validationErrors = this.fieldEditors[f].domElement;
+                        // find the first visible parent of the element
+                        while(!validationErrors.is(':visible')) {
+                            validationErrors = validationErrors.parent();
+                        }
+                    }
+                    this.fieldEditors[f].showValidationErrors(err);
+                } else {
+                    this.fieldEditors[f].showValidationErrors(null);
+                }
+                data[f] = this.fieldEditors[f].getValue();
+            }
+
+            if (validationErrors) {
+                $.scrollTo(validationErrors);
+                $.scrollTo('-=100px');
+                callback(false);
+                return;
+            }
+
+
+            var that = this;
+            var save = function(with_gecoding) {
+                with_gecoding = with_gecoding === undefined ? true : with_gecoding;
+                $.post(that.saveUrl, {
+                    'data': $.JSON.encode(data),
+                    'type': that.contactType,
+                    'id': that.contact_id != null ? that.contact_id : 0
+                }, function(newData) {
+                    if (newData.status != 'ok') {
+                        throw new Exception('AJAX error: '+$.JSON.encode(newData));
+                    }
+                    newData = newData.data;
+
+                    if (newData.history) {
+                        $.wa.history.updateHistory(newData.history);
+                    }
+                    if (newData.data && newData.data.top) {
+                        var html = '';
+                        for (var j = 0; j < newData.data.top.length; j++) {
+                            var f = newData.data.top[j];
+                            var icon = f.id != 'im' ? (f.icon ? '<i class="icon16 ' + f.id + '"></i>' : '') : '';
+                            html += '<li>' + icon + f.value + '</li>';
+                        }
+                        $("#contact-info-top").html(html);
+                        delete newData.data.top;
+                    }
+
+                    if(that.contact_id != null) {
+                        that.initFieldEditors(newData.data);
+                    }
+
+                    // hide old validation errors and show new if exist
+                    var validationErrors = false;
+                    for(var f in that.fieldEditors) {
+                        if (typeof newData.errors[f] != 'undefined') {
+                            that.fieldEditors[f].showValidationErrors(newData.errors[f]);
+                            if (!validationErrors) {
+                                validationErrors = that.fieldEditors[f].domElement;
+                                // find the first visible parent of the element
+                                while(!validationErrors.is(':visible')) {
+                                    validationErrors = validationErrors.parent();
+                                }
+                            }
+                        } else if (that.fieldEditors[f].currentMode == 'edit') {
+                            that.fieldEditors[f].showValidationErrors(null);
+                        }
+                    }
+
+                    if (validationErrors) {
+                        $.scrollTo(validationErrors);
+                        $.scrollTo('-=100px');
+                    } else if (that.contact_id && newData.data.reload) {
+                        window.location.reload();
+                        return;
+                    }
+
+                    if (!validationErrors) {
+                        
+                        if (that.contact_id === null) {
+                            that.justCreated = true;
+                        }
+                        
+                        that.contact_id = newData.data.id;
+                        if (with_gecoding) {
+                            // geocoding
+                            var last_geocoding = $.storage.get('contacts/last_geocoding') || 0;
+                            if ((new Date()).getTime() - last_geocoding > 3600) {
+                                $.storage.del('contacts/last_geocoding');
+                                var address = newData.data.address;
+                                if (!$.isEmptyObject(address)) {
+                                    var requests = [];
+                                    var indexes = [];
+                                    for (var i = 0; i < address.length; i += 1) {
+                                        requests.push(that.sendGeocodeRequest(address[i].for_map));
+                                        indexes.push(i);
+                                    }
+                                    var fn = function(response, i) {
+                                        if (response.status === "OK") {
+                                            var lat = response.results[0].geometry.location.lat || '';
+                                            var lng = response.results[0].geometry.location.lng || '';
+                                            data['address'][i]['value'].lat = lat;
+                                            data['address'][i]['value'].lng = lng;
+                                        } else if (response.status === "OVER_QUERY_LIMIT") {
+                                            $.storage.set('contacts/last_geocoding', (new Date()).getTime() / 1000);
+                                        }
+                                    };
+                                    $.when.apply($, requests).then(function() {
+                                        if (requests.length <= 1 && arguments[1] === 'success') {
+                                            fn(arguments[0], indexes[0]);
+                                        } else {
+                                            for (var i = 0; i < arguments.length; i += 1) {
+                                                if (arguments[i][1] === 'success') {
+                                                    fn(arguments[i][0], indexes[i]);
+                                                }
+                                            }
+                                        }
+                                        save.call(that, false);
+                                    });
+                                } else {
+                                    callback(!validationErrors);
+                                }
+                            } else {
+                                callback(!validationErrors);
+                            }
+                        } else {
+                            callback(!validationErrors);
+                        }
+                         
+                    } else {
+                        callback(!validationErrors);
+                    }
+                }, 'json');
+            };
+            
+            save();
+            
+        },
+
+        /** Return jQuery object representing ext selector with given options and currently selected value. */
+        createExtSelect: function(options, defValue) {
+            var optString = '';
+            var custom = true;
+            for(var i in options) {
+                var selected = '';
+                if (options[i] === defValue || i === defValue) {
+                    selected = ' selected="selected"';
+                    custom = false;
+                }
+                var v = this.htmlentities(options[i]);
+                optString += '<option value="'+(typeof options.length === 'undefined' ? i : v)+'"'+selected+'>'+v+'</option>';
+            }
+
+            var input;
+            if (custom) {
+                optString += '<option value="%custom" selected="selected">'+$_('other')+'...</option>';
+                input = '<input type="text" class="small ext">';
+            } else {
+                optString += '<option value="%custom">'+$_('other')+'...</option>';
+                input = '<input type="text" class="small empty ext">';
+            }
+
+            var result = $('<span><select class="ext">'+optString+'</select><span>'+input+'</span></span>');
+            var select = result.children('select');
+            input = result.find('input');
+            input.val(defValue);
+            if(select.val() !== '%custom') {
+                input.hide();
+            }
+
+            defValue = $_('which?');
+
+            var inputOnBlur = function() {
+                if(!input.val() && !input.hasClass('empty')) {
+                    input.val(defValue);
+                    input.addClass('empty');
+                }
+            };
+            input.blur(inputOnBlur);
+            input.focus(function() {
+                if (input.hasClass('empty')) {
+                    input.val('');
+                    input.removeClass('empty');
+                }
+            });
+
+            select.change(function() {
+                var v = select.val();
+                if (v === '%custom') {
+                    if (input.hasClass('empty')) {
+                        input.val(defValue);
+                    }
+                    input.show();
+                } else {
+                    input.hide();
+                    input.addClass('empty');
+                    input.val(v || '');
+                }
+                inputOnBlur();
+            });
+
+            input[0].getExtValue = function() {
+                return select.val() === '%custom' && input.hasClass('empty') ? '' : input.val();
+            };
+            input[0].setExtValue = function(val) {
+                if (options[val]) {
+                    select.val(val);
+                } else {
+                    select.val('%custom');
+                }
+                input.val(val);
+            };
+
+            return result;
+        },
+
+        /** Create and return JQuery object with buttons to save given fields.
+          * @param fieldIds array of field ids
+          * @param saveCallback function save handler. One boolean parameter: true if success, false if validation errors occured
+          * @param cancelCallback function cancel button handler. If not specified, then saveCallback() is called with no parameter. */
+        inplaceEditorButtons: function(fieldIds, saveCallback, cancelCallback) {
+            var buttons = $('<div class="field buttons"><div class="value submit"><em class="errormsg" id="validation-notice"></em></div></div>');
+            //
+            // Save button and save on enter in input fields
+            //
+            var that = this;
+            var saveHandler = function() {
+                $('.buttons .loading').show();
+                that.saveFields(fieldIds, function(p) {
+                    $('.buttons .loading').hide();
+                    saveCallback(p);
+                });
+                return false;
+            };
+
+            // refresh delegated event that submits form when user clicks enter
+            var inputs_handler = $('#contact-info-block.edit-mode input[type="text"]', $('#c-core')[0]);
+            inputs_handler.die('keyup');
+            inputs_handler.live('keyup', function(event) {
+                if(event.keyCode == 13 && (!$(event.currentTarget).data('autocomplete') || !$(event.currentTarget).data('contact_id'))){
+                    saveHandler();
+                }
+            });
+            var saveBtn = $('<input type="submit" class="button green" value="'+$_('Save')+'" />').click(saveHandler);
+
+            //
+            // Cancel link
+            //
+            var that = this;
+            var cancelBtn = $('<a href="javascript:void(0)" class="cancel">'+$_('cancel')+'</a>').click(function(e) {
+                $('.buttons .loading').hide();
+                if (typeof cancelCallback != 'function') {
+                    saveCallback();
+                } else {
+                    cancelCallback();
+                }
+                // remove topmost validation errors
+                that.fieldEditors.name.showValidationErrors(null);
+                $.scrollTo(0);
+                return false;
+            });
+            buttons.children('div.value.submit')
+                .append(saveBtn)
+                .append('<span class="or"> '+$_('or')+' </span>')
+                .append(cancelBtn)
+                .append($('<i class="icon16 loading" style="margin-left: 16px; display: none;"></i>'));
+
+            return buttons;
+        },
+                
+        destroy: function() {
+            $(this.el).html('');
+        },
+                
+        // UTILITIES
+
+        /** Utility function for common name => value wrapper.
+          * @param value    string|JQuery string to place in Value column, or a jquery collection of .value divs (possibly wrapped by .multifield-subfields)
+          * @param name     string string to place in Name column (defaults to '')
+          * @param cssClass string optional CSS class to add to wrapper (defaults to none)
+          * @return resulting HTML
+          */
+                
+        wrapper: function(value, name, cssClass) {
+            cssClass = (typeof cssClass != 'undefined') && cssClass ? ' '+cssClass : '';
+            var result = $('<div class="field'+cssClass+'"></div>');
+
+            if ((typeof name != 'undefined') && name) {
+                result.append('<div class="name">' + $.wa.encodeHTML(name) +'</div>');
+            }
+
+            if (typeof value != 'object' || !(value instanceof jQuery) || value.find('div.value').size() <= 0) {
+                value = $('<div class="value"></div>').append(value);
+            }
+            result.append(value);
+            return result;
+        },
+                
+        setOptions: function(opts) {
+            this.options = $.extend(options, this.options || {}, opts);
+        },
+
+            /** Convert html special characters to entities. */
+        htmlentities: function(s){
+            var div = document.createElement('div');
+            var text = document.createTextNode(s);
+            div.appendChild(text);
+            return div.innerHTML;
+        },
+                
+        addressToString: function(address) {
+            var value = [];
+            var order = [ 'street', 'city', 'country', 'region', 'zip' ];
+            address = $.extend({}, address || {});
+            for (var i = 0; i < order.length; i += 1) {
+                value.push(address[order[i]] || '');
+                delete address[order[i]];
+            }
+            for (var k in address) {
+                if (address.hasOwnProperty(k) && k !== 'lat' && k != 'lng') {
+                    value.push(address[k]);
+                }
+            }
+            return value.join(',');
+        },
+                
+        geocodeAddress: function(fieldValue, i) {
+            var self = this;
+            if (!fieldValue[i].data.lat || !fieldValue[i].data.lng) {
+                this.sendGeocodeRequest(fieldValue[i].for_map || fieldValue[i].value, function(r) {
+                    fieldValue[i].data.lat = r.lat;
+                    fieldValue[i].data.lng = r.lng;
+                    $.post('?module=contacts&action=saveGeocoords', {
+                        id: self.contact_id,
+                        lat: r.lat,
+                        lng: r.lng,
+                        sort: i
+                    });
+                });
+            }
+        },
+                
+        sendGeocodeRequest: function(value, fn, force) {
+            var address = [];
+            if (typeof value === 'string') {
+                address.push(value);
+            } else {
+                if (value.with_street && value.without_street && value.with_street === value.without_street) {
+                    address.push(value.with_street);
+                } else {
+                    if (value.with_street) {
+                        address.push(value.with_street);
+                    }
+//                    if (value.without_street) {
+//                        address.push(value.without_street);
+//                    }
+                }
+            }
+            if (address.length <= 1 && force === undefined) {
+                force = true;
+            }
+            
+            var df = $.Deferred();
+            
+
+      //Uncomment for test
+//            console.log('//maps.googleapis.com/maps/api/geocode/json');
+//            df.resolve([{
+//                    status: 'OK',
+//                    results: [
+//                        {
+//                            geometry: {
+//                                location: {
+//                                    lat: 60.2479758,
+//                                    lng: 90.1104176
+//                                }
+//                            }
+//                        }
+//                    ]
+//            }, 'success']);
+//            return df;
+            
+            
+            var self = this;
+            $.ajax({
+                url: '//maps.googleapis.com/maps/api/geocode/json',
+                data: {
+                    sensor: false,
+                    address: address[0]
+                },
+                dataType: 'json',
+                success: function(response) {
+                    var lat, lng;
+                    if (response) {
+                        if (response.status === "OK") {
+                            var n = response.results.length;
+                            var r = false;
+                            for (var i = 0; i < n; i += 1) {
+                                if (!response.results[i].partial_match) {   // address correct, geocoding without errors
+                                    lat = response.results[i].geometry.location.lat || '';
+                                    lng = response.results[i].geometry.location.lng || '';
+                                    if (fn instanceof Function) {
+                                        fn({ lat: lat, lng: lng });
+                                    }
+                                    r = true;
+                                    break;
+                                }
+                            }
+                            if (!r) {
+                                if (force) {
+                                    lat = response.results[0].geometry.location.lat || '';
+                                    lng = response.results[0].geometry.location.lng || '';
+                                    if (fn instanceof Function) {
+                                        fn({ lat: lat, lng: lng });
+                                    }
+                                    df.resolve([response, 'success']);
+                                } else if (address[1]) {
+                                    self.sendGeocodeRequest(address[1], fn, true).always(function(r) {
+                                        df.resolve(r);
+                                    });
+                                } else {
+                                    df.resolve([response, 'success']);
+                                }
+                            } else {
+                                df.resolve([response, 'success']);
+                            }
+                        } else {
+                            df.resolve([response, 'success']);
+                        }
+                    } else {
+                        df.resolve([{}, 'error']);
+                    }
+                },
+                error: function(response) {
+                    df.resolve([response, 'error']);
+                }
+            });
+            return df;
+        },
+        
+        /** Helper to switch to particular tab in a tab set. */
+        switchToTab: function(tab, onto, onfrom, tabContent) {
+            if (typeof(tab) == 'string') {
+                if (tab.substr(0, 2) == 't-') {
+                    tab = '#'+tab;
+                } else if (tab[0] != '#') {
+                    tab = "#t-" + tab;
+                }
+                tab = $(tab);
+            } else {
+                tab = $(tab);
+            }
+            if (tab.size() <= 0 || tab.hasClass('selected')) {
+                return;
+            }
+
+            if (!tabContent) {
+                var id = tab.attr('id');
+                if (!id || id.substr(0, 2) != 't-') {
+                    return;
+                }
+                tabContent = $('#tc-'+id.substr(2));
+            }
+
+            if (onfrom) {
+                var oldTab = tab.parent().children('.selected');
+                if (oldTab.size() > 0) {
+                    oldTab.each(function(k, v) {
+                        onfrom.call(v);
+                    });
+                }
+            }
+
+            var doSwitch = function() {
+                tab.parent().find('li.selected').removeClass('selected');
+                tab.removeClass('hidden').css('display', '').addClass('selected');
+                tabContent.siblings('.tab-content').addClass('hidden');
+                tabContent.removeClass('hidden');
+                if (onto) {
+                    onto.call(tab[0]);
+                }
+                $('#c-info-tabs').trigger('after_switch_tab', [tab]);
+            };
+
+            $('#c-info-tabs').trigger('before_switch_tab', [tab]);
+
+            // sliding animation (jquery.effects.core.min.js required)
+            if ($.effects && $.effects.slideDIB && !tab.is(':visible')) {
+                $.wa.controller.loadTabSlidingAnimation();
+                tab.hide().removeClass('hidden').show('slideDIB', {direction: 'down'}, 300, function() {
+                    doSwitch();
+                });
+            } else {
+                doSwitch();
+            }
+        },
+                
+        /** 
+        * Helper to append appropriate events to a checkbox list. 
+        * */
+        initCheckboxList: function(ul) {
+            ul = $(ul);
+
+            var updateStatus = function(i, cb) {
+                var self = $(cb || this);
+                if (self.is(':checked')) {
+                    self.parent().addClass('highlighted');
+                } else {
+                    self.parent().removeClass('highlighted');
+                }
+            };
+
+            ul.find('input[type="checkbox"]')
+                .click(updateStatus)
+                .each(updateStatus);
+            return ul;
+        },
+                
+        /** Load content from url and put it into elem. Params are passed to url as get parameters. */
+        load: function (elem, url, params, beforeLoadCallback, afterLoadCallback) {
+            var r = Math.random();
+            var that = this;
+            that.random = r;
+            $.get(url, params, function (response) {
+                if (that.random == r) {
+                    if (beforeLoadCallback) {
+                        beforeLoadCallback.call(that);
+                    }
+                    $(window).trigger('wa_before_load', [elem, url, params, response]);
+                    $(elem).html(response);
+                    $(window).trigger('wa_after_load', [elem, url, params, response]);
+                    if (afterLoadCallback) {
+                        afterLoadCallback.call(that);
+                    }
+                }
+            });
+        }
+                
+    }, options);
+    $.wa.fieldTypesFactory(contactEditor);
+    return contactEditor;
+};
+
+// one global instance of contact editor exists always
+$.wa.contactEditor = $.wa.contactEditorFactory();;

@@ -15,58 +15,54 @@
     </div>
     <div class="block not-padded contacts-data">
         <ul class="v-list">
-            {{foreach $contacts as $c}}
+            {foreach $contacts as $c}
                 <li class="contact-row">
                     <div class="profile image96px">
-                        <div class="image"><a href="#/contact/{{$c.id}}">
-                            {{if $c.photo}}
-                                <img src="{{$wa_url}}wa-content/img/userpic96.jpg" alt="">
-                            {{else}}
-                                <img src="{{$wa_url}}wa-data/public/contacts/photo/{{$c.id}}/{{$c.photo}}.96x96.jpg" alt="">
-                            {{/if}}
+                        <div class="image"><a href="#/contact/{$c.id}">
+                            <img src="{$c.photo_url_96}" alt="">
                         </a></div>
                         <div class="details">
-                            <input name="c_list_selector" value="{{$c.id}}" type="radio">
+                            <input name="c_list_selector" value="{$c.id}" type="radio">
                             <p class="contact-name">
-                                {{if $c.master_only}}
+                                {if $c.master_only}
                                     <i class="icon16 exclamation"></i>
-                                {{/if}}
-                                <a href="#/contact/{{$c.id}}">{{$c.name|escape}}</a>
+                                {/if}
+                                <a href="#/contact/{$c.id}">{$c.name}</a>
                                 <span class="hide-when-not-selected bold" style="color:#109010;">&mdash; [`selected as a master contact`]</span>
                             </p>
-                            {{if $c.master_only}}
-                                <p class="errormsg">{{$c.master_only}}</p>
-                            {{/if}}
-                            {{foreach $fields as $field_id => $field_name}}
-                                {{if !empty($c[$field_id])}}
+                            {if $c.master_only}
+                                <p class="errormsg">{$c.master_only}</p>
+                            {/if}
+                            {foreach $fields as $field_id => $field_name}
+                                {if !empty($c[$field_id])}
                                     <p>
-                                        <span class="c-details-label">{{$field_name}}:</span> {{$c[$field_id]|escape}}
+                                        <span class="c-details-label">{$field_name|escape}:</span> {$c[$field_id]}
                                     </p>
-                                {{/if}}
-                            {{/foreach}}
+                                {/if}
+                            {/foreach}
                         </div>
                     </div>
 
                     <div class="hidden merge-description-when-selected" style="margin:25px 0 20px 8px;">
-                        {{sprintf_wp("%s has been selected as a master contact.", sprintf('<strong>%s</strong>', htmlspecialchars($c.name)))}}
-                        {{$slaves_num = count($slave_ids)}}
-                        {{if !$c.master_only}}
-                            {{$slaves_num = $slaves_num - 1}}
-                        {{/if}}
+                        {sprintf_wp("%s has been selected as a master contact.", sprintf('<strong>%s</strong>', $c.name))}
+                        {$slaves_num = count($slave_ids)}
+                        {if !$c.master_only}
+                            {$slaves_num = $slaves_num - 1}
+                        {/if}
 
-                        {{if $slaves_num > 0}}
-                            {{sprintf(_w('%d other contact will be merged with %%s.', '%d other contacts will be merged with %%s.', $slaves_num), htmlspecialchars($c.name))}}
-                            {{$unable_to_merge_num = count($contacts) - $slaves_num - 1}}
-                            {{if $unable_to_merge_num > 0}}
-                                {{_w('%d contact will not be merged by the reasons designated above.', '%d contacts will not be merged by the reasons designated above.', $unable_to_merge_num)}}
-                            {{/if}}
-                        {{else}}
-                            {{sprintf_wp("However, there are no contacts to be merged with %s, by the reasons designated above.", htmlspecialchars($c.name))}}
+                        {if $slaves_num > 0}
+                            {sprintf(_w('%d other contact will be merged with %%s.', '%d other contacts will be merged with %%s.', $slaves_num), $c.name)}
+                            {$unable_to_merge_num = count($contacts) - $slaves_num - 1}
+                            {if $unable_to_merge_num > 0}
+                                {_w('%d contact will not be merged by the reasons designated above.', '%d contacts will not be merged by the reasons designated above.', $unable_to_merge_num)}
+                            {/if}
+                        {else}
+                            {sprintf_wp("However, there are no contacts to be merged with %s, by the reasons designated above.", $c.name)}
                             <span class="not-allowed-as-master"></span>
-                        {{/if}}
+                        {/if}
                     </div>
                 </li>
-            {{/foreach}}
+            {/foreach}
         </ul>
     </div>
 </div>
@@ -77,7 +73,7 @@
 </div>
 
 <script>(function() {
-    var slave_ids = {{json_encode($slave_ids)}};
+    var slave_ids = {json_encode($slave_ids)};
     var grid_place = $('#contacts-container');
     var button = $('#merge-submit');
 
@@ -127,7 +123,12 @@
 
     // cancel link
     $('#merge-cancel').click(function() {
-        $.wa.controller.redispatch();
+        var hashes = $.wa.controller.hashes;
+        if (hashes[1]) {
+            $.wa.setHash(hashes[1]);
+        } else {
+            $.wa.setHash('');
+        }
     });
 
     // 'Back to' link

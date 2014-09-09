@@ -18,7 +18,7 @@ class contactsContactsMergeSelectMasterAction extends waViewAction
         $ids = waRequest::request('ids', array(), 'array_int');
         $collection =  new contactsCollection('id/'.implode(',', $ids));
         $collection->orderBy('~data', 'DESC');
-        $contacts = $collection->getContacts('*', 0, 500);
+        $contacts = $collection->getContacts('*,photo_url_96', 0, 500);
 
         // Field names
         $fields = array(); // field id => field name
