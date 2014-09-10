@@ -698,14 +698,6 @@
             }
         },
 
-        contactsMerge: function () {
-            var selected = $.wa.grid.getSelected();
-            if (selected.length < 2) {
-                return false;
-            }
-            this.loadHTML('?module=contacts&action=mergeSelectMaster', { ids: selected });
-        },
-
         // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
         // *   Other UI-related stuff: dialogs, form submissions etc.
         // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

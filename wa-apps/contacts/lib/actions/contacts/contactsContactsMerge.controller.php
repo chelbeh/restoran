@@ -120,7 +120,7 @@ class contactsContactsMergeController extends waJsonController
                     }
                 }
             }
-
+            
         }
 
         // Remove duplicates
