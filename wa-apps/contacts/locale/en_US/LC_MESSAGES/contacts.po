@@ -1271,7 +1271,3 @@ msgstr "Подробно"
 #: /wa-apps/contacts/js/wa.controller.js:1123
 msgid "Userpics"
 msgstr "Юзерпики"
-
-#: /wa-apps/contacts/templates/actions/contacts/ContactsUser.html:45
-msgid "last login:"
-msgstr ""
