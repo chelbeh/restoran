@@ -10,8 +10,17 @@ class holidaysModel extends waModel
         $known = array_keys($this->query($sql)->fetchAll('contact_id'));
         $known || $known = null;
 
-        $sql = "SELECT id, name, birthday, photo FROM wa_contact WHERE is_user > 0 OR id IN (?)";
-        return $this->query($sql, array($known))->fetchAll('id');
+        $sql = "SELECT id, name, birth_day, birth_month, birth_year, photo FROM wa_contact WHERE is_user > 0 OR id IN (?)"; // !!!
+        $result = array();
+        foreach($this->query($sql, array($known)) as $row) {
+            if (!empty($row['birth_month']) && !empty($row['birth_day'])) {
+                $row['birthday'] = date('Y-m-d', mktime(0, 0, 0, $row['birth_month'], $row['birth_day'], ifset($row['birth_year'], date('Y'))));
+            } else {
+                $row['birthday'] = null;
+            }
+            $result[$row['id']] = $row;
+        }
+        return $result;
     }
 
     public function getByContact($contact_id)
