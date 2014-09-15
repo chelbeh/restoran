@@ -35,7 +35,7 @@ class b2cShipping extends waShipping
                             'est_delivery' => $time,
                             'currency'     => 'RUB',
                             'rate'         => $rate,
-                            'comment' => self::getComment($cities[$region_int]),
+                            'comment' => isset($cities[$region_int])?self::getComment($cities[$region_int]):'',
                         );
                         return $result;
                     }
