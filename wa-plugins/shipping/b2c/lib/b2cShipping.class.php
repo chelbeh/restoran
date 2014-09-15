@@ -25,6 +25,7 @@ class b2cShipping extends waShipping
                                 'est_delivery' => $time,
                                 'currency'     => 'RUB',
                                 'rate'         => $rate,
+                                'comment' => self::getComment($cities[$region_int]),
                             );
                             return $result;
                         }
@@ -34,6 +35,7 @@ class b2cShipping extends waShipping
                             'est_delivery' => $time,
                             'currency'     => 'RUB',
                             'rate'         => $rate,
+                            'comment' => self::getComment($cities[$region_int]),
                         );
                         return $result;
                     }
@@ -41,6 +43,10 @@ class b2cShipping extends waShipping
             }
         }
         return null;
+    }
+
+    private static function getComment($cities){
+        return 'Города доставки: '.implode(', ', $cities);
     }
 
     public function allowedCurrency()
