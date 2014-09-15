@@ -102,8 +102,8 @@
                                     {else}
                                         <i class="icon16 birthday"></i>
                                         <a href="{$wa_backend_url}contacts/#/contact/{$v.contact_id}/no-bc/" class="hint">
-                                            {$v.date|wa_date:'humandate'},
-                                            {_w('%d year', '%d years', $v.age)}
+                                            {$v.date|wa_date:'humandate'}{if !empty($v.age)},
+                                            {_w('%d year', '%d years', $v.age)}{/if}
                                         </a>
                                     {/if}
                                 </div>
