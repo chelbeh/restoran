@@ -298,5 +298,7 @@ class waAutoload
 
         'Geoip'                    => 'geoip/waGeoip.class.php',
         'GeoipModel'               => 'geoip/waGeoip.model.php',
+
+        'waDebug'                  => 'debug/waDebug.class.php',
     );
 }
