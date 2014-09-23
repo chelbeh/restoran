@@ -131,9 +131,9 @@ $.wa.fieldTypesFactory = function(contactEditor, fieldType) {
             }
 
             var nameAddition = '';
-            if (mode == 'edit') {
-                //nameAddition = (this.fieldData.required ? '<span class="req-star">*</span>' : '')+':';
-            }
+//            if (mode == 'edit') {
+//                nameAddition = (this.fieldData.required ? '<span class="req-star">*</span>' : '')+':';
+//            }
             var cssClass;
             if (this.contactType === 'person') {
                 if (['firstname', 'middlename', 'lastname'].indexOf(this.fieldData.id) >= 0) {
@@ -342,9 +342,8 @@ $.wa.fieldTypesFactory = function(contactEditor, fieldType) {
             }
 
             return this.domElement;
-        },
-        
-        
+        }
+
         
     });
     contactEditor.factoryTypes.Text = $.extend({}, contactEditor.factoryTypes.String);
@@ -1113,9 +1112,9 @@ $.wa.fieldTypesFactory = function(contactEditor, fieldType) {
             // A (composite) field with no inline mode?
             if (typeof sf.newInlineFieldElement != 'function') {
                 var nameAddition = '';
-                if (mode == 'edit') {
-                    //nameAddition = (this.fieldData.required ? '<span class="req-star">*</span>' : '')+':';
-                }
+//                if (mode == 'edit') {
+//                    nameAddition = (this.fieldData.required ? '<span class="req-star">*</span>' : '')+':';
+//                }
                 var wrapper = contactEditor.wrapper('<span class="replace-me-with-value"></span>', i === 0 ? (this.fieldData.name+nameAddition) : '', 'no-bot-margins');
                 var rwv = wrapper.find('span.replace-me-with-value');
 
@@ -1340,7 +1339,6 @@ $.wa.fieldTypesFactory = function(contactEditor, fieldType) {
             this.fieldData.subfields = this.fieldData.fields;
             for(var sfid in this.fieldData.subfields) {
                 var sf = this.fieldData.subfields[sfid];
-                if(sf.type=='Metro')sf.type='String';
                 var editor = $.extend({}, contactEditor.factoryTypes[sf.type]);
                 var sfData = this.fieldData.fields[sfid];
                 if (this.fieldData.required && this.fieldData.required[sfid]) {

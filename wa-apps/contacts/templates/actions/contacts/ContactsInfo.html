@@ -126,7 +126,7 @@
                                 <ul class="hint c-create-method-info">
                                     <li>[`ID`]: {$contact.id}</li>
                                     <li>[`Added`]: {if !empty($author)}{$author.name|escape} {/if}{$contact_create_time}</li>
-                                    <li>[`Method`]: {$contact.create_method} ({$contact.create_app_id})</li>
+                                    <li>[`Method`]: {if $contact.create_method}{$contact.create_method} ({$contact.create_app_id}){else}{$contact.create_app_id}{/if}</li>
                                 </ul>
                             {/if}
                         </div>
@@ -233,7 +233,7 @@
             $('#t-{$tab}').click();
         {/if}
 
-        $.wa.contactEditor.initFactories({json_encode($contactFields)});
+        $.wa.contactEditor.initFactories({json_encode($contactFields)}, {json_encode($contactFieldsOrder)});
         $.wa.contactEditor.initAllEditors();
         $.wa.contactEditor.initFieldEditors({json_encode($fieldValues)});
         $.wa.contactEditor.initContactInfoBlock('view');

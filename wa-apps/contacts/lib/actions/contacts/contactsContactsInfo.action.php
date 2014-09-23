@@ -38,7 +38,7 @@ class contactsContactsInfoAction extends waViewAction
             $r = $cr->getRight(null, $this->id);
             //var_dump($r );exit;
             if (!$r) {
-                throw new waRightsException('Access denied.');
+                throw new waRightsException(_w('Access denied'));
             } else {
                 $this->view->assign('readonly', $r === 'read');
             }
@@ -80,7 +80,8 @@ class contactsContactsInfoAction extends waViewAction
 
             // Update history
             if (empty($this->params['limited_own_profile'])) {
-                if( ( $name = waContactNameField::formatName($this->contact) ) || $name === '0') {
+                $name = $this->contact->get('name');
+                if ($name || $name === '0') {
                     $history = new contactsHistoryModel();
                     $history->save('/contact/'.$this->id, $name);
                 }
@@ -173,6 +174,7 @@ class contactsContactsInfoAction extends waViewAction
 
             contactsHelper::normalzieContactFieldValues($fieldValues, $contactFields);
             $this->view->assign('contactFields', $contactFields);
+            $this->view->assign('contactFieldsOrder', array_keys($contactFields));
             $this->view->assign('fieldValues', $fieldValues);
 
             // Contact categories
