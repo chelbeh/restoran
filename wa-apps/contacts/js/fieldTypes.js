@@ -1339,6 +1339,7 @@ $.wa.fieldTypesFactory = function(contactEditor, fieldType) {
             this.fieldData.subfields = this.fieldData.fields;
             for(var sfid in this.fieldData.subfields) {
                 var sf = this.fieldData.subfields[sfid];
+                if(sf.type=='Metro')sf.type='String';
                 var editor = $.extend({}, contactEditor.factoryTypes[sf.type]);
                 var sfData = this.fieldData.fields[sfid];
                 if (this.fieldData.required && this.fieldData.required[sfid]) {
