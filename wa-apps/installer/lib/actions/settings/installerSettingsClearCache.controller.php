@@ -17,7 +17,6 @@ class installerSettingsClearCacheController extends waJsonController
     public function execute()
     {
         try {
-
             $errors = installerHelper::flushCache();
 
             $this->response['message'] = _w('Cache cleared');

@@ -11,6 +11,7 @@
  * @copyright 2011 Webasyst LLC
  * @package installer
  */
+//
 
 abstract class installerExtrasRemoveAction extends waViewAction
 {
@@ -51,7 +52,7 @@ abstract class installerExtrasRemoveAction extends waViewAction
         }
     }
 
-    function execute()
+    public function execute()
     {
         $this->init();
 
@@ -101,7 +102,7 @@ abstract class installerExtrasRemoveAction extends waViewAction
                              */
 
                             $message = "Can not delete system application's {$this->extras_type} \"%s\"";
-                            throw new waException(sprintf(_w($message), _wd($slug, $info['name'])));
+                            throw new waException(sprintf(_w($message), _wd($slug, isset($info['name'])?$info['name']:'???')));
                         }
                         $queue[] = array(
                             'app_slug' => $app_id,

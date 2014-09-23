@@ -1,6 +1,5 @@
-<?php 
+<?php
 
 return array(
-	'view' => array('waSmarty3View'),
+    'view' => array('waSmarty3View'),
 );
-

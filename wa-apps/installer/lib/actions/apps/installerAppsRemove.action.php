@@ -23,7 +23,7 @@ class installerAppsRemoveAction extends waViewAction
         'config' => false,
     );
 
-    function execute()
+    public function execute()
     {
         //TODO use POST
         $app_ids = waRequest::request('app_id');
@@ -114,7 +114,7 @@ class installerAppsRemoveAction extends waViewAction
         $paths[] = wa()->getDataPath(null, true, $app_id); //wa-data/public/$app_id/
         $paths[] = wa()->getDataPath(null, false, $app_id); //wa-data/protected/$app_id/
         if ($this->options['log']) {
-            $paths[] = wa()->getAppPath(null, false, $app_id); //wa-log/$app_id/
+            $paths[] = wa()->getConfig()->getPath('log').'/'.$app_id; //wa-log/$app_id/
         }
         if ($this->options['config']) {
             $paths[] = wa()->getConfigPath($app_id); //wa-config/$app_id/
@@ -128,7 +128,7 @@ class installerAppsRemoveAction extends waViewAction
             try {
                 waFiles::delete($path, true);
             } catch (waException $ex) {
-                
+
             }
         }
         return $name;

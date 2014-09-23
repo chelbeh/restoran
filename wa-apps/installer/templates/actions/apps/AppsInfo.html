@@ -23,17 +23,37 @@
                     {if $app.commercial && !$app.purchased}
                         {* PAID APP, LICENSE IS NOT VALID *}                        
                         {if $app.license_expire}
-                            {* EXPIRED LICENSE *}
-                            <a class="button green" href="{$app.renew_url|escape}" value="[`Renew license`]">
+                        
+                            {* EXPIRED LICENSE: renew ... *}
                             <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$app.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$app.license_expire))}</p>
+                            <a class="button green" href="{$app.renew_url|escape}">[`Renew license`]</a>
+                            
+                            {* ...or buy a permanent license *}
+                            <form action="{$app.purchase_url|escape}" method="post" id="buy-instead-of-renew-license-form">
+                                <p>
+                                    <input type="hidden" name="app_id[]" value="{$app.slug}">
+                                    <input type="hidden" name="domain" value="{$domain}">
+                                    <input type="hidden" name="hash" value="{$identity_hash}">
+                                    {if !empty($promo_id)}
+                                    <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                                    {/if}
+                                    <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
+                                    [`or `] <a href="javascript:void();" onClick="$('#buy-instead-of-renew-license-form').submit();return false;">[`buy permanent license`]</a>
+                                </p>
+                                <p>{sprintf("[`Permanent license saves you money on your monthly bills (your monthly payment will be reduced by %s).`]", $app.lease_price)}</p>
+                            </form>
+                            
                         {else}
                             {* NEVER LICENSED *}
                             <form action="{$app.purchase_url|escape}" method="post">
                                 <input type="hidden" name="app_id[]" value="{$app.slug}">
                                 <input type="hidden" name="domain" value="{$domain}">
                                 <input type="hidden" name="hash" value="{$identity_hash}">
+                                {if !empty($promo_id)}
+                                <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                                {/if}
                                 <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                                <input type="submit" class="button green" value="[`Link license`]">
+                                <input type="submit" class="button green" value="[`Get license`]">
                                 <p class="red"><i class="icon16 no"></i>{sprintf("[`Installation and usage of %s app on <strong>%s</strong> is not licensed. Updates are disabled. Buy a new license or link your existing %s license to this Webasyst installation.`]",$app.name|escape,installerHelper::getDomain()|escape,$app.name|escape)}</p>
                             </form>
                         {/if}
@@ -64,7 +84,21 @@
                                 {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
                                 <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$app.name|escape, installerHelper::getDomain()|escape, $app.license_expire)}</em></p>
                                 <a class="button green" href="{$app.renew_url|escape}" style="display: inline-block;">[`Extend license`]</a>
-                                <br><br>
+                                {* ...or buy a permanent license *}
+                                <form action="{$app.purchase_url|escape}" method="post" id="buy-instead-of-renew-license-form">
+                                    <p>
+                                        <input type="hidden" name="app_id[]" value="{$app.slug}">
+                                        <input type="hidden" name="domain" value="{$domain}">
+                                        <input type="hidden" name="hash" value="{$identity_hash}">
+                                        {if !empty($promo_id)}
+                                        <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                                        {/if}
+                                        <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
+                                        [`or `] <a href="javascript:void();" onClick="$('#buy-instead-of-renew-license-form').submit();return false;">[`buy permanent license`]</a>
+                                    </p>
+                                    <p>{sprintf("[`Permanent license saves you money on your monthly bills (your monthly payment will be reduced by %s).`]", $app.lease_price)}</p>
+                                </form>
+                                
                             {else}
                                 {* VALID LICENSE *}
                                 <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a valid licensed installation of %s on <strong>%s</strong>.`]",$app.name|escape, installerHelper::getDomain()|escape)}</em></p>
@@ -96,6 +130,9 @@
                             <form action="{$app.purchase_url|escape}" method="post">
                                 <input type="hidden" name="app_id[]" value="{$app.slug}">
                                 <input type="hidden" name="hash" value="{$identity_hash}">
+                                {if !empty($promo_id)}
+                                    <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                                {/if}
                                 <input type="hidden" name="domain" value="{$domain}">
                                 <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                                 <input type="submit" class="button green" value="[`Buy & Install`]"{if !$app.applicable} disabled="disabled"{/if}>
@@ -122,44 +159,42 @@
 
             <!-- pricing -->
             <div class="fields width100px">
-                {if !$app.installed}
-                    {if $app.commercial}
-                        <div class="field-group">
-                            <div class="field">
-                                <div class="name">
-                                    [`Price`]
-                                </div>
-                                {if $app.lease_price == 'free'}
-                                    {* free to install on this particular installation (cloud) *}
-                                    <div class="value">
-                                        <strong>[`Free`]</strong>
-                                    </div>
-                                {else}
-                                    <div class="value">
-                                        {if !empty($app.compare_price)}<strike class="gray">{$app.compare_price}</strike>&nbsp; {/if}
-                                        <strong{if !empty($app.compare_price)} class="highlighted"{/if}>{$app.price}</strong>
-                                    </div>
-                                    {if $app.lease_price}
-                                        <div class="value">
-                                            [`or`]
-                                        </div>
-                                        <div class="value">
-                                            <strong>{sprintf('[`%s/mo`]',$app.lease_price)}</strong>
-                                        </div>
-                                    {/if}
-                                {/if}
-                            </div>
-                        </div>
-                    {else}
+                {if $app.commercial}
+                    <div class="field-group">
                         <div class="field">
                             <div class="name">
                                 [`Price`]
                             </div>
-                            <div class="value">
-                                <strong>[`Free`]</strong>
-                            </div>
+                            {if $app.lease_price == 'free'}
+                                {* free to install on this particular installation (cloud) *}
+                                <div class="value">
+                                    <strong>[`Free`]</strong>
+                                </div>
+                            {else}
+                                <div class="value">
+                                    {if !empty($app.compare_price)}<strike class="gray">{$app.compare_price}</strike>&nbsp; {/if}
+                                    <strong{if !empty($app.compare_price)} class="highlighted"{/if}>{$app.price}</strong>
+                                </div>
+                                {if $app.lease_price}
+                                    <div class="value">
+                                        [`or`]
+                                    </div>
+                                    <div class="value">
+                                        <strong>{sprintf('[`%s/mo`]',$app.lease_price)}</strong>
+                                    </div>
+                                {/if}
+                            {/if}
                         </div>
-                    {/if}
+                    </div>
+                {else}
+                    <div class="field">
+                        <div class="name">
+                            [`Price`]
+                        </div>
+                        <div class="value">
+                            <strong>[`Free`]</strong>
+                        </div>
+                    </div>
                 {/if}
                 <div class="field">
                     <div class="name">

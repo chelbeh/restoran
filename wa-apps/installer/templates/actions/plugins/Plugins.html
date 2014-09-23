@@ -73,8 +73,9 @@
 
     <ul class="thumbs">
     {if !empty($slug)}
-    {$sort = -1000}{$_plugins=[]}
+    {$sort = 1000}{$_plugins=[]}
     {foreach $slug as $key}
+        {if !empty( $apps[$key]) && !empty($apps[$key]['plugins'])}
         {foreach $apps[$key]['plugins'] as $plugin_id => $plugin}
         {if !isset($plugin.sort)}{$sort = $sort+1}{$plugin.sort=$sort}{/if}
         {$_sort=$plugin.sort}
@@ -85,14 +86,14 @@
             <a href="#/plugins/{$app['slug']}/{$plugin_id}/" data-href="#/plugins%s/{$app['slug']}/{$plugin_id}/" class="js-item-link">
                 <div class="i-image-wrapper">
                     <!-- cover -->
-                    <img src="{$plugin.icon}">
+                    <img src="{$plugin.icon|default:"`$wa_url`wa-apps/installer/img/dummy-plugin.png"}">
 
                     <!-- name & author -->
                     <h5>{$plugin.name|default:$plugin_id|escape|truncate:29}</h5>
 
                     {if !empty($plugin.publish_datetime) && strtotime($plugin.publish_datetime) > $smarty.now - 86400*14}
                         <!-- NEW -->
-                        <div class="i-badge new"><span>[`New!`]</span></div>
+                        <div class="i-badge new"><span>New</span></div>
                     {elseif !empty($plugin.tags)}
                         {if in_array('featured', $plugin.tags)} 
                             <!-- FEATURED -->
@@ -106,11 +107,15 @@
                 </div>
             </a>
             
-            {if $plugin.description}<p>{$plugin.description}</p>{/if}
+            {if !empty($plugin.description)}
+                <p>{$plugin.description}</p>
+            {elseif !empty($plugin.installed) && !empty($plugin.installed.description)}
+                <p>{$plugin.installed.description}</p>
+            {/if}
 
             <!-- plugin price and status -->
             {if empty($plugin.installed)}
-                {if $plugin.commercial}
+                {if !empty($plugin.commercial)}
                     {if $plugin.lease_price == 'free'}
                         {* free to install on this particular installation (cloud) *}
                         <span class="black bold">[`Free`]</span>
@@ -138,6 +143,7 @@
             {/capture}
             {$_plugins[$_sort]=$_plugin}
       {/foreach}
+        {/if}
     {/foreach}
      {else}
         <p class="align-center gray"><br>[`No plugins were found.`]</p>

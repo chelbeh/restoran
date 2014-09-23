@@ -407,9 +407,9 @@ class waInstaller
         }
 
         $this->writeLog(__METHOD__.' tree', self::LOG_DEBUG, array(
-                'targets'     => $targets,
-                'update_list' => $update_list,
-            ));
+            'targets'     => $targets,
+            'update_list' => $update_list,
+        ));
 
         #sort
         uasort($update_list, array(__CLASS__, 'sortUpdateList'));
@@ -845,10 +845,12 @@ class waInstaller
         if (file_exists(self::$root_path.$source_path) && !is_writable(self::$root_path.$source_path)) {
             throw new Exception(_w("Invalid file permissions").' '.$source_path);
         }
-        $disk_free_space = disk_free_space(self::$root_path);
-        $this->writeLog(__FUNCTION__, self::LOG_TRACE, compact('disk_free_space', 'source_size'));
-        if ($disk_free_space && ($source_size > $disk_free_space)) {
-            throw new Exception("Not enough disk space. Required at least {$source_size} but get {$disk_free_space}");
+        if (function_exists('disk_free_space') && is_callable('disk_free_space')) {
+            $disk_free_space = disk_free_space(self::$root_path);
+            $this->writeLog(__FUNCTION__, self::LOG_TRACE, compact('disk_free_space', 'source_size'));
+            if ($disk_free_space && ($source_size > $disk_free_space)) {
+                throw new Exception("Not enough disk space. Required at least {$source_size} but get {$disk_free_space}");
+            }
         }
         return $source_size;
     }

@@ -31,9 +31,10 @@ class installerMessage
         }
         return self::$instance;
     }
+
     private function __construct()
     {
-        $this->storage= waSystem::getInstance()->getStorage();
+        $this->storage = waSystem::getInstance()->getStorage();
         $this->messages = $this->storage->read(__CLASS__);
         if (!is_array($this->messages)) {
             $this->messages = array();
@@ -48,11 +49,11 @@ class installerMessage
     private function store()
     {
         $overdue = array();
-        foreach ($this->messages as $id=>$message) {
+        foreach ($this->messages as $id => $message) {
             if (!is_array($message)) {
                 $overdue[] = $id;
             } elseif (isset($message['t'])) {
-                if ((time()-$message['t'])>300) {
+                if ((time() - $message['t']) > 300) {
                     $overdue[] = $id;
                 }
             }
@@ -94,13 +95,13 @@ class installerMessage
     public function raiseMessage($message, $result = self::R_SUCCESS)
     {
         $ids = array_keys($this->messages);
-        do{
+        do {
             $id = rand(10000, 99999);
-        }while(in_array($id, $ids));
+        } while (in_array($id, $ids));
         $this->messages[$id] = array(
-			'text'=>$message,
-			'result'=>$result,
-			't'=>time(),
+            'text'   => $message,
+            'result' => $result,
+            't'      => time(),
         );
         $this->store();
         return $id;

@@ -7,7 +7,7 @@
             <a href="#/plugins/{$query}">[`List`]</a>
             {/if}
         </div>
-        <h1>[`Application not found`]</h1>
+        <h1>[`Plugin not found`]</h1>
         {if !empty($error)}
             <p class="error">{$error|escape}</p>
         {/if}
@@ -35,6 +35,9 @@
                         <form action="{$plugin.purchase_url|escape}" method="post">
                             <input type="hidden" name="app_id[]" value="{$plugin.slug}">
                             <input type="hidden" name="hash" value="{$identity_hash}">
+                            {if !empty($promo_id)}
+                                <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                            {/if}
                             <input type="hidden" name="domain" value="{$domain}">
                             <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">    
                             <input type="submit" class="button green" value="[`Link license`]">
@@ -46,7 +49,7 @@
                     {if $plugin.action == waInstallerApps::ACTION_UPDATE}
                     {* UPDATES ARE AVAILABLE *}
                         <form action="?module=update&action=manager" method="post">
-                            <input type="hidden" name="app_id[{$plugin.slug}]" value="{$plugin.vendor}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
+                            <input type="hidden" name="app_id[{$plugin.slug}]" value="{$plugin.vendor|default:'dummy'}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
                             <input type="submit" class="button blue" value="[`Install update`]"{if !$plugin.applicable} disabled="disabled"{/if}>
                             <p>
                                 {sprintf("[`A newer version of %s <strong>%s</strong> is available for installation (your current version is %s).`]",$plugin.name|escape,$plugin.version,$plugin.installed.version)}
@@ -122,6 +125,9 @@
                     <form action="{$plugin.purchase_url|escape}" method="post">
                         <input type="hidden" name="app_id[]" value="{$plugin.slug}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
                         <input type="hidden" name="hash" value="{$identity_hash}">
+                        {if !empty($promo_id)}
+                            <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                        {/if}
                         <input type="hidden" name="domain" value="{$domain}">
                         <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                         <input type="submit" class="button green" value="[`Buy & Install`]"{if !$plugin.applicable} disabled="disabled"{/if}>
@@ -131,7 +137,7 @@
                     {* FREE APP *}
                     <form action="?module=update&action=manager" method="post">
                         <input type="hidden" name="install" value="1">
-                        <input type="hidden" name="app_id[{$plugin.slug}]" value="{$plugin.vendor}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
+                        <input type="hidden" name="app_id[{$plugin.slug}]" value="{$plugin.vendor|default:'dummy'}{if !empty($plugin.edition)}:{$plugin.edition}{/if}">
                         <input type="submit" class="button green" value="[`Install`]"{if !$plugin.applicable} disabled="disabled"{/if}>
                     </form>
                     <p>{sprintf('[`%s will be downloaded from Webasyst Store and installed automatically.`]', $plugin.name|escape)}</p>
@@ -224,7 +230,7 @@
                     [`Developer`]
                 </div>
                 <div class="value">
-                    {$plugin.vendor_name|default:$plugin.vendor|escape}
+                    {$plugin.vendor_name|default:$plugin.vendor|default:"—"|escape}
                 </div>
             </div>
         </div>
@@ -272,7 +278,7 @@
                 <div class="block top-padded align-center clear-both">
                     <form action="?module=plugins&amp;action=remove" method="POST"  onsubmit="return confirm(this.title);" title="[`This will delete application source code and data without the ability to recover. Are you sure?`]">
                         {$wa->csrf()}
-                        <input type="hidden" name="extras_id[{$plugin.slug}]" value="{$plugin.installed.vendor}{if !empty($plugin.installed.edition)}:{$plugin.installed.edition}{/if}">
+                        <input type="hidden" name="extras_id[{$plugin.slug}]" value="{$plugin.installed.vendor|default:'dummy'}{if !empty($plugin.installed.edition)}:{$plugin.installed.edition}{/if}">
                         <input type="submit" value="[`Delete this plugin`]" class="button red">
                     </form>
                 </div>
@@ -292,7 +298,7 @@
 
             <div class="profile">
                 <div class="image">
-                    <img src="{$plugin.icon}" alt="">
+                    <img src="{$plugin.icon|default:"`$wa_url`wa-apps/installer/img/dummy-plugin.png"}" alt="">
                 </div>
                 <div class="details">
                     <h1>{$plugin.name}{if isset($plugin.status_label) && $plugin.status_label} <span class="highlighted i-plugin-label">{$plugin.status_label}</span>{/if}</h1>
@@ -352,10 +358,12 @@
     </div>
 {/if}
 </div>
+{if !empty($plugin)}
 <script type="text/javascript">
     <!--
     $.layout.window.setTitle('{$plugin.name|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}');
     //-->
 </script>
+{/if}
 {block name=footer}
 {/block}

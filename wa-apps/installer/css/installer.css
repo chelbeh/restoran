@@ -53,12 +53,12 @@
 --------- */
 
 ul.thumbs li .i-image-wrapper { position: relative; }
-.i-badge { height: 45px; width: 45px; background: #e0b8ff; position: absolute; text-align: left; top: -5px; }
-.i-badge:before { height: 45px; width: 45px; background: #e0b8ff; content:""; position: absolute; -moz-transform: rotate(30deg); -webkit-transform: rotate(30deg); -ms-transform: rotate(30deg); -o-transform: rotate(30deg); transform: rotate(30deg); }
-.i-badge:after { height: 45px; width: 45px; background: #e0b8ff; content:""; position: absolute; -moz-transform: rotate(-30deg); -webkit-transform: rotate(-30deg); -ms-transform: rotate(-30deg); -o-transform: rotate(-30deg); transform: rotate(-30deg); }
-.i-badge span { color: #000; font-weight: bold; position: absolute; z-index: 1983; top: 17px; left: 0; right: 0; transform: rotate(13deg); -webkit-transform: rotate(13deg); -moz-transform: rotate(13deg); -o-transform: rotate(-13deg); font-size: 0.7em; text-align: center; overflow: hidden; line-height: 1em; }
+.i-badge { height: 32px; width: 32px; background: #e0b8ff; position: absolute; text-align: left; top: -5px; }
+.i-badge:before { height: 32px; width: 32px; background: #e0b8ff; content:""; position: absolute; -moz-transform: rotate(30deg); -webkit-transform: rotate(30deg); -ms-transform: rotate(30deg); -o-transform: rotate(30deg); transform: rotate(30deg); }
+.i-badge:after { height: 32px; width: 32px; background: #e0b8ff; content:""; position: absolute; -moz-transform: rotate(-30deg); -webkit-transform: rotate(-30deg); -ms-transform: rotate(-30deg); -o-transform: rotate(-30deg); transform: rotate(-30deg); }
+.i-badge span { color: #000; font-weight: bold; position: absolute; z-index: 1983; top: 11px; left: 0; right: 0; transform: rotate(13deg); -webkit-transform: rotate(13deg); -moz-transform: rotate(13deg); -o-transform: rotate(-13deg); font-size: 0.7em; text-align: center; overflow: hidden; line-height: 1em; }
 .i-badge.two-lines span { top: 12px; }
-.i-badge i.thumb-up { background-repeat:no-repeat; height:32px; width:32px; display:inline-block; text-indent:-9999px; text-decoration:none!important; margin: 0.1em 0.2em 0 0; background-image: url('../img/thumb-up.png'); position: absolute; z-index: 9; opacity: 0.7; top: 4px; left: 6px; }
+.i-badge i.thumb-up { background-repeat:no-repeat; height:24px; width:24px; display:inline-block; text-indent:-9999px; text-decoration:none!important; margin: -0.1em 0 0 -0.2em; background-image: url('../img/thumb-up.png'); background-size: 24px 24px; position: absolute; z-index: 9; opacity: 0.7; top: 4px; left: 6px; }
 .i-image-wrapper:hover i.thumb-up { opacity: 1; }
 
 .i-badge.new,
@@ -84,7 +84,7 @@ ul.thumbs li .i-image-wrapper { position: relative; }
 .i-apps ul.thumbs li .profile .details p { margin-top: 5px; margin-bottom: 10px; font-size: 1em; }
 .i-apps ul.thumbs li .profile .details .i-app-label { font-size: 0.7em; padding: 1px 3px; color: #555; font-style: italic; }
 
-.i-apps ul.thumbs li .i-badge { left: 55px; top: -10px; }
+.i-apps ul.thumbs li .i-badge { right: 0px; top: -5px; }
 
 /* Plugin list
 -------------- */
@@ -95,7 +95,7 @@ ul.thumbs li .i-image-wrapper { position: relative; }
 .i-plugins ul.thumbs li { width: 220px; }
 .i-plugins ul.thumbs li p { font-size: 0.9em; margin-bottom: 10px; }
 .i-plugins ul.thumbs li img { width: 200px; height: 110px; border: 1px solid #ccc; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 5px; }
-.i-plugins ul.thumbs li .i-badge { right: 5px; }
+.i-plugins ul.thumbs li .i-badge { right: 8px; }
 
 
 /*

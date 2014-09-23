@@ -25,6 +25,9 @@
                         <form action="{$app.purchase_url|escape}" method="post">
                             <input type="hidden" name="app_id[]" value="{$app.slug}">
                             <input type="hidden" name="hash" value="{$identity_hash}">
+                            {if !empty($promo_id)}
+                                <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                            {/if}
                             <input type="hidden" name="domain" value="{$domain}">
                             <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                             {if $app.license_expire}
@@ -67,6 +70,9 @@
                                 <form action="{$app.purchase_url|escape}" method="post">
                                     <input type="hidden" name="app_id[]" value="{$app.slug}">
                                     <input type="hidden" name="hash" value="{$identity_hash}">
+                                    {if !empty($promo_id)}
+                                        <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                                    {/if}
                                     <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                                     <input type="submit" class="button green" value="[`Extend license`]">
                                     <p><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$app.name|escape, installerHelper::getDomain()|escape, $app.license_expire)}</p>
@@ -93,6 +99,9 @@
                             <form action="{$app.purchase_url|escape}" method="post">
                                 <input type="hidden" name="app_id[]" value="{$app.slug}{if !empty($app.edition)}:{$app.edition}{/if}">
                                 <input type="hidden" name="hash" value="{$identity_hash}">
+                                {if !empty($promo_id)}
+                                    <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                                {/if}
                                 <input type="hidden" name="domain" value="{$domain}">
                                 <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                                 <input type="submit" class="button green" value="[`Buy & Install`]"{if !$app.applicable} disabled="disabled"{/if}>

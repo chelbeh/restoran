@@ -14,7 +14,7 @@
 
 class installerUpdateStateController extends waJsonController
 {
-    function execute()
+    public function execute()
     {
 
         $updater = new waInstaller(waInstaller::LOG_TRACE);

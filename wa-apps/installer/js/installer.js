@@ -22,15 +22,17 @@ String.prototype.translate = function () {
 
     if (original && !original.time) {
         original.time = function (name, reset) {
-            if (!name)
+            if (!name) {
                 return;
+            }
             var time = new Date().getTime();
             if (!console.timeCounters)
                 console.timeCounters = {};
 
             var key = "KEY" + name.toString();
-            if (!reset && console.timeCounters[key])
+            if (!reset && console.timeCounters[key]) {
                 return;
+            }
             console.timeCounters[key] = time;
         };
 

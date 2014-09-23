@@ -12,7 +12,7 @@ msgstr ""
 "%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: .\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.9\n"
 "Language: ru_RU\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: .\n"
@@ -1203,3 +1203,30 @@ msgstr "Установить плагин «%s»?"
 #: /wa-apps/installer/templates/actions/update/UpdateManager.html:108
 msgid "Finalizing the installation and redirecting back to the app..."
 msgstr "Завершение установки и перенаправление обратно в приложение..."
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:41
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:97
+msgid "or "
+msgstr "или"
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:41
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:97
+msgid "buy permanent license"
+msgstr "купить постоянную лицензию"
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:43
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:99
+msgid ""
+"Permanent license saves you money on your monthly bills (your monthly "
+"payment will be reduced by %s)."
+msgstr ""
+"Постоянная лицензия позволяет сэкономить на ежемесячных платежах за хостинг "
+"(платеж уменьшится на %s)."
+
+#: /wa-apps/installer/templates/actions/themes/ThemesView.html:37
+msgid "Not in use"
+msgstr "Не используется"
+
+#: /wa-apps/installer/templates/actions/themes/ThemesView.html:105
+msgid "Get new themes from Webasyst Store"
+msgstr "Новые темы дизайна из магазина Webasyst"

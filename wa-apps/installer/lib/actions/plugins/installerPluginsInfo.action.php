@@ -17,12 +17,10 @@ class installerPluginsInfoAction extends waViewAction
         $search = array();
 
         $search['slug'] = preg_replace('@^(wa-plugins/)?([^/]+)/.+$@', '$1$2', waRequest::get('slug'));
-        $search['vendor'] = waRequest::get('vendor', 'webasyst');
         if (strpos($search['slug'], 'wa-plugins/') === 0) {
             $options['system'] = true;
         }
         $applications = installerHelper::getInstaller()->getApps($options, $filter);
-
         $plugin_search = array();
         $plugin_search['id'] = preg_replace('@^.+/@', '', waRequest::get('slug'));
         if (array_filter($search, 'strlen') && ($app = installerHelper::search($applications, $search))) {
@@ -32,14 +30,10 @@ class installerPluginsInfoAction extends waViewAction
                 'requirements' => true,
                 //XXX   'vendor'       => waRequest::get('plugin_vendor', 'webasyst'),
             );
-
             $plugin = installerHelper::getInstaller()->getItemInfo($plugin_search['slug'], $options);
-            if (!$plugin && empty($options['system'])) {
-                $path = wa()->getAppPath('plugins/'.$plugin_search['id'].'/lib/config/plugin.php', $search['slug']);
-                if (file_exists($path)) {
-                    $options['local'] = true;
-                    $plugin = installerHelper::getInstaller()->getItemInfo($plugin_search['slug'], $options);
-                }
+            if (!$plugin) {
+                $options['local'] = true;
+                $plugin = installerHelper::getInstaller()->getItemInfo($plugin_search['slug'], $options);
 
             }
             if ($plugin) {
@@ -47,6 +41,7 @@ class installerPluginsInfoAction extends waViewAction
                 $plugin['slug'] = preg_replace('@^wa-plugins/([^/]+)/plugins/(.+)$@', 'wa-plugins/$1/$2', $plugin['slug']);
             }
             $this->view->assign('identity_hash', installerHelper::getHash());
+            $this->view->assign('promo_id', installerHelper::getPromoId());
             $this->view->assign('domain', installerHelper::getDomain());
             $this->view->assign('plugin', $plugin);
             $this->view->assign('query', waRequest::get('query', '', waRequest::TYPE_STRING_TRIM).'/');
@@ -54,5 +49,4 @@ class installerPluginsInfoAction extends waViewAction
             throw new waException(_w('Plugin not found'), 404);
         }
     }
-
 }

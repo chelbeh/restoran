@@ -38,6 +38,7 @@ class installerAppsInfoAction extends waViewAction
         }
 
         $this->view->assign('identity_hash', installerHelper::getHash());
+        $this->view->assign('promo_id', installerHelper::getPromoId());
         $this->view->assign('domain', installerHelper::getDomain());
         if (!empty($app['is_premium']) && ($app['theme'] == 'premium')) {
             $this->setTemplate(preg_replace('@(\.html)$@', 'Premium$1', $this->getTemplate()));

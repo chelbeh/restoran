@@ -16,10 +16,17 @@ class installerPluginsAction extends installerItemsAction
 {
     protected $module = 'plugins';
 
+
+    protected function getExtrasOptions()
+    {
+        $options = parent::getExtrasOptions();
+        $options['local'] = true;
+        return $options;
+    }
+
     protected function getAppOptions()
     {
         return parent::getAppOptions() + array('system' => true);
     }
-
 }
 //EOF

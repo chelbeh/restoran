@@ -31,6 +31,7 @@ class installerThemesInfoAction extends waViewAction
             }
 
             $this->view->assign('identity_hash', installerHelper::getHash());
+            $this->view->assign('promo_id', installerHelper::getPromoId());
             $this->view->assign('domain', installerHelper::getDomain());
             $this->view->assign('theme', $theme);
             $this->view->assign('query', waRequest::get('query', '', waRequest::TYPE_STRING_TRIM).'/');
@@ -38,5 +39,4 @@ class installerThemesInfoAction extends waViewAction
             throw new waException(_w('Theme not found'), 404);
         }
     }
-
 }

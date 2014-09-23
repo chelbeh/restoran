@@ -14,7 +14,7 @@
 
 class installerUpdateDownloadlogController extends waController
 {
-    function execute()
+    public function execute()
     {
         $installer = new waInstaller();
         waFiles::readFile($installer->getLogPath(), 'update.txt');

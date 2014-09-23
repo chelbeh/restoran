@@ -89,7 +89,7 @@
                         </div>
                         {if !empty($theme.publish_datetime) && strtotime($theme.publish_datetime) > $smarty.now - 86400*14}
                             <!-- NEW -->
-                            <div class="i-badge new"><span>[`New!`]</span></div>
+                            <div class="i-badge new"><span>New</span></div>
                         {elseif !empty($theme.tags)}
                             {if in_array('featured', $theme.tags)}
                                 <!-- FEATURED -->

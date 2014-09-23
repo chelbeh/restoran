@@ -26,7 +26,7 @@
                                     <img src="{$app.icons.96}" alt="{$app.name|truncate:15|escape}">
                                     {if !empty($app.publish_datetime) && strtotime($app.publish_datetime) > $smarty.now - 86400*14}
                                         <!-- NEW -->
-                                        <div class="i-badge new"><span>[`New!`]</span></div>
+                                        <div class="i-badge new"><span>New</span></div>
                                     {elseif !empty($app.tags)}
                                         {if in_array('featured', $app.tags)} 
                                             <!-- FEATURED -->

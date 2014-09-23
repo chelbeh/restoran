@@ -324,37 +324,36 @@ HTML;
             $urls = array();
             $local_path = dirname(__FILE__).'/../wa-sources/';
             $apps = array();
+            $plugins = array();
             if (!isset($_POST['complete']) || !$_POST['complete']) {
-                if (file_exists($local_path) && ($content = scandir($local_path))) {
-                    foreach ($content as $path) {
-                        if (!in_array($path, array('.', '..')) && is_dir($local_path.$path) && ($sub_content = scandir($local_path.$path))) {
-                            foreach ($sub_content as $sub_path) {
-                                if (preg_match('@^([\\w%0-9\\-!]+)\\.tar\\.gz$@', $sub_path, $matches)) {
-                                    $decoded = $path.'/'.urldecode($matches[1]);
-                                    $urls[] = array(
-                                        'source' => $local_path.$path.'/'.$sub_path,
-                                        'target' => $decoded,
-                                        'slug'   => $decoded,
-                                    );
-                                    if (preg_match('@wa-apps/([\\w\\d\\-]+)$@', $decoded, $matches)) {
-                                        $apps[] = $matches[1];
-                                    }
-                                }
+                if (file_exists($local_path) && is_dir($local_path)) {
+                    $cwd = getcwd();
+                    chdir($local_path);
+                    $pattern = '{*.tar.gz,wa-apps/*.tar.gz,wa-apps/*/plugins/*.tar.gz,wa-apps/*/themes/*.tar.gz}';
+                    foreach (glob($pattern, GLOB_BRACE) as $path) {
+                        if (preg_match('@^([\\w%0-9\\-!]+)\\.tar\\.gz$@', basename($path), $matches)) {
+                            $decoded = dirname($path).'/';
+                            if ($decoded == './') {
+                                $decoded = '';
                             }
-                        } else {
-                            if (preg_match('@^([\\w%0-9\\-!]+)\\.tar\\.gz$@', $path, $matches)) {
-                                $decoded = urldecode($matches[1]);
-                                $urls[] = array(
-                                    'source' => $local_path.$path,
-                                    'target' => $decoded,
-                                    'slug'   => $decoded,
-                                );
-                                if (preg_match('@wa-apps/([\\w\\d\\-]+)$@', $decoded, $matches)) {
-                                    $apps[] = $matches[1];
+
+                            $decoded .= urldecode($matches[1]);
+                            $urls[] = array(
+                                'source' => $local_path.$path,
+                                'target' => $decoded,
+                                'slug'   => $decoded,
+                            );
+                            if (preg_match('@wa-apps/([\\w\\d\\-]+)$@', $decoded, $matches)) {
+                                $apps[] = $matches[1];
+                            } elseif (preg_match('@wa-apps/([\\w\\d\\-]+)/plugins/([\\w\\d\\-]+)$@', $decoded, $matches)) {
+                                if (!isset($plugins[$matches[1]])) {
+                                    $plugins[$matches[1]] = array();
                                 }
+                                $plugins[$matches[1]][] = $matches[2];
                             }
                         }
                     }
+                    chdir($cwd);
                 }
 
                 if (!count($urls)) {
@@ -384,6 +383,11 @@ HTML;
             if ($urls && $installer->update($urls)) {
                 foreach ($apps as $app) {
                     $installer_apps->installWebAsystApp($app);
+                    if (!empty($plugins[$app])) {
+                        foreach ($plugins[$app] as $plugin) {
+                            $installer_apps->updateAppPluginsConfig($app, $plugin);
+                        }
+                    }
                 }
             } else {
                 $state = $installer->getState();

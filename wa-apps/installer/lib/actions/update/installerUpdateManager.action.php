@@ -112,7 +112,7 @@ class installerUpdateManagerAction extends waViewAction
                                                 if (($__info['app'] == $app_id) || empty($items[$__info['app']][$type][$extra_id])) {
                                                     if (!empty($items[$__info['app']][$type][$extra_id]['name'])) {
                                                         $__info['name'] .= " ({$info['name']})";
-                                                    } elseif($app_info = wa()->getAppInfo($__info['app'])) {
+                                                    } elseif ($app_info = wa()->getAppInfo($__info['app'])) {
 
                                                         $__info['name'] .= " ({$app_info['name']})";
                                                     } else {

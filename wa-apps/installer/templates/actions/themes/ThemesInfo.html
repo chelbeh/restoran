@@ -37,6 +37,9 @@
                                 <input type="hidden" name="app_id[]" value="{$inherited.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
                             {/foreach}
                             <input type="hidden" name="hash" value="{$identity_hash}">
+                            {if !empty($promo_id)}
+                                <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                            {/if}
                             <input type="hidden" name="domain" value="{$domain}">
                             <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                             
@@ -117,6 +120,9 @@
                             <input type="hidden" name="app_id[]" value="{$inherited.slug}{if !empty($theme.edition)}:{$theme.edition}{/if}">
                         {/foreach}
                         <input type="hidden" name="hash" value="{$identity_hash}">
+                        {if !empty($promo_id)}
+                            <input type="hidden" name="promo_id" value="{$promo_id|escape}">
+                        {/if}
                         <input type="hidden" name="domain" value="{$domain}">
                         <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
                         <input type="submit" class="button green" value="[`Buy & Install`]"{if !$theme.applicable} disabled="disabled"{/if}>

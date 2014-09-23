@@ -22,9 +22,11 @@ class waInstallerApps
     private static $cache_ttl;
     private $license;
     private $identity_hash;
+    private $promo_id;
     private static $force;
 
     private $extras_list = array();
+    private static $sort = array();
 
     const CONFIG_GENERIC = 'wa-config/config.php';
     const CONFIG_DB = 'wa-config/db.php';
@@ -87,6 +89,15 @@ class waInstallerApps
     public function getHash()
     {
         return $this->identity_hash;
+    }
+
+    /**
+     * Get install promo_id
+     * @return string
+     */
+    public function getPromoId()
+    {
+        return $this->promo_id;
     }
 
     private static function getServerSignature($raw = false)
@@ -196,6 +207,7 @@ class waInstallerApps
         $this->license = $license;
         /* identity hash */
         $this->identity_hash = self::getGenericConfig('identity_hash');
+        $this->promo_id = self::getGenericConfig('promo_id');
         if (!$this->identity_hash) {
             $this->updateGenericConfig();
             $this->identity_hash = self::getGenericConfig('identity_hash');
@@ -456,6 +468,11 @@ class waInstallerApps
         $item = null;
         $config_path = self::getConfigPath(trim($path.'/'.$slug, '/'));
         $config = $this->getConfig($config_path);
+        if ($config) {
+            $config += array(
+                'vendor' => self::VENDOR_UNKNOWN,
+            );
+        }
         if (empty($filter) || self::filter($config, $filter)) {
             $item = array(
                 'id'          => preg_replace('@^.+/([^/]+)$@', '$1', $slug),
@@ -560,13 +577,15 @@ class waInstallerApps
 
     private function extend(&$item, $options = array())
     {
-        self::fixItemCurrent($item);
-        $item['applicable'] = true;
-        if (!empty($item['requirements']) && !empty($options['requirements'])) {
-            $item['applicable'] = $this->checkRequirements($item['requirements']);
-        }
-        if (!empty($options['action'])) {
-            $item['action'] = self::applicableAction($item);
+        if ($item) {
+            self::fixItemCurrent($item);
+            $item['applicable'] = true;
+            if (!empty($item['requirements']) && !empty($options['requirements'])) {
+                $item['applicable'] = $this->checkRequirements($item['requirements']);
+            }
+            if (!empty($options['action'])) {
+                $item['action'] = self::applicableAction($item);
+            }
         }
     }
 
@@ -950,8 +969,14 @@ class waInstallerApps
                 } else {
                     $path = 'wa-apps/'.$app_id.'/'.$type;
                 }
+                $enum_filter = array();
+                if (!empty($options['filter'])) {
+                    if (!empty($options['filter']['vendor'])) {
+                        $enum_filter['vendor'] = $options['filter']['vendor'];
+                    }
+                }
                 $extras[$app_id] = array(
-                    $type => $this->enumerate($path, ifset($enum_options[$app_id], array()))
+                    $type => $this->enumerate($path, ifset($enum_options[$app_id], array()), $enum_filter),
                 );
             }
             $installed = $extras;
@@ -966,6 +991,7 @@ class waInstallerApps
                 $installed = $extras;
                 $extras = array();
             }
+
             foreach ($this->getVendors() as $vendor) {
 
                 $url = $type.'/?app_id='.implode(',', (array)$app);
@@ -980,9 +1006,7 @@ class waInstallerApps
 
                 $list = $this->query($url, $vendor);
 
-                $sort = array();
-
-                $count = 0;
+                $count = count(self::$sort);
                 foreach ($list as $app_id => $available_extras) {
                     if (!isset($extras[$app_id])) {
                         if (!isset($options['apps']) || !empty($options['apps'])) {
@@ -993,11 +1017,9 @@ class waInstallerApps
                         }
                     }
                     foreach ($available_extras[$type] as $extras_id => $extras_item) {
-
-                        if (!isset($sort[$extras_id])) {
-                            $sort[$extras_id] = $count++;
+                        if (!isset(self::$sort[$extras_id])) {
+                            self::$sort[$extras_id] = ++$count;
                         }
-
                         if (!empty($installed[$app_id][$type][$extras_id])) {
                             $_installed = $installed[$app_id][$type][$extras_id];
                             if (!empty($extras_item['inherited'])) {
@@ -1029,18 +1051,27 @@ class waInstallerApps
                         }
                     }
                 }
-                $f = create_function('$a,$b', '
-                    $sort = '.var_export($sort, true).';
-                    return max(-1,min(1,(isset($sort[$a])?$sort[$a]:100)-(isset($sort[$b])?$sort[$b]:100)));
-                    ');
+
                 foreach ($extras as &$available_extras) {
-                    uksort($available_extras[$type], $f);
+                    uksort($available_extras[$type], array(__CLASS__, 'sort'));
                     unset($available_extras);
                 }
             }
         }
 
         return $extras;
+    }
+
+    private static function sort($a, $b)
+    {
+        static $min = 0;
+        if (!isset(self::$sort[$a])) {
+            self::$sort[$a] = --$min;
+        }
+        if (!isset(self::$sort[$b])) {
+            self::$sort[$b] = --$min;
+        }
+        return max(-1, min(1, (self::$sort[$a] - self::$sort[$b])));
     }
 
     /**
@@ -1073,15 +1104,18 @@ class waInstallerApps
         } else {
             $info = array();
         }
+
         if ($info || !empty($options['local'])) {
             if ($id == '*') {
                 $slug = preg_replace('@^\\*/@', 'site/', $slug);
             }
+            $exists = !!$info;
             $info += array(
                 'installed'  => null,
                 'applicable' => null,
                 'slug'       => $slug,
             );
+
             $installed_apps = self::getConfig(self::CONFIG_APPS);
             if (!empty($installed_apps[$id]) || ($id == 'wa-plugins') || ($id == '*')) {
                 $filter = array();
@@ -1090,9 +1124,9 @@ class waInstallerApps
                 }
                 $key = ($id == 'wa-plugins') ? '' : 'wa-apps';
                 $info = array_merge($info, $this->info($key, $info['slug'], $filter));
-
-
-                if (!empty($info['inherited'])) {
+                if (!$exists && empty($info['installed'])) {
+                    $info = array();
+                } elseif (!empty($info['inherited'])) {
                     foreach ($info['inherited'] as $inherited_app_id => $inherited) {
                         $inherited_info = $this->info(($inherited_app_id == 'wa-plugins') ? '' : 'wa-apps', $inherited['slug'], $filter);
                         if (empty($inherited_info['installed'])) {
@@ -1102,6 +1136,7 @@ class waInstallerApps
                     }
                 }
             }
+
             $this->extend($info, $options);
         }
         return $info;
@@ -1176,6 +1211,9 @@ class waInstallerApps
                 }
                 if ($this->identity_hash) {
                     $query = $query.($query ? '&' : '').'hash='.$this->identity_hash;
+                }
+                if ($this->promo_id) {
+                    $query = $query.($query ? '&' : '').'promo_id='.$this->promo_id;
                 }
                 if ($domain = $this->getDomain()) {
                     $query = $query.($query ? '&' : '').'domain='.urlencode(base64_encode($domain));
@@ -1667,7 +1705,7 @@ class waInstallerApps
     {
         $default = array(
             'debug'         => false,
-            'identity_hash' => md5(__FILE__.php_uname().phpversion().rand(0, time())),
+            'identity_hash' => md5(__FILE__.(function_exists('php_uname') ? php_uname() : '').phpversion().rand(0, time())),
         );
         $config = array_merge($default, self::getConfig(self::CONFIG_GENERIC), $config);
         self::setConfig(self::CONFIG_GENERIC, $config);

@@ -14,7 +14,7 @@
 
 class installerSettingsRemoveAction extends waViewAction
 {
-    function execute()
+    public function execute()
     {
         try {
             $message = array();

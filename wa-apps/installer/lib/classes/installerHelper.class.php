@@ -44,6 +44,16 @@ class installerHelper
     }
 
     /**
+     *
+     * Get promo_id of installed framework
+     * @return string
+     */
+    public static function getPromoId()
+    {
+        return self::getInstaller()->getPromoId();
+    }
+
+    /**
      * Get current domain name
      * @return string
      */
@@ -215,8 +225,6 @@ class installerHelper
 
     public static function isDeveloper()
     {
-
-        return false;
         $result = false;
         $paths = array();
         $paths[] = dirname(__FILE__).'/.svn';

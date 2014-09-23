@@ -21,7 +21,7 @@ class installerUpdateExecuteController extends waJsonController
      */
     private $model;
 
-    function execute()
+    public function execute()
     {
         if ($this->thread_id = waRequest::get('thread_id', false)) {
             $cache = new waSerializeCache($this->getApp().'.'.$this->thread_id);
@@ -138,4 +138,4 @@ class installerUpdateExecuteController extends waJsonController
         return $result_urls;
     }
 }
-//EOF;
+//EOF
