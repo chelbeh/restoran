@@ -20,7 +20,8 @@ class waLogModel extends waModel
             // Check action
             if (!isset($actions[$action])) {
                 if (waSystemConfig::isDebug()) {
-                    throw new waException('Unknown action for log '.$action);
+                    return false;
+                    //throw new waException('Unknown action for log '.$action);
                 } else {
                     return false;
                 }
