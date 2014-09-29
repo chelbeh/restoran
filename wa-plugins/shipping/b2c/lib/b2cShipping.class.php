@@ -46,7 +46,7 @@ class b2cShipping extends waShipping
     }
 
     private static function getComment($cities){
-        return 'Города доставки: '.implode(', ', $cities);
+        return 'Города доставки: <span class="b2c_cities">'.implode(', ', $cities)."</span>";
     }
 
     public function allowedCurrency()
