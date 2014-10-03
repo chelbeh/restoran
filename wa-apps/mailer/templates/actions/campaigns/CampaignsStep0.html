@@ -2,7 +2,9 @@
     <div class="block">
         <p>[`Please choose one of these templates to create a new email campaign. If none of the templates suits your needs, click on &ldquo;Blank&rdquo; to compose a new message.`]</p>
 
+        {if $wa->mailer->isAdmin()}
         <p><a href="#/templates/">[`Manage templates`]</a></p>
+        {/if}
 
         <p style="font-size:85%;color:#777;">[`To create new campaign as a copy of previously sent, navigate to the sent message and click “Create new from this”.`]</p>
     </div>
@@ -42,6 +44,7 @@
                                 ifrm.document.open();
                                 ifrm.document.write($('#iframe-preview-{$t.id}-content').text());
                                 ifrm.document.close();
+                                $('#iframe-preview-{$t.id}-content').contents().find('a[href]').attr('target',"_blank");
                             })();</script>
                         {/if}
                     </div>
@@ -71,4 +74,5 @@
         window.location.hash = '#/campaigns/letter/new/'+(template_id ? template_id+'/' : '');
     });
 
+    $.wa.mailer.setTitle();
 })();</script>

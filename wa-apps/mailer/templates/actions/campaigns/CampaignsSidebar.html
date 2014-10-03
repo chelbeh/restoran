@@ -4,20 +4,21 @@
 <div class="sidebar right200px"><div class="block m-editor-toolbar">
 
     <div class="block">
-        <ul class="menu-v">
-            {if $campaign.status != mailerMessageModel::STATUS_DRAFT}
+        <ul class="menu-v with-icons">
+            {*if $campaign.status != mailerMessageModel::STATUS_DRAFT && $campaign.status != mailerMessageModel::STATUS_PENDING}
                 <li><a href="#/campaigns/letter/{$campaign.id}/">
                     [`Letter`]
                     <span id="right-sidebar-letter-hint" class="red hint{if $message_written} hidden{/if}"><br>[`not written yet`]</span>
                 </a></li>
-            {/if}
+            {/if*}
 
-            {if $wa->mailer->writable($campaign)}
-                {if $campaign.status == mailerMessageModel::STATUS_DRAFT}
+            {*if $wa->mailer->writable($campaign)}
+                {if $campaign.status == mailerMessageModel::STATUS_DRAFT }
+                {elseif $campaign.status == mailerMessageModel::STATUS_PENDING }
                 {elseif $campaign.status != mailerMessageModel::STATUS_SENT && $campaign.status != mailerMessageModel::STATUS_SENDING_ERROR}
                     <li><a href="#/campaigns/report/{$campaign.id}/">
                         {if $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED}
-                            [`Paused`] <i class="icon16 pause"></i>
+                            [`Sending report`] <span>([`Paused`] <i class="icon16 pause"></i>)</span>
                         {else}
                             [`Now sending`] <i class="icon16 loading"></i>
                         {/if}
@@ -25,13 +26,13 @@
                 {else}
                     <li><a href="#/campaigns/report/{$campaign.id}/">[`Sending report`]</a></li>
                 {/if}
-            {/if}
+            {/if*}
 
-            {if $campaign.status != mailerMessageModel::STATUS_DRAFT}
+            {*if $campaign.status != mailerMessageModel::STATUS_DRAFT && $campaign.status != mailerMessageModel::STATUS_PENDING}
                 <li><a href="#/campaigns/options/{$campaign.id}/">[`Options`]</a></li>
-            {/if}
+            {/if*}
 
-            <li class="bottom-padded">
+            <li class="bottom-padded" style="padding-left: 4px;">
                 <h6>[`Author`]</h6>
                 <div class="profile image32px">
                     <div class="image">
@@ -98,6 +99,12 @@
                         $.storage.del('mailer/hash');
                         $('#content .sidebar').remove();
                         $('#content .m-envelope-stripes-2').html(
+                            {if $campaign.is_template || !$campaign.status || $campaign.status == mailerMessageModel::STATUS_DRAFT}
+                            {else}
+                            '<div class="block m-core-header">'+
+                            '<a href="#/campaigns/archive/" class="no-underline"><i class="icon10 larr"></i>[`Sent`]</a>'+
+                            '</div>' +
+                            {/if}
                             '<div class="double-padded block"><h1>'+
                                 "{ifempty($campaign.subject, '[`<no subject>`]')|escape}"+
                             '</h1><div class="info-block"><p>'+
@@ -137,18 +144,18 @@
         });
     {/if}
 
-    {if $campaign.status > 0}
+    {if $campaign.status != {mailerMessageModel::STATUS_DRAFT} && $campaign.status != {mailerMessageModel::STATUS_PENDING}}
         $('#right-sidebar-recipients-number').hide();
     {elseif $wa->mailer->writable($campaign)}
         setTimeout(function() {
             // Get number of recipients from local storage, if cached
-            {if $recipients_selected}
+            {if isset($recipients_selected)}
                 $.wa.mailer.showRecipientsInRightSidebar('{if $recipients_selected === true}1{else}{$recipients_selected}{/if}');
             {else}
                 $.wa.mailer.showRecipientsInRightSidebar('');
             {/if}
 
-            {if $wa->mailer->getConfigOption('max_recipients_count')}
+            {if $wa->mailer->getConfigOption('max_recipients_count') && isset($recipients_selected)}
                 var max_recipients_count = {$wa->mailer->getConfigOption('max_recipients_count')};
                 var recipients_count = ('{$recipients_selected}' || '0').replace(/[^0-9]/g, '') - 0;
                 if (recipients_count > max_recipients_count) {

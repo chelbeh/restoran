@@ -21,8 +21,10 @@ class mailerCampaignsReportUpdateAction extends mailerCampaignsReportAction
         if ($campaign['status'] <= 0) {
             throw new waException('Unable to show report for a message draft.', 404);
         }
-
-        // Access control
+        if ($campaign['status'] == mailerMessageModel::STATUS_PENDING) {
+            throw new waException('Unable to show report for a pending message.', 404);
+        }
+            // Access control
         if (mailerHelper::campaignAccess($campaign) < 1) {
             throw new waException('Access denied.', 403);
         }

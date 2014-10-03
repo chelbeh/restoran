@@ -74,6 +74,7 @@ return array(
                         |   Mailbox.{0,96}does\snot\sexist
                         |   ukr\.net>\snot\sused
                         |   Mailbox\snot\savailable
+                        |   550\sHost\sunknown
                         ~xi",
         ),
 
@@ -81,7 +82,10 @@ return array(
         // Non-fatal
         //
         'Your message qualified as spam and declined' => array(
-            'regex' => '~550.{1,200}spam|spam.{1,200}550~i',
+            'regex' => "~   550.{1,200}spam
+                        |   spam.{1,200}550
+                        |   email\sabuse\sreport\sfor\san\semail\smessage
+                        ~xi",
             'fatal' => false,
         ),
 

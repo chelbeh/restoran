@@ -12,18 +12,6 @@ if (file_exists($file)) {
     header("HTTP/1.0 404 Not Found");
 }');
 
-// Default subscribe list
-$mod = new waModel();
-$mod->exec(
-    "INSERT IGNORE INTO mailer_subscribe_list
-     SET id=1,
-         name='Subscribers',
-         description='',
-         create_contact_id=:cid,
-         create_datetime=:dt",
-    array('cid' => wa()->getUser()->getId(), 'dt' => date('Y-m-d H:i:s'))
-);
-
 // Import pre-installed templates to database
 $tmpls_dir = $this->getAppPath('templates/preinstalled');
 if ($tmpls_dir && is_readable($tmpls_dir) && is_dir($tmpls_dir) && class_exists('ZipArchive')) {

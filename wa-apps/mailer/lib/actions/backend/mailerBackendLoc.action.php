@@ -25,6 +25,9 @@ class mailerBackendLocAction extends waViewAction
             'cancel',
             'Search results',
             'This plain-text version of your message is automatically created from HTML version and displayed if recipients have disabled HTML view in their email programs.',
+            'Insert variable',
+            'Close',
+            'Apply',
         ) as $s) {
             $strings[$s] = _w($s);
         }

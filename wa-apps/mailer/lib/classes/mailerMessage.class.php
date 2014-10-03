@@ -77,6 +77,10 @@ class mailerMessage extends mailerSimpleMessage
             $this->data['body'] = preg_replace('!(<img[^<]*src="[^"]*'.$url.'[^"]+\.)(jpg|jpeg|png|gif)"!is', '$1{$log_id}.$2"', $this->data['body'], 1);
         }
 
+        // curly bracket + symbol after = smarty error (in <style>)
+        // fix this by adding space after curly bracket if we have ":" inside curly brackets
+        $this->data['body'] = preg_replace('/{([^\s][^}]*):([^}]*)}/i', '{ $1:$2}', $this->data['body']);
+
         // prepare HTML
         if (stripos($this->data['body'], '<body') === false) {
             $this->data['body'] = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -361,6 +365,23 @@ class mailerMessage extends mailerSimpleMessage
         return $result;
     }
 
+    public function testReturnPathSmtpSender()
+    {
+        $transport = $this->getTransport();
+        if ($transport instanceof Swift_SmtpTransport) {
+            if (!$transport->isStarted()) {
+                $transport->start();
+            }
+
+            try {
+                $transport->executeCommand(sprintf("MAIL FROM: <%s>\r\n", $this->data['return_path']), array(250));
+            } catch (Exception $e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected function sendMessage()
     {
         if ($this->data['status'] != mailerMessageModel::STATUS_SENDING) {
@@ -381,7 +402,9 @@ class mailerMessage extends mailerSimpleMessage
 
         // send message
         $transport = $this->getTransport();
+
         $mailer = Swift_Mailer::newInstance($transport);
+
         // Use AntiFlood to re-connect after several emails
         $mailer->registerPlugin(new Swift_Plugins_AntiFloodPlugin(50));
         // Rate limit number of emails per minute
@@ -401,7 +424,7 @@ class mailerMessage extends mailerSimpleMessage
         $limit = 100;
         $i = 0;
         $sent_since_last_event = 0;
-        while ($rows = $this->log_model->getByField(array('message_id' => $this->id, 'status' => 0), 'id', $limit)) {
+        while ($rows = $this->log_model->getByField(array('message_id' => $this->id, 'status' => mailerMessageLogModel::STATUS_AWAITING), 'id', $limit)) {
             if ($this->contact_fields) {
                 $contact_ids = array();
                 foreach ($rows as $row) {
@@ -464,8 +487,11 @@ class mailerMessage extends mailerSimpleMessage
                     $view->assign('log_id', $row_id);
                     $view->assign('unsubscribe_link', $unsubscribe_link);
                     if ($this->contact_fields) {
-                        $this->assignContactData($view, $contacts[$row['contact_id']]);
+                        $view = $this->assignContactData($view, $contacts[$row['contact_id']]);
                     }
+                    $subject = $view->fetch('string:'.$this->data['subject']);
+                    $message->setSubject($subject);
+
                     $body = $view->fetch('string:'.$this->data['body']);
                     $message->setBody($body, 'text/html', 'utf-8');
                     $message->addPart(mailerHtml2text::convert($body), 'text/plain');
@@ -532,7 +558,7 @@ class mailerMessage extends mailerSimpleMessage
                         $error = $e->getMessage();
                         $error_fatal = false;
                         if ($error && preg_match('~RFC 2822~u', $error)) {
-                            $error_class = 'Incorrect Email address';
+                            $error_class = 'Address incorrect or does not exist';
                             $error_fatal = true;
                         }
                         $recipient_status = mailerMessageLogModel::STATUS_SENDING_ERROR;
@@ -612,6 +638,7 @@ class mailerMessage extends mailerSimpleMessage
             }
             $view->assign($field, $value);
         }
+        return $view;
     }
 
     protected function setHeader(Swift_Message $message, $header, $value)

@@ -43,7 +43,7 @@ class mailerMessageParamsModel extends waModel
         $data = array();
         foreach ($params as $k => $v) {
             if ($v) {
-                $data[] = "(".$id.', "'.$this->escape($k).'", "'.$this->escape($v).'")';
+                $data[] = "(".$id.", '".$this->escape($k)."', '".$this->escape($v)."')";
             }
         }
         if ($data) {

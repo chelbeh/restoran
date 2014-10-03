@@ -14,4 +14,16 @@ class mailerMessageRecipientsModel extends waModel
         $sql = "SELECT id,value FROM ".$this->table." WHERE message_id = i:id ORDER BY id";
         return $this->query($sql, array('id' => $id))->fetchAll('id', true);
     }
+
+    public function getAllByMessage($id)
+    {
+        $sql = "SELECT * FROM ".$this->table." WHERE message_id = i:id ORDER BY id";
+        return $this->query($sql, array('id' => $id))->fetchAll();
+    }
+
+    public function getGroupedByMessage($id)
+    {
+        $sql = "SELECT id FROM ".$this->table." WHERE message_id = i:id AND `group` IS NOT NULL ORDER BY id";
+        return $this->query($sql, array('id' => $id))->fetchAll('id', true);
+    }
 }

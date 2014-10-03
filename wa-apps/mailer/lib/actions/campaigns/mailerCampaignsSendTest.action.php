@@ -15,7 +15,7 @@ class mailerCampaignsSendTestAction extends waViewAction
         // Campaign data
         $mm = new mailerMessageModel();
         $campaign = $mm->getById($campaign_id);
-        if (!$campaign || $campaign['status'] > 0) {
+        if (!$campaign || ($campaign['status'] > mailerMessageModel::STATUS_DRAFT && $campaign['status'] != mailerMessageModel::STATUS_PENDING) ) {
             throw new waException('Campaign not found.', 404);
         }
 

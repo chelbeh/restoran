@@ -5,11 +5,9 @@
     <title>{$wa->appName()} &mdash; {$wa->accountName()}</title>
     {$wa->css()}
     <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/fileuploader/fileuploader.css"/>
-    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/elrte/elrte.min.css"/>
-    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/elrte/elrte-wa.css"/>
     <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/css/jquery-ui/base/jquery.ui.autocomplete.css" />
-    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/codemirror/lib/codemirror.css">
     <link type="text/css" rel="stylesheet" href="{$wa_app_static_url}css/mailer.css?{{$wa->version()}}"/>
+    <link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/js/redactor/redactor.css?v{time()}">
 
     <script src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-plugins/jquery.history.js"></script>
@@ -20,30 +18,34 @@
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.mouse.min.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.position.min.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.min.js"></script>
-    <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.html.js"></script>
+    {*<script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.html.js"></script>*}
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.draggable.min.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.sortable.min.js"></script>
     <script src="{$wa_url}wa-content/js/fileuploader/fileuploader.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-wa/wa.core.js"></script>
     <script src="{$wa_url}wa-content/js/jquery-wa/wa.dialog.js"></script>
-    <script src="{$wa_url}wa-content/js/elrte/elrte.min.js"></script>
-    {if $wa->locale() !== 'en_US'}
-        <script src="{$wa_url}wa-content/js/elrte/i18n/elrte.{substr($wa->locale(), 0, 2)}.js"></script>
-    {/if}
-    <script src="{$wa_url}wa-content/js/elrte/elrte-wa.js"></script>
 
-    <script src="{$wa_url}wa-content/js/codemirror/lib/codemirror.js"></script>
-    <script src="{$wa_url}wa-content/js/codemirror/mode/xml/xml.js"></script>
-    <script src="{$wa_url}wa-content/js/codemirror/mode/javascript/javascript.js"></script>
-    <script src="{$wa_url}wa-content/js/codemirror/mode/css/css.js"></script>
-    <script src="{$wa_url}wa-content/js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
     <script src="{$wa_app_static_url}js/vendor/raphael-min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/g.raphael-min.js"></script>
     <script src="{$wa_app_static_url}js/vendor/beautify-html.js"></script>
 
+    <script src="{$wa_url}wa-content/js/ace/ace.js"></script>
+    <script src="{$wa_url}wa-content/js/redactor/redactor.min.js"></script>
+    {if $wa->locale() !== 'en_US'}
+    <script src="{$wa_url}wa-content/js/redactor/{substr($wa->locale(), 0, 2)}.js"></script>
+    {/if}
+    <script src="{$wa_app_static_url}js/redactor.vars.js"></script>
+    <script src="{$wa_url}wa-content/js/jquery-wa/editor.js?v{$wa->version()}"></script>
+
+
     <script src="{$wa_app_static_url}js/vendor/g.pie.modified.js?v{$wa->version()}"></script>
     <script src="{$wa_app_static_url}js/mailer.js?v{$wa->version()}"></script>
     <script src="?action=loc&v={{$wa->version()}}"></script>
+    
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.datepicker.min.js"></script>
+    {if $wa->locale() !== 'en_US'}
+        <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/i18n/jquery.ui.datepicker-{$wa->locale()}.js"></script>
+    {/if}
 
     {*
      * Plugin blocks
@@ -88,7 +90,7 @@
                     <div class="name">
                         <a href="javascript:void(0)" class="inline-link"><b><i><span class="var-code">{$var_id|escape}</span></i></b></a>
                     </div>
-                    <div class="value hint">{$var_name}</div>
+                    <div class="value hint">{$var_name|escape}</div>
                 </div>
             {/foreach}
         </div>

@@ -122,7 +122,7 @@
 
     // Make table rows clickable (middle-click friendly)
     $.wa.mailer.makeClickable($('.m-campaigns tbody td'), function(td) {
-        return '#/campaigns/report/'+td.parent().attr('rel')+'/';
+        return '#/campaigns/letter/'+td.parent().attr('rel')+'/';
     });
 
     $.wa.mailer.showLastSearchBreadcrumb.last_search_ids = {};
@@ -155,7 +155,7 @@
         // Number of campaigns currently being sent
         $.wa.mailer.sending_count = {ifempty($sending_count, 0)};
         {if $sending_count}
-            $('#sending-list-item').addClass('bold').find('.count').text('{$sending_count}/{count($messages)}');
+            $('#sending-list-item').addClass('bold').find('.count').text('{$sending_count}/{$total_rows}');
 
             // Update list every 30 seconds while there's a campaign currently sending
             if ($.wa.mailer.archive_redispatch_timeout) {
@@ -168,9 +168,10 @@
                 }
             }, 30000);
         {else}
-            $('#sending-list-item').removeClass('bold').find('.count').text('{count($messages)}');
+            $('#sending-list-item').removeClass('bold').find('.count').text('{$total_rows}');
         {/if}
     {/if}
 
+    $.wa.mailer.setTitle();
 })();</script>
 

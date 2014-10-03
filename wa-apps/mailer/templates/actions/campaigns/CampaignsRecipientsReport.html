@@ -1,14 +1,13 @@
 <div id="pie-legend-copy" class="hidden">
     {include file="templates/actions/campaigns/pie_diagram_legend.html"}
 </div>
-
 {if $recipients}
     {if $error_classes}
         <div class="block" style="max-width:600px;margin-left:23px;padding-left:0;">
-            <table class="zebra">
+            <table class="errors-table">
                 {foreach $error_classes as $e}
                     <tr>
-                        <td><a class="inline-link show-recipients-link" href="javascript:void(0)" rel="{$e.param}"><b>{$e.name}</b></a></td>
+                        <td><a class="inline-link show-recipients-link" href="javascript:void(0)" rel="{$e.param}" data-hide-title="false" {if $e.status > mailerMessageLogModel::STATUS_PREVIOUSLY_UNSUBSCRIBED}data-graph-id="{$e.status}"{/if}><b>{$e.name}</b></a></td>
                         {if $e.percent !== null}
                             <td>{$e.count}</td>
                             <td>({$e.percent}%)</td>
@@ -24,25 +23,33 @@
     <table class="zebra recipients-report">
         {foreach $recipients as $r}
             <tr>
-                <td class="min-width">{$start + $r@iteration}</td>
-                <td>{$r.name|escape}</td>
-                <td>{$r.email|escape}</td>
-                <td>
-                    {$r.status_text}
+                {if ($r.status >= mailerMessageLogModel::STATUS_NOT_DELIVERED && !empty($statuses)) ||
+                    !empty($search)}
+                <td>{$r.datetime}</td>
+                {/if}
+                <td>{$r.name|escape} {$r.email|escape}</td>
+                {if $r.status != mailerMessageLogModel::STATUS_VIEWED && (count($statuses) > 1 || !empty($search))}
+                <td>{$r.status_text}
                     {if $r.error}
-                        <div class="hidden">{$r.error|escape|nl2br}</div>
+                    <div class="hidden">{$r.error|escape|nl2br}</div>
                     {/if}
                 </td>
+                {elseif count($statuses) == 7}
+                <td>{$r.status_text}
+                    {if $r.error}
+                    <div class="hidden">{$r.error|escape|nl2br}</div>
+                    {/if}
+                </td>
+                {/if}
             </tr>
         {/foreach}
     </table>
     {if $has_more}
-        <a class="inline-link load-more-recipients" rel="{$parameters}" href="javascript:void(0)"><b>[`Load next 50`] ({sprintf_wp('total %s', $total_rows)})</b></a>
+        <a class="inline-link load-more-recipients" rel="{$parameters}"  data-hide-title="false" href="javascript:void(0)"><b>[`Load next 50`] ({sprintf_wp('total %s', $total_rows)})</b></a>
     {/if}
 {else}
     <p>[`No entries in this list`]</p>
 {/if}
-
 <script>(function($) { "use strict";
 
     // Update chart legend
@@ -52,11 +59,27 @@
     old_pie_legend.after(new_pie_legend).remove();
     $('#pie-legend-copy').remove();
 
-    // Retain active link selection in chart legend
-    var active_link = $('.show-recipients-link.disabled:first');
-    if (active_link.length > 0) {
-        new_pie_legend.find('.show-recipients-link[rel="'+active_link.attr('rel')+'"]').addClass('disabled');
-    }
+    {if $search}
+        $('#pie-legend').find('.search-recipients input').val('{$search}');
+        $('#report-wrapper .recipients-count').show()
+                .find('[data-rel]').hide()
+                .end()
+                .find('[data-rel="search"]').show()
+                    .find('.title').html('{$search}: <span class="cnt">{$recipients|count}</span></span>');
+    {/if}
+    {if $total_rows && $endinterval && $startinterval}
+        $('.m-graph-times').find('.recipients-period-count').removeClass('hidden').text("{_w('%s recipient appear in the period selected', '%s recipients appear in the period selected', $total_rows)}");
+    {else}
+        $('.m-graph-times').find('.recipients-period-count').addClass('hidden');
+    {/if}
 
+    {if $period}
+        if (!$('.m-graph-times').find('a').hasClass('active')) {
+            $('.m-graph-times')
+                    .find('.choosen')
+                        .removeClass('hidden').html('{$period[0]} &mdash; {$period[1]}')
+                        .siblings().addClass('hidden');
+        }
+    {/if}
 })($);</script>
 

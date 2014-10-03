@@ -22,6 +22,25 @@ class mailerFilesUploadimageController extends waUploadJsonController
         }
     }
 
+    public function display()
+    {
+        $this->getResponse()->sendHeaders();
+        if (!$this->errors) {
+            if (waRequest::get('filelink')) {
+                echo stripslashes(json_encode(array('filelink' => $this->response)));
+            } else {
+                $data = array('status' => 'ok', 'data' => $this->response);
+                echo json_encode($data);
+            }
+        } else {
+            if (waRequest::get('filelink')) {
+                echo json_encode(array('error' => $this->errors));
+            } else {
+                echo json_encode(array('status' => 'fail', 'errors' => $this->errors));
+            }
+        }
+    }
+
     protected function getPath()
     {
         $message_id = waRequest::request('message_id');

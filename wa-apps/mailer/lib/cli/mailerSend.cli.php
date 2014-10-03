@@ -19,12 +19,22 @@ class mailerSendCli extends waCliController
         }
 
         $message_model = new mailerMessageModel();
-        $messages = $message_model->getByField('status', array(
-            mailerMessageModel::STATUS_SENDING,
-        ), true);
+        $messages = $message_model->getMessageForSend();
 
         foreach ($messages as $message) {
             $mailer_message = new mailerMessage($message);
+
+            // Campaign params
+            $mpm = new mailerMessageParamsModel();
+            $params = $mpm->getByMessage($message['id']);
+
+            if ($message['status'] != mailerMessageModel::STATUS_SENDING) {
+                // renew recipients for pending campaigns
+                mailerHelper::updateDraftRecipients($message['id'], 'UpdateDraftRecipientsTable');
+                mailerHelper::prepareRecipients($message, $params);
+                $mailer_message->status(mailerMessageModel::STATUS_SENDING);
+            }
+
             $mailer_message->send();
         }
     }

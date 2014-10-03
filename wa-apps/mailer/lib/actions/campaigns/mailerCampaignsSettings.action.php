@@ -23,7 +23,7 @@ class mailerCampaignsSettingsAction extends waViewAction
         if (!$campaign) {
             throw new waException('Campaign not found.', 404);
         }
-        if ($campaign['status'] > 0) {
+        if ($campaign['status'] != mailerMessageModel::STATUS_DRAFT && $campaign['status'] != mailerMessageModel::STATUS_PENDING) {
             echo "<script>window.location.hash = '#/campaigns/report/{$campaign_id}/';</script>";
             exit;
         }
@@ -38,23 +38,23 @@ class mailerCampaignsSettingsAction extends waViewAction
         $params = $mpm->getByMessage($campaign_id);
 
         // Prepare google-analytics defaults
-        if (empty($params['google_analytics'])) {
-            // If previous campaign had google analytics turned on, then turn it on by default
-            $sql = "SELECT MAX(m.id)
-                    FROM mailer_message AS m
-                        JOIN mailer_message_params AS mp
-                            ON mp.message_id=m.id
-                    WHERE m.status > 0
-                        AND mp.name='google_analytics'";
-            $ga_message_id = $mm->query($sql)->fetchField();
-
-            if ($ga_message_id) {
-                $sql = "SELECT MAX(id) FROM mailer_message WHERE status > 0";
-                if ($ga_message_id == $mm->query($sql)->fetchField()) {
-                    $params['google_analytics'] = 1;
-                }
-            }
-        }
+//        if (empty($params['google_analytics'])) {
+//            // If previous campaign had google analytics turned on, then turn it on by default
+//            $sql = "SELECT MAX(m.id)
+//                    FROM mailer_message AS m
+//                        JOIN mailer_message_params AS mp
+//                            ON mp.message_id=m.id
+//                    WHERE m.status > 0
+//                        AND mp.name='google_analytics'";
+//            $ga_message_id = $mm->query($sql)->fetchField();
+//
+//            if ($ga_message_id) {
+//                $sql = "SELECT MAX(id) FROM mailer_message WHERE status > 0";
+//                if ($ga_message_id == $mm->query($sql)->fetchField()) {
+//                    $params['google_analytics'] = 1;
+//                }
+//            }
+//        }
         if (empty($params['google_analytics_utm_source'])) {
             $params['google_analytics_utm_source'] = 'newsletter';
         }
@@ -65,9 +65,9 @@ class mailerCampaignsSettingsAction extends waViewAction
             $params['google_analytics_utm_campaign'] = strtolower(waLocale::transliterate($campaign['subject']));
             $params['google_analytics_utm_campaign'] = preg_replace('~[^a-z0-9]+~u', '_', preg_replace('~[`\'"]~', '', $params['google_analytics_utm_campaign']));
             $params['google_analytics_utm_campaign'] = trim($params['google_analytics_utm_campaign'], '_');
-            if (strlen($params['google_analytics_utm_campaign']) <= 5) {
-                $params['google_analytics_utm_campaign'] = '';
-            }
+//            if (strlen($params['google_analytics_utm_campaign']) <= 5) {
+//                $params['google_analytics_utm_campaign'] = '';
+//            }
         }
 
         // List of possible senders
@@ -126,12 +126,13 @@ class mailerCampaignsSettingsAction extends waViewAction
         }
 
         mailerHelper::assignCampaignSidebarVars($this->view, $campaign, $params);
+//        $params['action'] = 'NameAndCountRecipients'; // __not__ update table with draft recipients because we just open page, only count nonunique recipients
         $this->view->assign('return_paths', $return_paths);
         $this->view->assign('campaign', $campaign);
         $this->view->assign('senders', $senders);
         $this->view->assign('params', $params);
         $this->view->assign('sending_speed_values', wa('mailer')->getConfig()->getAvailableSpeeds());
-        $this->view->assign('unique_recipients', mailerHelper::countUniqueRecipients($campaign, $params));
+//        $this->view->assign('unique_recipients', mailerHelper::countRecipients($campaign, $params));
     }
 }
 

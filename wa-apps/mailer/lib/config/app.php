@@ -15,5 +15,7 @@ return array(
     'routing_params' => array(
         'private' => true,
     ),
+    'themes' => true,
     'rights' => true,
+    'my_account' => true,
 );

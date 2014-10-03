@@ -12,16 +12,27 @@
 
 {if $drafts}
     <div class="block">
-<!--         <h5 class="heading collapse-handler" id="m-sb-drafts-header">[`Drafts`]</h5> -->
-        <div class="collapsible1">
+        <h5 class="heading collapse-handler" id="m-sb-drafts-header">
+            <i class="icon16 darr"></i>
+            <span class="title b-all-drafts">[`Drafts`]</span>
+            <span class="count">{count($drafts)}</span>
+        </h5>
+
+        <div class="collapsible">
             <ul class="menu-v with-icons">
                 {foreach $drafts as $d}
-                    <li><a href="#/campaigns/letter/{$d.id}">
-                        <i class="icon16 userpic20" style="background-image: url('{if $d.pic_src}{$d.pic_src}{else}{$wa_url}wa-content/img/userpic20.jpg{/if}');"></i>{ifempty($d.subject, "[`<no subject>`]")|escape}
-                        <br><span class="hint">{waDateTime::format('date', $d.create_datetime)}</span>
+                    <li {if $d@index > 10}style="display:none" data-list="hidden"{/if}><a href="#/campaigns/letter/{$d.id}">
+                        {if $d.status == mailerMessageModel::STATUS_PENDING}<span class="count"><i class="icon16 clock"></i></span>{/if}
+                        <i class="icon16 userpic20" style="background-image: url('{if $d.pic_src}{$d.pic_src}{else}{$wa_url}wa-content/img/userpic20.jpg{/if}');"></i>{if $d.status == mailerMessageModel::STATUS_PENDING}<i>{/if}{ifempty($d.subject, "[`<no subject>`]")|escape}{if $d.status == mailerMessageModel::STATUS_PENDING}</i>{/if}
+                        <br><span class="hint">{if $d.status == mailerMessageModel::STATUS_PENDING}{waDateTime::format('datetime', $d.send_datetime)}{else}{waDateTime::format('date', $d.create_datetime)}{/if}</span>
                     </a></li>
                 {/foreach}
             </ul>
+            {if count($drafts) > 10}
+            <span id="b-all-drafts" class="count b-drafts-toggle" data-list="shown">
+                <a href="javascript:void(0);" class="inline-link all-drafts"><b><i>[`all drafts`]</i></b></a>
+            </span>
+            {/if}
         </div>
     </div>
 {/if}
@@ -68,6 +79,14 @@
 
 <script>$(function() {
     $.wa.mailer.sending_count = {ifempty($sending_count, 0)};
+
+    $('#b-all-drafts').on('click', 'a', function(e){
+        e.preventDefault();
+        var $this = $(this);
+        $('#b-all-drafts').hide();
+        $this.closest('.collapsible').find('li').show();
+    })
+
 });</script>
 
 {*

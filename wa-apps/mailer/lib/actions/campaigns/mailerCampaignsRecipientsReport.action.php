@@ -51,6 +51,9 @@ class mailerCampaignsRecipientsReportAction extends mailerCampaignsReportAction
     protected function getRecipientsSent($campaign_id)
     {
         $start = waRequest::request('start', 0, 'int');
+        $startinterval = waRequest::request('startinterval', 0, 'int');
+        $endinterval = waRequest::request('endinterval', 0, 'int');
+        $quantum = waRequest::request('quantum', 60, 'int');
         $limit = 50;
         $search = waRequest::request('search');
         $error_class = waRequest::request('error_class');
@@ -65,14 +68,43 @@ class mailerCampaignsRecipientsReportAction extends mailerCampaignsReportAction
 
         // Hacky way to add type classification to error tab
         $error_classes = null;
-        if (!$search && $start == 0 && $status && (count($status) > 1 || $status[0] < 0)) {
-            $type = $status[0] > -3 ? 'bounces' : 'exceptions';
+        if (!$search && $start == 0 && $status && $status[0] < 0 && count($status) != 7) {
+            $type = $status[0] > mailerMessageLogModel::STATUS_PREVIOUSLY_UNSUBSCRIBED ? 'bounces' : 'exceptions';
             $stata = $type == 'bounces' ? '-1,-2' : '-3,-4';
 
             $total_count = 0;
             $error_classes = array();
-            $sql = "SELECT status, error_class, COUNT(*) AS `count` FROM mailer_message_log WHERE message_id=:mid AND status IN ({$stata}) GROUP BY status, error_class ORDER BY `count` DESC";
-            foreach($lm->query($sql, array('mid' => $campaign_id, 'stata' => $stata)) as $row) {
+            $datetime_sql = '';
+            if ($startinterval && $endinterval && $quantum) {
+                $startinterval = floor($startinterval / (60 * $quantum)) * (60 * $quantum);
+                $startinterval = waDateTime::date('Y-m-d H:i:s', $startinterval);
+                $endinterval = waDateTime::date('Y-m-d H:i:s', $endinterval);
+
+                $datetime_sql = " AND datetime BETWEEN s:startinterval AND s:endinterval ";
+//            $datetime_sql = " AND CEIL ( UNIX_TIMESTAMP(datetime) / (60*i:quantum) ) * (60*i:quantum) BETWEEN i:startinterval AND i:endinterval ";
+//            $datetime_sql = " AND datetime BETWEEN i:startinterval AND i:endinterval ";
+            }
+            $sql = "SELECT
+                      status,
+                      error_class,
+                      COUNT(*) AS `count`
+                  FROM mailer_message_log
+                  WHERE
+                      message_id=:mid AND
+                      status IN ({$stata})
+                      {$datetime_sql}
+                  GROUP BY status, error_class
+                  ORDER BY `count` DESC";
+            foreach($lm->query(
+                $sql,
+                array(
+                    'mid' => $campaign_id,
+                    'stata' => $stata,
+                    'quantum' => $quantum,
+                    'startinterval' => min($startinterval, $endinterval),
+                    'endinterval' => max($startinterval, $endinterval)
+                )
+            ) as $row) {
                 $row['name'] = self::getErrorClass($row['status'], $row['error_class']);
                 $row['param'] = 'status='.$row['status'].'&error_class='.urlencode(ifempty($row['error_class'], 'null'));
                 $total_count += $row['count'];
@@ -96,8 +128,12 @@ class mailerCampaignsRecipientsReportAction extends mailerCampaignsReportAction
         // List of recipients
         $log = array();
         $total_rows = true;
-        foreach($lm->getByMessage($campaign_id, $start, $limit, $status, $search, $error_class, $total_rows) as $l) {
-            $l['name'] = empty($l['name']) ? _w('<no_name>') : $l['name'];
+        $ordername = !count($status);
+        foreach($lm->getByMessage($campaign_id, $start, $limit, $status, $search, $error_class, $total_rows, $startinterval, $endinterval, $quantum, $ordername) as $l) {
+            // try to get name from contacts or mailer_message_log table
+            $l['name'] = empty($l['cname']) ? $l['name'] : $l['cname'];
+            $l['email'] = !empty($l['name']) ? '<'.$l['email'].'>' : $l['email'];
+            $l['datetime'] = waDateTime::format('fulldatetime', $l['datetime']);
             $l['status_text'] = '';
             switch($l['status']) {
                 case -4:
@@ -105,7 +141,7 @@ class mailerCampaignsRecipientsReportAction extends mailerCampaignsReportAction
                 case -2:
                 case -1:
                     $error = self::getErrorClass($l['status'], $l['error_class']);
-                    $css_class = $l['status'] == -3 ? 'earlier-unsubscribed' : 'error';
+                    $css_class = $l['status'] == mailerMessageLogModel::STATUS_PREVIOUSLY_UNSUBSCRIBED ? 'earlier-unsubscribed' : 'error';
                     if ($l['error']) {
                         $css_class .= ' show-full-error-text';
                     }
@@ -142,6 +178,15 @@ class mailerCampaignsRecipientsReportAction extends mailerCampaignsReportAction
         if ($error_class) {
             $parameters[] = 'error_class='.urlencode($error_class);
         }
+        $period = false;
+        if ($startinterval && $endinterval) {
+            $parameters[] = 'startinterval='.$startinterval;
+            $parameters[] = 'endinterval='.$endinterval;
+            $period = array(
+                waDateTime::format('humandatetime', min($startinterval, $endinterval)),
+                waDateTime::format('humandatetime', max($startinterval, $endinterval))
+            );
+        }
         $parameters = implode('&', $parameters);
 
         $this->view->assign('start', $start);
@@ -149,6 +194,11 @@ class mailerCampaignsRecipientsReportAction extends mailerCampaignsReportAction
         $this->view->assign('parameters', $parameters);
         $this->view->assign('total_rows', $total_rows);
         $this->view->assign('error_classes', $error_classes);
+        $this->view->assign('search', $search);
+        $this->view->assign('statuses', $status);
+        $this->view->assign('period', $period);
+        $this->view->assign('startinterval', $startinterval);
+        $this->view->assign('endinterval', $endinterval);
         return $log;
     }
 

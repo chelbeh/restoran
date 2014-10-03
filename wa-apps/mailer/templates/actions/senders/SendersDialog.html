@@ -45,6 +45,10 @@
                         </option>
                     {/foreach}
                 </select>
+                <br/>
+                {foreach $sender_types as $id => $s}
+                <span class="hint" data-sender="{$id}" style="display: none;">{$s.description}</span>
+                {/foreach}
             </div>
         </div>
     </div>
@@ -153,7 +157,8 @@
         $(".transport-params").hide();
         $(".transport-params").find('input').attr('disabled', 'disabled');
         $("#" + $(this).val() + "-params").show().find('input').removeAttr('disabled');
-    });
+        $('[data-sender="'+$(this).val()+'"]').show().siblings('.hint').hide();
+    }).trigger('change');
 
     // Set up dialog buttons
     var buttons = form.find('.buttons').children();

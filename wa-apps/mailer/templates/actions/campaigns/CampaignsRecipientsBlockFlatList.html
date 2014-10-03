@@ -1,38 +1,4 @@
 {foreach $remove_ids as $id}
     <input type="hidden" name="remove_ids[]" value="{$id}">
 {/foreach}
-<textarea id="flat-list-textarea" placeholder="[`Paste emails here, one email (or Name <email>) per line.`]" style="min-height:100px;min-width:400px;">{$data|trim|escape}</textarea>
-
-<script>(function($) { "use strict";
-    var textarea = $('#flat-list-textarea');
-    var form = textarea.closest('form');
-
-    textarea.closest('form').one('change', function() {
-        $('#recipients-group-flat_list .hide-when-modified').hide();
-    });
-
-    var timeout = null;
-
-    textarea.keyup(function() {
-        if (textarea.val()) {
-            textarea.attr('name', 'add_values[]');
-        } else {
-            textarea.removeAttr('name');
-        }
-
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-        timeout = setTimeout(function() {
-            if (textarea.val().length > 65535) {
-                if (!textarea.hasClass('error')) {
-                    textarea.addClass('error').parent().append($('<em class="errormsg"></em>').text("{sprintf_wp('WARNING: Amount of data in the field above can not exceed %d characters.', 65535)}"));
-                }
-            } else {
-                textarea.removeClass('error').siblings('.errormsg').remove();
-            }
-            form.change();
-        }, 500);
-    }).keyup();
-})($);</script>
-
+<textarea id="flat-list-textarea" disabled placeholder="[`Paste emails here, one email (or Name <email>) per line.`]" style="min-height:100px;min-width:400px;" name="add_values[]">{$data|trim|escape}</textarea>

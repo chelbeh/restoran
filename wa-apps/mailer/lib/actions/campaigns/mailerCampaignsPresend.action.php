@@ -22,7 +22,7 @@ class mailerCampaignsPresendAction extends waViewAction
         if (!$campaign) {
             throw new waException('Campaign not found.', 404);
         }
-        if ($campaign['status'] > 0) {
+        if ($campaign['status'] != mailerMessageModel::STATUS_DRAFT && $campaign['status'] != mailerMessageModel::STATUS_PENDING) {
             echo "<script>window.location.hash = '#/campaigns/report/{$campaign_id}/';</script>";
             exit;
         }
@@ -41,9 +41,12 @@ class mailerCampaignsPresendAction extends waViewAction
         if (waRequest::post('send') && !$errormsg) {
             $errormsg = self::eventValidate($campaign, $params);
             if (!$errormsg) {
-                self::prepareRecipients($campaign, $params);
-                echo "<script>window.location.hash='#/campaigns/report/{$campaign_id}/';</script>";
-                exit;
+                mailerHelper::prepareRecipients($campaign, $params);
+                // check schedule campaigns (we should 'prepare' Recipients, check events, but not send campaign)
+                if ($campaign['status'] != mailerMessageModel::STATUS_PENDING) {
+                    echo "<script>window.location.hash='#/campaigns/report/{$campaign_id}/';</script>";
+                    exit;
+                }
             }
         }
 
@@ -52,12 +55,15 @@ class mailerCampaignsPresendAction extends waViewAction
         $this->view->assign('cron_ok', wa()->getSetting('last_cron_time') + 3600*2 > time());
         $this->view->assign('last_cron_time', wa()->getSetting('last_cron_time'));
         $this->view->assign('return_path_ok', $this->isReturnPathOk($campaign, $params));
-        $this->view->assign('unique_recipients', mailerHelper::countUniqueRecipients($campaign, $params));
+        $this->view->assign('unique_recipients', $params['recipients_count']);
         $this->view->assign('routing_ok', !!wa()->getRouteUrl('mailer', true));
+
+        $this->view->assign('scheduled', $campaign['status'] == mailerMessageModel::STATUS_PENDING );
+        $this->view->assign('scheduled_time', $campaign['send_datetime'] );
     }
 
     /** Local validation: check basic campaign properties. */
-    public static function localValidate($campaign, $params)
+    public static function localValidate($campaign, &$params)
     {
         $errormsg = array();
         if (!trim($campaign['body'])) {
@@ -68,14 +74,15 @@ class mailerCampaignsPresendAction extends waViewAction
         }
 
         // Check if there are recipients selected
-        $unique_recipients = mailerHelper::countUniqueRecipients($campaign, $params);
-        if ($unique_recipients <= 0) {
+        $action = waRequest::post('send') ? null : 'UpdateDraftRecipientsTable'; // if we actually dont send - will update draft recipients table and count
+        $params['recipients_count'] = mailerHelper::countUniqueRecipients($campaign, $params, null, $errors, $action);
+        if ($params['recipients_count'] <= 0) {
             $errormsg[] = _w('No recipients selected.');
         }
 
         // Check if this campaign has more recipients than it is allowed
         $max_recipients_count = wa('mailer')->getConfig()->getOption('max_recipients_count');
-        if ($max_recipients_count && $max_recipients_count < $unique_recipients) {
+        if ($max_recipients_count && $max_recipients_count < $params['recipients_count']) {
             $errormsg[] = _w('Maximum recipients limit has been exceeded:').' '.$max_recipients_count;
         }
 
@@ -93,7 +100,7 @@ class mailerCampaignsPresendAction extends waViewAction
         $max_recipients_daily = wa('mailer')->getConfig()->getOption('max_recipients_daily');
         if ($max_recipients_daily) {
             $mlm = new mailerMessageLogModel();
-            if ($max_recipients_daily < $mlm->countSentToday() + $unique_recipients) {
+            if ($max_recipients_daily < $mlm->countSentToday() + $params['recipients_count']) {
                 $errormsg[] = _w('Maximum recipients daily limit has been exceeded:').' '.$max_recipients_daily;
             }
         }
@@ -135,109 +142,51 @@ class mailerCampaignsPresendAction extends waViewAction
         return (array) $evt_params['errors'];
     }
 
-    /**
-     * Prepare given campaign for sending:
-     * - Change status to mailerMessageModel::STATUS_CONTACTS
-     * - Create recipient records in `mailer_message_log`
-     * - Exclude unsubscribers and broken emails
-     * - Create contacts for each new recipient
-     * - Change status to mailerMessageModel::STATUS_SENDING
-     * - Trigger `campaign.contacts_prepared` event.
-     */
-    protected static function prepareRecipients(&$campaign, &$params)
-    {
-        // Change campaign state: 'preparing recipients'
-        $m = new mailerMessage($campaign['id']);
-        $m->status(mailerMessageModel::STATUS_CONTACTS);
-
-        // Move to message_log
-        $drm = new mailerDraftRecipientsModel();
-        $drm->moveToMessageLog($campaign['id']);
-
-        // Mark unsubscriber's emails
-        $mm = new mailerMessageModel();
-        $sql = "UPDATE mailer_message_log AS l
-                    JOIN mailer_unsubscriber AS u
-                        ON l.email = u.email
-                SET l.status = ".mailerMessageLogModel::STATUS_PREVIOUSLY_UNSUBSCRIBED."
-                WHERE l.message_id = ".$campaign['id']."
-                    AND u.list_id = 0";
-        $mm->exec($sql);
-
-        // Mark emails known to be unavailable
-        if (empty($params['send_to_unavailable'])) {
-            $sql = "UPDATE mailer_message_log AS l
-                        JOIN wa_contact_emails AS e
-                            ON l.email = e.email
-                    SET l.status = ".mailerMessageLogModel::STATUS_PREVIOUSLY_UNAVAILABLE."
-                    WHERE l.message_id = ".$campaign['id']."
-                        AND e.status = 'unavailable'";
-            $mm->exec($sql);
-        }
-
-        // Make sure all contacts are created
-        $mlm = new mailerMessageLogModel();
-        $replace_values = array();
-        $replace_sql = "INSERT INTO mailer_message_log (id, contact_id) VALUES %s ON DUPLICATE KEY UPDATE contact_id=VALUES(contact_id)";
-        foreach($mlm->where('message_id=? AND contact_id=0', $campaign['id'])->query() as $row) {
-            $contact = new waContact();
-            $contact->save(array(
-                'name' => $row['name'],
-                'email' => $row['email'],
-                'create_app_id' => 'mailer',
-                'create_method' => 'recipient',
-            ));
-            $replace_values[] = sprintf('(%d,%d)', $row['id'], $contact->getId());
-            if (count($replace_values) > 50) {
-                $mlm->exec(sprintf($replace_sql, implode(',', $replace_values)));
-            }
-        }
-        if ($replace_values) {
-            $mlm->exec(sprintf($replace_sql, implode(',', $replace_values)));
-        }
-
-        // Change campaign state: 'sending'
-        $m->status(mailerMessageModel::STATUS_SENDING);
-        $campaign['status'] = mailerMessageModel::STATUS_SENDING;
-
-        /**@/**
-         * @event campaign.contacts_prepared
-         *
-         * Campaign just moved to SENDING status
-         *
-         * @param array[string]array $params['campaign'] row from mailer_message
-         * @param array[string]array $params['params'] campaign params from mailer_message_params, key => value
-         * @return void
-         */
-        $evt_params = array(
-            'campaign' => $campaign,
-            'params' => $params,
-        );
-        wa()->event('campaign.contacts_prepared', $evt_params);
-    }
-
     /** Returns false if there's a problem connecting to this campaign's return path */
     protected function isReturnPathOk($campaign)
     {
         if (empty($campaign['return_path'])) {
-            return true;
+            return array(
+                'status'=>true
+            );
         }
 
         $rpm = new mailerReturnPathModel();
         $rp = $rpm->getByEmail($campaign['return_path']);
         if (!$rp) {
-            return false;
+            return array(
+                'status'=>false,
+                'reason'=>1,
+                'return-path'=>$campaign['return_path']
+            );
         }
 
         // Check if SSL is supported
         if (!defined('OPENSSL_VERSION_NUMBER') && !empty($data['ssl'])) {
-            return false;
+            return array(
+                'status'=>false,
+                'reason'=>2,
+                'return-path'=>$campaign['return_path']
+            );
+        }
+
+        // check return-path form smtp sender
+        $mm = new mailerMessage($campaign);
+        if ($mm->testReturnPathSmtpSender() === false) {
+            return array(
+                'status'=>false,
+                'reason'=>4,
+                'return-path'=>$campaign['return_path']
+            );
         }
 
         // Check cache in session
         $status = wa()->getStorage()->get('mailer_rp_status_'.$rp['id']);
         if (isset($status)) {
-            return $status;
+            return array(
+                'reason'=>5,
+                'status'=>$status
+            );
         }
 
         // Try to connect using given settings
@@ -245,12 +194,17 @@ class mailerCampaignsPresendAction extends waViewAction
             $mail_reader = new waMailPOP3($rp);
             $mail_reader->count();
             wa()->getStorage()->set('mailer_rp_status_'.$rp['id'], true);
-            return true;
+            return array(
+                'status'=>true
+            );
         } catch (Exception $e) {
         }
 
         wa()->getStorage()->set('mailer_rp_status_'.$rp['id'], false);
-        return false;
+        return array(
+            'status'=>false,
+            'reason'=>3
+        );
     }
 }
 

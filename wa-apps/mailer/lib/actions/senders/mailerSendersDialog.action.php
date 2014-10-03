@@ -30,15 +30,30 @@ class mailerSendersDialogAction extends waViewAction
         static $senders = null;
         if ($senders === null) {
             $senders = array(
-                'default' => _w('System Default'),
-                'mail' => _w('php mail() function'),
-                'smtp' => _w('SMTP'),
+                'default' => array(
+                    'name' => _w('System Default'),
+                    'description' => _w('When this option is selected messages are sent by the default transport specified in the Webasyst framework configuration.')
+                ),
+                'mail' => array(
+                    'name' => _w('php mail() function'),
+                    'description' => _w('Some web-hosting companies allow sending email message by means of this transport only. If it is required to specify additional parameters for the mail() function you can enter them in the provided text field. The default parameters are -f%s.')
+                ),
+                'smtp' => array(
+                    'name' => _w('SMTP'),
+                    'description' => _w('Special server which is specifically used for sending email messages. You can send newsletters via any SMTP server for which you have connection credentials: host, port, user name, and password. It can be the SMTP server of your web-hosting company or that of a public mail service such as Gmail, Yahoo! Mail, Outlook.com, etc.')
+                )
             );
             if (function_exists('proc_open')) {
-                $senders['sendmail'] = _w('Sendmail');
+                $senders['sendmail'] = array(
+                    'name' => _w('Sendmail'),
+                    'description' => _w('This is the web server\'s system command for sending email in UNIX-like operating systems. The "Sendmail" option will allow you to specify a non-standard system command for sending messages if you are an experienced server administrator.')
+                );
             }
             if ($debug) {
-                $senders['test'] = _w('Debug mailer');
+                $senders['test'] = array(
+                    'name' => _w('Debug mailer'),
+                    'description' => ""
+                );
             }
 
             /**

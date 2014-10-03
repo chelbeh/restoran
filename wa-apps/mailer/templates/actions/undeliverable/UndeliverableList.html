@@ -28,11 +28,11 @@
                         {$cname|escape}
                     {else}
                         {if $order == $cid}
-                            <a href="#/undeliverable/{$start}/!{$cid}/{$search_url_append}">{$cname|escape} <i class="icon16 uarr"></i></a>
+                            <a href="#/undeliverable/{$start}/{$records}/!{$cid}/{$search_url_append}">{$cname|escape} <i class="icon16 uarr"></i></a>
                         {elseif $order == "!{$cid}"}
-                            <a href="#/undeliverable/{$start}/{$cid}/{$search_url_append}">{$cname|escape} <i class="icon16 darr"></i></a>
+                            <a href="#/undeliverable/{$start}/{$records}/{$cid}/{$search_url_append}">{$cname|escape} <i class="icon16 darr"></i></a>
                         {else}
-                            <a href="#/undeliverable/{$start}/{$cid}/{$search_url_append}">{$cname|escape}</a>
+                            <a href="#/undeliverable/{$start}/{$records}/{$cid}/{$search_url_append}">{$cname|escape}</a>
                         {/if}
                     {/if}
                 </th>
@@ -51,17 +51,37 @@
             </tr>
         {/foreach}
     </tbody></table>
+
     <div class="block paging">
-        <span style="margin-right:20px;">[`Total addresses:`] {$total_rows}</span>
-        {if count($pagination) > 1}
-            {foreach $pagination as $page => $st}
-                {if $st !== false}
-                    <a{if $current_page == $page} class="selected"{/if} href="#/undeliverable/{$st}/{$order}/{$search_url_append}">{$page}</a>
-                {else}
+        <div class="c-page-list">
+            <span style="margin-right:20px;">[`Total addresses:`] {$total_rows}</span>
+            {if count($pagination) > 1}
+                <span>
+                {foreach $pagination as $page => $offset}
+                {if $offset !== false}
+                    <a{if $current_page == $page} class="selected"{/if} href="#/undeliverable/{$offset}/{$records}/{$order}/{$search_url_append}">{$page}</a>
+                    {else}
                     ...
                 {/if}
-            {/foreach}
-        {/if}
+                {/foreach}
+                {if $current_page != 1}
+                    <a href="#/undeliverable/{$start-$records}/{$records}/{$order}/{$search_url_append}" class="prevnext"><i class="icon10 larr"></i> пред</a>
+                {/if}
+                {if $current_page != $page}
+                    <a href="#/undeliverable/{$start+$records}/{$records}/{$order}/{$search_url_append}" class="prevnext">след <i class="icon10 rarr"></i></a>
+                {/if}
+                </span>
+            {/if}
+        </div>
+        <div class="c-page-num">[`Show`]
+            {$records_on_page = [30, 50, 100, 200, 500]}
+            <select id="records-per-page">
+                {foreach $records_on_page as $onpage}
+                <option value="{$onpage}"{if $records==$onpage} selected="selected"{/if}>{$onpage}</option>
+                {/foreach}
+            </select> [`records`]
+        </div>
+        <div class="clear"></div>
     </div>
 {/if}
 
@@ -72,12 +92,17 @@
 </div>
 
 <script>(function() { "use strict";
+    $('#records-per-page').on('change', function(e){
+        var records = $(this).val();
+        $.storage.set('mailer/undeliverable_records', records);
+        window.location.hash = '#/undeliverable/0/'+records+'/{$order}/{$search_url_append}';
+    });
 
     // Search field
     var submitSearch = function() {
         var input = $(this);
         var search_string = input.val();
-        var new_hash = $.wa.mailer.cleanHash('#/undeliverable/0/{$order}/' + encodeURIComponent(search_string));
+        var new_hash = $.wa.mailer.cleanHash('#/undeliverable/0/{$records}/{$order}/' + encodeURIComponent(search_string));
         if ($.wa.mailer.getHash() != new_hash) {
             input.prev('.icon16').removeClass('search').addClass('loading');
             window.location.hash = new_hash;
@@ -102,6 +127,7 @@
             i.removeClass('delete').addClass('loading');
             $.post('?module=undeliverable&action=list', {
                 order: '{$order}',
+                records: '{$records}',
                 start: '{$start}',
                 search: '{$search}',
                 mark_email: i.closest('tr').children('.email-field').text()
@@ -141,5 +167,7 @@
             height: '180px'
         });
     });
+
+    $.wa.mailer.setTitle();
 })();</script>
 

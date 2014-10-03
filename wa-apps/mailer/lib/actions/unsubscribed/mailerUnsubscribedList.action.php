@@ -14,7 +14,7 @@ class mailerUnsubscribedListAction extends waViewAction
         // POST parameters
         $search = waRequest::request('search');
         $start  = waRequest::request('start', 0, 'int');
-        $limit  = 50;
+        $limit  = waRequest::request('records', 30, 'int');;
         $order  = waRequest::request('order');
         if (!in_array($order, array('datetime', 'email', '!datetime', '!email'))) {
             $order = 'email';
@@ -35,6 +35,8 @@ class mailerUnsubscribedListAction extends waViewAction
 
         $this->view->assign('list', $list);
         $this->view->assign('order', $order);
+        $this->view->assign('records', $limit);
+        $this->view->assign('start', $start);
         $this->view->assign('search_url_append', $search ? $search.'/' : '');
         $this->view->assign('search', $search);
     }

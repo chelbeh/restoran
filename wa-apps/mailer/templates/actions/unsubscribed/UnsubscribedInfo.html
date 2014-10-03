@@ -8,7 +8,7 @@
         <div class="name-field value">
             {if $data.linked_contacts}
                 {foreach $data.linked_contacts as $contact_id => $contact_name}
-                    <a href="{mailerHelper::getContactsAppUrl()}#/contact/{$contact_id}/no-bc/">{$contact_name|escape}</a>{if !$contact_name@last},{/if}
+                    <a href="{mailerHelper::getContactsAppUrl()}#/contact/{$contact_id}/">{$contact_name|escape}</a>{if !$contact_name@last},{/if}
                 {/foreach}
             {else}
                 [`not set `]

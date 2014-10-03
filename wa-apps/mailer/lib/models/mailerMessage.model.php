@@ -11,6 +11,7 @@ class mailerMessageModel extends waModel
     const STATUS_SENDING = 2;
     const STATUS_SENDING_PAUSED = 3;
     const STATUS_SENDING_ERROR = 4;
+    const STATUS_PENDING = 5;
     const STATUS_SENT = 9;
 
     protected $table = "mailer_message";
@@ -49,6 +50,26 @@ class mailerMessageModel extends waModel
         return $m->query($sql, array(
             'sending' => mailerCampaignsArchiveAction::getArchiveStates(),
             'sent' => self::STATUS_SENT,
+        ))->fetchAssoc();
+    }
+
+    public function countDraft()
+    {
+        // Filter messages by access rights
+        $access_sql = '';
+        if (!mailerHelper::isInspector()) {
+            $access_sql = 'AND m.create_contact_id='.wa()->getUser()->getId();
+        }
+
+        $sql = "SELECT SUM(IF(status=i:scheduled,1,0)) AS scheduled_count, count(*) AS draft_count
+                FROM mailer_message AS m
+                WHERE status IN (i:draft,i:scheduled)
+                    AND is_template=0
+                    {$access_sql}";
+        $m = new waModel();
+        return $m->query($sql, array(
+            'scheduled' => self::STATUS_PENDING,
+            'draft' => self::STATUS_DRAFT,
         ))->fetchAssoc();
     }
 
@@ -105,5 +126,13 @@ class mailerMessageModel extends waModel
         $messages = $this->query($sql)->fetchAll('id');
         $total_rows = $this->query('SELECT FOUND_ROWS()')->fetchField();
         return array($messages, $total_rows);
+    }
+
+    public function getMessageForSend()
+    {
+        return $this->query("SELECT * FROM ".$this->table."
+                            WHERE status = ".mailerMessageModel::STATUS_SENDING." OR
+                            (status = ".mailerMessageModel::STATUS_PENDING."
+                                AND send_datetime < '".date('Y-m-d H:i:s')."')")->fetchAll('id');
     }
 }

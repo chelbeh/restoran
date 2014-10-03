@@ -13,7 +13,7 @@ class mailerCampaignsSaveController extends waJsonController
         $mm = new mailerMessageModel();
         if ($message_id) {
             $campaign = $mm->getById($message_id);
-            if (!$campaign || $campaign['status'] > 0) {
+            if (!$campaign || $campaign['status'] > 0 && $campaign['status'] != mailerMessageModel::STATUS_PENDING ) {
                 $this->response = $message_id;
                 return;
             }
@@ -30,7 +30,7 @@ class mailerCampaignsSaveController extends waJsonController
         }
 
         $data = waRequest::post('data', array());
-
+        $sender_params = array();
         // Populate from_name and from_email from sender data
         if (!empty($data['sender_id'])) {
             $sm = new mailerSenderModel();
@@ -38,10 +38,10 @@ class mailerCampaignsSaveController extends waJsonController
             if ($sender) {
                 // Update message data using data from sender parameters.
                 $spm = new mailerSenderParamsModel();
-                $params = $spm->getBySender($data['sender_id']);
+                $sender_params = $spm->getBySender($data['sender_id']);
                 $data['from_name'] = trim($sender['name']);
                 $data['from_email'] = trim($sender['email']);
-                $data['reply_to'] = trim(ifempty($params['reply_to'], ''));
+                $data['reply_to'] = trim(ifempty($sender_params['reply_to'], ''));
             } else {
                 $data['sender_id'] = 0;
             }
@@ -76,6 +76,7 @@ class mailerCampaignsSaveController extends waJsonController
 
         // Save message params
         $new_params = waRequest::post('params');
+        $new_params['sender_params'] = serialize($sender_params);
         $delete_old_params = waRequest::post('delete_old_params');
         if ($new_params === null || !is_array($new_params)) {
             $new_params = array();
@@ -83,6 +84,7 @@ class mailerCampaignsSaveController extends waJsonController
         if ($delete_old_params === null || !is_array($delete_old_params)) {
             $delete_old_params = array();
         }
+
         $mpm = new mailerMessageParamsModel();
         $mpm->save($message_id, $new_params, $delete_old_params);
 

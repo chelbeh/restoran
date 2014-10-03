@@ -29,7 +29,7 @@ class mailerCampaignsRecipientsPreviewAction extends waViewAction
         $params = $mpm->getByMessage($campaign_id);
 
         // Campaign recipients
-        if ($campaign['status'] > 0) {
+        if ($campaign['status'] > 0 && $campaign['status'] != mailerMessageModel::STATUS_PENDING) {
             throw new waException('Recipients list preview is only available for drafts.');
         }
 

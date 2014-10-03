@@ -24,7 +24,7 @@ class mailerCampaignsStep1Action extends waViewAction
                 $campaign = $tm->getById($template_id);
                 $campaign['id'] = '';
             }
-            if ($campaign) {
+            if ($campaign && count($campaign) > 1) {
                 // Create campaign right now when template is specified
                 $mpm = new mailerMessageParamsModel();
                 $params = $mpm->getByMessage($campaign['id']);
@@ -52,7 +52,7 @@ class mailerCampaignsStep1Action extends waViewAction
             if ($access < 1) {
                 throw new waException('Access denied.', 403);
             }
-            if ($campaign['status'] > 0 || $access < 2) {
+            if (($campaign['status'] != mailerMessageModel::STATUS_DRAFT && $campaign['status'] != mailerMessageModel::STATUS_PENDING) || $access < 2) {
                 $this->setTemplate('templates/actions/campaigns/CampaignsStep1ReadOnly.html');
             }
         }

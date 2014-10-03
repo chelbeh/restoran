@@ -23,5 +23,26 @@ return array(
         'secure' => false,
     ),
 
-    'subscribe/' => 'frontend/subscribe'
+    'subscribeform/<id>/' => array(
+        'url' => 'subscribeform/<id>/?',
+        'module' => 'frontend',
+        'action' => 'form',
+        'secure' => false
+    ),
+
+    'subscribe' => 'frontend/subscribe/',
+
+    'confirm/<hash>/' => array(
+        'url' => 'confirm/<hash>/?',
+        'module' => 'frontend',
+        'action' => 'confirm',
+        'secure' => false
+    ),
+
+    'root' => array(
+        'url' => 'my/',
+        'module' => 'frontend',
+        'action' => 'mySubscriptions',
+        'secure' => true,
+    )
 );

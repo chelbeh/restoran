@@ -25,6 +25,9 @@ class mailerCampaignsRecipientsAction extends waViewAction
             throw new waException('Access denied.', 403);
         }
 
+        $contacts_plugins = wa('contacts')->getConfig()->getPlugins();
+        $you_need_contacts = wa()->getUser()->getRights('contacts', 'backend') == 0 ? true : false;
+
         // Campaign params
         $mpm = new mailerMessageParamsModel();
         $params = $mpm->getByMessage($campaign_id);
@@ -56,20 +59,6 @@ class mailerCampaignsRecipientsAction extends waViewAction
         // Prepare recipients data for template: count every separate list and total number of unique addresses.
         $recipients_groups = self::getRecipientsGroups($campaign, $recipients);
 
-        // Total number of unique recipients in all lists
-        $total_recipients = mailerHelper::countUniqueRecipients($campaign, $params, $recipients, $errormsg);
-        $form_disabled = false;
-        $recipients_stats = null;
-        if ($errormsg) {
-            if (!empty($params['recipients_update_progress'])) {
-                $form_disabled = true;
-                $errormsg = '';
-            }
-        } else if ($total_recipients <= 5000) {
-            $drm = new mailerDraftRecipientsModel();
-            $recipients_stats = $drm->getStatsByMessage($campaign['id']);
-        }
-
         // Does user have admin access to contacts app?
         $is_contacts_admin = wa()->getUser()->getRights('contacts', 'backend') > 1;
 
@@ -77,21 +66,22 @@ class mailerCampaignsRecipientsAction extends waViewAction
         $sql = "SELECT COUNT(*) FROM wa_contact";
         $contacts_count = $mrm->query($sql)->fetchField();
 
-        mailerHelper::assignCampaignSidebarVars($this->view, $campaign, $params, $recipients);
+        mailerHelper::assignCampaignSidebarVars($this->view, $campaign);
 
         $a = array_flip($recipients);
         $all_contacts_selected_id = ifset($a['/']);
 
-        $this->view->assign('errormsg', $errormsg);
-        $this->view->assign('form_disabled', $form_disabled);
+        mailerHelper::updateDraftRecipients($campaign['id'], 'NameAndCountRecipients'); // get names anf count for recipient groups, but don't fill recipientsDraft table
+
         $this->view->assign('contacts_count', $contacts_count);
-        $this->view->assign('total_recipients', $total_recipients);
         $this->view->assign('is_contacts_admin', $is_contacts_admin);
         $this->view->assign('all_contacts_selected_id', $all_contacts_selected_id);
         $this->view->assign('recipients_groups', $recipients_groups);
-        $this->view->assign('recipients_stats', $recipients_stats);
+        $this->view->assign('recipients', mailerHelper::getRecipients($campaign['id']));
         $this->view->assign('campaign', $campaign);
         $this->view->assign('params', $params);
+        $this->view->assign('you_need_contacts', $you_need_contacts);
+
     }
 
     protected static function getRecipientsGroups($campaign, $recipients)
@@ -129,13 +119,20 @@ class mailerCampaignsRecipientsAction extends waViewAction
             'recipients_groups' => array(), // output
         );
         wa()->event('recipients.form', $params);
-
+        // additional email must be the last one
+        if (array_key_exists('flat_list', $params['recipients_groups'])) {
+            $flat = $params['recipients_groups']['flat_list'];
+            unset($params['recipients_groups']['flat_list']);
+            $params['recipients_groups']['flat_list'] = $flat;
+        }
         return $params['recipients_groups'];
     }
 
     protected function saveRecipientsFromPost($campaign, &$recipients)
     {
-        if (!waRequest::post() || $campaign['status'] > 0 || mailerHelper::campaignAccess($campaign) < 2) {
+        if (!waRequest::post() ||
+            ($campaign['status'] > 0 && $campaign['status'] != mailerMessageModel::STATUS_PENDING) ||
+            mailerHelper::campaignAccess($campaign) < 2) {
             return false;
         }
 
@@ -158,6 +155,11 @@ class mailerCampaignsRecipientsAction extends waViewAction
             $remove_ids = array();
         }
         $remove_ids = array_flip($remove_ids);
+
+        // Delete list by id if specified.
+        if (waRequest::post('all_contacts')) {
+            $remove_ids += $mrm->getGroupedByMessage($campaign['id']);
+        }
 
         // Recipients records to add
         $add_values = waRequest::post('add_values');

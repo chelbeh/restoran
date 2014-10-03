@@ -10,25 +10,50 @@ class mailerSubscribersListAction extends waViewAction
         if (!mailerHelper::isAdmin()) {
             throw new waException('Access denied.', 403);
         }
-        // POST parameters
-        $search = waRequest::request('search');
-        $start  = waRequest::request('start', 0, 'int');
-        $limit  = 50;
-        $order  = waRequest::request('order');
+
+        $list_id = waRequest::get('id', 0, 'int');
+        $search = waRequest::get('search', '');
+        $start  = waRequest::get('start', 0, 'int');
+        $records  = waRequest::get('records', 30, 'int');
+        $order  = waRequest::get('order');
         if (!in_array($order, array('name', 'datetime', 'email', '!name', '!datetime', '!email'))) {
             $order = 'name';
         }
 
-        // Fetch data
-        $sm = new mailerSubscriberModel();
-        $list = $sm->getListView($search, $start, $limit, $order);
-        $total_rows = $sm->countListView($search);
+        $mf = new mailerFormModel();
+        $all_forms = $mf->getAll('id');
 
-        // Prepare pagination for template
-        mailerHelper::assignPagination($this->view, $start, $limit, $total_rows);
+        $subscribe_list = false;
+        if ($list_id > -1) {
+            // Fetch data
+            $sm = new mailerSubscriberModel();
+            $list = $sm->getListView($search, $start, $records, $order, $list_id);
+            $total_rows = $sm->countListView($search, $list_id);
+            $subscribers_count = $sm->countListView('');
 
-        $this->view->assign('list', $list);
+            $sml = new mailerSubscribeListModel();
+            $subscribe_list = $sml->getListById($list_id);
+
+            $mfsl = new mailerFormSubscribeListsModel();
+            $subscribe_list['forms'] = $mfsl->getForms($list_id);
+            foreach($subscribe_list['forms'] as $form) {
+                $all_forms[$form['id']]['checked'] = true;
+            }
+
+            // Prepare pagination for template
+            mailerHelper::assignPagination($this->view, $start, $records, $total_rows);
+
+            $this->view->assign('list', $list);
+            $this->view->assign('total_rows', $total_rows);
+            $this->view->assign('subscribers_count', $subscribers_count);
+        }
+
+        $this->view->assign('list_id', $list_id);
+        $this->view->assign('all_forms', $all_forms);
+        $this->view->assign('subscribe_list', $subscribe_list);
         $this->view->assign('order', $order);
+        $this->view->assign('start', $start);
+        $this->view->assign('records', $records);
         $this->view->assign('search_url_append', $search ? $search.'/' : '');
         $this->view->assign('form_html', $this->getFormHtml());
         $this->view->assign('search', $search);

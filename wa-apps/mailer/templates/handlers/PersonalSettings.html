@@ -1,0 +1,26 @@
+<form id="mailer-personal-settings" method="post" action="{$wa_backend_url}mailer/?module=personal&action=settingsSave&theme_id={$theme_id}">
+{foreach $files as $f}
+    <div>
+        <b>{$f.id}</b><br>
+        <textarea style="width:90%; height:200px;" name="files[{$f.id}]">{$f.content|escape}</textarea>
+    </div>
+    <br>
+{/foreach}
+    <input type="submit" value="[`Save`]">
+    <i class="icon16 loading" style="display: none;"></i>
+    <span class="save-msg-icon" style="display: none;"><i class="icon16 yes after-button"></i>[`Saved`]</span>
+</form>
+
+<script>
+    $('#mailer-personal-settings').submit(function () {
+        var f = $(this),
+            $saved_msg = f.find('.save-msg-icon'),
+            $loading = f.find('.loading');
+        $loading.show();
+        $.post(f.attr('action'), f.serialize(), function () {
+            $loading.hide();
+            $saved_msg.fadeIn( 500 ).delay( 500).fadeOut( 500 );
+        }, 'json');
+        return false;
+    });
+</script>

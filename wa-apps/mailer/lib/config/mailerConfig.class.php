@@ -40,6 +40,19 @@ class mailerConfig extends waAppConfig
         return parent::isIgnoreFile($f) || $f === 'swift';
     }
 
+    public function checkUpdates()
+    {
+        try {
+            $app_settings_model = new waAppSettingsModel();
+            $time = $app_settings_model->get($this->application, 'update_time');
+            if ($time == 'Array') {
+                $app_settings_model->set($this->application, 'update_time', 1366642583);
+            }
+        } catch (waDbException $e) {
+        }
+        parent::checkUpdates();
+    }
+
     public function getBounceTypes()
     {
         $result = $this->getOption('bounce_types');

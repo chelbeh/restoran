@@ -1,11 +1,11 @@
 <?php
 
 $tm = new mailerTemplateModel();
-foreach($tm->getTemplates() as $t) {
+foreach($tm->getTemplates() as $template) {
     $count = null;
-    $body = str_replace(array('%7B', '%24', '%7D'), array('{', '$', '}'), $t['body'], $count);
+    $body = str_replace(array('%7B', '%24', '%7D'), array('{', '$', '}'), $template['body'], $count);
     if ($count > 0) {
-        $tm->updateById($t['id'], array(
+        $tm->updateById($template['id'], array(
             'body' => $body,
         ));
     }

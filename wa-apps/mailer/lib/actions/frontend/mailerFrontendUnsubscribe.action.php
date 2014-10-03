@@ -11,76 +11,75 @@ class mailerFrontendUnsubscribeAction extends waViewAction
         if (!$hash) {
             $hash = waRequest::param('hash');
         }
-        $log_id = substr($hash, 16, -16);
 
-        // When log_id not specified, unsubscribe by email, if present
-        if (!$log_id) {
-            $email = waRequest::get('email');
-            if (!$email) {
-                $email = waRequest::param('email');
-            }
-            if (!$email) {
+        $log_id = substr($hash, 16, -16);
+        // getting id in message_log table
+        $mlm = new mailerMessageLogModel();
+        $log = $mlm->getById($log_id);
+        $email = waRequest::get('email');
+        if (!$email) {
+            $email = waRequest::param('email');
+        }
+
+        if ((!$log_id || !$log) && $email) { // if no hash specified - unsubscribe by email if passed (user must signin before)
+            $this->unsubscribeByEmail($email);
+        }
+        elseif ($log)  { // if we have hash and record in DB then autoauth user
+            wa()->getAuth()->auth(array('id'=>$log['contact_id']));
+
+            if (!$log || $hash !== mailerMessage::getUnsubscribeHash($log)) {
                 throw new waException('Page not found', 404);
             }
 
-            $this->unsubscribeByEmail($email);
-            $this->view->assign('email', $email);
-            return;
-        }
+            $message_model = new mailerMessageModel();
+            $message = $message_model->getById($log['message_id']);
 
-        $mailer_log_model = new mailerMessageLogModel();
-        $log = $mailer_log_model->getById($log_id);
-        if (!$log || $hash !== mailerMessage::getUnsubscribeHash($log)) {
-            throw new waException('Page not found', 404);
-        }
+            $list_id = waRequest::get('id');
+            if ($list_id === null) {
+                $list_id = $message['list_id'];
+            }
 
-        $message_model = new mailerMessageModel();
-        $message = $message_model->getById($log['message_id']);
+            // Add email to mailer_unsubscriber
+            $unsubscribe_model = new mailerUnsubscriberModel();
+            if (!$list_id) {
+                // list_id == 0 means: all lists
+                $unsubscribe_model->deleteByField('email', $log['email']);
+            }
+            $unsubscribe_model->insert(array(
+                    'email' => $log['email'],
+                    'list_id' => $list_id,
+                    'datetime' => date('Y-m-d H:i:s'),
+                    'message_id' => $log['message_id'],
+                ), 2);
 
-        $list_id = waRequest::get('id');
-        if ($list_id === null) {
-            $list_id = $message['list_id'];
-        }
+            // Remove email from mailer_subscriber
+            $subscribe_model = new mailerSubscriberModel();
+            if ($list_id) {
+                $subscribe_model->deleteForUnsubscribe($log['contact_id'], $list_id);
+            } else {
+                $subscribe_model->deleteForUnsubscribe($log['contact_id']);
+            }
 
-        // Add email to mailer_unsubscriber
-        $unsubscribe_model = new mailerUnsubscriberModel();
-        if (!$list_id) {
-            // list_id == 0 means: all lists
-            $unsubscribe_model->deleteByField('email', $log['email']);
-        }
-        $unsubscribe_model->insert(array(
-            'email' => $log['email'],
-            'list_id' => $list_id,
-            'datetime' => date('Y-m-d H:i:s'),
-            'message_id' => $log['message_id'],
-        ), 2);
+            // Update campaign statistics
+            $mlm->updateById($log_id, array(
+                    'status' => mailerMessageLogModel::STATUS_UNSUBSCRIBED,
+                ));
 
-        // Remove email from mailer_subscriber
-        $subscribe_model = new mailerSubscriberModel();
-        if ($list_id) {
-            $subscribe_model->deleteByField(array(
-                'contact_id' => $log['contact_id'],
-                'list_id' => $list_id
-            ));
+            // Add to wa_log
+            $this->log('unsubscribe', 1, $log['contact_id'], 'list:'.$list_id.";message:".$message['id']);
         } else {
-            $subscribe_model->deleteByField('contact_id', $log['contact_id']);
+
         }
+        $this->redirect(wa()->getRouteUrl('mailer/frontend/mySubscriptions/'));
 
-        // Update campaign statistics
-        $mailer_log_model->updateById($log_id, array(
-            'status' => mailerMessageLogModel::STATUS_UNSUBSCRIBED,
-        ));
-
-        // Add to wa_log
-        $this->log('unsubscribe', 1, $log['contact_id'], 'list:'.$list_id.";message:".$message['id']);
-
-        // Prepare view
-        $this->view->assign('email', $log['email']);
+        return;
     }
 
     protected function unsubscribeByEmail($email) {
         // Add email to mailer_unsubscriber
         $unsubscribe_model = new mailerUnsubscriberModel();
+        $ce = new waContactEmailsModel();
+        $ms = new mailerSubscriberModel();
         $unsubscribe_model->deleteByField('email', $email);
         $unsubscribe_model->insert(array(
             'email' => $email,
@@ -93,6 +92,13 @@ class mailerFrontendUnsubscribeAction extends waViewAction
         $subscribe_model = new mailerSubscriberModel();
         $subscribe_model->deleteByField('email', $email);
 
+        $email_id = $ce->getByField(array(
+                'email' => $email
+            ));
+        if ($email_id) {
+            // Remove email from mailer_subscriber
+            $ms->deleteByField('contact_email_id', $email_id['id']);
+        }
         // Add to wa_log
         $this->log('unsubscribe', 1, 0);
     }

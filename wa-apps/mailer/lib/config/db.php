@@ -13,15 +13,26 @@ return array(
         'name' => array('varchar', 255, 'null' => 0),
         'create_datetime' => array('datetime', 'null' => 0),
         'create_contact_id' => array('int', 11, 'null' => 0),
-        'list_id' => array('int', 11, 'null' => 0),
         'locale' => array('varchar', 5),
-        'confirmation' => array('tinyint', 1, 'null' => 0, 'default' => '0'),
-        'confirmation_sender_id' => array('int', 11, 'null' => 0, 'default' => '0'),
-        'confirmation_subject' => array('varchar', 255),
-        'confirmation_body' => array('text'),
-        'captcha' => array('tinyint', 1, 'null' => 0, 'default' => '0'),
+        'status' => array('tinyint', 1, 'unsigned' => 1, 'null' => 0, 'default' => '0'),
         ':keys' => array(
             'PRIMARY' => 'id',
+        ),
+    ),
+    'mailer_form_params' => array(
+        'form_id' => array('int', 11, 'null' => 0),
+        'name' => array('varchar', 255, 'null' => 0),
+        'value' => array('text', 'null' => 0),
+        ':keys' => array(
+            'PRIMARY' => array('form_id', 'name'),
+        ),
+    ),
+    'mailer_form_subscribe_lists' => array(
+        'form_id' => array('int', 11, 'null' => 0),
+        'list_id' => array('int', 11, 'null' => 0),
+        ':keys' => array(
+            'PRIMARY' => array('form_id', 'list_id'),
+            'list_id_idx' => 'list_id',
         ),
     ),
     'mailer_message' => array(
@@ -132,11 +143,21 @@ return array(
         'contact_id' => array('int', 11, 'null' => 0),
         'list_id' => array('int', 11, 'null' => 0),
         'datetime' => array('datetime', 'null' => 0),
-        'email' => array('varchar', 255, 'null' => 0),
+        'contact_email_id' => array('int', 11, 'unsigned' => 1, 'null' => 0, 'default' => '0'),
         ':keys' => array(
-            'PRIMARY' => array('list_id', 'contact_id', 'email'),
+            'PRIMARY' => array('list_id', 'contact_id', 'contact_email_id'),
             'contact_id' => 'contact_id',
-            'email' => 'email',
+            'contact_email_id' => 'contact_email_id',
+        ),
+    ),
+    'mailer_subscriber_temp' => array(
+        'id' => array('int', 11, 'null' => 0, 'autoincrement' => 1),
+        'hash' => array('varchar', 100, 'null' => 0, 'default' => ''),
+        'data' => array('text', 'null' => 0),
+        'create_datetime' => array('datetime', 'null' => 0),
+        ':keys' => array(
+            'PRIMARY' => 'id',
+            'hash' => 'hash',
         ),
     ),
     'mailer_unsubscriber' => array(

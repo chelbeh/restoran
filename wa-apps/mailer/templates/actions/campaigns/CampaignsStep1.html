@@ -1,5 +1,3 @@
-{if $lang!='en'}<script src="{$wa_url}wa-content/js/elrte/i18n/elrte.{$lang}.js"></script>{/if}
-
 {if $campaign.id}
     {include file="templates/actions/campaigns/CampaignsSidebar.html"}
 {else}
@@ -15,52 +13,48 @@
 
 <div class="content right200px"><div class="shadowed m-editor" style="margin-bottom:0">
 <div class="m-envelope-stripes-1"><div class="m-envelope-stripes-2">
-
+<div class="block m-core-header"></div>
 <form id="form-campaign" action="?module=campaigns&action=save" method="post">
+    {if !empty($campaign.id)}
+    <ul class="m-compose-navigation tabs">
+        <li class="m-first-step selected"><a href="#/campaigns/letter/{$campaign.id}/">[`Compose letter`]</a></li>
+        <li class="m-second-step"><a href="#/campaigns/recipients/{$campaign.id}/">[`Choose recipients`]</a></li>
+        <li class="m-third-step"><a id="right-sidebar-send-link" href="#/campaigns/send/{$campaign.id}/">[`Check and send`]</a></li>
+    </ul>
+    {else}
+    <ul class="m-compose-navigation tabs">
+        <li class="m-first-step selected"><a href="javascript:void(0)">[`Compose letter`]</a></li>
+        <li class="m-second-step m-disabled"><a href="javascript:void(0)">[`Choose recipients`]</a></li>
+        <li class="m-third-step m-disabled"><a href="javascript:void(0)">[`Check and send`]</a></li>
+    </ul>
+    {/if}
 
-    <div class="block double-padded">
-
-        {if !empty($campaign.id)}
-            <ul class="m-compose-navigation">
-                <li class="m-first-step m-current"><a href="#/campaigns/letter/{$campaign.id}/"><span>[`Compose`]</span></a></li>
-                <li class="m-divider"></li>
-                <li>
-                    <a href="#/campaigns/recipients/{$campaign.id}/"><span><u>[`Recipients`]</u></span></a><span id="right-sidebar-recipients-number" class="hint"><i class="icon16 loading"></i></span></li>
-                <li class="m-divider"></li>
-                <li><a id="right-sidebar-send-link" href="#/campaigns/send/{$campaign.id}/"><span><u>[`Send`]</u></span></a></li>
-            </ul>
-        {else}
-            <ul class="m-compose-navigation">
-                <li class="m-first-step m-current"><a href="javascript:void(0)"><span>[`Compose`]</span></a></li>
-                <li class="m-divider"></li>
-                <li class="m-disabled"><a href="javascript:void(0)"><span>[`Recipients`]</span></a></li>
-                <li class="m-divider"></li>
-                <li class="m-disabled"><a href="javascript:void(0)"><span>[`Send`]</span></a></li>
-            </ul>
-        {/if}
+    <div class="block campaign-header tab-content">
+        <div class="block fields m-subject">
+            <h1><input id="message-subject" type="text" name="data[subject]" value="{$campaign.subject|escape}" placeholder="[`type a subject of your message`]"></h1>
+        </div>
 
         <input type="hidden" name="id" value="{$campaign.id}">
-
-        <input id="message-subject" type="text" name="data[subject]" value="{$campaign.subject|escape}" placeholder="[`&lt;type a subject of your message&gt;`]" class="m-subject">
     </div>
 
-    <div class="m-editor wysiwyg-html clear-both">
+    <div class="m-editor wysiwyg-html clear-both wa-editor-core-wrapper">
 
-        <ul class="mode-toggle">
+        <ul class="mode-toggle wa-editor-wysiwyg-html-toggle">
             <li class="selected wysiwyg toolbar-bg">
-                <a href="javascript:void(0)">[`Design editor`]</a>
+                <a class="wysiwyg" href="javascript:void(0)">[`Design editor`]</a>
             </li>
             <li>
-                <a href="javascript:void(0)">[`HTML`]</a>
+                <a class="html" href="javascript:void(0)">HTML</a>
             </li>
             {if $campaign.id}
-                <li class="plain-text">
-                    <a href="javascript:void(0)">[`Plain-text`]</a>
-                </li>
+            <li>
+                <a class="plain-text" href="javascript:void(0)">[`Plain-text`]</a>
+            </li>
             {/if}
         </ul>
 
         <textarea id="message-body" name="data[body]">{$campaign.body|escape}</textarea>
+        <div class="plain-text-preview"><textarea class="padded preview" disabled></textarea></div>
     </div>
 
     <div class="block double-padded" id="editor-step-1-buttons">
@@ -74,14 +68,27 @@
 </div></div>{* div.m-envelope-stripes-1, div.m-envelope-stripes-2 *}
 </div></div>{* div.content.right200px, div.shadowed.m-editor *}
 
-<script>(function() { "use strict";
+<script>
+var wa_url = "{$wa_url}";
+var wa_app = "{$wa->app()}";
+
+(function() { "use strict";
     var form = $('#form-campaign');
     var submit_btn = form.find("input:submit");
     var textarea = $("#message-body");
-    //var elrte = null;
-    var editors = $.wa.mailer.initWYSIWYG(textarea{if !empty($campaign.id)}, {$campaign.id}{/if});
-    var elrte = editors[0], codemirror = editors[1];
-    $.wa.mailer.autoresizeWYSIWYG(form.find('.workzone'));
+    var $plain_text = $('.plain-text-preview');
+    var $btns_replacement = $('<div class="button-replacement italic">'+
+            '[`This plain-text version of your message is automatically created from HTML version and displayed if recipients have disabled HTML view in their email programs.`]'+
+            '</div>');
+//    var $btns = $('#editor-step-1-buttons');
+
+    $btns_replacement.hide().insertBefore(submit_btn.parent());
+
+    var min_h = 200;
+
+    $plain_text.hide();
+
+    textarea = $.wa.mailer.initWYSIWYG(textarea, submit_btn, min_h, "{waRequest::cookie('_csrf', '')}", "{$lang}");
 
     var original_subject = $('#message-subject').val();
 
@@ -92,12 +99,7 @@
             return false;
         }
 
-        if (elrte && form.find('.workzone > iframe').is(':visible')) {
-            // WYSIWYG tab is currently selected: update value in textarea
-            textarea.elrte('updateSource');
-        } else if (codemirror && form.find('.workzone > .CodeMirror').is(':visible')) {
-            textarea.val(codemirror.getValue());
-        }
+        textarea.waEditor('sync');
         if ($.trim(textarea.val()) && $('#message-subject').val()) {
             $('#right-sidebar-letter-hint').hide();
         } else {
@@ -121,8 +123,32 @@
         });
     });
 
-    form.find('.mode-toggle .plain-text a').click(function() {
-        form.submit();
+    form.find('.mode-toggle a').on('click', function(){
+        $.wa.mailer.resizeWYSIWYG(min_h, $.wa.mailer.step1_random, null, textarea);
+        if (!$(this).hasClass('plain-text')) {
+            $plain_text.hide();
+            submit_btn.parent().show();
+            $btns_replacement.hide();
+            var $li = $(this).closest('li');
+            $li.siblings('.plain-text').removeClass('selected');
+        }
+    });
+    form.find('.mode-toggle .plain-text').on('click', function() {
+        $plain_text.show();
+        var htmlText = textarea.waEditor('get'),
+            $li = $(this).closest('li');
+        $li.addClass('selected')
+                .siblings().removeClass('selected');
+
+        submit_btn.parent().hide();
+        $btns_replacement.show();
+        $('.m-editor').find('.redactor_box, .ace').hide();
+        // Fetch plain-text version from server
+        $plain_text.prepend('<i class="icon16 loading after-button"></i>');
+        $.post('?module=campaigns&action=getPlainText', { html: htmlText }, function(r) {
+            $plain_text.find('textarea').val(r.data).siblings('.loading').remove();
+            form.submit();
+        }, 'json');
     });
 
     // Save on Ctrl+S, or Cmd+S
@@ -159,24 +185,22 @@
             event.preventDefault();
             return false;
         });
-        if (elrte) {
-            $(elrte.iframe).contents().keydown(h);
-        }
-
-        // Confirmation before user leaves page
-        var h2;
-        $(window).on('wa.before_dispatched', h2 = function(e) {
-            if (submit_btn.hasClass('yellow') && form.closest('html').length) {
-                if (!confirm("[`Unsaved changes will be lost if you leave this page now. Are you sure?`]")) {
-                    e.preventDefault();
-                    return false;
-                }
-            }
-            $(window).off('wa.before_dispatched', h2);
-            $(document).off('keydown', h);
-            return true;
-        });
     })();
+
+    // Confirmation before user leaves page
+    var linksNotModeToggle = $('a:not(.wa-editor-core-wrapper a)');
+    var askConfirmation = function(event) {
+        if (submit_btn.hasClass('yellow') && form.closest('html').length) {
+            if (!confirm("[`Unsaved changes will be lost if you leave this page now. Are you sure?`]")) {
+                event.preventDefault();
+                return false;
+            }
+            else {
+                linksNotModeToggle.off('click', askConfirmation);
+            }
+        }
+    };
+    linksNotModeToggle.on('click', function(e) { askConfirmation(e); });
 
     {if empty($campaign.subject)}
         $('#message-subject').focus();
@@ -195,5 +219,7 @@
             window.location.hash = '#/campaigns/letter/{$campaign.id}/';
         }
     {/if}
+
+    $.wa.mailer.setTitle();
 })();</script>
 

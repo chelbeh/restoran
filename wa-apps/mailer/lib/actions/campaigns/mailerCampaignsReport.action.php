@@ -21,6 +21,9 @@ class mailerCampaignsReportAction extends waViewAction
         if ($campaign['status'] <= 0) {
             throw new waException('Unable to show report for a message draft.', 404);
         }
+        if ($campaign['status'] == mailerMessageModel::STATUS_PENDING) {
+            throw new waException('Unable to show report for a pending message.', 404);
+        }
         if ($campaign['status'] == mailerMessageModel::STATUS_CONTACTS) {
             // Something bad must have happened during initial sending phase
             // (address preparation).
@@ -44,6 +47,8 @@ class mailerCampaignsReportAction extends waViewAction
         // Total number of recipients
         $lm = new mailerMessageLogModel();
         $total_recipients = $lm->countByField('message_id', $campaign_id);
+
+        $message_start = $lm->getMessageStart($campaign_id);
 
         // Recipients stats for pie graph
         $stats = $this->getStats($campaign_id);
@@ -78,7 +83,7 @@ class mailerCampaignsReportAction extends waViewAction
             }
         }
 
-        $this->view->assign('recipient_criteria', $this->getRecipients($campaign));
+        $this->view->assign('recipient_criterias', mailerHelper::getRecipients($campaign['id']));
         $this->view->assign('allow_return_path_edit', $allow_return_path_edit);
         $this->view->assign('check_return_path', $check_return_path);
         $this->view->assign('return_path_error', $return_path_error);
@@ -87,6 +92,8 @@ class mailerCampaignsReportAction extends waViewAction
         $this->view->assign('campaign', $campaign);
         $this->view->assign('params', $params);
         $this->view->assign('stats', $stats);
+        $this->view->assign('message_start_date', $message_start);
+        $this->view->assign('message_written', trim($campaign['body']) && trim($campaign['subject']));
 
         mailerHelper::assignCampaignSidebarVars($this->view, $campaign, $params);
     }
@@ -105,35 +112,38 @@ class mailerCampaignsReportAction extends waViewAction
         $stats['bounced_num']       = $s[-1] + $s[-2];
         $stats['exceptions_num']    = $s[-3] + $s[-4];
         $stats['not_sent_num']      = $s[0];
-        $stats['unknown_num']       = $s[2] + $s[1];
-        $stats['opened_num']        = $s[3];
+        $stats['unknown_num']       = $s[1];
+        $stats['opened_num']        = $s[4] + $s[3] + $s[2];
         $stats['unsubscribed_num']  = $s[5];
+        $stats['actualy_sent_num']  = $s[-2] + $s[-1] + $s[1] + $s[2] + $s[3] + $s[4] + $s[5];
 
         if ($stats['recipients_num'] - $stats['exceptions_num'] > 0) {
-            $stats['percent_complete_precise'] = ($stats['recipients_num'] - $stats['exceptions_num'] - $stats['not_sent_num'])*100.0 / ($stats['recipients_num'] - $stats['exceptions_num']);
+            $stats['percent_complete_precise'] = ($stats['actualy_sent_num'])*100.0 / ($stats['recipients_num'] - $stats['exceptions_num']);
         } else {
             $stats['percent_complete_precise'] = 100;
         }
         if ($stats['recipients_num'] > 0) {
-            $stats['percent_complete_precise_all'] = ($stats['recipients_num'] - $stats['not_sent_num'])*100.0 / $stats['recipients_num'];
+            $stats['percent_complete_precise_all'] = ($stats['actualy_sent_num'])*100.0 / $stats['recipients_num'];
         } else {
             $stats['percent_complete_precise_all'] = 100;
         }
 
-        if ($stats['recipients_num'] > 0) {
-            list($stats['exceptions_percent'], $stats['exceptions_percent_formatted'])     = self::formatInt($stats['exceptions_num'] * 100 / $stats['recipients_num']);
-            list($stats['bounced_percent'], $stats['bounced_percent_formatted'])           = self::formatInt($stats['bounced_num'] * 100 / $stats['recipients_num']);
-            list($stats['not_sent_percent'], $stats['not_sent_percent_formatted'])         = self::formatInt($stats['not_sent_num'] * 100 / $stats['recipients_num']);
-            list($stats['unknown_percent'], $stats['unknown_percent_formatted'])           = self::formatInt($stats['unknown_num'] * 100 / $stats['recipients_num']);
-            list($stats['opened_percent'], $stats['opened_percent_formatted'])             = self::formatInt($stats['opened_num'] * 100 / $stats['recipients_num']);
-            list($stats['unsubscribed_percent'], $stats['unsubscribed_percent_formatted']) = self::formatInt($stats['unsubscribed_num'] * 100 / $stats['recipients_num']);
+        if ($stats['actualy_sent_num'] > 0) {
+            list($stats['exceptions_percent'], $stats['exceptions_percent_formatted'])     = self::formatInt($stats['exceptions_num'] * 100 / $stats['actualy_sent_num']);
+            list($stats['bounced_percent'], $stats['bounced_percent_formatted'])           = self::formatInt($stats['bounced_num'] * 100 / $stats['actualy_sent_num']);
+            list($stats['not_sent_percent'], $stats['not_sent_percent_formatted'])         = self::formatInt($stats['not_sent_num'] * 100 / $stats['actualy_sent_num']);
+            list($stats['unknown_percent'], $stats['unknown_percent_formatted'])           = self::formatInt($stats['unknown_num'] * 100 / $stats['actualy_sent_num']);
+            list($stats['opened_percent'], $stats['opened_percent_formatted'])             = self::formatInt($stats['opened_num'] * 100 / $stats['actualy_sent_num']);
+            list($stats['unsubscribed_percent'], $stats['unsubscribed_percent_formatted']) = self::formatInt($stats['unsubscribed_num'] * 100 / $stats['actualy_sent_num']);
+            list($stats['actualy_sent_percent'], $stats['actualy_sent_percent_formatted']) = self::formatInt($stats['actualy_sent_num'] * 100 / $stats['actualy_sent_num']);
         } else {
-            $stats['exceptions_percent_formatted'] = $stats['exceptions_percent']      = 0;
-            $stats['bounced_percent_formatted'] = $stats['bounced_percent']            = 0;
-            $stats['not_sent_percent_formatted']  = $stats['not_sent_percent']         = 0;
-            $stats['unknown_percent_formatted']  = $stats['unknown_percent']           = 100;
-            $stats['opened_percent_formatted']  = $stats['opened_percent']             = 0;
-            $stats['unsubscribed_percent_formatted']  = $stats['unsubscribed_percent'] = 0;
+            $stats['exceptions_percent_formatted']      = $stats['exceptions_percent']      = 0;
+            $stats['bounced_percent_formatted']         = $stats['bounced_percent']         = 0;
+            $stats['not_sent_percent_formatted']        = $stats['not_sent_percent']        = 0;
+            $stats['unknown_percent_formatted']         = $stats['unknown_percent']         = 100;
+            $stats['opened_percent_formatted']          = $stats['opened_percent']          = 0;
+            $stats['unsubscribed_percent_formatted']    = $stats['unsubscribed_percent']    = 0;
+            $stats['actualy_sent_percent_formatted']    = $stats['actualy_sent_percent']    = 0;
         }
 
         return $stats;
@@ -193,7 +203,7 @@ class mailerCampaignsReportAction extends waViewAction
             $end_ts = strtotime($campaign['finished_datetime']);
         } else {
             $end_ts = time();
-            if ($stats['recipients_num'] - $stats['exceptions_num'] >= 50 && $end_ts - $start_ts >= 20 && $stats['percent_complete_precise'] > 5) {
+            if ($stats['actualy_sent_num'] >= 50 && $end_ts - $start_ts >= 20 && $stats['percent_complete_precise'] > 5) {
                 $campaign['estimated_finish_datetime'] = round(time() + (100 - $stats['percent_complete_precise'])*($end_ts - $start_ts)/$stats['percent_complete_precise']);
             }
         }

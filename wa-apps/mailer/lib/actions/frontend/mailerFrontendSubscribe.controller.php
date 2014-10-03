@@ -1,206 +1,127 @@
 <?php
 
-class mailerFrontendSubscribeController extends waViewController
+class mailerFrontendSubscribeController extends waJsonController
 {
     public function execute()
     {
-        $name = waRequest::post('name');
-        $email = waRequest::post('email');
-        $locale = waRequest::post('locale');
-        $charset = waRequest::post('charset');
-
-        if (!$locale || !waLocale::getInfo($locale)) {
-            $locale = wa()->getLocale();
+        $subscriber = waRequest::post('subscriber');
+        if (!$subscriber) { // else subscribe by passed email and name
+            $subscriber['email'] = waRequest::request('email');
+            $subscriber['name'] = waRequest::request('name', '');
         }
+
+        $lists = waRequest::post('lists');
+
+        if ( waRequest::post('captcha') && !wa()->getCaptcha()->isValid()) {
+            $this->errors[_w('Incorrect data')][] ='captcha' ;
+        }
+
+        $form_id = waRequest::post('form_id');
+        $form_model = new mailerFormModel();
+
+        if ($form_id && $form = $form_model->getById($form_id)) {
+            $mfp = new mailerFormParamsModel();
+            $form['params'] = $mfp->get($form_id);
+
+            if (!$lists && isset($form['params']['show_subscription_list'])) {
+                $this->errors[_w('Incorrect data')][] = 'lists[]';
+            }
+        }
+
+//        $locale = waRequest::post('locale');
+        $charset = waRequest::post('charset');
+//        if (!$locale || !waLocale::getInfo($locale)) {
+//            $locale = wa()->getLocale();
+//        }
 
         // Convert name and email to UTF-8
         if ($charset && $charset != 'utf8') {
-            if ( ( $t = @iconv($charset, 'utf8//IGNORE', $name))) {
-                $name = $t;
+            if ( ( $t = @iconv($charset, 'utf8//IGNORE', $subscriber['name']))) {
+                $subscriber['name'] = $t;
             }
-            if ( ( $t = @iconv($charset, 'utf8//IGNORE', $email))) {
-                $email = $t;
+            if ( ( $t = @iconv($charset, 'utf8//IGNORE', $subscriber['email']))) {
+                $subscriber['email'] = $t;
             }
         }
 
         // Validate email
-        $email = trim($email);
-        if (!$email) {
-            throw new waException('No email to subscribe.', 404);
-        }
+        $subscriber['email'] = trim($subscriber['email']);
         $ev = new waEmailValidator();
-        if (!$ev->isValid($email)) {
-            throw new waException('Email is invalid.', 404);
-        }
 
-        // Get contact_id by email
-        $cem = new waContactEmailsModel();
-        $contact_id = $cem->getContactIdByNameEmail($name, $email);
-        if (!$contact_id) {
-            $contact_id = $cem->getContactIdByEmail($email);
+        if (!$subscriber['email']) {
+            $this->errors[_w('Required fields')][] ='subscriber[email]' ;
         }
-
-        // Create new contact if no id found
-        if (!$contact_id) {
-            $contact = new waContact();
-            $contact['locale'] = $locale;
-            $contact['email'] = $email;
-            if ($name) {
-                $contact['name'] = $name;
+        else {
+            if (!$ev->isValid($subscriber['email'])) {
+                $this->errors[_w('Invalid email format')][] ='subscriber[email]' ;
             }
-            $contact['create_method'] = 'subscriber';
-            if ($contact->save()) {
-                throw new waException('Unable to create contact.', 500);
-            }
-            $contact_id = $contact->getId();
         }
 
-        // Remove contact from unsubscribers
-        $um = new mailerUnsubscriberModel();
-        $um->deleteByField(array(
-            'email' => $email,
-            'list_id' => array(0, 1),
-        ));
-
-        // Subscribe contact to default list (id=1)
-        $sm = new mailerSubscriberModel();
-        $sm->add($contact_id, 1, $email);
-        echo $contact_id;
-        exit;
-    }
-
-    //
-    // Since we have no form or list management in current version,
-    // some functionality is disabled.
-    // !!! Old code below this line may be of some use in future.
-    //
-
-    public function old__execute()
-    {
-        if (waRequest::get('confirm')) {
-            $this->confirm();
-        } else {
-            $this->subscribe();
-        }
-    }
-
-    protected function subscribe()
-    {
-        $id = waRequest::get('form');
-        $form_model = new mailerFormModel();
-        $form = $form_model->getById($id);
-
-        $name = waRequest::post('name');
-        $email = waRequest::post('email');
-
-        $charset = waRequest::post('charset');
-        if ($charset && $charset != 'utf8') {
-            $name = iconv($charset, 'utf8', $name);
-        }
-
-        if (!$form || !$email) {
-            throw new waException("Page not found", 404);
-        }
-
-        $contact_emails_model = new waContactEmailsModel();
-
-        $email_field = waContactFields::get('email');
-        if ($email_field->isUnique()) {
-            $contact_id = $contact_emails_model->getContactIdByEmail($email);
-        } else {
-            $contact_id = $contact_emails_model->getContactIdByNameEmail($name, $email);
-        }
-        if (!$contact_id) {
-            $contact_id = $this->addContact($name, $email, $form);
-        }
-        if ($contact_id) {
-            if ($form['list_id']) {
-                if ($form['confirmation']) {
-                    $this->sendConfirmation($contact_id, $email, $name, $form);
+        if (!$this->errors) {
+            $ms = new mailerSubscriberModel();
+            if (empty($form)) { // subscribe to All subscribers
+                if ($contact_id = $ms->addSubscriber(null, $subscriber, array(0))) {
+                    $this->response = $contact_id;
                 } else {
-                    $this->addSubscriber($contact_id, $form);
+                    $this->errors = "error while susbscribing";
+                }
+                return;
+            } else {
+                if (isset($form['params']['confirm_mail'])) {
+                    $this->confirmationTrigger($form, $subscriber, $lists);
+                } else {
+                    $ms->addSubscriber($form['id'], $subscriber, $lists);
+                }
+
+                if ($form['params']['after_submit'] == 'redirect') {
+                    $this->response = array($form['params']['after_submit'] => $form['params']['redirect_after_submit']);
+                } else {
+                    // doesn't contains HTML - keep new lines
+                    if($form['params']['html_after_submit'] == strip_tags($form['params']['html_after_submit'])) {
+                        $form['params']['html_after_submit'] = nl2br($form['params']['html_after_submit']);
+                    }
+                    $this->response = array($form['params']['after_submit'] => $form['params']['html_after_submit']);
                 }
             }
         }
     }
 
-    protected function confirm()
+    protected function confirmationTrigger($form, $subscriber, $lists)
     {
-        $hash = waRequest::get('confirm');
-        $temp = explode('-', substr($hash, 16, -16));
-        if (count($temp) == 2) {
-            if ($hash === $this->getHash($temp[0], $temp[1])) {
-                $this->addSubscriber($temp[0], $temp[1]);
-                echo "Теперь вы подписаны на рассылку!";
-                return true;
-            }
-        }
-        throw new waException("Page not found", 404);
-    }
+        // generate link with hash
+        $confirmation_hash = hash('md5', time().'QuKLH:sh8o0gbksdblg`;ogZ$/.`+'.mt_rand().mt_rand().mt_rand());
+        $confirm_url = wa()->getRouteUrl('mailer/frontend/confirm/hash', array('hash'=>$confirmation_hash), true);
 
-    protected function addContact($name, $email, $form)
-    {
-        $contact = new waContact();
-        if ($name) {
-            $contact['name'] = $name;
+        // Validate email
+        $ev = new waEmailValidator();
+        // default sender
+        if (!empty($form['params']['confirm_mail_from']) && $ev->isValid($form['params']['confirm_mail_from'])) {
+            $from_name = $from_email = trim($form['params']['confirm_mail_from']);
         }
-        if ($form['locale']) {
-            $contact['locale'] = $form['locale'];
-        }
-        $contact['email'] = $email;
-        $contact['create_method'] = 'subscriber';
-        if (!$contact->save()) {
-            return $contact->getId();
-        }
-        return false;
-    }
-
-    protected function addSubscriber($contact_id, $list_id)
-    {
-        $subscriber_model = new mailerSubscriberModel();
-        $subscriber_model->add($contact_id, $list_id);
-    }
-
-    protected function sendConfirmation($contact_id, $email, $name, $form)
-    {
-        $hash = $this->getHash($contact_id, $form['list_id']);
-        $confirm_url = wa()->getRouteUrl('mailer/frontend/subscribe', true).'?confirm='.$hash;
-
-        if ($form['confirmation_sender_id']) {
-            $sender_model = new mailerSenderModel();
-            $sender = $sender_model->getById($form['confirmation_sender_id']);
-            $from_name = $sender['name'];
-            $from_email = $sender['email'];
-        } else {
-            $app_settings_model = new waAppSettingsModel();
-            $from_name = $app_settings_model->get('webasyst', 'name');
-            $from_email = $app_settings_model->get('webasyst', 'email');
+        else {
+            $default = waMail::getDefaultFrom();
+            $from_name = reset($default);
+            $from_email = key($default);
         }
 
         $message = new mailerSimpleMessage(array(
-            'subject' => $form['confirmation_subject'],
-            'body' => $form['confirmation_body'],
-            'from_name' => $from_name,
-            'from_email' => $from_email,
-            'sender_id' => $form['confirmation_sender_id']
+            'subject'       => trim($form['params']['confirm_mail_subject']),
+            'body'          => nl2br(trim($form['params']['confirm_mail_body'])),
+            'from_name'     => $from_name,
+            'from_email'    => $from_email,
+            'sender_id'     => 0
         ));
-        $message->send($email, $name, array(
-            '{$name}' => $name,
-            '{$confirmation_link}' => $confirm_url
-        ));
-    }
 
-    protected function getHash($contact_id, $list_id)
-    {
-        $app_settings_model = new waAppSettingsModel();
-        $salt = $app_settings_model->get('mailer', 'subscribe_salt');
-        if (!$salt) {
-            $salt = uniqid(time());
-            $app_settings_model->set('mailer', 'subscribe_salt', $salt);
-        }
-        $hash = md5($contact_id.$salt.$list_id);
-        $hash = substr($hash, 0, 16).$contact_id.'-'.$list_id.substr($hash, -16);
-        return $hash;
+        $name = isset($subscriber['name']) ? trim($subscriber['name']) : "";
+        $email = $subscriber['email'];
+
+        $message->send($email, $name, array(
+            '{SUBSCRIBER_NAME}'             => $name,
+            '{SUBSCRIPTION_CONFIRM_URL}'    => $confirm_url
+        ));
+
+        $mst = new mailerSubscriberTempModel();
+        $mst->save($confirmation_hash, array( 'form' => $form['id'], 'subscriber' => $subscriber, 'lists' => $lists ));
     }
 }
 

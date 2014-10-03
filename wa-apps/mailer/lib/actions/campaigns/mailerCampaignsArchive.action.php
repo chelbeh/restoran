@@ -112,7 +112,7 @@ class mailerCampaignsArchiveAction extends waViewAction
 
                 $messages[$message_id]['processed_num']     = $messages[$message_id]['recipients_num'] - $s[0];
                 $messages[$message_id]['exceptions_num']    = $s[-3] + $s[-4];
-                $messages[$message_id]['bounced_num']       = $s[-1] + $s[-2] + $s[-3] + $s[-4];
+                $messages[$message_id]['bounced_num']       = $s[-1] + $s[-2];
                 $messages[$message_id]['not_sent_num']      = $s[0];
                 $messages[$message_id]['sent_num']          = $messages[$message_id]['processed_num'] - $messages[$message_id]['bounced_num'];
                 $messages[$message_id]['opened_num']        = $s[4] + $s[3] + $s[2];

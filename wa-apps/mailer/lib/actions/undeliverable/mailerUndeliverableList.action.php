@@ -26,7 +26,7 @@ class mailerUndeliverableListAction extends waViewAction
         // Parameters for the list
         $search = waRequest::request('search');
         $start  = waRequest::request('start', 0, 'int');
-        $limit  = 50;
+        $limit  = waRequest::request('records', 30, 'int');;
         $order  = waRequest::request('order');
         if (!in_array($order, array('name', 'email', 'datetime', '!name', '!email', '!datetime'))) {
             $order = 'email';
@@ -47,6 +47,8 @@ class mailerUndeliverableListAction extends waViewAction
 
         $this->view->assign('list', $list);
         $this->view->assign('order', $order);
+        $this->view->assign('records', $limit);
+        $this->view->assign('start', $start);
         $this->view->assign('search_url_append', $search ? $search.'/' : '');
         $this->view->assign('search', $search);
         $this->view->assign('columns', array(

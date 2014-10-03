@@ -14,7 +14,7 @@ class mailerBackendSidebarAction extends waViewAction
 
         // List of drafts
         $mm = new mailerMessageModel();
-        $drafts = $mm->select('*')->where('is_template=0 AND status=?'.$access_sql, mailerMessageModel::STATUS_DRAFT)->order('id DESC')->fetchAll('id');
+        $drafts = $mm->select('*')->where('is_template=0 AND status IN (i:draft, i:pending)'.$access_sql, array('draft' => mailerMessageModel::STATUS_DRAFT, 'pending' => mailerMessageModel::STATUS_PENDING))->order('id DESC')->fetchAll('id');
         foreach($drafts as &$d) {
             $d['pic_src'] = '';
             if (!empty($d['create_contact_id'])) {

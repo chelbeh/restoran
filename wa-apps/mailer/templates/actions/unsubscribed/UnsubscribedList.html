@@ -23,20 +23,20 @@
         <thead><tr>
             <th class="m-first">
                 {if $order == 'email'}
-                    <a href="#/unsubscribed/{$start}/!email/{$search_url_append}">[`Email`] <i class="icon16 uarr"></i></a>
+                    <a href="#/unsubscribed/{$start}/{$records}/!email/{$search_url_append}">[`Email`] <i class="icon16 uarr"></i></a>
                 {elseif $order == '!email'}
-                    <a href="#/unsubscribed/{$start}/email/{$search_url_append}">[`Email`] <i class="icon16 darr"></i></a>
+                    <a href="#/unsubscribed/{$start}/{$records}/email/{$search_url_append}">[`Email`] <i class="icon16 darr"></i></a>
                 {else}
-                    <a href="#/unsubscribed/{$start}/email/{$search_url_append}">[`Email`]</a>
+                    <a href="#/unsubscribed/{$start}/{$records}/email/{$search_url_append}">[`Email`]</a>
                 {/if}
             </th>
             <th class="m-last">
                 {if $order == 'datetime'}
-                    <a href="#/unsubscribed/{$start}/!datetime/{$search_url_append}">[`Unsubscribe date`] <i class="icon16 uarr"></i></a>
+                    <a href="#/unsubscribed/{$start}/{$records}/!datetime/{$search_url_append}">[`Unsubscribe date`] <i class="icon16 uarr"></i></a>
                 {elseif $order == '!datetime'}
-                    <a href="#/unsubscribed/{$start}/datetime/{$search_url_append}">[`Unsubscribe date`] <i class="icon16 darr"></i></a>
+                    <a href="#/unsubscribed/{$start}/{$records}/datetime/{$search_url_append}">[`Unsubscribe date`] <i class="icon16 darr"></i></a>
                 {else}
-                    <a href="#/unsubscribed/{$start}/datetime/{$search_url_append}">[`Unsubscribe date`]</a>
+                    <a href="#/unsubscribed/{$start}/{$records}/datetime/{$search_url_append}">[`Unsubscribe date`]</a>
                 {/if}
             </th>
         </tr></thead><tbody>
@@ -47,17 +47,37 @@
             </tr>
         {/foreach}
     </tbody></table>
+
     <div class="block paging">
-        <span style="margin-right:20px;">[`Total addresses:`] {$total_rows}</span>
-        {if count($pagination) > 1}
-            {foreach $pagination as $page => $start}
-                {if $start !== false}
-                    <a{if $current_page == $page} class="selected"{/if} href="#/unsubscribed/{$start}/{$order}/{$search_url_append}">{$page}</a>
-                {else}
-                    ...
-                {/if}
+        <div class="c-page-list">
+            <span style="margin-right:20px;">[`Total addresses:`] {$total_rows}</span>
+            {if count($pagination) > 1}
+            <span>
+            {foreach $pagination as $page => $offset}
+            {if $offset !== false}
+                <a{if $current_page == $page} class="selected"{/if} href="#/unsubscribed/{$offset}/{$records}/{$order}/{$search_url_append}">{$page}</a>
+            {else}
+                ...
+            {/if}
             {/foreach}
-        {/if}
+            {if $current_page != 1}
+                <a href="#/unsubscribed/{$start-$records}/{$records}/{$order}/{$search_url_append}" class="prevnext"><i class="icon10 larr"></i> пред</a>
+            {/if}
+            {if $current_page != $page}
+                <a href="#/unsubscribed/{$start+$records}/{$records}/{$order}/{$search_url_append}" class="prevnext">след <i class="icon10 rarr"></i></a>
+            {/if}
+            </span>
+            {/if}
+        </div>
+        <div class="c-page-num">[`Show`]
+            {$records_on_page = [30, 50, 100, 200, 500]}
+            <select id="records-per-page">
+                {foreach $records_on_page as $onpage}
+                <option value="{$onpage}"{if $records==$onpage} selected="selected"{/if}>{$onpage}</option>
+                {/foreach}
+            </select> [`records`]
+        </div>
+        <div class="clear"></div>
     </div>
 {/if}
 
@@ -91,6 +111,11 @@
 </div>
 
 <script>(function() { "use strict";
+    $('#records-per-page').on('change', function(e){
+        var records = $(this).val();
+        $.storage.set('mailer/unsubscribed_records', records);
+        window.location.hash = '#/unsubscribed/0/'+records+'/{$order}/{$search_url_append}';
+    });
 
     // Click on a table row opens dialog
     var existing_dialog = null;
@@ -121,7 +146,7 @@
     var submitSearch = function() {
         var input = $(this);
         var search_string = input.val();
-        var new_hash = $.wa.mailer.cleanHash('#/unsubscribed/0/{$order}/' + encodeURIComponent(search_string));
+        var new_hash = $.wa.mailer.cleanHash('#/unsubscribed/0/{$records}/{$order}/' + encodeURIComponent(search_string));
         if ($.wa.mailer.getHash() != new_hash) {
             input.prev('.icon16').removeClass('search').addClass('loading');
             window.location.hash = new_hash;
@@ -230,5 +255,6 @@
         $('#unsubscribers-sb-link .count').html('{$total_rows}');
     {/if}
 
+    $.wa.mailer.setTitle();
 })();</script>
 

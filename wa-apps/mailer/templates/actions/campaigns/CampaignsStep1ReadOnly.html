@@ -6,8 +6,35 @@
         <a href="#/campaigns/archive/" class="no-underline"><i class="icon10 larr"></i>[`Sent`]</a>
     </div>
 
-    <div class="block double-padded">
-        <h1 style="margin:0;">
+    <ul class="m-compose-navigation tabs">
+        <li class="m-first-step selected"><a href="#/campaigns/letter/{$campaign.id}/">[`Letter`]</a></li>
+        {if $wa->mailer->isInspector() || $wa->mailer->isAuthor()}
+        {if $campaign.status == mailerMessageModel::STATUS_DRAFT }
+        {elseif $campaign.status == mailerMessageModel::STATUS_PENDING }
+        {elseif $campaign.status != mailerMessageModel::STATUS_SENT && $campaign.status != mailerMessageModel::STATUS_SENDING_ERROR}
+        <li class="m-second-step">
+            {if $wa->mailer->isAuthor()}
+            <a href="#/campaigns/report/{$campaign.id}/">
+            {/if}
+            {if $campaign.status == mailerMessageModel::STATUS_SENDING_PAUSED}
+                [`Sending report`] <span>([`Paused`] <i class="icon16 pause"></i>)</span>
+            {else}
+                [`Now sending`] <i class="icon16 loading"></i>
+            {/if}
+            {if $wa->mailer->isAuthor()}
+            </a>
+            {/if}
+        </li>
+        {else}
+        <li class="m-second-step">
+            <a href="#/campaigns/report/{$campaign.id}/" class="no-underline">[`Sending report`]</a>
+        </li>
+        {/if}
+        {/if}
+    </ul>
+
+    <div class="block double-padded tab-content">
+        <h1>
             {$campaign.subject|escape}
         </h1>
     </div>
@@ -25,9 +52,9 @@
             </li>
         </ul>
 
-        <div class="el-rte">
+        <div class="plain-text-preview">
             <div id="improvised-workzone" class="workzone">
-                <iframe id="wysiwyg-tab" frameborder="0" style="width:100%"></iframe>
+                <iframe id="wysiwyg-tab" frameborder="0" style="width:100%;min-height: 100%;"></iframe>
                 <textarea id="message-body" class="padded preview" name="data[body]" style="display:none;" disabled>{$campaign.body|escape}</textarea>
                 <div id="plain-text-preview" style="display:none;"><textarea class="padded preview" disabled></textarea></div>
             </div>
@@ -41,15 +68,26 @@
 
 <script>(function($) {
     $.wa.mailer.showLastSearchBreadcrumb({$campaign.id});
-    $.wa.mailer.autoresizeWYSIWYG($('#improvised-workzone'), 30);
-
+//    $.wa.mailer.autoresizeWYSIWYG($('#improvised-workzone'), 30);
     var textarea = $('#message-body');
     var content = textarea.val();
-    var ifrm = textarea.siblings('iframe')[0];
+    var $ifrm = textarea.siblings('iframe')
+    var ifrm = $ifrm[0];
+
+    $ifrm.on('load', function(){
+        this.style.height = this.contentWindow.document.body.scrollHeight + 'px'
+    });
+
     ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
     ifrm.document.open();
     ifrm.document.write(content);
     ifrm.document.close();
+
+    textarea.siblings('iframe').contents().find('a[href]').attr('target',"_blank");
+
+    var h = $(ifrm).height();
+    $('#plain-text-preview textarea').height(h);
+    textarea.height(h);
 
     // Switching betweeb tabs
     $('li:not(.selected) a', $('.mode-toggle')[0]).live('click', function() {
@@ -77,4 +115,6 @@
         li.addClass('selected').siblings().removeClass('selected');
     });
 
-})($);</script>
+    $.wa.mailer.setTitle();
+})($);
+</script>
