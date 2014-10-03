@@ -707,10 +707,6 @@ msgstr ""
 msgid "No contacts were merged"
 msgstr ""
 
-#: /wa-apps/contacts/lib/actions/contacts/contactsContactsMerge.controller.php:39
-msgid "were skipped because they have user accounts"
-msgstr ""
-
 #: /wa-apps/contacts/templates/actions/contacts/ContactsInfo.html:12
 msgid "of"
 msgstr ""
@@ -1599,3 +1595,9 @@ msgstr ""
 #: /wa-apps/contacts/lib/actions/contacts/contactsContactsLinks.action.php:24
 msgid "Access denied"
 msgstr ""
+
+#: /wa-apps/contacts//lib/actions/contacts/contactsContactsMerge.controller.php:39
+msgid "%d contact was skipped because they have user accounts"
+msgid_plural "%d contacts were skipped because they have user accounts"
+msgstr[0] ""
+msgstr[1] ""

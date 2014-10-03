@@ -36,7 +36,7 @@ class contactsContactsMergeController extends waJsonController
             $message = _w("No contacts were merged");
         }
         if ($merge_result['users']) {
-            $message .= '<br />'.$merge_result['users']." "._w("contact", "contacts", $merge_result['users'])._w(" were skipped because they have user accounts");
+            $message .= '<br />' . _w("%d contact was skipped because they have user accounts", "%d contacts were skipped because they have user accounts",  $merge_result['users']);
         }
         
         $this->response['merge_result'] = $merge_result;

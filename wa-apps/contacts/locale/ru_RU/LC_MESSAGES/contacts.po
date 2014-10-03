@@ -46,9 +46,6 @@ msgstr "Все контакты"
 msgid "%s of %s contacts have been merged"
 msgstr "%s из %s контактов были объединены"
 
-msgid " were skipped because they have user accounts"
-msgstr " были пропущены, потому что они являются пользователями"
-
 msgid "contact"
 msgid_plural "contacts"
 msgstr[0] "контакт"
@@ -1301,3 +1298,10 @@ msgstr ""
 #: /wa-apps/contacts/lib/actions/contacts/contactsContactsLinks.action.php:24
 msgid "Access denied"
 msgstr "Доступ запрещен"
+
+#: /wa-apps/contacts//lib/actions/contacts/contactsContactsMerge.controller.php:39
+msgid "%d contact was skipped because they have user accounts"
+msgid_plural "%d contacts were skipped because they have user accounts"
+msgstr[0] "%d контакт был пропущен, потому что он является пользователем"
+msgstr[1] "%d контакты были пропущены, потому что они являются пользователями"
+msgstr[2] "%d контактов были пропущены, потому что они являются пользователями"

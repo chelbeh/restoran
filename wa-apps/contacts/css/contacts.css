@@ -419,3 +419,5 @@ ul.v-list li { list-style: none; background: white; padding: 8px; border-top: 1p
 #list-group li { margin-left: -10px; }
 .ui-menu .ui-menu-item a { white-space: nowrap; text-overflow: ellipsis; width: 96%; overflow: hidden; }
 .max-width { width: 100%; }
+
+.c-view-settings .field { width: 80%; }
