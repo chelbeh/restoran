@@ -128,11 +128,11 @@ class mailerMessageModel extends waModel
         return array($messages, $total_rows);
     }
 
-    public function getMessageForSend()
+    public function getMessageForSend($shedule = false)
     {
+        $condition = !$shedule ? " AND send_datetime < '".date('Y-m-d H:i:s')."'" : '';
         return $this->query("SELECT * FROM ".$this->table."
                             WHERE status = ".mailerMessageModel::STATUS_SENDING." OR
-                            (status = ".mailerMessageModel::STATUS_PENDING."
-                                AND send_datetime < '".date('Y-m-d H:i:s')."')")->fetchAll('id');
+                            (status = ".mailerMessageModel::STATUS_PENDING.$condition.")")->fetchAll('id');
     }
 }

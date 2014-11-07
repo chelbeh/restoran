@@ -318,9 +318,11 @@ class webmoneyPayment extends waPayment implements waIPayment
                 /**
                  *  11.Secret Key
                  */
-                $hash_string .= $this->secret_key.';';
-                $transaction_hash = strtolower(base64_encode(md5($hash_string, true)));
+                $hash_string .= $this->secret_key;
+                $transaction_hash = base64_encode(md5($hash_string, true));
                 unset($hash_string);
+
+                $transaction_sign = isset($data['LMI_HASH']) ? $data['LMI_HASH'] : null;
 
                 break;
             case self::PROTOCOL_WEBMONEY_LEGACY:
@@ -357,14 +359,15 @@ class webmoneyPayment extends waPayment implements waIPayment
                 foreach ($fields as $field) {
                     $hash_string .= (isset($data[$field]) ? $data[$field] : '');
                 }
+
                 $transaction_hash = strtolower(md5($hash_string));
                 unset($data['LMI_SECRET_KEY']);
                 unset($hash_string);
 
+                $transaction_sign = isset($data['LMI_HASH']) ? strtolower($data['LMI_HASH']) : null;
+
                 break;
         }
-
-        $transaction_sign = isset($data['LMI_HASH']) ? strtolower($data['LMI_HASH']) : null;
 
         if (!empty($data['LMI_PREREQUEST']) || ($transaction_sign == $transaction_hash)) {
             $result = true;

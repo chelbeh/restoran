@@ -1,0 +1,16 @@
+<div class="content">
+    <div id="page" role="main">
+        {if !empty($contact)}
+            <h1>[`Thank you!`]</h1>
+            <p>[`You have successfully signed up.`]</p>
+        {else}
+            <div class="signuppage">
+                <h1>[`Sign up`]</h1>
+                {$wa->authAdapters()}
+                <div class="wa-horizontal">
+                    {$wa->signupForm($errors)}
+                </div>
+            </div>
+        {/if}
+    </div>
+</div>

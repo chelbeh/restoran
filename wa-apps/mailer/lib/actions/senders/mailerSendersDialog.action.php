@@ -19,6 +19,16 @@ class mailerSendersDialogAction extends waViewAction
             $params['type'] = 'mail';
         }
 
+        $params['ssl_is_set'] = extension_loaded('openssl');
+
+        if ($sender) {
+            $email = explode('@', $sender['email']);
+            $sender['domain'] = array_pop($email);
+            $sender['one_string_key'] = mailerHelper::getOneStringKey(ifset($params['dkim_pub_key']));
+            $params['dkim_selector'] = mailerHelper::getDkimSelector($sender['email']);
+        }
+//wa_dump($params);
+
         $this->assignSenderTypes(waSystemConfig::isDebug() || $params['type'] == 'test');
         $this->view->assign('show_delete_button', $id && $sender && $sender_model->countAll() > 1);
         $this->view->assign('sender', $sender);

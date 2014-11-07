@@ -58,7 +58,7 @@ class mailerBackendSidebarAction extends waViewAction
             $templates_count = $tm->countAll();
 
             $sm = new mailerSubscriberModel();
-            $subscribers_count = $sm->countAll();
+            $subscribers_count = $sm->countListView('');
 
             $um = new mailerUnsubscriberModel();
             $unsubscribers_count = $um->countAll();

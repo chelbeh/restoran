@@ -1,0 +1,41 @@
+<!-- TILED PHOTO LIST -->
+
+{* @event frontend_collection.%plugin_id%.thumbs_list *}
+{if !empty($frontend_collection)}{foreach $frontend_collection as $item}{if !empty($item.thumbs_list)}{$item.thumbs_list}{/if}{/foreach}{/if}
+<div class="view-thumbs row {if $wa->param('action') eq 'album'} album-float-left-view{/if}" id="photo-list">
+{foreach from=$photos item=photo}
+    <div class="col-md-3 col-sm-6{if $photo.stack_count > 0} stacked{/if}" itemscope itemtype ="http://schema.org/Photograph">
+        <div class="image image-tenth">
+            {$wa->photos->getImgHtml($photo, '600', ['itemprop' => 'image', 'class' => 'img-responsive'])}
+            <div class="corner top left">
+                {* @event prepare_photos_frontend.top_left.%plugin_id% *}
+                {foreach $photo.hooks.top_left as $plugin => $output}{$output}{/foreach}
+            </div>
+            <div class="corner top right">
+                {* @event prepare_photos_frontend.top_right.%plugin_id% *}
+                {foreach $photo.hooks.top_right as $plugin => $output}{$output}{/foreach}
+                {if $photo.stack_count > 0}<span class="indicator">{$photo.stack_count}</span>{/if}
+            </div>
+            <div class="mask">
+                <h2 itemprop="name">{$photo.name|truncate:20:"...":true}</h2>
+                {* @event prepare_photos_frontend.name.%plugin_id% *}
+                {foreach $photo.hooks.name as $plugin => $output}{$output}{/foreach}
+                {if $photo.rate > 0}
+                    <div class="rating nowrap">{$wa->photos->ratingHtml($photo.rate, 10)}</div>
+                {/if}
+                <p itemprop="description">{$photo.description}</p>
+                {* @event prepare_photos_frontend.thumb.%plugin_id% *}
+                {foreach $photo.hooks.thumb as $plugin => $output}{$output}{/foreach}
+                <a href="{$photo.frontend_link}" class="info theme-background-hover">[`Show`]</a>
+            </div>                
+        </div>
+    </div>
+    {if $photo@iteration is div by 4}<div class="clearfix"></div>{/if}
+{/foreach}
+</div>
+
+{if isset($pages_count) && $pages_count > 1}
+<div class="block lazyloading-paging">
+    {wa_pagination total=$pages_count attrs=['class' => "pagination"]}
+</div>
+{/if}

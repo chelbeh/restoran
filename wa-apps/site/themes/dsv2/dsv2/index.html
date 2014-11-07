@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{$wa->title()|escape}</title>
+        <meta name="Keywords" content="{$wa->meta('keywords')|escape}" />
+        <meta name="Description" content="{$wa->meta('description')|escape}" />
+
+        {if !empty($canonical)}<link rel="canonical" href="{$canonical}"/>{/if}
+        <link rel="shortcut icon" href="/favicon.ico"/>
+        <!-- Bootstrap -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,500,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+        <link href="{$wa_theme_url}bootstrap.min.css?v{$wa_theme_version}" rel="stylesheet">
+        <link href="{$wa_theme_url}dsv.css?v{$wa_theme_version}" rel="stylesheet">
+        <link href="{$wa_theme_url}responsive.css?v{$wa_theme_version}" rel="stylesheet">
+        <link href="{$wa_theme_url}font-awesome.min.css?v{$wa_theme_version}" rel="stylesheet">
+        {if $wa->shop && $wa->shop->currency() == 'RUB'} <link href="{$wa_url}wa-content/font/ruble/arial/fontface.css" rel="stylesheet" type="text/css">{/if}
+        {$wa->css()} {* links active plugins CSS *}
+
+        <!--[if lt IE 9]>
+          <script src="{$wa_theme_url}html5shiv.min.js"></script>
+          <script src="{$wa_theme_url}respond.min.js"></script>
+        <![endif]-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="{$wa_theme_url}bootstrap.min.js?v{$wa_theme_version}"></script>
+        <script src="{$wa_theme_url}bootstrap-hover-dropdown.min.js?v{$wa_theme_version}"></script>
+        <script src="{$wa_theme_url}dsv.js?v{$wa_theme_version}"></script>
+        {$wa->js()} {* links active plugins JS *}
+
+        {include file="head.all.html" inline}
+        {include file="`$wa_active_theme_path`/head.html" inline}
+        
+        {$wa->headJs()} {* links Google Analytics tracking code and site's custom JS (defined in Site app settings) *}
+    </head>
+    <body class="boxed-layout container">
+        <div class="wrapper">
+            <div class="auth">
+                <div class="container">
+                    <ul class="usermenu pull-right">
+                        {if count($currencies) > 1}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Валюта Р <i class="fa fa-angle-down"></i></span></a>
+                            <ul class="dropdown-menu currencies" role="menu">
+                                {$currency = $wa->shop->currency()}
+                                {foreach $currencies as $c_code => $c}
+                                    <li{if $c_code == $currency} class="selected"{/if}><a rel="{$c_code}">{if $c.code=="RUB"}{$c.sign_html}{else}{$c.sign}{/if}</a></li>
+                                {/foreach}
+                            </ul>
+                        </li>
+                        {/if}
+                        {if $wa->isAuthEnabled()}
+                            {if $wa->user()->isAuth()}
+                                {if $wa->shop}
+                                    <li><a href="{$wa->myUrl()}">[s`My account`]</a></li>
+                                {else}
+                                    <li>{$wa->user('name')}</li>
+                                {/if}
+                                <li class="divider"></li>
+                                <li><a href="?logout">[s`Log out`]</a></li>
+                            {else}
+                                <li><a href="#" data-toggle="modal" data-target="#signupModal">[s`Sign up`]</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" data-toggle="modal" data-target="#loginModal">[s`Log in`]</a></li>
+                            {/if}
+                        {/if}
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- End currencies and authmenu-->
+            <div class="header margin-bottom-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 col-xs-4">
+                            <div class="logo">
+                                {include file="dsv.logo.html" inline}
+                            </div>
+                        </div>
+                        <div class="col-xs-8 visible-xs visible-sm">
+                            <ul class="phones">
+                                {include file="dsv.phones.html" inline}
+                            </ul>
+                        </div>
+                        <!-- End Logo -->
+                        <div class="col-md-4">
+                            {include file="search.html" inline}
+                        </div>
+                        <!-- End search -->
+                        <div class="col-md-5 hidden-xs hidden-sm">
+                            <ul class="phones pull-right">
+                                {include file="dsv.phones.html" inline}
+                            </ul>
+                        </div>
+                        <!-- End phones -->
+                    </div>
+                </div>
+            </div>
+            <!-- End header -->
+            <nav class="navbar navbar-inverse" rol="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Меню</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <span class="navbar-brand visible-xs">Меню</span>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            {foreach $wa->apps() as $a}
+                                <li{if $a.url==$wa_app_url} class="active"{/if}><a href="{$a.url}">{$a.name}</a></li>
+                            {/foreach}
+                        </ul>
+                        {$site_pages = $wa->site->pages()}
+                        {if count($site_pages)}
+                        <ul class="nav navbar-nav navbar-right">
+                            {foreach $site_pages as $p}
+                                {if count($p.childs)>0}
+                                    <li class="{if $p.id == $page.id} active{/if}">
+                                        <a href="{$p.url}">{$p.name} <i class="fa fa-angle-down"></i></a>
+                                        <ul class="dropdown-menu">
+                                            {foreach $p.childs as $page_child}
+                                                <li{if $page_child.id == $page.id} class="active"{/if}><a href="{$page_child.url}">{$page_child.name}</a></li>
+                                            {/foreach}
+                                        </ul>
+                                    </li>
+                                {else}
+                                    <li{if $p.id == $page.id} class="active"{/if}><a href="{$p.url}">{$p.name}</a></li>
+                                {/if}
+                            {/foreach}
+                        </ul>    
+                        {/if}
+                    </div>
+                </div>
+            </nav>
+            <!-- End menu -->
+            {include file="menu.html" inline}
+            <!-- End catalog -->
+            <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-bordered">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="loginLabel">[s`Sign up`]</h4>
+                                {$wa->authAdapters()}
+                                <p>
+                                    У вас уже есть аккаунт? Выполните <a href="#" data-auth="1">вход</a>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="authfroms">
+                                <form action="{$wa->signupUrl()}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input type="text" name="data[firstname]" id="frmsignup-name" class="form-control" placeholder="[s`First name`]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input type="text" name="data[lastname]" id="frmsignup-lastname" class="form-control" placeholder="[s`Last name`]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">@</span>
+                                            <input type="text" name="data[email]" id="frmsignup-email" class="form-control" placeholder="[s`Email`]">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <input type="password" name="data[password]" id="frmsignup-password" class="form-control" placeholder="[s`Password`]">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                            <input type="password" name="data[password_confirm]" id="frmsignup-confirm" class="form-control" placeholder="[s`Confirm password`]">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            <input type="submit" value="[s`Sign Up`]" class="btn-dsv btn-block">
+                                        </div>
+                                    </div>
+                                    {$wa->captcha()}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Signup modal -->
+
+            <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-bordered">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="loginLabel">[s`Sign In`]</h4>
+                                {$wa->authAdapters()}
+                                <p>
+                                    У вас нет аккаунта? Пройдите <a href="#" data-signup="1">регистрацию</a>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="authfroms">
+                                <form action="{$wa->loginUrl()}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input type="text" name="login" id="frmlogin-email" class="form-control" placeholder="[s`Email`]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <input type="password" name="password" id="frmlogin-password" class="form-control" placeholder="[s`Password`]">
+                                        </div>
+                                    </div>
+                                    <p><a href="#" data-forgot="1">[s`Forgot password?`]</a></p>
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            <input type="hidden" name="wa_auth_login" value="1">
+                                            <input type="submit" value="[s`Sign In`]" class="btn-dsv btn-block">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Login modal -->
+
+            <div class="modal fade" id="forgotModal" tabindex="-1" rold="dialog" aria-labelledby="forgotLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-bordered">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="forgotLabel">[s`Forgot password?`]</h4>
+                                <p>
+                                    <a href="#" data-auth="1">[s`I remember it now!`]</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="authforms">
+                                <form action="{$wa->forgotPasswordUrl()}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <input type="text" name="login" autocomplete="off" class="form-control" placeholder="[s`Email`]">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            <input type="submit" value="[s`Reset password`]" class="btn-dsv btn-block">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div role="main">
+                <div class="page">
+                    {include file="`$wa_active_theme_path`/main.html" inline}
+                </div>
+            </div>
+            <div class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-3 hidden-xs">
+                            <div class="logo">
+                                {include file="dsv.logo.html" inline}
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <ul class="list-unstyled">
+                                {if count($site_pages)}
+                                    {foreach $wa->apps() as $a}
+                                        <li><a href="{$a.url}">{$a.name}</a></li>
+                                    {/foreach}
+                                    {foreach $site_pages as $p}
+                                        <li><a href="{$p.url}">{$p.name}</a></li>
+                                    {/foreach}
+                                {/if}
+                            </ul>
+                        </div>
+                    </div><!-- /.row -->
+                    <div class="row padded">
+                        <div class="col-sm-10 address">
+                            <ul class="list-unstyled">
+                                <li class="first">&copy; {if $wa->shop}{$wa->shop->settings('name')}{/if}, {time()|wa_datetime:"Y"}</li>
+                                <li><i class="fa fa-map-marker"></i> Москва, ул. Достоевского, 38</li>
+                                <li><i class="fa fa-phone"></i> {if $wa->shop}{$wa->shop->settings('phone')}{/if}</li>
+                                <li><i class="fa fa-envelope"></i> {if $wa->shop}{$wa->shop->settings('email')}{/if}</li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-2">
+                            <ul class="list-unstyled social">
+                                {if $wa_app == "site"}
+                                    {include file="`$wa_active_theme_path`/dsv.social.html" inline}
+                                {else}
+                                    {include file="`$wa_parent_theme_path`/dsv.social.html" inline}
+                                {/if}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End footer -->
+            {if isset($smarty.cookies.dsv_viewed)}
+                {$dsv_viewed = $smarty.cookies.dsv_viewed}
+                {assign var=dsv_viewed value=","|explode:$dsv_viewed}
+            {else}
+                {$dsv_viewed = []}
+            {/if}
+
+            {if isset($smarty.cookies.dsv_wishlist)}
+                {$dsv_wishlist = $smarty.cookies.dsv_wishlist}
+                {assign var=dsv_wishlist value=","|explode:$dsv_wishlist}
+            {else}
+                {$dsv_wishlist = []}
+            {/if}
+
+            {if isset($smarty.cookies.shop_compare)}
+                {$shop_compare = $smarty.cookies.shop_compare}
+                {assign var=shop_compare value=","|explode:$shop_compare}
+            {else}
+                {$shop_compare = []}
+            {/if}
+
+            <div class="wrapper-toolbar">
+                <div class="container">
+                    <div class="user-toolbar">
+                        <ul class="list-unstyled">
+                            <li id="count-viewed"{if count($dsv_viewed)} class="highlight"{/if}>
+                              <a href="#">
+                                <i class="fa fa-clock-o fa-lg"></i> 
+                                <span class="toolbar-title">[`Recently viewed`]</span>
+                                <span class="count">{if count($dsv_viewed)}{count($dsv_viewed)}{else}0{/if}</span>
+                              </a>
+                            </li>
+                            <li id="count-compare"{if count($shop_compare)} class="highlight"{/if}>
+                              <a href="{if count($shop_compare)}{$wa->getUrl('/shop/frontend/compare/', ['id' => $shop_compare ])}{/if}">
+                                <i class="fa fa-bar-chart-o fa-lg"></i> 
+                                <span class="toolbar-title">[`Compare`]</span>
+                                <span class="count">{if count($shop_compare)}{count($shop_compare)}{else}0{/if}</span>
+                              </a>
+                            </li>
+                            <li id="count-wishlist"{if count($dsv_wishlist)} class="highlight"{/if}>
+                              <a href="#">
+                                <i class="fa fa-star fa-lg"></i> 
+                                <span class="toolbar-title">[`Favorites`]</span>
+                                <span class="count">{if count($dsv_wishlist)}{count($dsv_wishlist)}{else}0{/if}</span>
+                              </a>
+                            </li>
+                            {if $wa->shop}
+                                {$cart_total = $wa->shop->cart->total()}
+                                {$cart_count = $wa->shop->cart->count()}
+                                <li id="cart" class="cart{if $cart_total} highlight{/if}" style="border: none;">
+                                    <a href="{$wa->getUrl('shop/frontend/cart')}">
+                                        <i class="fa fa-shopping-cart fa-lg"></i> 
+                                        <span class="toolbar-title">[s`Cart`]</span>
+                                        <span class="cart-count count">{$cart_count}</span>
+                                        <span class="cart-total price">{wa_currency_html($cart_total, $wa->shop->currency())}</span>
+                                    </a>
+                                    {if strpos($wa->currentUrl(), 'cart') === false && strpos($wa->currentUrl(), 'checkout') === false}
+                                        {include file="flying.cart.html"}
+                                    {/if}
+                                </li>
+                            {/if}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- End toolbar -->
+        {*debug*}
+        {*|@debug_print_var*}
+        </div>
+        <!-- End wrapper-->
+    </body>
+</html>

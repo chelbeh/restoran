@@ -75,6 +75,12 @@ return array(
                         |   ukr\.net>\snot\sused
                         |   Mailbox\snot\savailable
                         |   550\sHost\sunknown
+                        |   Account\sblocked\sdue\sto\sinactivity
+                        |   In\smy\smailserver\snot\sstored\sthis\suser
+                        |   Not\sour\sCustomer
+                        |   Mailbox\sis\sfrozen
+                        |   Recipient\sverify\sfailed
+                        |   No\ssuch\se-mail\sin\ssystem
                         ~xi",
         ),
 

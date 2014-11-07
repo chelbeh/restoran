@@ -21,7 +21,7 @@
         <div class="collapsible">
             <ul class="menu-v with-icons">
                 {foreach $drafts as $d}
-                    <li {if $d@index > 10}style="display:none" data-list="hidden"{/if}><a href="#/campaigns/letter/{$d.id}">
+                    <li {if $d@iteration > 10 && count($drafts) > 10}style="display:none" data-list="hidden"{/if}><a href="#/campaigns/letter/{$d.id}">
                         {if $d.status == mailerMessageModel::STATUS_PENDING}<span class="count"><i class="icon16 clock"></i></span>{/if}
                         <i class="icon16 userpic20" style="background-image: url('{if $d.pic_src}{$d.pic_src}{else}{$wa_url}wa-content/img/userpic20.jpg{/if}');"></i>{if $d.status == mailerMessageModel::STATUS_PENDING}<i>{/if}{ifempty($d.subject, "[`<no subject>`]")|escape}{if $d.status == mailerMessageModel::STATUS_PENDING}</i>{/if}
                         <br><span class="hint">{if $d.status == mailerMessageModel::STATUS_PENDING}{waDateTime::format('datetime', $d.send_datetime)}{else}{waDateTime::format('date', $d.create_datetime)}{/if}</span>

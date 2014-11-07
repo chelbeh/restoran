@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{$wa->title()|escape}</title>
+        <meta name="Keywords" content="{$wa->meta('keywords')|escape}" />
+        <meta name="Description" content="{$wa->meta('description')|escape}" />
+
+        {if !empty($canonical)}<link rel="canonical" href="{$canonical}"/>{/if}
+        <link rel="shortcut icon" href="/favicon.ico"/>
+        {if $wa->blog}
+            <!-- rss -->
+            {$rss=$wa->blog->rssUrl()}
+            {if $rss}<link rel="alternate" type="application/rss+xml" title="{$wa->accountName()}" href="{$rss}">{/if}
+        {/if}
+
+        <!-- Bootstrap -->
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,500,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+        <link href="{$wa_theme_url}bootstrap.min.css?v{$wa_theme_version}" rel="stylesheet">
+        <link href="{$wa_theme_url}dsv.css?v{$wa_theme_version}" rel="stylesheet">
+        <link href="{$wa_theme_url}responsive.css?v{$wa_theme_version}" rel="stylesheet">
+        <link href="{$wa_theme_url}font-awesome.min.css?v{$wa_theme_version}" rel="stylesheet">
+        {if $wa->shop && $wa->shop->currency() == 'RUB'} <link href="{$wa_url}wa-content/font/ruble/arial/fontface.css" rel="stylesheet" type="text/css">{/if}
+        {$wa->css()} {* links active plugins CSS *}
+
+        <!--[if lt IE 9]>
+          <script src="{$wa_theme_url}html5shiv.min.js"></script>
+          <script src="{$wa_theme_url}respond.min.js"></script>
+        <![endif]-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="{$wa_theme_url}bootstrap.min.js?v{$wa_theme_version}"></script>
+        <script src="{$wa_theme_url}bootstrap-hover-dropdown.min.js?v{$wa_theme_version}"></script>
+        <script src="{$wa_theme_url}dsv.js?v{$wa_theme_version}"></script>
+        {$wa->js()} {* links active plugins JS *}
+
+        {include file="head.all.html" inline}
+        {include file="`$wa_active_theme_path`/head.html" inline}
+        
+        {$wa->headJs()}
+
+        {assign var=mobile value=$wa->isMobile() || $wa->userAgent('device') == 'ipad' scope="global"}
+        {if !$mobile && $theme_settings.texture != "none"}
+        <style>
+            body { background-image: url('{$wa_theme_url}img/themesettings/texture/{$theme_settings.texture}.png')}
+        </style>
+        {/if}
+        {if !$mobile && $theme_settings.bgimage != "none"}
+        {$bgcolor = $theme_settings.bgimage|truncate:6:"":true}
+        <style>
+            body.boxed-layout { 
+                background-image: url('{$wa_theme_url}img/themesettings/bgimage/{$theme_settings.bgimage}.jpg');
+                background-repeat: no-repeat;
+                background-position: top center;
+                background-color: #{$bgcolor};
+            }
+        </style>
+        {/if}
+        {if $theme_settings.custom_background && $theme_settings.custom_background_color}
+        <style>
+            body.boxed-layout { 
+                background-image: url('{$wa_theme_url}{$theme_settings.custom_background}');
+                background-repeat: no-repeat;
+                background-position: top center;
+                background-color: {$theme_settings.custom_background_color};
+            }
+        </style>
+        {/if}
+
+    </head>
+    {if $wa->isMobile() || $wa->userAgent('device') == 'ipad'}
+        {* mobile *}                 
+    {/if}
+    {if !$wa->isMobile() && $wa->userAgent('device') != 'ipad'}
+        {* no mobile *}  
+    {/if}
+    {$color_scheme=$theme_settings.color_scheme|substr:18}
+    {assign var="pos" value=$color_scheme|strpos:"."}
+    {$class = $color_scheme|substr:0:$pos}
+
+    {if $theme_settings.custom_color && $theme_settings.custom_color_hover}
+        {$class = 'custom'}
+        <style>
+.custom .theme-color { color: {$theme_settings.custom_color} !important }
+.custom .theme-color:hover { color: {$theme_settings.custom_color_hover} !important }
+.custom .theme-color-wh { color: {$theme_settings.custom_color} !important }
+.custom .theme-color-hover:hover { color: {$theme_settings.custom_color_hover} !important }
+.custom .theme-background { background-color: {$theme_settings.custom_color} !important }
+.custom .theme-background:hover { background-color: {$theme_settings.custom_color_hover} !important }
+.custom .theme-background-wh { background-color: {$theme_settings.custom_color} !important }
+.custom .theme-background-hover:hover { background-color: {$theme_settings.custom_color} !important }
+.custom .theme-border-color { border-color: {$theme_settings.custom_color} !important }
+.custom .theme-border-color-hover:hover { border-color: {$theme_settings.custom_color} !important }
+.custom .theme-shadow-color:hover {
+  -moz-box-shadow: 0 1px 5px {$theme_settings.custom_color};
+  -ms-box-shadow: 0 1px 5px {$theme_settings.custom_color};
+  -webkit-box-shadow: 0 0px 5px {$theme_settings.custom_color};
+  box-shadow: 0px 0px 5px {$theme_settings.custom_color};
+}
+.custom .footer ul li a:hover { color: {$theme_settings.custom_color_hover} }
+.custom .usermenu > li > a:hover { color: {$theme_settings.custom_color_hover} }
+.custom .navbar-default .navbar-nav>.active>a,
+.custom .navbar-default .navbar-nav>.active>a:hover,
+.custom .navbar-default .navbar-nav>.active>a:focus {
+  background-color: transparent;
+  color: {$theme_settings.custom_color};
+}
+.custom .navbar-default .navbar-nav>li>a:hover,
+.custom .navbar-default .navbar-nav>li>a:focus { color: {$theme_settings.custom_color_hover} }
+.custom .navbar-default .navbar-nav .selected>a,
+.custom .navbar-default .navbar-nav .selected>a:hover,
+.custom .navbar-default .navbar-nav .selected>a:focus { color: {$theme_settings.custom_color} }
+.custom div.dropdown-menu ul li a:hover { color: {$theme_settings.custom_color_hover} }
+.custom .breadcrumb a:hover { color: {$theme_settings.custom_color_hover} }
+.custom .user-toolbar ul #cart.highlight .count { background-color: {$theme_settings.custom_color} !important }
+.custom .user-toolbar ul #cart.highlight>a .fa { color: {$theme_settings.custom_color} }
+.custom .user-toolbar ul>li:hover>a .fa { color: {$theme_settings.custom_color_hover} !important }
+.custom .user-toolbar ul>li:hover .count { background-color: {$theme_settings.custom_color_hover} !important }
+.custom .modal-content { border-top: 2px solid {$theme_settings.custom_color} }
+.custom .btn-dsv { background-color: {$theme_settings.custom_color} }
+.custom .btn-dsv:hover { background-color: {$theme_settings.custom_color_hover} }
+.custom .wa-form .wa-submit input { background-color: {$theme_settings.custom_color} }
+.custom .wa-horizontal .wa-form .wa-submit a { color: {$theme_settings.custom_color} }
+.custom .btn-blue { background-color: {$theme_settings.custom_color} }
+.custom .btn-blue:hover { background-color: {$theme_settings.custom_color_hover} }
+.custom .table-dsv.table-hover>tbody>tr:hover>td,
+.custom .table-dsv.table-hover>tbody>tr:hover>th,
+.custom .table-dsv.table-hover>tbody>tr:hover>td a { background-color: {$theme_settings.custom_color} }
+.custom .tab-dsv .nav-tabs { border-bottom-color: {$theme_settings.custom_color} }
+.custom .tab-dsv .nav-tabs > li > a:hover { background-color: {$theme_settings.custom_color} }
+.custom .tab-dsv .nav-tabs > .active > a, 
+.custom .tab-dsv .nav-tabs > .active > a:hover, 
+.custom .tab-dsv .nav-tabs > .active > a:focus { background-color: {$theme_settings.custom_color} }
+.custom blockquote:hover { border-left-color: {$theme_settings.custom_color} }
+.custom .tt-input:focus,
+.custom .wa-captcha-input:focus,
+.custom .wa-form .wa-value input[type="text"]:focus,
+.custom .wa-form .wa-value input[type="password"]:focus,
+.custom .form-control:focus {
+border-color: {$theme_settings.custom_color};
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_color};
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_color};
+}
+
+.custom .slider .bx-wrapper .bx-pager.bx-default-pager a:hover { background-color: {$theme_settings.custom_color} }
+.custom .product-slider-arrows a:hover { background-color: {$theme_settings.custom_color} }
+.custom ul.product-items li button { background-color: {$theme_settings.custom_color} }
+.custom ul.product-items li .userbar-list a.active { color: {$theme_settings.custom_color} }
+.custom ul.product-items li .userbar-list a:hover { color: {$theme_settings.custom_color_hover} }
+.custom ul.product-items li .addtouserbar span.active { background-color: {$theme_settings.custom_color} }
+.custom ul.product-items li .addtouserbar span:hover { background-color: {$theme_settings.custom_color_hover} }
+.custom .maintext ul li i.fa { color: {$theme_settings.custom_color} }
+.custom .carousel-arrow a.carousel-control:hover { color: {$theme_settings.custom_color} }
+.custom .thumbnail h3 a:hover,
+.custom .thumbnail-style h3 a:hover { color: {$theme_settings.custom_color} }
+.custom .subcategories a.subcat { border-bottom-color:{$theme_settings.custom_color} }
+.custom .filters .ui-slider-horizontal .ui-widget-header { background-color: {$theme_settings.custom_color} }
+.custom .product-page .product-links a.active { color: {$theme_settings.custom_color} }
+.custom .product-page .product-links a:hover { color: {$theme_settings.custom_color_hover} }
+.custom .checkout .checkout-step h2.active { background-color: {$theme_settings.custom_color} }
+.custom .checkout .checkout-step h2.active:after { border-top-color: {$theme_settings.custom_color} }
+.custom .da-slide h2 i { background: url(img/themesettings/bg-heading19.png) repeat }
+.custom .da-slide .da-link:hover { border-color: {$theme_settings.custom_color}; background: {$theme_settings.custom_color} }
+.custom .product-page #product-categories a:hover,
+.custom .product-page #product-tags a:hover { color: {$theme_settings.custom_color} }
+.custom .bonus { background-color: {$theme_settings.custom_color} }
+.custom .pagination li.selected a { background-color: {$theme_settings.custom_color} }
+.custom .pagination li a:hover { background-color: {$theme_settings.custom_color_hover} }
+
+.custom ul.photostream li.selected img { border-color: {$theme_settings.custom_color} }
+.custom .photo-albums a:hover { background-color: {$theme_settings.custom_color} }
+.custom #photo-author a { color: {$theme_settings.custom_color} }
+
+.custom .timeline .timeline-body h2 a:hover { color: {$theme_settings.custom_color} }
+.custom .timeline .timeline-footer > a { color: {$theme_settings.custom_color} }
+.custom .post .credentials a { color: {$theme_settings.custom_color} }
+.custom .comments-header { color: {$theme_settings.custom_color} }
+.custom .comment-form h4 { color: {$theme_settings.custom_color} }
+        </style>
+    {/if}
+
+    <body class="{if $theme_settings.color_scheme && empty($theme_settings.my_color)}{$class}{/if} {if !$mobile && $theme_settings.layout == 'boxed'}boxed-layout container{/if}{if $mobile} touch{/if}">
+        <div class="wrapper">
+            <div class="auth">
+                <div class="container">
+                    {if $theme_settings.slogan}
+                    <ul class="usermenu pull-left hidden-xs hidden-sm">
+                        <li>{$theme_settings.slogan}</li>
+                    </ul>
+                    {/if}
+                    <ul class="usermenu pull-right">
+                        {if $wa_app == "shop" && count($currencies) > 1}
+                        <li class="dropdown crcy">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Валюта</a><ul class="dropdown-menu currencies" role="menu">
+                                {$currency = $wa->shop->currency()}
+                                {foreach $currencies as $c_code => $c}
+                                    <li{if $c_code == $currency} class="active"{/if}><a rel="{$c_code}">{if $c.code=="RUB"}{$c.sign_html}{else}{$c.sign}{/if}{if $c_code == $currency} <i class="fa fa-check"></i>{/if}</a></li>
+                                {/foreach}
+                            </ul>
+                        </li>
+                        {/if}
+
+                        {if $wa->isAuthEnabled()}
+                            {if $wa_app == "shop"}<li class="divider"></li>{/if}
+                            {if $wa->user()->isAuth()}
+                                {if $wa->shop}
+                                    <li><a href="{$wa->myUrl()}">[s`My account`]</a></li>
+                                {else}
+                                    <li>{$wa->user('name')}</li>
+                                {/if}
+                                <li class="divider"></li>
+                                <li><a href="?logout">[s`Log out`]</a></li>
+                            {else}
+                                <li><a href="#" data-toggle="modal" data-target="#signupModal">[s`Sign up`]</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#" data-toggle="modal" data-target="#loginModal">[s`Log in`]</a></li>
+                            {/if}
+                        {/if}
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <!-- End currencies and authmenu-->
+            <div class="header margin-bottom-5">
+                <div class="container container-xs-height">
+                    <div class="row row-xs-height">
+                        <div class="col-md-3 col-xs-4 col-xs-height col-middle hidden-xs hidden-sm">
+                            <div class="logo theme-background-wh">
+                                {include file="dsv.logo.html" inline}
+                            </div>
+                        </div>
+                        <div class="col-xs-6 visible-xs visible-sm">
+                            <div class="logo theme-background-wh">
+                                {include file="dsv.logo.html" inline}
+                            </div>
+                        </div>
+                        <div class="col-xs-6 visible-xs visible-sm">
+                            <a href="javascript:void(0);" id="phones" class="theme-color pull-right" data-toggle="popover" data-container="body" data-placement="left" data-html="true" data-trigger="click hover focus" data-content="<ul class='list-unstyled' style='margin:0'>{include file='dsv.phones.html' inline}</ul>"><i class="fa fa-fw fa-phone"></i></a>
+                        </div>
+                        <!-- End Logo -->
+                        <div class="col-md-4 col-xs-height col-middle hidden-xs hidden-sm">
+                            {include file="search.html" inline}
+                        </div>
+                        <div class="col-xs-12 visible-xs visible-sm">
+                            {include file="search.html" inline}
+                        </div>
+                        <!-- End search -->
+                        <div class="col-md-5 col-xs-height col-middle hidden-xs hidden-sm">
+                            <ul class="phones pull-right">
+                                {include file="dsv.phones.html" inline}
+                            </ul>
+                        </div>
+                        <!-- End phones -->
+                    </div>
+                </div>
+            </div>
+            <!-- End header -->
+            <nav class="navbar navbar-inverse" rol="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                            <span class="sr-only">Меню</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <span class="navbar-brand visible-xs">Меню</span>
+                    </div>
+                    <div class="collapse navbar-collapse navbar-responsive-collapse">
+                        <ul class="nav navbar-nav">
+                            {foreach $wa->apps() as $a}
+                                <li{if $a.url==$wa_app_url} class="active"{/if}><a href="{$a.url}">{$a.name}</a></li>
+                            {/foreach}
+                        {if !$wa->isMobile() && $wa->userAgent('device') != 'ipad'}
+                        {/if}
+                        </ul>
+                        
+                        
+                        {$site_pages = $wa->site->pages()}
+                        {if count($site_pages)}
+                        
+                        <ul class="nav navbar-nav navbar-right">
+                            {foreach $site_pages as $p}
+                                {if !empty($p.childs)}
+                                    <li class="dropdown">
+                                        <a href="{$p.url}" class="dropdown-toggle{if !$mobile} disabled{/if}" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">{$p.name}</a>
+                                        <ul class="dropdown-menu">
+                                            {if $mobile}
+                                                <li><a href="{$p.url}">{$p.name}</a></li>
+                                            {/if}
+                                            {foreach $p.childs as $page_child}
+                                                <li><a href="{$page_child.url}">{$page_child.name}</a></li>
+                                            {/foreach}
+                                        </ul>
+                                    </li>
+                                {else}
+                                    <li{if $p.id == $page.id|default:0} class="active"{/if}><a href="{$p.url}">{$p.name}</a></li>
+                                {/if}
+                            {/foreach}
+                        </ul>
+                        {/if}
+                    </div>
+                </div>
+            </nav>
+            <!-- End menu -->
+
+            {if !$mobile}
+                {* no mobile *}
+                {include file="menu.html" inline}
+            {else}
+                {* mobile *}
+                {include file="menu.mobile.html" inline}
+            {/if}
+            
+            <!-- End catalog -->
+            <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-bordered">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="loginLabel">[s`Sign up`]</h4>
+                                {$wa->authAdapters()}
+                                <p>
+                                    У вас уже есть аккаунт? Выполните <a href="#" data-auth="1">вход</a>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="authfroms">
+                                <form action="{$wa->signupUrl()}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input type="text" name="data[firstname]" id="frmsignup-name" class="form-control" placeholder="[s`First name`]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input type="text" name="data[lastname]" id="frmsignup-lastname" class="form-control" placeholder="[s`Last name`]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">@</span>
+                                            <input type="text" name="data[email]" id="frmsignup-email" class="form-control" placeholder="[s`Email`]">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <input type="password" name="data[password]" id="frmsignup-password" class="form-control" placeholder="[s`Password`]">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                            <input type="password" name="data[password_confirm]" id="frmsignup-confirm" class="form-control" placeholder="[s`Confirm password`]">
+                                        </div>
+                                    </div>
+                                    <div class="row captcha">
+                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            <input type="submit" value="[s`Sign Up`]" class="btn-dsv btn-block">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Signup modal -->
+
+            <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-bordered">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="loginLabel">[s`Sign In`]</h4>
+                                {$wa->authAdapters()}
+                                <p>
+                                    У вас нет аккаунта? Пройдите <a href="#" data-signup="1">регистрацию</a>.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="authfroms">
+                                <form action="{$wa->loginUrl()}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                            <input type="text" name="login" id="frmlogin-email" class="form-control" placeholder="[s`Email`]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <input type="password" name="password" id="frmlogin-password" class="form-control" placeholder="[s`Password`]">
+                                        </div>
+                                    </div>
+                                    <p><a href="#" data-forgot="1">[s`Forgot password?`]</a></p>
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            <input type="hidden" name="wa_auth_login" value="1">
+                                            <input type="submit" value="[s`Sign In`]" class="btn-dsv btn-block">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Login modal -->
+
+            <div class="modal fade" id="forgotModal" tabindex="-1" rold="dialog" aria-labelledby="forgotLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-bordered">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title" id="forgotLabel">[s`Forgot password?`]</h4>
+                                <p>
+                                    <a href="#" data-auth="1">[s`I remember it now!`]</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="authforms">
+                                <form action="{$wa->forgotPasswordUrl()}" method="post">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                            <input type="text" name="login" autocomplete="off" class="form-control" placeholder="[s`Email`]">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-offset-1">
+                                            <input type="submit" value="[s`Reset password`]" class="btn-dsv btn-block">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div role="main">
+                <div class="page">
+                    {include file="`$wa_active_theme_path`/main.html" inline}
+                </div>
+            </div>
+            <div class="footer">
+                <div class="container">
+                    <div class="row footer-menu">
+                        <div class="col-md-3 col-md-offset-1 col-sm-6 logo-social">
+                            <div class="logo margin-bottom-30 theme-background-wh">
+                                {include file="dsv.logo.html" inline}
+                            </div>
+                            <div class="footer-column">
+                                [`Contact with us`]
+                            </div>
+                            <ul class="list-unstyled list-inline social clearfix">
+                                {include file="dsv.social.html" inline}
+                            </ul>
+                        </div>
+                        <div class="col-md-2 col-xs-6">
+                            <div class="footer-column">[`Company`]</div>
+                             {if count($site_pages)}
+                                <ul class="list-unstyled">
+                                    {foreach $site_pages as $p}
+                                        <li><a href="{$p.url}">{$p.name}</a></li>
+                                    {/foreach} 
+                                </ul>
+                            {/if}
+                        </div>
+                        <div class="col-md-2 col-xs-6">
+                            <div class="footer-column">[`Apps`]</div>
+                            <ul class="list-unstyled">
+                                {foreach $wa->apps() as $a}
+                                    <li><a href="{$a.url}">{$a.name}</a></li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                        {if $wa->isMobile()}<div class="clearfix"></div>{/if}
+                        <div class="col-md-3 col-sm-6">
+                            <div class="footer-column">[`Contacts`]</div>
+                            <ul class="list-unstyled">
+                                <li>г. Москва, ул. Выдуманная д.8, корп. 42, офис. 405</li>
+                                <li>Телефоны: +7 (111) 555-12-34; +1 (111) 555-55-55;</li>
+                                <li>Факс: +7 (111) 555-12-34</li>
+                                <li>Email: {if $wa->shop}{$wa->shop->settings('email')}{/if}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row align-center copyright">
+                        Copyright &copy; {if $wa->shop}{$wa->shop->settings('name')}{/if}, {time()|wa_datetime:"Y"}.
+                    </div>
+                </div>
+            </div>
+            <!-- End footer -->
+            {if isset($smarty.cookies.dsv_viewed)}
+                {$dsv_viewed = $smarty.cookies.dsv_viewed}
+                {assign var=dsv_viewed value=","|explode:$dsv_viewed}
+            {else}
+                {$dsv_viewed = []}
+            {/if}
+
+            {if isset($smarty.cookies.dsv_wishlist)}
+                {$dsv_wishlist = $smarty.cookies.dsv_wishlist}
+                {assign var=dsv_wishlist value=","|explode:$dsv_wishlist}
+            {else}
+                {$dsv_wishlist = []}
+            {/if}
+
+            {if !empty($smarty.cookies.shop_compare)}
+                {$shopcompare = $smarty.cookies.shop_compare}
+                {assign var=shop_compare value=","|explode:$shopcompare}
+            {else}
+                {$shop_compare = []}
+            {/if}
+
+            <div class="wrapper-toolbar">
+                <div class="container">
+                    <div class="user-toolbar">
+                        <ul class="list-unstyled">
+                            <li id="count-viewed" class="{if count($dsv_viewed)} highlight{/if}" data-toggle="popover" data-trigger="manual" data-placement="top" data-delay="{ 'hide': 2000 }">
+                              <a href="{$wa->getUrl('shop/frontend/search')}?func=viewed">
+                                <i class="fa fa-clock-o fa-lg"></i> 
+                                <span class="toolbar-title hidden-sm hidden-xs">[`Recently viewed`]</span>
+                                <span class="count hidden-xs">{if count($dsv_viewed)}{count($dsv_viewed)}{else}0{/if}</span>
+                              </a>
+                            </li>
+                            <li id="count-compare" class="{if count($shop_compare)} highlight{/if}" data-toggle="popover" data-trigger="manual" data-placement="top" data-delay="{ 'hide': 2000 }">
+                              <a href="{if count($shop_compare)}{$wa->getUrl('shop/frontend/compare/', ['id' => $shopcompare ])}{/if}">
+                                <i class="fa fa-bar-chart-o fa-lg"></i> 
+                                <span class="toolbar-title hidden-sm hidden-xs">[`Compare`]</span>
+                                <span class="count hidden-xs">{if count($shop_compare)}{count($shop_compare)}{else}0{/if}</span>
+                              </a>
+                            </li>
+                            <li id="count-wishlist" class="{if count($dsv_wishlist)} highlight{/if}" data-toggle="popover" data-trigger="manual" data-placement="top" data-delay="{ 'hide': 2000 }">
+                              <a href="{$wa->getUrl('shop/frontend/search')}?func=wishlist">
+                                <i class="fa fa-star fa-lg"></i> 
+                                <span class="toolbar-title hidden-sm hidden-xs">[`Favorites`]</span>
+                                <span class="count hidden-xs">{if count($dsv_wishlist)}{count($dsv_wishlist)}{else}0{/if}</span>
+                              </a>
+                            </li>
+                            {if $wa->shop}
+                                {$cart_total = $wa->shop->cart->total()}
+                                {$cart_count = $wa->shop->cart->count()}
+                                <li id="cart" class="cart{if $cart_total} highlight{/if}" style="border: none;" data-toggle="popover" data-trigger="manual" data-placement="top" data-delay="{ 'hide': 2000 }">
+                                    <a href="{$wa->getUrl('shop/frontend/cart')}">
+                                        <i class="fa fa-shopping-cart fa-lg"></i> 
+                                        <span class="toolbar-title hidden-xs">[s`Cart`]</span>
+                                        <span class="cart-count count">{$cart_count}</span>
+                                        <span class="cart-total price hidden-sm hidden-xs">{wa_currency_html($cart_total, $wa->shop->currency())}</span>
+                                    </a>
+                                    {if strpos($wa->currentUrl(), 'cart') === false && strpos($wa->currentUrl(), 'checkout') === false && !$wa->isMobile() && $wa->userAgent('device') != 'ipad'}
+                                        {include file="flying.cart.html"}
+                                    {/if}
+                                </li>
+                            {/if}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {* 
+            <script type="text/javascript">
+                var isFixedSupported = (function(){
+                var isSupported = null;
+                if (document.createElement) {
+                    var el = document.createElement("div");
+                    if (el && el.style) {
+                        el.style.position = "fixed";
+                        el.style.top = "10px";
+                        var root = document.body;
+                        if (root && root.appendChild && root.removeChild) {
+                            root.appendChild(el);
+                            isSupported = (el.offsetTop === 10);
+                            root.removeChild(el);
+                        }
+                    }
+                }
+                return isSupported;
+                })();
+                window.onload = function(){
+                if (!isFixedSupported){
+                    document.body.className += ' fixfixed';
+                    var bottombar = document.getElementById('bottombar');
+                    var bottomBarHeight = bottombar.offsetHeight;
+                    var windowHeight = window.innerHeight;
+                    window.onscroll = function(){
+                        var scrollTop = window.scrollY;
+                        bottombar.style.bottom = (scrollTop + windowHeight - bottomBarHeight) + 'px';
+                    };
+                }
+                window.scrollBy(0, 1);
+                }
+            </script>
+            *}
+
+            <div id="back-top">
+                <a href="#top" title="[`Scroll top`]"><img src="{$wa_url}wa-data/public/site/themes/dsv2/img/scrolltop.png"></a></div>
+            <!-- End toolbar -->
+        {*debug*}
+        {*|@debug_print_var*}
+        </div>
+        <!-- End wrapper-->
+    </body>
+</html>

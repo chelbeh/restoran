@@ -1,0 +1,52 @@
+{* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.nav_before *}
+{foreach $frontend_action as $plugin => $output}
+    {if !empty($output.nav_before)}{$output.nav_before}{/if}
+{/foreach}
+
+<nav class="page-nav right" role="navigation">
+    <div class="nav-sidebar">
+    
+        <!-- subscribe -->
+		{$rss = $wa->blog->rssUrl()}
+		{if $rss}
+			<div class="subscribe">
+                <ul>
+        			<li><a href="{$rss}" title="[s`RSS`]"><i class="fa fa-rss"></i> [s`RSS`]</a></li>
+    				
+    			</ul>
+    		</div>
+		{/if}
+    </div>
+</nav>
+<div class="page-content">
+
+    {if empty($posts) && $wa->currentUrl() == $wa_app_url}
+
+       <div class="welcome">
+            <h1>[`Welcome to your new blog!`]</h1>
+            <p>{sprintf('[`Start by writing a post in your <a href="%s">blog backend</a>.`]', $wa_backend_url|cat:'blog/')}</p>
+        </div>
+    
+    {else}
+
+        <!-- internal navigation breadcrumbs -->
+        <div class="container">
+            <ol class="breadcrumb">
+                <li><a href="{$wa_app_url}">Главная</a></li>
+                {if isset($breadcrumbs)}
+                    {foreach $breadcrumbs as $breadcrumb}
+                        <li><a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a></li>
+                    {/foreach}
+                {/if}
+                {if !empty($post)}
+                    <li><a href="{$wa->blog->url()}">[`All posts`]</a></li>
+                {/if}
+            </ol>
+        </div>
+        {$content}
+        
+    {/if}
+    
+    <div class="clear-both"></div>
+        
+</div>

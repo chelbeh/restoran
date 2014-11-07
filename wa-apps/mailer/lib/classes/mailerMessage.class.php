@@ -197,20 +197,14 @@ class mailerMessage extends mailerSimpleMessage
             /**@/**
              * @event campaign.before_sending
              *
-             * A sending session started for a campaign
+             * A sending session started for all campaigns
              *
-             * For each campaign there could be several sending sessions. It can be triggered by CRON,
-             * or by a backend user opening campaign report page.
+             * For all campaigns there could be one sending session. It can be triggered by CRON,
+             * or by a backend user opening campaign report page (for each campaign).
              *
-             * @param array[string]array $params['campaign'] row from mailer_message
-             * @param array[string]array $params['params'] campaign params from mailer_message_params, key => value
              * @return void
              */
-            $evt_params = array(
-                'campaign' => $this->data,
-                'params' => $this->params,
-            );
-            wa()->event('campaign.before_sending', $evt_params);
+            wa()->event('campaign.before_sending');
 
             // send message
             $this->sendMessage();
@@ -297,6 +291,8 @@ class mailerMessage extends mailerSimpleMessage
 
             try {
                 $message = $this->getMessage();
+
+                $this->attachSigner($message);
 
                 // set to
                 if ($row['name']) {
@@ -452,6 +448,8 @@ class mailerMessage extends mailerSimpleMessage
 
                     $message = $this->getMessage();
 
+                    $this->attachSigner($message);
+
                     // set to
                     if ($row['name']) {
                         $message->setTo($row['email'], $row['name']);
@@ -496,6 +494,7 @@ class mailerMessage extends mailerSimpleMessage
                     $message->setBody($body, 'text/html', 'utf-8');
                     $message->addPart(mailerHtml2text::convert($body), 'text/plain');
                     $message->generateId();
+
                     $i++;
 
                     // send message
@@ -681,6 +680,24 @@ class mailerMessage extends mailerSimpleMessage
         // set header Precedence: bulk
         $m->getHeaders()->addTextHeader('Precedence', 'bulk');
         return $m;
+    }
+
+    protected function attachSigner(&$message)
+    {
+        // DKIM Signer
+        $params_model = new mailerSenderParamsModel();
+        $sender_params = $params_model->getBySender($this->data['sender_id']);
+        if (!empty($sender_params['dkim'])) {
+            $email = $this->data['from_email'];
+            $e = explode('@', $email);
+            $domain_name = array_pop($e);
+            $signer = new Swift_Signers_DKIMSigner(
+                $sender_params['dkim_pvt_key'], $domain_name, mailerHelper::getDkimSelector($email)
+            );
+            $signer->ignoreHeader('Return-Path');
+            $signer->ignoreHeader('Bcc');
+            $message->attachSigner($signer);
+        }
     }
 }
 

@@ -33,6 +33,9 @@ class mailerCampaignsSendController extends waJsonController
             }
 
             wao(new mailerMessage($campaign))->send();
+
+            $this->logAction('sent_campaign');
+
         } catch (Exception $e) {
             $this->errors = $e->getMessage();
         }

@@ -168,12 +168,13 @@ class mailerSubscriberModel extends waModel
         // Get contact_id by email
         $cem = new waContactEmailsModel();
         $contact_id = null;
-        $subscriber['name'] = isset($subscriber['name']) ? $subscriber['name'] : null;
         $contact_id = $cem->getContactIdByNameEmail($subscriber['name'], $subscriber['email'], false);
 
         if (!$contact_id) {
             $contact = new waContact();
             $contact['create_method'] = 'subscriber';
+            $data['create_ip'] = waRequest::getIp();
+            $data['create_user_agent'] = waRequest::getUserAgent();
             $contact['create_contact_id'] = 0;
             if ($contact->save($subscriber)) {
                 throw new waException('Unable to create contact.', 500);

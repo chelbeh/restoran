@@ -1,0 +1,7 @@
+<a href="{$wa_app_url}">
+    {if $theme_settings.logo}
+        <img src="{if strpos($wa->currentUrl(), 'cart') === false}{$wa_parent_theme_url}{else}{$wa_theme_url}{/if}{$theme_settings.logo}" alt="{$wa->accountName()}" class="img-responsive" />
+    {else}
+        <img src="{$wa_theme_url}img/logo.png" alt="{$wa->accountName()}" class="img-responsive">
+    {/if}
+</a>

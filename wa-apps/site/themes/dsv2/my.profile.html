@@ -1,0 +1,23 @@
+<div class="tab-dsv margin-bottom-20">
+	{$wa->myNav('nav nav-tabs')}
+</div>
+<h1>[`My profile`]</h1>
+
+{if $saved}
+<p class="text-success lead">[`Contact information successfully updated!`] <i class="fa fa-check fa-lg"></i></p>
+{/if}
+
+<form action="" method="post">
+    <div class="wa-form">
+
+        {$form->html()}
+		
+        <div class="wa-field">
+            <div class="wa-value">
+            	<button type="submit" class="btn-blue btn-simple">[`Save`]</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+{$wa->globals('isMyAccount', true)}

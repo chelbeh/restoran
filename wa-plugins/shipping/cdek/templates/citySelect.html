@@ -1,0 +1,90 @@
+<script type="text/javascript" language="JavaScript">
+    // jQuery
+    $(document).ready(function(){
+        if(parseFloat($.fn.jquery) >= 1.9){
+            $.fn.live = function(one,two) {
+                var $this = $(this)
+                return $this.on(one,two);
+            };
+        }
+    });
+
+    var context{$id} = $("li.shipping-{$id}");
+    
+    function updateCitySelect{$id}(context{$id}) {
+        $("#city_load{$id}", context{$id}).show();
+        $.post(
+                "/data/shipping/{$id}/city/",
+                {
+                    region: $("[name='customer_{$id}[address.shipping][region]']", context{$id}).val()
+                },
+        insertOptions{$id},
+                'json'
+                );
+    }
+    
+    function shipping_type{$id}() {
+        if ($("[name='rate_id[{$id}]']", context{$id}).length) {
+            return $("[name='rate_id[{$id}]']", context{$id}).val();
+        } else {
+            return 'door';
+        }
+    }
+    
+    function showHide{$id}(val, context{$id}) {
+        if (val === "sklad") {
+            $(context{$id}).find("[name='customer_{$id}[address.shipping][street]']").parent('span.field').hide();
+        } else if (val === "door") {
+            $(context{$id}).find("[name='customer_{$id}[address.shipping][street]']").parent('span.field').show();
+        } 
+    }
+    
+    function insertOptions{$id}(data)
+    {
+        $("#city_select{$id}[name='{$name}']").empty();
+        if (data) {
+            $.each(data, function(key, city) {
+                $("#city_select{$id}[name='{$name}']").append("<option>" + city.title + "</option>");
+            });
+        }
+       $("#city_load{$id}", context{$id}).hide();
+    }
+    
+    
+    $(function() {
+            
+        //Скрываем штатное поле
+        //Если видимых полей больше одного то скрываем только поле адреса
+        //Если видимое поле 1 то скрываем весь wa-field-address-shipping чтобы
+        //поле "Адрес" не висело пустым
+        if ($(".wa-field-address-shipping .field input[type!=hidden]", context{$id}).length > 1) {
+            $("[name='customer_{$id}[address.shipping][city]']", context{$id}).parent('span').hide();
+        } else {
+            $(".wa-field-address-shipping", context{$id}).hide();
+        }
+
+        setInterval(function(){
+            showHide{$id}(shipping_type{$id}(),context{$id});
+        }, 100)
+        
+        $("select[name='customer_{$id}[address.shipping][region]']", context{$id}).live('change',function(){
+            updateCitySelect{$id}(context{$id});
+        });
+
+        //При изменении города, обновляем штатное поле города и дергаем событие
+        //для перерасчета стоимости и вариантов доставки
+        $("select#city_select{$id}", context{$id}).live('change', function() {
+            $("[name='customer_{$id}[address.shipping][city]']").val($(this).val())
+                    .change();
+        });
+
+
+    })
+
+
+</script>
+<select name='{$name}' id="city_select{$id}">
+    {foreach $city_list as $city}
+    <option value="{$city.title}" {if $current_city == $city.title}selected{/if}>{$city.title}</option>
+    {/foreach}
+</select><i class="icon16 loading" style="display:none;" id="city_load{$id}"></i>

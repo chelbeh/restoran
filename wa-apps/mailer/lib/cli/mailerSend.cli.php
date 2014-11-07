@@ -19,23 +19,35 @@ class mailerSendCli extends waCliController
         }
 
         $message_model = new mailerMessageModel();
-        $messages = $message_model->getMessageForSend();
+        $messages = $message_model->getMessageForSend(true);
+        $fire_event = false;
 
         foreach ($messages as $message) {
-            $mailer_message = new mailerMessage($message);
 
-            // Campaign params
-            $mpm = new mailerMessageParamsModel();
-            $params = $mpm->getByMessage($message['id']);
+            if ($message['send_datetime'] > date('Y-m-d H:i:s')) {
 
-            if ($message['status'] != mailerMessageModel::STATUS_SENDING) {
-                // renew recipients for pending campaigns
-                mailerHelper::updateDraftRecipients($message['id'], 'UpdateDraftRecipientsTable');
-                mailerHelper::prepareRecipients($message, $params);
-                $mailer_message->status(mailerMessageModel::STATUS_SENDING);
+                $fire_event = true;
+
+            } else {
+
+                $mailer_message = new mailerMessage($message);
+
+                // Campaign params
+                $mpm = new mailerMessageParamsModel();
+                $params = $mpm->getByMessage($message['id']);
+
+                if ($message['status'] != mailerMessageModel::STATUS_SENDING) {
+                    // renew recipients for pending campaigns
+                    mailerHelper::updateDraftRecipients($message['id'], 'UpdateDraftRecipientsTable');
+                    mailerHelper::prepareRecipients($message, $params);
+                    $mailer_message->status(mailerMessageModel::STATUS_SENDING);
+                }
+
+                $mailer_message->send();
             }
-
-            $mailer_message->send();
+        }
+        if ($fire_event) {
+            wa()->event('campaign.before_sending');
         }
     }
 }

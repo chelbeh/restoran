@@ -1,7 +1,7 @@
 <h2>[`Scheduled sending`]</h2>
 
 <form id="form-schedule" action="?module=schedule&action=save" method="post">
-{if $cron_ok}
+{*if $cron_ok*}
     {if isset($campaign.id)}<input type="hidden" name="id" value="{$campaign.id}" />{/if}
     <div class="block fields form">
 
@@ -24,7 +24,7 @@
 
         <div id="past-time-error-msg" class="red hidden" style="padding: 10px 0;">[`Incorrect date/time`]</div>
 
-        {if $last_cron_time}
+        {if $cron_ok && $last_cron_time}
         <p class="hint" style="padding: 10px 0;">
             <i class="icon10 yes"></i>
             {$last_cron_time|wa_datetime:'humandatetime'|string_format:'[`Cron is working properly. Latest execution time: %s`]'}
@@ -37,7 +37,7 @@
         <span> [`or`] </span>
         <a href="#/senders/" class="cancel-link">[`cancel`]</a>
     </div>
-{else}
+{*else}
     <div class="error red">[`Scheduled sending is unavailable (no <tt>cron</tt> jobs set up)!`]</div>
     <div class="hidden buttons">
         <div class="hidden buttons">
@@ -46,7 +46,7 @@
             <a href="#/senders/" class="cancel cancel-link">[`cancel`]</a>
         </div>
     </div>
-{/if}
+{/if*}
 </form>
 
 <script src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.datepicker.min.js"></script>
@@ -64,7 +64,7 @@
     // Set up dialog buttons
     var buttons = form.find('.buttons').children();
     form.parents('.dialog').find('.dialog-buttons-gradient').empty().append(buttons);
-{if $cron_ok}
+{*if $cron_ok*}
     buttons.filter('.cancel-link').click(function(e){
         e.preventDefault();
         form.closest('.dialog').trigger('close').remove();
@@ -205,6 +205,6 @@
     {
         return $('.datepicker').datepicker('option', 'dateFormat').toUpperCase().replace('YY', 'YYYY');
     }
-{/if}
+{*/if*}
 })();
 </script>

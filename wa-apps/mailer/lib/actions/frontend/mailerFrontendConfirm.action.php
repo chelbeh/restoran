@@ -28,6 +28,8 @@ class mailerFrontendConfirmAction extends waViewAction
 
         wa()->getAuth()->auth(array('id'=>$contact_id));
 
+        $this->logAction('subscribed_via_form');
+
         $this->redirect(wa()->getRouteUrl('mailer/frontend/mySubscriptions/').'?just-confirmed=1');
 
 //        $this->view->assign('contact_id', $contact_id);

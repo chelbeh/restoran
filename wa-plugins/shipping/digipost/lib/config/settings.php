@@ -1,11 +1,25 @@
 <?php
 return array(
+	'digipost_username'    => array(
+	//	'value'        => '20',
+		'title'        => 'Логин на Digi-Post.ru',
+		'description'  => 'Ваш логин на Digi-Post.ru. Чтобы получить логин, необходимо зарегистрироваться на сайте <a href="http://digi-post.ru/user/registration">Digi-Post.ru</a>.',
+		'control_type' => waHtmlControl::INPUT,
+	),
+	
 	'digipost_api_key'    => array(
 	//	'value'        => '20',
 		'title'        => 'API ключ',
 		'description'  => 'API ключ необходим для работы приложения. Чтобы получить API ключ, необходимо зарегистрироваться на сайте <a href="http://digi-post.ru/user/registration">Digi-Post.ru</a>. <a href="http://digi-post.ru/user/registration">Как получить API ключ</a>.',
 		'control_type' => waHtmlControl::INPUT,
 	),
+	
+	'valued'  => array(
+        'value'        => '1',
+        'title'        => 'Все отправления ценные',
+        'description'  => 'При расчете доставки каждое отправление оценивается в стоимость всего заказа.',
+        'control_type' => waHtmlControl::CHECKBOX,
+    ),
 	
 	'upload'  => array(
         'value'        => '1',
@@ -15,49 +29,29 @@ return array(
     ),
     
 	'deliveries' => array(
-		'value' => array('bookpost', 'valuable_bookpost', 'first_class_valuable_bookpost', 'valuable_bookpost_avia', 'registered_bookpost', 'first_class_registered_bookpost','valuable_parcel','avia_valuable_parcel','ems'),
+		'value' => array('parcel', 'valued_bookpost', 'bookpost_1class', 'bookpost', 'ems'),
 		'title' => 'Доступные способы доставки',
 		'description' => 'укажите способы доставки, которыми вы будете доставлять ваши заказы',
 		'control_type' => waHtmlControl::GROUPBOX,
 		'options' => array(
 			array(
-				'value' => 'bookpost',
-				'title' => 'Простая бандероль',
+				'value' => 'parcel',
+				'title' => 'Посылка',
 				'description' => '',
 			),
 			array(
-				'value' => 'valuable_bookpost',
+				'value' => 'valued_bookpost',
 				'title' => 'Ценная бандероль',
 				'description' => '',
 			),
 			array(
-				'value' => 'first_class_valuable_bookpost',
+				'value' => 'bookpost_1class',
 				'title' => 'Ценная бандероль 1 класс',
 				'description' => '',
 			),
 			array(
-				'value' => 'valuable_bookpost_avia',
-				'title' => 'Ценная авиабандероль',
-				'description' => '',
-			),
-			array(
-				'value' => 'registered_bookpost',
-				'title' => 'Заказная бандероль',
-				'description' => '',
-			),
-			array(
-				'value' => 'first_class_registered_bookpost',
-				'title' => 'Заказная бандероль 1 класс',
-				'description' => '',
-			),
-			array(
-				'value' => 'valuable_parcel',
-				'title' => 'Ценная посылка',
-				'description' => '',
-			),
-			array(
-				'value' => 'avia_valuable_parcel',
-				'title' => 'Ценная авиапосылка',
+				'value' => 'bookpost',
+				'title' => 'Простая бандероль',
 				'description' => '',
 			),
 			array(

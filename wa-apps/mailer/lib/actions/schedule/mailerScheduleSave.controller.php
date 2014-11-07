@@ -40,8 +40,10 @@ class mailerScheduleSaveController extends waJsonController
 
         // validate income datetime
         if ($this->combineDate($datetime)) {
+
             $params['send_datetime'] = $datetime;
             $params['status'] = mailerMessageModel::STATUS_PENDING;
+
         } else {
             $this->errors = array('params' => 'bad params');
         }
@@ -51,6 +53,21 @@ class mailerScheduleSaveController extends waJsonController
             $mm->updateById($message_id, $params);
         } else {
             $this->errors = array('time' => 'past time');
+        }
+        if (empty($this->errors) && !empty($campaign)) {
+            /**@/**
+             * @event campaign.before_sending
+             *
+             * A sending session started for all campaigns
+             *
+             * For all campaigns there could be one sending session. It can be triggered by CRON,
+             * or by a backend user opening campaign report page (for each campaign).
+             *
+             * @return void
+             */
+            wa()->event('campaign.before_sending');
+
+            $this->logAction('scheduled_delayed_sending');
         }
 
         $this->response = $message_id;

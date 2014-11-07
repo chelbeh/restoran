@@ -4,6 +4,6 @@ return array(
 	'description' => 'Доставка Почтой России.',
 	'icon'        => 'img/RussianPost16.png',
 	'logo'        => 'img/RussianPost.png',
-	'version'     => '1.0.0',
+	'version'     => '1.0.1',
 	'vendor'      => 992994,
 );

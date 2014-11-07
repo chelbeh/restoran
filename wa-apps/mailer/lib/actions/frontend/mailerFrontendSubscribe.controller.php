@@ -61,6 +61,7 @@ class mailerFrontendSubscribeController extends waJsonController
             $ms = new mailerSubscriberModel();
             if (empty($form)) { // subscribe to All subscribers
                 if ($contact_id = $ms->addSubscriber(null, $subscriber, array(0))) {
+                    $this->logAction('subscribed_via_form', null, null, $contact_id);
                     $this->response = $contact_id;
                 } else {
                     $this->errors = "error while susbscribing";
@@ -70,7 +71,8 @@ class mailerFrontendSubscribeController extends waJsonController
                 if (isset($form['params']['confirm_mail'])) {
                     $this->confirmationTrigger($form, $subscriber, $lists);
                 } else {
-                    $ms->addSubscriber($form['id'], $subscriber, $lists);
+                    $contact_id = $ms->addSubscriber($form['id'], $subscriber, $lists);
+                    $this->logAction('subscribed_via_form', null, null, $contact_id);
                 }
 
                 if ($form['params']['after_submit'] == 'redirect') {

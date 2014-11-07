@@ -162,8 +162,8 @@ class mailerCampaignsRecipientsAction extends waViewAction
         }
 
         // Recipients records to add
-        $add_values = waRequest::post('add_values');
-        if (!$add_values || !is_array($add_values)) {
+        $add_values = (array)waRequest::post('add_values');
+        if (!$add_values) { // || !is_array($add_values)
             $add_values = array();
         }
         $add_values = array_flip($add_values);

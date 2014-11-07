@@ -1,0 +1,67 @@
+<!-- plugin hook -->
+{* @event frontend_layout.%plugin_id%.header *}
+{foreach $frontend_layout as $item}{if !empty($item.header)}{$item.header}{/if}{/foreach}
+
+{if $action == 'photo'}
+    {* in Default theme sidebar becomes dropdown on pages presenting a single photo *}
+    {$_DROPDOWN_SIDEBAR = 1}
+{/if}
+
+{if !empty($_DROPDOWN_SIDEBAR)}
+<div class="dropdown-sidebar">
+{/if}
+    
+    <nav class="page-nav" role="navigation">
+        <div class="nav-sidebar">
+            <div class="nav-sidebar-body">      
+                <!-- more plugins -->
+                {* @event frontend_sidebar.%plugin_id%.section *}
+                {$_hook_frontend_sidebar_section = false}
+                {foreach $frontend_sidebar as $plugin => $output}
+                    {if !empty($output.section)}
+                        {$_hook_frontend_sidebar_section = true}
+                    {/if}
+                {/foreach}
+                {if $_hook_frontend_sidebar_section}
+                    <div{if $theme_settings.page_nav_mode == 'slidemenu'} class="slidemenu" data-back-lbl="[s`Back`]"{else} class="dropdown"{/if}>
+                        <ul class="menu-v">
+                            {foreach $frontend_sidebar as $plugin => $output}
+                                {if !empty($output.section)}
+                                    <li class="collapsible">
+                                        <a href="#" onClick="return false">
+                                            {if substr($plugin, -7) == '-plugin'}{$wa->pluginName(substr($plugin, 0, -7))}{else}[`More`]{/if}
+                                        </a>
+                                        <ul class="menu-v">
+                                            <li>
+                                                <div class="inner shadowed">
+                                                    {$output.section}
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {/if}
+                            {/foreach}
+                        </ul>
+                    </div>
+                {/if}
+            </div>
+            <div class="clearfix"></div>    
+        </div>
+    </nav>
+    
+    <div id="page-content" {if $action == 'photo'} itemscope itemtype="http://schema.org/Photograph"{/if} class="container">
+        <!-- integrnal navigation breadcrumbs -->
+        <ol class="breadcrumb">
+            {if !empty($breadcrumbs)}
+                <li><a href="{$wa_app_url}">[`Home Page`]</a></li>
+                {foreach $breadcrumbs as $breadcrumb}
+                    <li><a href="{$breadcrumb.full_url}">{$breadcrumb.name|escape}</a></li>
+                {/foreach}
+            {/if}
+        </ol>
+        {$content}
+    </div>
+
+{if !empty($_DROPDOWN_SIDEBAR)}
+</div>
+{/if}

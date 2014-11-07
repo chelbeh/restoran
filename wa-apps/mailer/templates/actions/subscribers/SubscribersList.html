@@ -23,7 +23,7 @@
                 {else}
                 [`Subscription forms`]:
                     {foreach $subscribe_list.forms as $form}
-                    <a class="inline-link" href="{$wa_app_url}#/subscribers/form/{$form.id}" target="_blank">{$form.name}</a>{if !$form@last}, {/if}
+                    <a class="inline-link" href="{$wa_app_url}#/subscribers/form/{$form.id}">{$form.name}</a>{if !$form@last}, {/if}
                     {/foreach}
                 {/if}
             </div>

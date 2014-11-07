@@ -475,7 +475,7 @@
                 saveButton: saveButton,
                 iframe: true,
                 minHeight: height,
-                plugins: ['vars'],
+                plugins: ['fontcolor', 'fontsize', 'fontfamily', 'vars'],
                 imageUpload: '?module=files&action=uploadimage&filelink=1',
                 syncBeforeCallback: function (html) {
                     html = html.replace(/(empty-cells:\s?show;\s*)?outline:\s?rgba\(0,\s?0,\s?0,\s?0\.6\)\sdashed\s1px;?/gi, '');
@@ -508,10 +508,15 @@
         },
 
         resizeWYSIWYG: function (min_height, random, resizer, textarea) {
+            if ($('.wa-editor-core-wrapper').length === 0) {
+                $(window).off('resize', resizer);
+                return;
+            }
             var $window = $(window),
                 window_h = $window.height(),
                 button_container_h = $('#editor-step-1-buttons').outerHeight(),
-                editor_offset_top = $('.wa-editor-core-wrapper').offset().top,
+                editor_offset_offset = $('.wa-editor-core-wrapper').offset(),
+                editor_offset_top = editor_offset_offset.top,
                 ace_padding_h = $('.ace').outerHeight() - $('.ace').height(),
                 editor_toolbar_h = $('.redactor_toolbar').outerHeight(),
                 editor_h = window_h - button_container_h - editor_offset_top - 5;
@@ -886,6 +891,7 @@
             var partialMatch = false;
             var partialMatchLength = 2;
             var match = false;
+            var index = 0;
 
             if (!sidebar) {
                 sidebar = $('#wa-app > .sidebar');
@@ -893,6 +899,7 @@
 
             sidebar.find('li a').each(function (k, v) {
                 v = $(v);
+                index = k;
                 if (!v.attr('href')) {
                     return;
                 }
@@ -917,7 +924,9 @@
 
             if (match) {
                 sidebar.find('.selected').removeClass('selected');
-
+                if (index > 9) {
+                    $('#b-all-drafts a').trigger('click');
+                }
                 // Only highlight items that are outside of dropdown menus
                 if (match.parents('ul.dropdown').size() <= 0) {
                     var p = match.parent();

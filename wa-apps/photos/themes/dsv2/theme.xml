@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="photos" parent_theme_id="site:dsv2" version="2.0.0">
+    <name locale="en_US">Design with taste 2</name>
+    <name locale="ru_RU">Дизайн со вкусом 2</name>
+    <description locale="ru_RU">Семейство адаптивных тем дизайна.</description>
+    <files>
+        <file path="index.html" custom="0" parent="1">
+        </file>
+        <file path="default.photos.css" custom="0">
+            <description locale="en_US">Core Photos app CSS</description>
+            <description locale="ru_RU">Основной CSS приложения «Фото»</description>
+        </file>
+        <file path="default.photos.mobile.css" custom="0">
+            <description locale="en_US">Additional Photos app CSS for multi-touch mobile devices</description>
+            <description locale="ru_RU">Дополнительный CSS приложения «Фото» для мобильных устройств</description>
+        </file>        
+        <file path="main.html" custom="0">
+            <description locale="en_US">Main layout and navigation for the Photos app content</description>
+            <description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Фото»</description>
+        </file>
+        <file path="head.html" custom="0">
+            <description locale="en_US">Photos app's &lt;head&gt; instructions</description>
+            <description locale="en_US">Блок &lt;head&gt; приложения «Фото»</description>
+        </file>
+        <file path="list-thumbs.html" custom="0">
+            <description locale="en_US">Photo list thumbnails view</description>
+            <description locale="ru_RU">Список фотографий эскизами</description>
+        </file>
+        <file path="list-plain.html" custom="0">
+            <description locale="en_US">Photo list plain view</description>
+            <description locale="ru_RU">Список фотографий «простыней»</description>
+        </file>
+        <file path="photo.html" custom="0">
+            <description locale="en_US">One photo and its details</description>
+            <description locale="ru_RU">Просмотр фотографий по одной</description>
+        </file>
+        <file path="home.html" custom="0">
+            <description locale="en_US">Wrapper for the main photo gallery homepage</description>
+            <description locale="ru_RU">Обертка для главной страницы фотогалереи</description>
+        </file>
+        <file path="album.html" custom="0">
+            <description locale="en_US">Wrapper for photo album</description>
+            <description locale="ru_RU">Обертка для альбома фотографий</description>
+        </file>
+        <file path="search.html" custom="0">
+            <description locale="en_US">Wrapper for photo search (filtering) results, e.g. by tag or by rating</description>
+            <description locale="ru_RU">Обертка для страницы поиска (фильтрации) фотографий, например, по тегу или автору</description>
+        </file>
+        <file path="page.html" custom="0">
+            <description locale="en_US">Static page content</description>
+            <description locale="ru_RU">Содержимое информационной страницы</description>
+        </file>
+        <file path="login.html" custom="0">
+            <description locale="en_US">Login page</description>
+            <description locale="ru_RU">Страница входа для пользователей</description>
+        </file>
+        <file path="signup.html" custom="0">
+            <description locale="en_US">Sign up page</description>
+            <description locale="ru_RU">Страница регистрации пользователей</description>
+        </file>
+        <file path="forgotpassword.html" custom="0">
+            <description locale="en_US">Forgot password page</description>
+            <description locale="ru_RU">Страница сброса пароля</description>
+        </file>
+        <file path="error.html" custom="0">
+          <description locale="en_US">404 and other errors</description>
+          <description locale="ru_RU">404 и другие ошибки</description>
+        </file>
+        <file path="footer.html" custom="0">
+            <description locale="en_US">App specific footer content</description>
+            <description locale="ru_RU">Содержимое футера приложения</description>
+        </file>
+        <file path="lazyloading.js">
+            <description locale="en_US">Lazy loading JS</description>
+            <description locale="ru_RU">Скрипты загрузки контента «на лету»</description>
+        </file>
+    <file path="dsv.photos.css" custom="1"><description locale="ru_RU">css стили приложения «Фото»</description></file></files>
+    <about locale="en_US">
+<![CDATA[
+<p><b> «Design with taste» </b> - is a universal family of those designs for all base application framework WebAsyst: Website, Blog, Photography, Shop-Script and others. Parent (main) theme of family, which includes a basic set of CSS-styles and the overall layout design index.html, is the theme for the application «Design with taste» "Site" (this issue). All themes «Design with taste» design for other applications (Blog, Photo and others) use the base CSS and index.html from the parent (main) theme. </ p>
+<p><b> «Design with taste» </b> also adapted and optimized for mobile devices (Pads and Smartphones). Topic is based on Bootstrap 3, which provide correct display on all modern browsers.</p>
+]]>
+    </about>
+    <about locale="ru_RU">
+<![CDATA[
+<p><b> «Дизайн со вкусом» </b> - это универсальное семейство адаптивных тем дизайна для всех базовых приложений фреймворка Вебасист: Сайт, Блог, Фото, Shop-Script и других. Родительской (основной) темой семейства, включающей в себя базовый набор CSS-стилей и общий макет дизайна index.html, является тема «Дизайн со вкусом» для приложения «Сайт». Все темы дизайна шаблона других приложений (Блог, Фото, Магазин и других) используют базовый CSS и index.html из родительской (основной) темы. </p>
+<p><b> «Дизайн со вкусом» </b> также адаптирован и оптимизирован для мобильных устройств (планшеты и смартфоны). Тема дизайна разработана на основе Bootstrap 3, что обеспечивает корректное отображение на всех современных браузерах. </p>
+]]>
+    </about>
+    <thumbs>
+        <thumb>250x0</thumb>
+        <thumb>970</thumb>
+    </thumbs>
+    <locales>
+        <locale>
+            <msgid>Show</msgid>
+            <msgstr locale="ru_RU">Посмотреть</msgstr>
+        </locale>
+        <locale>
+            <msgid>Home Page</msgid>
+            <msgstr locale="ru_RU">Главная страница</msgstr>
+        </locale>
+    </locales>
+</theme>

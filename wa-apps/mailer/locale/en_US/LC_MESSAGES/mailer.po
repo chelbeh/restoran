@@ -63,7 +63,7 @@ msgstr ""
 
 #: /wa-apps/mailer/templates/layouts/Backend.html:75
 msgid "In every outgoing message this variable will be replaced with a personal recipient link that can be used to unsubscribe from your future mailings."
-msgstr ""
+msgstr "In every outgoing message this variable will be replaced with a unique link pointing to recipient's personal subscription management page."
 
 #: /wa-apps/mailer/templates/layouts/Backend.html:80
 msgid "Following variables will be replaced with recipient's contact data:"

@@ -37,6 +37,8 @@ class mailerTemplatesSaveController extends waJsonController
             $data['create_contact_id'] = $this->getUser()->getId();
             // save template
             $id = $template_model->insert($data);
+
+            $this->logAction('composed_new_template');
         }
 
         if (!empty($data['body'])) {

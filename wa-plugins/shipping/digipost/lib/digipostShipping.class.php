@@ -25,146 +25,84 @@ class digipostShipping extends waShipping
 
 	public function calculate()
 	{
-		$digipost_api_key = trim($this->digipost_api_key);
+		if (!empty($this->digipost_username) || !empty($this->digipost_api_key)) {
 
-		if (!empty($digipost_api_key)) {
-
-			$weight = $this->getTotalWeight();
+			$weight = $this->getTotalWeight()*1000;
 			if ($weight <= 0) {$weight = $this->default_weight;}
 			$zip = trim($this->getAddress('zip'));
 			$from_zip = trim($this->from_zip);
+			if ($this->valued) {$valued = $this->getTotalPrice();} else {$valued = 0;}
 
 			if (!empty($zip)) {
+
 				if (!empty($from_zip)) {
+
 					$services = array();
-					$data = array('key'=>$digipost_api_key, 'to'=>$this->getAddress('zip'), 'from'=>$from_zip, 'weight'=>$weight, 'value'=> $this->getTotalPrice(), 'method'=>'json');
+					
+					$url = 'http://digi-post.ru/api/calc?';
+					$data = array('to'=>$this->getAddress('zip'), 'from'=>$from_zip, 'weight'=>$weight, 'value'=>$valued);
+					
+					$Response = $this->getFromDigiApi($url, $data, 'get');
 
-					$Response = $this->getFromApi($data, 'calculate');
-					$res = json_decode($Response);
+					if (is_string($this->getSettings('allowance'))) {
+						$allowance = (int)$this->getSettings('allowance');
+					} else {
+						$allowance = 0;
+					}
 
-					if($res != null) {
+					//print_r($Response);
 
-						if (isset($res->delivery_time)) {
-						$std = $res->delivery_time->standart +6;
-						$first_class = $res->delivery_time->first_class +6;
-						$avia = $res->delivery_time->avia +6;
-						$ems = $res->delivery_time->first_class +2;
+					if (!empty($Response->parcel) && !empty($this->deliveries['parcel'])) {
+						$parcel_eta_to = $Response->parcel->eta+5;
+						$services['parcel'] = array(
+							'name'         => $Response->parcel->type,
+							'description' => $Response->info->route,
+							'id'           => 'parcel',
+							'est_delivery' => waDateTime::format('humandate', strtotime('+'.(int)$Response->parcel->eta.' days')).' — '.waDateTime::format('humandate', strtotime('+'.$parcel_eta_to.' days')),
+							'rate'         => $Response->parcel->cost + $allowance,
+							'currency'     => 'RUB',
+						);
+					}
 
-						$delivery_date = waDateTime::format('humandate', strtotime('+'.(int)$res->delivery_time->standart.' days')).' — '.waDateTime::format('humandate', strtotime('+'.(int)$std.' days'));
-						$delivery_date_first_class = waDateTime::format('humandate', strtotime('+'.(int)$res->delivery_time->first_class.' days')).' — '.waDateTime::format('humandate', strtotime('+'.(int)$first_class.' day'));
-						$delivery_date_avia = waDateTime::format('humandate', strtotime('+'.(int)$res->delivery_time->avia.' days')).' — '.waDateTime::format('humandate', strtotime('+'.(int)$avia.' day'));
-						$delivery_date_ems = waDateTime::format('humandate', strtotime('+'.(int)$res->delivery_time->first_class.' days')).' — '.waDateTime::format('humandate', strtotime('+'.(int)$ems.' day'));
-						
-						} else {
-							$delivery_date = false;
-							$delivery_date_first_class = false;
-							$delivery_date_avia = false;
-							$delivery_date_ems = false;
-							
-						}
-						
-						if (is_string($this->getSettings('allowance'))) {
-							$allowance = (int)$this->getSettings('allowance');
-						} else {
-							$allowance = 0;
-						}
+					if (!empty($Response->bookpost_1class) && !empty($this->deliveries['bookpost_1class'])) {
+						$bookpost_1class_eta_to = $Response->bookpost_1class->eta+3;
+						$services['bookpost_1class'] = array(
+							'name'         => $Response->bookpost_1class->type,
+							'description' => $Response->info->route,
+							'id'           => 'bookpost_1class',
+							'est_delivery' => waDateTime::format('humandate', strtotime('+'.(int)$Response->bookpost_1class->eta.' days')).' — '.waDateTime::format('humandate', strtotime('+'.$bookpost_1class_eta_to.'days')),
+							'rate'         => $Response->bookpost_1class->cost_nds + $allowance,
+							'currency'     => 'RUB',
+						);
+					}
 
-						if (isset($res->bookpost) && $weight < $res->bookpost->max_weight && !empty($this->deliveries['bookpost'])) {
-							$services['bookpost'] = array(
-								'name'         => $res->bookpost->name,
-								'description' => $res->to->address,
-								'est_delivery' => $delivery_date,
-								'id'           => 'bookpost',
-								'rate'         => $res->bookpost->rate + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
-						if (isset($res->valuable_bookpost) && $weight < $res->valuable_bookpost->max_weight && !empty($this->deliveries['valuable_bookpost'])) {
-							$services['valuable_bookpost'] = array(
-								'name'         => $res->valuable_bookpost->name,
-								'description' => $res->to->address,
-								'id'           => 'valuable_bookpost',
-								'est_delivery' => $delivery_date,
-								'rate'         => $res->valuable_bookpost->delivery + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
-						if (isset($res->first_class_valuable_bookpost) && $weight < $res->first_class_valuable_bookpost->max_weight && !empty($this->deliveries['first_class_valuable_bookpost'])) {
-							$services['first_class_valuable_bookpost'] = array(
-								'name'         => $res->first_class_valuable_bookpost->name,
-								'description' => $res->to->address,
-								'id'           => 'first_class_valuable_bookpost',
-								'est_delivery' => $delivery_date_first_class,
-								'rate'         => $res->first_class_valuable_bookpost->delivery + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
-						if (isset($res->valuable_bookpost_avia) && $weight < $res->valuable_bookpost_avia->max_weight && !empty($this->deliveries['valuable_bookpost_avia'])) {
-							$services['valuable_bookpost_avia'] = array(
-								'name'         => $res->valuable_bookpost_avia->name,
-								'description' => $res->to->address,
-								'id'           => 'valuable_bookpost_avia',
-								'est_delivery' => $delivery_date_avia,
-								'rate'         => $res->valuable_bookpost_avia->delivery + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
-						if (isset($res->registered_bookpost) && $weight < $res->registered_bookpost->max_weight && !empty($this->deliveries['registered_bookpost'])) {
-							$services['registered_bookpost'] = array(
-								'name'         => $res->registered_bookpost->name,
-								'description' => $res->to->address,
-								'id'           => 'registered_bookpost',
-								'est_delivery' => $delivery_date,
-								'rate'         => $res->registered_bookpost->rate + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
+					if (!empty($Response->valued_bookpost) && !empty($this->deliveries['valued_bookpost'])) {
+						$valued_bookpost_eta_to = $Response->valued_bookpost->eta+4;
+						$services['valued_bookpost'] = array(
+							'name'         => $Response->valued_bookpost->type,
+							'description' => $Response->info->route,
+							'id'           => 'valued_bookpost',
+							'est_delivery' => waDateTime::format('humandate', strtotime('+'.(int)$Response->parcel->eta.' days')).' — '.waDateTime::format('humandate', strtotime('+'.$valued_bookpost_eta_to.'days')),
+							'rate'         => $Response->valued_bookpost->cost_nds + $allowance,
+							'currency'     => 'RUB',
+						);
+					}
 
-						if (isset($res->first_class_registered_bookpost) && $weight < $res->first_class_registered_bookpost->max_weight && !empty($this->deliveries['first_class_registered_bookpost'])) {
-							$services['first_class_registered_bookpost'] = array(
-								'name'         => $res->first_class_registered_bookpost->name,
-								'description' => $res->to->address,
-								'id'           => 'first_class_registered_bookpost',
-								'est_delivery' => $delivery_date_first_class,
-								'rate'         => $res->first_class_registered_bookpost->rate + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
+					if (!empty($Response->bookpost) && !empty($this->deliveries['bookpost'])) {
+						$bookpost_eta_to = $Response->bookpost->eta+4;
+						$services['bookpost'] = array(
+							'name'         => $Response->bookpost->type,
+							'description' => $Response->info->route,
+							'id'           => 'bookpost',
+							'est_delivery' => waDateTime::format('humandate', strtotime('+'.(int)$Response->parcel->eta.' days')).' — '.waDateTime::format('humandate', strtotime('+'.$bookpost_eta_to.'days')),
+							'rate'         => $Response->bookpost->cost_reg_bookpost_cost_nds + $allowance,
+							'currency'     => 'RUB',
+						);
+					}
 
-						if (isset($res->valuable_parcel) && $weight < $res->valuable_parcel->max_weight && !empty($this->deliveries['valuable_parcel'])) {
-							$services['valuable_parcel'] = array(
-								'name'         => $res->valuable_parcel->name,
-								'description' => $res->to->address,
-								'id'           => 'valuable_parcel',
-								'est_delivery' => $delivery_date,
-								'rate'         => $res->valuable_parcel->delivery + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
-
-						if (isset($res->avia_valuable_parcel) && $weight < $res->avia_valuable_parcel->max_weight && !empty($this->deliveries['avia_valuable_parcel'])) {
-							$services['avia_valuable_parcel'] = array(
-								'name'         => $res->avia_valuable_parcel->name,
-								'description' => $res->to->address,
-								'id'           => 'avia_valuable_parcel',
-								'est_delivery' => $delivery_date_avia,
-								'rate'         => $res->avia_valuable_parcel->delivery + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
-
-						if (isset($res->ems) && $weight < $res->ems->max_weight && !empty($this->deliveries['ems'])) {
-							$services['ems'] = array(
-								'name'         => $res->ems->name,
-								'description' => $res->to->address,
-								'id'           => 'ems',
-								'est_delivery' => $delivery_date_ems,
-								'rate'         => $res->ems->delivery + $allowance,
-								'currency'     => 'RUB',
-							);
-						}
-
-					} else { $services = false; }
+					if (!empty($Response->error)) {
+						return $Response->message;
+					}
 
 				} else {
 					$services = false;
@@ -173,7 +111,6 @@ class digipostShipping extends waShipping
 			} else {
 				$services = 'Для расчета стоимости доставки укажите почтовый индекс!';
 			}
-
 		} else {
 			$services = false;
 		}
@@ -567,12 +504,62 @@ if (!$response && !$hint) {
 		return $response;
 	}
 
+	public function getFromDigiApi($url, $data, $type) {
+
+		$timeout = 5;
+		if (!empty($data)) {
+			$str = http_build_query($data);
+		} else {
+			$str = '';
+		}
+
+		$url=$url.$str;
+		//print_r($url);
+		if (extension_loaded('curl') && function_exists('curl_init')) {
+			$curl_error = null;
+			if (!($ch = curl_init())) {
+				$curl_error = 'curl init error';
+			}
+			if (curl_errno($ch) != 0) {
+				$curl_error = 'curl init error: '.curl_errno($ch);
+			}
+			if (!$curl_error) {
+
+				@curl_setopt($ch, CURLOPT_URL, $url);
+				@curl_setopt($ch, CURLOPT_USERPWD, trim($this->digipost_username) . ":" . trim($this->digipost_api_key));
+				@curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+				@curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+
+				if ($type == 'post') {
+					@curl_setopt($ch, CURLOPT_POST, true);
+					@curl_setopt($ch, CURLOPT_POSTFIELDS, $str);
+				}
+
+				$res = @curl_exec($ch);
+				$response = $this->getResult($res);
+
+				//print_r($response);
+
+				if (curl_errno($ch) != 0) {
+					$curl_error = 'curl error: '.curl_errno($ch);
+				}
+				curl_close($ch);
+			} else {
+				throw new waException($curl_error);
+			}
+		} else {
+			throw new waException("PHP extension 'curl' is not loaded");
+		}
+		return $response;
+	}
+
 	public function getResult($res) {
 		$temp = json_decode($res);
 		if (isset($temp->error))
 			return $temp;
 
-		return $res;
+		return $temp;
 	}
 
 }

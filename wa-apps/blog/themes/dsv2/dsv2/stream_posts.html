@@ -1,0 +1,85 @@
+{* post stream (list): default view mode *}
+<div class="container">
+<ul class="timeline">
+{foreach $posts as $post}
+    <li id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts" {/if}itemscope itemtype="http://schema.org/BlogPosting"{if $post@index is odd} class="timeline-inverted"{/if}>
+        <div class="timeline-badge primary">
+            <i class="fa fa-dot-circle-o"></i>
+        </div>
+        <div class="timeline-panel">
+            <div class="timeline-heading">
+                {if !empty($post.preview)}
+                    <img src="{$wa_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
+                {/if}
+            </div>
+            <div class="timeline-body text-justify">
+                <h2>
+                    <a href="{$post.link}">{$post.title}</a>
+                    {* @event prepare_posts_frontend.%plugin_id%.post_title *}
+                    {if !empty($post.plugins.post_title)}
+                        {foreach $post.plugins.post_title as $plugin => $output}{$output}{/foreach}
+                    {/if}
+                </h2>
+                {* @event prepare_posts_frontend.%plugin_id%.before *}
+                {if !empty($post.plugins.before)}
+                    <div class="text_before">
+                        {foreach $post.plugins.before as $plugin => $output}{$output}{/foreach}
+                    </div>
+                {/if}
+                <div>
+                    {$post.text}
+                </div>
+                {* @event prepare_posts_frontend.%plugin_id%.after *}
+                {if !empty($post.plugins.after)}
+                    <div class="text_after">
+                        {foreach $post.plugins.after as $plugin => $output}{$output}{/foreach}
+                    </div>
+                {/if}
+                {if $post.cutted}
+                    <a href="{$post.link}" class="btn-blue btn-simple">{$post.cut_link_label|default:'[`Continue reading →`]'}</a>
+                {/if}
+            </div>
+            <div class="timeline-footer">
+                <ul class="list-inline list-unstyled">
+                    <li>
+                        <i class="fa fa-pencil"></i>
+                        {if $post.user.posts_link}
+                            <a href="{$post.user.posts_link}" class="username theme-color">{$post.user.name}</a>
+                        {else }
+                            <span class="username">{$post.user.name}</span>
+                        {/if}
+                    </li>
+                    <li>
+                        <i class="fa fa-calendar"></i>
+                        <span class="date">{$post.datetime|wa_datetime:"humandate"}</span>
+                    </li>
+                    <li>
+                        <span class="timeline-comments">
+                            {if $show_comments && $post.comments_allowed}
+                                {if !empty($post.comment_count)}
+                                    <i class="fa fa-comments-o"></i> 
+                                    <a href="{$post.link}#comments">
+                                        {_w('%d comment','%d comments',$post.comment_count)}
+                                    </a>
+                                {else}
+                                    {*
+                                    <a href="{$post.link}#comments">
+                                        [`no comments`]
+                                    </a>
+                                    *}
+                                {/if}
+                            {/if}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </li>
+{foreachelse}
+    {if $page lt 2}
+        {_w('%d post','%d posts',0)}
+    {/if}
+{/foreach}
+<li class="clearfix" style="float: none;"></li>
+</ul>
+</div>

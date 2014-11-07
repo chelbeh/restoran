@@ -56,6 +56,8 @@ class mailerFrontendMySubscriptionsAction extends waViewAction
             ), true);
 
             $unsubscriber = $just_unsubscribed = true;
+
+            $this->logAction('unsubscribed_from_all_mailings');
         }
 
         if ($update_subscriptions) {
@@ -75,6 +77,8 @@ class mailerFrontendMySubscriptionsAction extends waViewAction
                 $ms->add($contact->getId(), $lists_to_subscribe, $default_email);
 
                 $contact_subscriptions_ids = $lists_nothing_to_do + $lists_to_subscribe;
+
+                $this->logAction('edited_subscription');
             }
             else {
                 // if contact is in Unsubscribers and noting selected - delete all subscriptions
@@ -90,8 +94,12 @@ class mailerFrontendMySubscriptionsAction extends waViewAction
             // if contact is in Unsubscribers already we will subscibr him again
             $mu->deleteByField('email', $user_emails);
 
+            $ms->add($contact->getId(), 0, $default_email); // Subscribe to all lists
+
             $unsubscriber = $just_unsubscribed = false;
             $just_subscribed_again = true;
+
+            $this->logAction('subscribed_from_customer_portal');
         }
 
         foreach ($all_subscriptions as $subscription) {

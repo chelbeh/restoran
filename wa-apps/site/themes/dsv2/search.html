@@ -1,0 +1,21 @@
+{if $wa_app != "blog"}
+    {if $wa->shop}
+    <form method="get" action="{$wa->getUrl('shop/frontend/search')}">
+        <div class="search input-group">
+            <input type="search" name="query" class="form-control" placeholder="[s`Find products`]"{if !empty($query)} value="{$query}"{/if}>
+            <span class="input-group-btn">
+                <button class="btn btn-default theme-background theme-border-color" type="submit"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    {/if}
+{else}
+    <form method="get" action="{$wa->getUrl('blog/frontend/')}">
+        <div class="search input-group">
+            <input type="search" name="query" class="form-control" id="search" placeholder="[`Search posts`]" {if !empty($blog_query)}value="{$blog_query}"{/if}>
+            <span class="input-group-btn">
+                <button class="btn btn-default theme-background theme-border-color" type="submit"><i class="fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+{/if}

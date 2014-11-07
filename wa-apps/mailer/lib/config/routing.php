@@ -30,7 +30,7 @@ return array(
         'secure' => false
     ),
 
-    'subscribe' => 'frontend/subscribe/',
+    'subscribe/?' => 'frontend/subscribe/',
 
     'confirm/<hash>/' => array(
         'url' => 'confirm/<hash>/?',

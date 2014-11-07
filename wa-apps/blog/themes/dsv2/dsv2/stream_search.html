@@ -1,0 +1,39 @@
+{* post stream (list): minimalistic view mode; used for post filtering by tags, author, search, etc. *}
+
+{foreach $posts as $post}
+    <div class="post search-match margin-bottom-50" id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts"{/if} itemscope itemtype="http://schema.org/BlogPosting">
+        <div class="post-heading">
+            {if !empty($post.preview)}
+                <img src="{$wa_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
+            {/if}
+        </div>
+        <div class="post-info">
+            <ul class="list-inline list-unstyled">
+                <li>
+                    <i class="fa fa-pencil"></i>
+                    {if $post.user.posts_link}
+                        <a href="{$post.user.posts_link}" class="theme-color username">{$post.user.name}</a>
+                    {else}
+                        <span class="username">{$post.user.name}</span>
+                    {/if}
+                </li>
+                <li>
+                    <i class="fa fa-calendar"></i> {$post.datetime|wa_datetime:"humandate"}
+                </li>
+                <li>
+                    <span><i class="fa fa-comments-o"></i> {_w('%d comment','%d comments',$post.comment_count)}</span>
+                </li>
+            </ul>    
+        </div>
+        <div class="post-body">
+            <h3><a href="{$post.link}" itemprop="url">{$post.title}</a></h3>
+            <div>
+                {$post.text}
+            </div>
+        </div>
+    </div>
+{foreachelse}
+    {if !isset($page) || $page lt 2}
+        {_w('%d post','%d posts',0)}
+    {/if}
+{/foreach}

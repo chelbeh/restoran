@@ -1,0 +1,282 @@
+{if $wa->shop && $wa_app != "blog" && $wa_app != "photos"}
+    {if isset($category)}
+        {$selected_category=$category.id}
+    {else}
+        {$selected_category=null}
+    {/if}
+    {$categories = $wa->shop->categories(0, null, true, true)}
+    <nav class="navbar navbar-default" rol="navigation">
+        <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target="#catalog">
+                <span class="sr-only">[`Catalog`]</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand visible-xs">[`Catalog`]</span>
+        </div>
+        <div class="navbar-collapse collapse" id="catalog">
+            <ul class="nav navbar-nav">
+                {foreach $categories as $cat}
+                    {if count($cat.childs)}
+                    <li class="dropdown">
+                    <a href="{$cat.url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">{$cat.name}</a>
+                    {if isset($cat.params.col)}
+                    {if $cat.params.col > 1 && $cat.params.col <= 3}
+                        {$base_col=$cat.params.col}
+                    {/if}
+                    <div class="dropdown-menu{if isset($cat.params.right) && $cat.params.right == '1'} menu_right{/if}">
+                        {$sum=0}
+                        <div class="col_{$base_col} col_header">
+                            {if $wa->isMobile()}
+                            <a href="{$cat.url}">{$cat.name}</a>
+                            {/if}
+                        </div>
+                        {$next=0}
+                        {foreach $cat.childs as $subcat}
+                            {$col=1}
+                            {if !empty($subcat.params.col) && (empty($subcat.params.split) || $subcat.params.split < 2)}
+                                {$col=$subcat.params.col}
+                            {/if}
+                            {if $next != 1}
+                            <div class="col_{$col}{if isset($subcat.params.border) || !empty($subcat.params.split)} border-none{/if}">
+                            {/if}
+                                <ul>
+                                    <li class="first">
+                                        <a href="{$subcat.url}">{if isset($subcat.params.icon)}<img src="{$wa_url}{$subcat.params.icon}" alt="{$subcat.name}" class="subcat-icon">{/if}{$subcat.name}</a>
+                                    </li>
+                                    {if count($subcat.childs)}
+                                        {if !empty($subcat.params.split) && $subcat.params.split>1 && $subcat.params.split < 4}
+                                            {$subcat_count=(count($subcat.childs)/$subcat.params.split)|round}
+                                            {$sub_col=1}
+                                        {/if}
+                                        {foreach $subcat.childs as $subsubcat}
+                                            <li><a href="{$subsubcat.url}">{$subsubcat.name}</a></li>
+                                            {if !empty($subcat.params.split) && $subcat.params.split>1 && $subcat_count>1 && $subsubcat@iteration is div by $subcat_count}
+                                                {$sub_col=$sub_col+1}
+                                                </ul>
+                                                </div>
+                                                {$sum=$sum+$col}
+                                                {if $sum==$base_col}
+                                                    <div class="clearfix"></div>
+                                                    {$sum=0}
+                                                {/if}
+                                                {if !$subsubcat@last}
+                                                <div class="col_{$col}{if (!empty($subcat.params.border) && $subcat.params.border=='0') || (!empty($subcat.params.split) && $subcat.params.split!=$sub_col)} border-none{/if}">
+                                                <ul>
+                                                <li class="empty">&nbsp;</li>
+                                                {else}
+                                                <div class="col_{$base_col} border-none" style="display: none">
+                                                <ul>
+                                                <li></li>
+                                                {/if}
+                                            {/if}
+                                        {/foreach}
+                                    {/if}
+                                </ul>
+                            {if count($subcat.childs)}    
+                            </div>
+                                {$next=0}
+                                {$sum=$sum+$col}
+                            {else}
+                                {$next=1}
+                            {/if}
+                            
+                            {if $sum==$base_col}
+                                <div class="clearfix"></div>
+                                <div class="col_{$base_col} col_divider"></div>
+                                {$sum=0}
+                            {/if}
+                        {/foreach}
+                    </div>
+                    {else}
+                        {$base_col=1}
+                        <ul class="dropdown-menu">
+                            {foreach $cat.childs as $subcat}
+                                <li{if $subcat.childs} class="dropdown-submenu"{/if}>
+                                    <a href="{$subcat.url}">{$subcat.name}</a>
+                                    {wa_print_tree tree=$subcat.childs selected=$selected_category unfolded=true collapsible_class='collapsible' class="dropdown-menu" elem ='<a href=":url" title=":name">:name</a>'}
+                                </li>
+                            {/foreach}
+                        </ul>
+                    {/if}
+                    </li>
+                    {else}
+                        <li><a href="{$cat.url}">{$cat.name}</a></li>
+                    {/if}
+                {/foreach}
+            </ul>
+        </div>
+        </div>
+    </nav>
+{/if}
+
+{if $wa_app == "blog" || $wa_app == "photos"}
+{if $wa->shop}
+    {if isset($category)}
+        {$selected_category=$category.id}
+    {else}
+        {$selected_category=null}
+    {/if}
+    {$categories = $wa->shop->categories(0, null, true, true)}
+{/if}
+<nav class="navbar navbar-default" rol="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target="#catalog">
+                <span class="sr-only">[`Catalog`]</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand visible-xs">[`Catalog`]</span>
+        </div>
+        <div class="navbar-collapse collapse" id="catalog">
+            <ul class="nav navbar-nav">
+                {if $wa->shop && count($categories)}
+                    <li class="dropdown cats">
+                        <a href="{$cat.url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true"><i class="fa fa-bars fa-lg"></i> [s`Categories`]</a>
+                        <ul class="dropdown-menu">
+                            {foreach $categories as $cat}
+                                <li><a href="{$cat.url}">{$cat.name}</a></li>
+                            {/foreach}
+                        </ul>
+                    <li>
+                {/if}
+                
+                {if $wa_app == "blog"}
+                    <!-- timeline navigation -->
+                    {$timeline = $wa->blog->timeline()}
+                    {if !empty($timeline)}
+                        <li>
+                            <a href="#" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">[`Calendar`]</a>
+
+                            <ul class="dropdown-menu">
+                                {$year=null}
+                                {foreach $timeline as $year_month => $item}
+                                    {if $year neq $item.year}
+                                        {if !$item@first}
+                                                </ul>
+                                            </li>
+                                        {/if}
+                                        <li class="dropdown-submenu{if $item.year_selected} selected{/if}">
+                                        {$year=$item.year}
+                                        <a href="{$item.year_link}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="false">{$item.year|default:'NULL'}</a>
+                                        <ul class="dropdown-menu">
+                                    {/if}
+                                    <li {if $item.selected}class="selected"{/if}>
+                                        <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">{_ws(date("F",gmmktime(0,0,0,$item.month,1)))}</a>
+                                    </li>
+                                    {if $item@last}
+                                            </ul>
+                                        </li>
+                                    {/if}
+                                {/foreach}
+                            </ul>
+                        </li>
+                    {/if}
+                    
+                    <!-- blogs -->
+                    {$blogs = $wa->blog->blogs()}
+                    {if count($blogs) > 1}
+                        <li class="{if is_array($wa->globals('blog_id')) && empty($is_search)}bold{/if}"><a href="{$wa->blog->url()}">[`All posts`]</a></li>
+                        {foreach $blogs as $blog}
+                            <li class="{if $wa->globals('blog_id') eq $blog.id && empty($is_search)}{if $action == 'post'}bold{else}selected{/if}{/if}">
+                                <a href="{$blog.link}">{$blog.name}</a>
+                            </li>
+                        {/foreach}
+                    {/if}
+
+                    <!-- info pages -->
+                    {$blog_pages=$wa->blog->pages()}
+                    {if $blog_pages}
+                        {foreach $blog_pages as $_page}
+                            {if count($_page.childs)>0}
+                                <li class="{if $_page.id == $page.id} active{/if}">
+                                    <a href="{$_page.url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">{$_page.title} <i class="fa fa-angle-down"></i></a>
+                                    <ul class="dropdown-menu">
+                                        {foreach $_page.childs as $page_child}
+                                            <li{if $page_child.id == $page.id} class="active"{/if}><a href="{$page_child.url}">{$page_child.title}</a></li>
+                                        {/foreach}
+                                    </ul>
+                                </li>
+                            {else}
+                                <li{if $_page.id == $page.id} class="active"{/if}><a href="{$_page.url}">{$_page.title}</a></li>
+                            {/if}
+                        {/foreach}
+                    {/if}
+
+                    <!-- plugins -->
+                    {* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.sidebar *}
+                    {foreach $frontend_action as $plugin => $output}
+                      {if !empty($output.sidebar)}
+                        <li>
+                            <a href="#" onClick="return false" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">
+                                {if substr($plugin, -7) == '-plugin'}{$wa->pluginName(substr($plugin, 0, -7))}{else}[`More`]{/if}
+                            </a>
+                            <ul class="dropdown-menu">
+                            {$output.sidebar}
+                            </ul>
+                        </li>
+                      {/if}
+                    {/foreach}
+                {/if}
+                <!-- end blog menu tems -->
+                
+                {if $wa_app == "photos"}
+                    <li {if $wa->currentUrl() == $wa_app_url} class="active"{/if}>
+                        <a href="{$wa_app_url}">[`Photostream`]</a>
+                    </li>
+                    <li {if $wa->param('action') neq 'page' && $wa->param('action') neq 'album' && $wa->param('hash') == 'favorites'} class="selected"{/if}>
+                        <a href="{$wa_app_url}favorites/">[`Editors’ choice`]</a>
+                    </li>
+
+                    <!-- albums -->
+                    {if $albums = $wa->photos->albums(0)}
+                    <li>
+                        <a href="javascript:void(0);" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">[`Albums`] <i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            {foreach $albums as $album}
+                                <li>
+                                    <a href="{$album.url}">{$album.name}</a>
+                                </li>
+                            {/foreach}
+                        </ul>
+                    </li>
+                    {/if}
+
+                    <!-- tags -->
+                    {if $cloud = $wa->photos->tags()}
+                    <li>
+                        <a href="#" onClick="return false" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">[`Tags`] <i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            {foreach $cloud as $tag}
+                                <a href="{$wa_app_url}tag/{$tag.uri_name}/" style="font-size: {$tag.size}%; opacity: {$tag.opacity}">{$tag.name|escape}</a>
+                            {/foreach}
+                        </ul>
+                    </li>
+                    {/if}
+
+                    {$photos_pages=$wa->photos->pages()}
+                    {if $photos_pages}
+                        {foreach $photos_pages as $_page}
+                        <li>
+                            <a href="{$_page.url|escape}"{if !empty($_page.childs)} class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true"{/if}>{$_page.name}{if !empty($_page.childs)} <i class="fa fa-angle-down"></i>{/if}</a>
+                            {if !empty($_page.childs)}
+                                {wa_print_tree tree=$_page.childs class="dropdown-menu" attrs = 'id="page-list"' elem ='<a href=":url" title=":title">:name</a>' collapsible_class='collapsible' selected=$wa->param('page_id')}
+                            {/if}
+                        </li>
+                        {/foreach}
+                    {/if}
+                    <!-- plugins -->
+                    {* @event frontend_sidebar.%plugin_id%.menu *}
+                    {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.menu)}
+                    <li>{$item.menu}</li>
+                    {/if}{/foreach}
+                {/if}
+            </ul>
+        </div>
+    </div>
+</nav>
+{/if}

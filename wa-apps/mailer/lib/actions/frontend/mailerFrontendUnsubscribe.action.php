@@ -66,7 +66,9 @@ class mailerFrontendUnsubscribeAction extends waViewAction
                 ));
 
             // Add to wa_log
-            $this->log('unsubscribe', 1, $log['contact_id'], 'list:'.$list_id.";message:".$message['id']);
+            //$this->log('unsubscribe', 1, $log['contact_id'], 'list:'.$list_id.";message:".$message['id']);
+            $this->logAction('unsubscribed_from_all_mailings', null, null, $log['contact_id']);
+
         } else {
 
         }
@@ -89,18 +91,15 @@ class mailerFrontendUnsubscribeAction extends waViewAction
         ), 2);
 
         // Remove email from mailer_subscriber
-        $subscribe_model = new mailerSubscriberModel();
-        $subscribe_model->deleteByField('email', $email);
-
         $email_id = $ce->getByField(array(
                 'email' => $email
             ));
         if ($email_id) {
-            // Remove email from mailer_subscriber
             $ms->deleteByField('contact_email_id', $email_id['id']);
         }
         // Add to wa_log
-        $this->log('unsubscribe', 1, 0);
+        //$this->log('unsubscribe', 1, 0);
+        $this->logAction('unsubscribed_from_all_mailings');
     }
 }
 

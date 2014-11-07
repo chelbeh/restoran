@@ -7,12 +7,16 @@ class mailerHelper
 {
     public static function getVars()
     {
+        $exclude = array('company_contact_id');
         $fields = waContactFields::getAll();
         $vars = array(
             //'<a href="{$unsubscribe_link}">'._w('Unsubscribe').'</a>' => _w('Unsubscribe URL'),
         );
         foreach ($fields as $f) {
-            $vars['{$'.$f->getId().'}'] = $f->getName();
+            $id = $f->getId();
+            if (!in_array($id, $exclude)) {
+                $vars['{$'.$f->getId().'}'] = $f->getName();
+            }
         }
         return $vars;
     }
@@ -473,14 +477,27 @@ class mailerHelper
         $view->assign('params', $mailer_form_params);
         $view->assign('lists', $mailer_form_lists);
 
-
-
         return $view->fetch(wa('mailer')->getAppPath('templates/forms/subscription_form.html'));
     }
 
     public static function quant($num, $quantum)
     {
         return ceil(($num) / (60 * $quantum)) * (60 * $quantum);
+    }
+
+    public static function getOneStringKey($dkim_pub_key)
+    {
+        $one_string_key = trim(preg_replace('/^\-{5}[^\-]+\-{5}(.+)\-{5}[^\-]+\-{5}$/s', '$1', trim($dkim_pub_key)));
+        //$one_string_key = str_replace('-----BEGIN PUBLIC KEY-----', '', $dkim_pub_key);
+        //$one_string_key = trim(str_replace('-----END PUBLIC KEY-----', '', $one_string_key));
+        $one_string_key = preg_replace('/\s+/s', '', $one_string_key);
+        return $one_string_key;
+    }
+
+    public static function getDkimSelector($email)
+    {
+        $e = explode('@', $email);
+        return trim(preg_replace('/[^a-z0-9]/i', '', $e[0])) . 'wamail';
     }
 }
 
