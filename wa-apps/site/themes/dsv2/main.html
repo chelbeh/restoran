@@ -1,4 +1,4 @@
-<div id="page-content" class="container">
+<div id="page-content" {if !$theme_settings.sidebar || $wa->isMobile() || $wa->userAgent('device') == 'ipad'} class="container"{/if}>
     {if $wa->currentUrl() == $wa_app_url && (empty($page.content) || $page.content == '')}
         <div class="welcome">
             <h1>[`Welcome to your new site!`]</h1>

@@ -682,6 +682,9 @@ class mailerMessage extends mailerSimpleMessage
         return $m;
     }
 
+    /**
+     * @param Swift_Message $message
+     */
     protected function attachSigner(&$message)
     {
         // DKIM Signer

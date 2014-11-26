@@ -133,19 +133,24 @@
     <div class="field-group">
         <div class="field">
             <div class="name">
-				<label for="is-dkim">DKIM</label>
-			</div>
+                <label for="is-dkim">DKIM</label>
+            </div>
             <div class="value">
                 <div class="small float-right">[`<a target="_blank" href="http://www.webasyst.com/help/2024/mailer-dkim/">What is DKIM</a>`]</div>
               	<div id="dkim-needs-email" class="small float-right" style="margin-right: 50px; display: none;">[`Please enter sender's email address to use DKIM.`]</div>
 
-                <label><input type="checkbox" name="params[dkim]" id="is-dkim" value="1"{if !empty($params.dkim)} checked{/if}{if empty($params.ssl_is_set)} disabled{/if} /></label>
+                <label><input type="checkbox" name="params[dkim]" id="is-dkim" value="1"{if !empty($params.dkim)} checked{/if}{if empty($params.ssl_is_set) || empty($params.php_version_ok)} disabled{/if} /></label>
                 <input type="hidden" name="params[dkim_pvt_key]" value="{ifset($params.dkim_pvt_key)}" />
                 <input type="hidden" name="params[dkim_pub_key]" value="{ifset($params.dkim_pub_key)}" />
             </div>
             {if empty($params.ssl_is_set)}
             <div class="value">
                 [`You need to install openssl php extention to use DKIM`]
+            </div>
+            {/if}
+            {if empty($params.php_version_ok)}
+            <div class="value">
+                [`You need PHP version 5.3 or higher to use DKIM. Your current version is:`] <b>{$params.php_version}</b>
             </div>
             {/if}
         </div>

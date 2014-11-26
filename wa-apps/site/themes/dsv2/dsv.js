@@ -2,23 +2,13 @@ $(function() {
     window.scrollBy(0, 1);
     $('#phones').popover();
 
-    /*
-    if (Modernizr.touch) {
-        var $body = jQuery('body'); 
-        $(document)
-        .on('focus', 'input', function(e) {
-            $body.addClass('fixfixed');
-        })
-        .on('blur', 'input', function(e) {
-            $body.removeClass('fixfixed');
-        });
-    }    */
- /*
-    var height = $(".navbar-default ul.nav li").height() + 2;
-    $(".navbar-default ul.nav li:not([id])").filter(function() {
-        return this.offsetTop + $(this).height() > height;
-    }).wrapAll("<ul>").parent().appendTo("#overflow .dropdown-menu");
-*/
+    $("#search").focus(function(){
+        $(this).closest('.input-group').addClass("active_search");
+    });
+    $("#search").focusout(function(){
+        $(this).closest('.input-group').removeClass("active_search");
+    });
+
     /* Форма авторизации */
     $("a[data-auth=1]").click(function(){
         $('#signupModal').modal('hide');
@@ -82,23 +72,26 @@ $(function() {
         return false;
     });
 
+    $('div#cart').affix({
+      offset: {
+        top: 150,
+        bottom: 200,
+      }
+    })
+
     if($('#cart').length){
         $('#cart').hover(function(){
             var cart = $(this), fcart = cart.find('.flying-cart');
             if(!cart.hasClass('highlight')) return false;
             clearTimeout(fcart.data('timer'));
             if(fcart.is(':animated') || fcart.hasClass('active')) return false;
-            fcart.css('bottom', -fcart.outerHeight()-40);
-            fcart.stop().animate({bottom: cart.outerHeight()+20}, 'slow', function(){
-                $(this).addClass('active');
-            });
+            fcart.fadeIn();
         }, function(){
             if(!$('#cart').hasClass('highlight')) return false;
             var fcart = $(this).find('.flying-cart');
+            
             fcart.data('timer', setTimeout(function(){
-                fcart.stop().animate({bottom: -fcart.outerHeight()+20}, "slow", function(){
-                    $(this).removeClass('active').css('bottom', -340);
-                });
+                fcart.fadeOut();
             }, 1000));
         });
         
@@ -146,4 +139,8 @@ $(function() {
             }, "json");
         });
     }
+    
+    $('.list-toggle').on('click', function() {
+        $(this).toggleClass('active');
+    });
 });

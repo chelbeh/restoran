@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.0.0">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.1.0">
     <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <description locale="en_US">Adaptive design theme for all base Webasyst apps</description>
@@ -8,7 +8,7 @@
     <files>
         <file path="index.html" custom="0">
     		<description locale="en_US">Core layout of the Default theme family</description>
-    		<description locale="ru_RU">Основной макет тем дизайна семейства «Дизайн со вкусом»</description>
+    		<description locale="ru_RU"/>
         </file>
     	<file path="main.html" custom="0">
     		<description locale="en_US">Main layout for the Site app content</description>
@@ -73,7 +73,31 @@
         <file path="head.html" custom="0">
             <description locale="ru_RU">Блок &lt;head&gt; приложения «Сайт»</description>
         </file>
-    <file path="search.html" custom="1"><description locale="ru_RU">Форма поиска</description></file><file path="menu.html" custom="1"><description locale="ru_RU">Меню категорий</description></file><file path="menu.mobile.html" custom="1" modified="1"><description locale="ru_RU">Каталог для мобильных устройств</description></file></files>
+        <file path="search.html" custom="1">
+            <description locale="ru_RU">Форма поиска</description>
+        </file>
+        <file path="menu.html" custom="1">
+            <description locale="ru_RU">Меню категорий</description>
+        </file>
+        <file path="menu.mobile.html" custom="1">
+            <description locale="ru_RU">Каталог для мобильных устройств</description>
+        </file>
+        <file path="dsv.user.css" custom="1">
+            <description locale="ru_RU">Пользовательский файл стилей</description>
+        </file>
+        <file path="sidebar.html" custom="1">
+            <description locale="ru_RU">Содержание боковой панели</description>
+        </file>
+        <file path="sidebar.css" custom="1">
+            <description locale="ru_RU">css стили боковой панели</description>
+        </file>
+        <file path="social.vkontakte.html" custom="1">
+            <description locale="ru_RU">Виджет сообщества Вконтакте</description>
+        </file>
+        <file path="social.facebook.html" custom="1">
+            <description locale="ru_RU">Виджет сообщества facebook</description>
+        </file>
+    </files>
     <about locale="en_US">
 <![CDATA[
 <p><b> «Design with taste» </b> - is a universal family of those designs for all base application framework WebAsyst: Website, Blog, Photography, Shop-Script and others. Parent (main) theme of family, which includes a basic set of CSS-styles and the overall layout design index.html, is the theme for the application «Design with taste» "Site" (this issue). All themes «Design with taste» design for other applications (Blog, Photo and others) use the base CSS and index.html from the parent (main) theme. </ p>
@@ -136,17 +160,41 @@
                     <name locale="en_US">without texture</name>
                     <name locale="ru_RU">без текстуры</name>
                 </option>
+                <option value="back_pattern">
+                    <name locale="en_US">back_pattern</name>
+                </option>
+                <option value="black_lozenge">
+                    <name locale="en_US">black_lozenge</name>
+                </option>
                 <option value="blizzard">
                     <name locale="en_US">blizzard</name>
                 </option>
+                <option value="brickwall">
+                    <name locale="en_US">brickwall</name>
+                </option>
+                <option value="carbon_fibre">
+                    <name locale="en_US">carbon_fibre</name>
+                </option>
                 <option value="crossword">
                     <name locale="en_US">crossword</name>
+                </option>
+                <option value="dark_fish_skin">
+                    <name locale="en_US">dark_fish_skin</name>
+                </option>
+                <option value="embossed_paper">
+                    <name locale="en_US">embossed_paper</name>
+                </option>
+                <option value="first_aid_kit">
+                    <name locale="en_US">first_aid_kit</name>
                 </option>
                 <option value="foggy_birds">
                     <name locale="en_US">foggy_birds</name>
                 </option>
                 <option value="food">
                     <name locale="en_US">food</name>
+                </option>
+                <option value="geometry">
+                    <name locale="en_US">geometry</name>
                 </option>
                 <option value="geometry2">
                     <name locale="en_US">geometry2</name>
@@ -157,11 +205,29 @@
                 <option value="green_gobbler">
                     <name locale="en_US">green_gobbler</name>
                 </option>
+                <option value="grey">
+                    <name locale="en_US">grey</name>
+                </option>
                 <option value="halftone">
                     <name locale="en_US">halftone</name>
                 </option>
+                <option value="honey_im_subtle">
+                    <name locale="en_US">honey_im_subtle</name>
+                </option>
+                <option value="light_wool">
+                    <name locale="en_US">light_wool</name>
+                </option>
+                <option value="lil_fiber">
+                    <name locale="en_US">lil_fiber</name>
+                </option>
+                <option value="notebook">
+                    <name locale="en_US">notebook</name>
+                </option>
                 <option value="photography">
                     <name locale="en_US">photography</name>
+                </option>
+                <option value="pixel_weave">
+                    <name locale="en_US">pixel_weave</name>
                 </option>
                 <option value="plaid">
                     <name locale="en_US">plaid</name>
@@ -178,8 +244,26 @@
                 <option value="ricepaper">
                     <name locale="en_US">ricepaper</name>
                 </option>
+                <option value="sandpaper">
+                    <name locale="en_US">sandpaper</name>
+                </option>
                 <option value="sativa">
                     <name locale="en_US">sativa</name>
+                </option>
+                <option value="shinecaro">
+                    <name locale="en_US">shinecaro</name>
+                </option>
+                <option value="simple_dashed">
+                    <name locale="en_US">simple_dashed</name>
+                </option>
+                <option value="sneaker_mesh_fabric">
+                    <name locale="en_US">sneaker_mesh_fabric</name>
+                </option>
+                <option value="sos">
+                    <name locale="en_US">sos</name>
+                </option>
+                <option value="sprinkles">
+                    <name locale="en_US">sprinkles</name>
                 </option>
                 <option value="squared_metal">
                     <name locale="en_US">squared_metal</name>
@@ -196,8 +280,29 @@
                 <option value="subtlenet2">
                     <name locale="en_US">subtlenet2</name>
                 </option>
+                <option value="tapestry_pattern">
+                    <name locale="en_US">tapestry_pattern</name>
+                </option>
+                <option value="tex2res3">
+                    <name locale="en_US">tex2res3</name>
+                </option>
+                <option value="tex2res4">
+                    <name locale="en_US">tex2res4</name>
+                </option>
+                <option value="tex2res5">
+                    <name locale="en_US">tex2res5</name>
+                </option>
                 <option value="tileable_wood_texture">
                     <name locale="en_US">tileable_wood_texture</name>
+                </option>
+                <option value="triangles_pattern">
+                    <name locale="en_US">triangles_pattern</name>
+                </option>
+                <option value="tweed">
+                    <name locale="en_US">tweed</name>
+                </option>
+                <option value="wavegrid">
+                    <name locale="en_US">wavegrid</name>
                 </option>
                 <option value="wild_oliva">
                     <name locale="en_US">wild_oliva</name>
@@ -300,6 +405,16 @@
             <description locale="en_US">Example: Modern online shop</description>
             <description locale="ru_RU">Например: Современный интернет-магазин</description>
         </setting>
+        <setting var="social_size" control_type="image_select">
+            <value>img/themesettings/medium.png</value>
+            <name locale="ru_RU">Размер социальных иконок</name>
+            <name locale="en_US">Social icons size</name>
+            <options>
+                <option value="img/themesettings/small.png"/>
+                <option value="img/themesettings/medium.png"/>
+                <option value="img/themesettings/large.png"/>
+            </options>
+        </setting>
         <setting var="fb" control_type="text">
             <value>https://www.facebook.com/</value>
             <name locale="en_US">Facebook page URL</name>
@@ -327,6 +442,202 @@
             <name locale="ru_RU">Имя пользователя в Твиттере</name>
             <description locale="en_US">Example: webasyst</description>
             <description locale="ru_RU">Например: webasyst_ru</description>
+        </setting>
+        <setting var="cart" control_type="radio">
+            <value>bottom</value>
+            <name locale="en_US">Cart position
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 65px -500px 0 0;">Sidebar</p>                 
+            ]]>
+            </name>
+            <name locale="ru_RU">Расположение корзины
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 65px -500px 0 0;">Боковая панель</p>                 
+            ]]>
+            </name>
+            <options>
+                <option value="top">
+                    <name locale="en_US">top</name>
+                    <name locale="ru_RU">вверху</name>
+                    <description locale="en_US">Cart placed in app menu.</description>
+                    <description locale="ru_RU">Корзина находится в меню приложений.</description>
+                </option>
+                <option value="bottom">
+                    <name locale="en_US">bottom</name>
+                    <name locale="ru_RU">Внизу</name>
+                    <description locale="en_US">Cart placed in usermenu (compare, favourite)</description>
+                    <description locale="ru_RU">Корзина находится в пользовательском меню (сравнение, избранное).</description>
+                </option>
+            </options>
+        </setting>
+        <setting var="catalog_header" control_type="select">
+            <value>light</value>
+            <name locale="en_US">Catalog header style</name>
+            <name locale="ru_RU">Стиль заголовка каталога</name>
+            <options>
+                <option value="light">
+                    <name locale="ru_RU">светлый</name>
+                    <name locale="en_US">light</name>
+                </option>
+                <option value="dark">
+                    <name locale="ru_RU">темный</name>
+                    <name locale="en_US">dark</name>
+                </option>
+            </options>
+        </setting>
+        <setting var="sidebar" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show / hide sidebar</name>
+            <name locale="ru_RU">Отобразить / скрыть боковую панель</name>
+        </setting>
+        <setting var="sidebar_news" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show / hide news</name>
+            <name locale="ru_RU">Отобразить / скрыть последние новости</name>
+        </setting>
+        <setting var="sidebar_brand" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show / hide brands</name>
+            <name locale="ru_RU">Отобразить / скрыть бренды</name>
+        </setting>
+        <setting var="sidebar_info" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show / hide information</name>
+            <name locale="ru_RU">Отобразить / скрыть блок «Информация»</name>
+        </setting>
+        <setting var="sidebar_tags" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show / hide tags</name>
+            <name locale="ru_RU">Отобразить / скрыть блок «Теги»</name>
+        </setting>
+        <setting var="sidebar_communities" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show / hide communities widgets</name>
+            <name locale="ru_RU">Отобразить / скрыть виджеты сообществ</name>
+        </setting>
+        <setting var="sidebar_photos" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show / hide latest photos
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">VK Community</p>                 
+            ]]>
+            </name>
+            <name locale="ru_RU">Отобразить / скрыть последние фото
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">Сообщество Вконтакте</p>                 
+            ]]>
+            </name>
+        </setting>
+        <setting var="vk_id" control_type="text">
+            <value>21415010</value>
+            <name locale="en_US">VK community id</name>
+            <name locale="ru_RU">Идентификатор сообщества</name>
+            <description locale="en_US">Example: 21415010</description>
+            <description locale="ru_RU">Например: 21415010</description>
+        </setting>
+        <setting var="vk_mode" control_type="select">
+            <value></value>
+            <name locale="en_US">Widget mode</name>
+            <name locale="ru_RU">Вид виджета</name>
+            <options>
+                <option value="0">
+                    <name locale="ru_RU">Участиники сообщества</name>
+                    <name locale="en_US">Community members</name>
+                </option>
+                <option value="1">
+                    <name locale="ru_RU">Только название</name>
+                    <name locale="en_US">Only name</name>
+                </option>
+                <option value="2">
+                    <name locale="ru_RU">Новости</name>
+                    <name locale="en_US">News</name>
+                </option>
+            </options>
+        </setting>
+        <setting var="vk_height" control_type="text">
+            <value>300</value>
+            <name locale="en_US">VK community height</name>
+            <name locale="ru_RU">Высота виджета</name>
+            <description locale="en_US">Example: 400</description>
+            <description locale="ru_RU">Например: 400</description>
+        </setting>
+        <setting var="vk_color1" control_type="color">
+            <value/>
+            <name locale="en_US">Background color</name>
+            <name locale="ru_RU">Цвет фона</name>
+            <description locale="en_US">Example: #000000</description>
+            <description locale="ru_RU">Например: #000000</description>
+        </setting>
+        <setting var="vk_color2" control_type="color">
+            <value/>
+            <name locale="en_US">Font color</name>
+            <name locale="ru_RU">Цвет текста</name>
+            <description locale="en_US">Example: #000000</description>
+            <description locale="ru_RU">Например: #000000</description>
+        </setting>
+        <setting var="vk_color3" control_type="color">
+            <value/>
+            <name locale="en_US">Button color
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">Facebook community</p>                 
+            ]]>
+            </name>
+            <name locale="ru_RU">Цвет кнопок
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">Сообщество facebook</p>                 
+            ]]>
+            </name>
+            <description locale="en_US">Example: #000000</description>
+            <description locale="ru_RU">Например: #000000</description>
+        </setting>
+        <setting var="fb_href" control_type="text">
+            <value>https://www.facebook.com/Webasyst.RU</value>
+            <name locale="en_US">FB community link</name>
+            <name locale="ru_RU">Ссылка на сообщество</name>
+            <description locale="en_US">Example: https://www.facebook.com/FacebookDevelopers</description>
+            <description locale="ru_RU">Например: https://www.facebook.com/FacebookDevelopers</description>
+        </setting>
+        <setting var="fb_height" control_type="text">
+            <value>300</value>
+            <name locale="en_US">FB community height</name>
+            <name locale="ru_RU">Высота виджета</name>
+            <description locale="en_US">Example: 400</description>
+            <description locale="ru_RU">Например: 400</description>
+        </setting>
+        <setting var="fb_color" control_type="select">
+            <value>dark</value>
+            <name locale="en_US">Color scheme</name>
+            <name locale="ru_RU">Цветовая схема</name>
+            <options>
+                <option value="light">
+                    <name locale="ru_RU">светлая</name>
+                    <name locale="en_US">light</name>
+                </option>
+                <option value="dark">
+                    <name locale="ru_RU">темная</name>
+                    <name locale="en_US">dark</name>
+                </option>
+            </options>
+        </setting>
+         <setting var="fb_faces" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show Friends' Faces</name>
+            <name locale="ru_RU">Показать лица друзей</name>
+        </setting>
+        <setting var="fb_header" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show header</name>
+            <name locale="ru_RU">Показать заголовок</name>
+        </setting>
+        <setting var="fb_stream" control_type="checkbox">
+            <value/>
+            <name locale="en_US">Show latest posts</name>
+            <name locale="ru_RU">Показать последние посты</name>
+        </setting>
+        <setting var="fb_border" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Show border</name>
+            <name locale="ru_RU">Показать границу</name>
         </setting>
     </settings>
     <locales>
@@ -381,6 +692,38 @@
         <locale>
             <msgid>All right reserved</msgid>
             <msgstr locale="ru_RU">Все права защищены</msgstr>
+        </locale>
+        <locale>
+            <msgid>Latest news</msgid>
+            <msgstr locale="ru_RU">Последние новости</msgstr>
+        </locale>
+        <locale>
+            <msgid>Information</msgid>
+            <msgstr locale="ru_RU">Информация</msgstr>
+        </locale>
+        <locale>
+            <msgid>Communities</msgid>
+            <msgstr locale="ru_RU">Сообщества</msgstr>
+        </locale>
+        <locale>
+            <msgid>Latest Photos</msgid>
+            <msgstr locale="ru_RU">Последние Фото</msgstr>
+        </locale>
+        <locale>
+            <msgid>Tags</msgid>
+            <msgstr locale="ru_RU">Теги</msgstr>
+        </locale>
+        <locale>
+            <msgid>Product catalog</msgid>
+            <msgstr locale="ru_RU">Каталог товаров</msgstr>
+        </locale>
+        <locale>
+            <msgid>Brands</msgid>
+            <msgstr locale="ru_RU">Бренды</msgstr>
+        </locale>
+        <locale>
+            <msgid>Product catalog</msgid>
+            <msgstr locale="ru_RU">Каталог товаров</msgstr>
         </locale>
     </locales>
 </theme>

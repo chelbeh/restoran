@@ -91,6 +91,14 @@
   }
 }
 @media (max-width: 480px) {
+  .auth .container {
+    text-align: center;
+  }
+  .auth ul.usermenu {
+    display: inline-block;
+    float: none !important;
+  }
+
   .navbar-default .navbar-nav > li a {
     border-bottom: solid 1px #eee;
   }

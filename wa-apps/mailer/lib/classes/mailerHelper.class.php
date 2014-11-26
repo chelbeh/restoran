@@ -143,7 +143,13 @@ class mailerHelper
         $mrm = new mailerMessageRecipientsModel();
         $recipients = $mrm->getAllByMessage($campaign_id);
         // Loop through all message_resipients and gather data avout what is selected
+
         foreach($recipients as $key => $value) {
+
+            if (empty($value['value'])) {
+                continue;
+            }
+
             // Skip list types supported by plugins
             if ($value['value']{0} == '@') {
                 continue;

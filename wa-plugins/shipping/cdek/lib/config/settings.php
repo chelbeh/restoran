@@ -60,10 +60,16 @@ return array(
         'description' => 'Средняя длина посылки',
         'control_type' => waHtmlControl::INPUT,
     ),
+    'surcharge_by_order' => array(
+        'value' => 0,
+        'title' => 'Надбавка (% от заказа)',
+        'description' => 'Указанный процент берется от стоимости товаров в заказе.',
+        'control_type' => waHtmlControl::INPUT,
+    ),
     'surcharge' => array(
         'value' => 0,
-        'title' => 'Надбавка (%)',
-        'description' => 'Указанный процент от общей стоимости отправления будет прибавлен к стоимости доставки.',
+        'title' => 'Надбавка (% от доставки)',
+        'description' => 'Указанный процент берется от стоимости доставки.',
         'control_type' => waHtmlControl::INPUT,
     ),
     'tariff_list' => array(
@@ -80,6 +86,11 @@ return array(
             array(
                 'value' => '137',
                 'title' => 'Посылка склад-дверь',
+                'description' => '',
+            ),
+            array(
+                'value' => '139',
+                'title' => 'Посылка дверь-дверь',
                 'description' => '',
             ),
             array(

@@ -1,0 +1,11 @@
+<!-- FB Widget -->
+<div class="fb-like-box"
+    data-href="{$theme_settings.fb_href}"
+    data-width="260"
+    data-height="{if empty($theme_settings.fb_height)}400{else}{$theme_settings.fb_height}{/if}"
+    data-colorscheme="{if empty($theme_settings.fb_color)}light{else}{$theme_settings.fb_color}{/if}"
+    data-show-faces="{if empty($theme_settings.fb_faces)}false{else}true{/if}"
+    data-header="{if empty($theme_settings.fb_header)}false{else}true{/if}"
+    data-stream="{if empty($theme_settings.fb_stream)}false{else}true{/if}"
+    data-show-border="{if empty($theme_settings.fb_border)}false{else}true{/if}"
+></div>

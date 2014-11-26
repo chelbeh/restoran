@@ -1,7 +1,33 @@
 <style>
-    .del-block {
+    table.zebra td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .del-block, .click-block {
         display: inline-block;
-        padding-left: 200px;
+        
+    }
+    input.banner-size {
+        border: 0px none;
+        background: inherit;
+        cursor: pointer;
+    }
+    input.banner-size.width {
+        text-align: right;
+    }
+    input.banner-size.edit {
+        border: 1px solid #666666;
+        cursor: text;
+    }
+    body.wait {
+        cursor: wait;
+    }
+    
+    input.banner-name.hidden {
+        display: none;
+    }
+    .banner-edit-ico {
+        cursor: pointer;
     }
     
 </style>
@@ -28,14 +54,46 @@
 
 <div class="block">
 	<h1 class="wa-page-heading">[`All banners`]</h1>
+    <div>[`Attention! The routing rule must be specified for the application ('Private settlement' in Site->Structure->Banner)`]</div>
+    <div>&nbsp;</div>
    	<table class="zebra">
+        <tr>
+            <th>
+                [`Name`]
+            </th>
+            <th>
+                [`Size`]
+            </th>
+            <th>
+                [`Clicks`]
+            </th>
+            <th>
+                [`Code`]
+            </th>
+            <th>
+                &nbsp;
+            </th>
+        </tr>
    		{foreach from=$banners item=b}
     	<tr>
         	<td>
-                <b>#{$b.id}</b>&nbsp;&nbsp;&nbsp;&nbsp;<b><a href="#/banner/{$b.id}/" style="display: inline-block;">{$b.title}</a></b><br />
-        		<i>{$b.width} &times; {$b.height}</i>
-                
-                <div class="del-block" id="{$b.id}">
+                <b><a href="#/banner/{$b.id}/" style="display: inline-block; padding-right: 10px;" id="banner-name-link-{$b.id}">{$b.title}</a>
+                <input type="text" value="{$b.title}" class="banner-param banner-name hidden" id="banner-name-edit-{$b.id}" data-id="{$b.id}" ></b> 
+                <i class="icon16 edit banner-edit-ico" data-id="{$b.id}" id="banner-edit-ico-{$b.id}" title="[`Click for edit`]"></i><br />
+            </td>
+            <td>
+                <input type="text" value="{$b.width}" name="width" size="4" maxlength="4" class="banner-param banner-size width" data-id="{$b.id}" title="[`Click for edit`]"> &times; <input type="text" value="{$b.height}" name="height" size="4" maxlength="4" class="banner-param banner-size height" data-id="{$b.id}" title="[`Click for edit`]">
+            </td>
+            <td>
+                <div class="click-block">
+                    {$b.click}
+                </div>
+            </td>
+            <td>
+                {literal}{$wa->banner->getBanner({/literal}{$b.id})}
+            </td>
+            <td>
+                <div class="del-block" >
                     <a class="banner-del-link" href="#" class="bold no-underline" id="{$b.id}">
                         <i class="icon16 delete"></i><strong class="underline">[`Delete this banner`]</strong>
                     </a>

@@ -121,3 +121,28 @@ msgstr "Файл не может быть сохранен: недостаточ
 
 msgid "Failed to upload file"
 msgstr "Файл не загружен"
+
+msgid "Clicks"
+msgstr "Кликов"
+
+msgid "Click for edit"
+msgstr "Кликните для правки"
+
+msgid "none"
+msgstr "не задано"
+
+msgid ""
+"Attention! The routing rule must be specified for the application ('Private "
+"settlement' in Site->Structure->Banner)"
+msgstr ""
+"Внимание! Для приложения должно быть указано правило маршрутизации ('Скрытое "
+"поселение' в меню Сайт->Структура->Баннер)"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Size"
+msgstr "Размеры"
+
+msgid "Code"
+msgstr "Код для вставки"

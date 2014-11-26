@@ -11,6 +11,19 @@
         cursor: pointer;
     }
     
+    .banner-param {
+        border: 0px none;
+        background: inherit;
+        cursor: pointer;
+    }
+    .banner-param.edit {
+        border: 1px solid #666666;
+        cursor: text;
+    }
+    body.wait {
+        cursor: wait;
+    }
+    
 </style>
 
 <div class="block">
@@ -126,6 +139,7 @@
                 <th>[`'Title' tag`]</th>
                 <th>[`Link`]</th>
                 <th>[`Show`]</th>
+                <th>[`Clicks`]</th>
                 <th></th>
             </tr>
        		{foreach from=$items item=i}
@@ -133,9 +147,9 @@
             	<td style="width: 1px;">
             		<a href="{$i.url}" title="Full size" target="_blank" style="display: block;"><img src="{$i.url}" id="img_{$i.id}" class="banner_img_preview"></a><br />
             	</td>
-                <td>{$i.alt}</td>
-                <td>{$i.title}</td>
-                <td><a href="{$i.link}" target="_blank">{$i.link}</a></td>
+                <td><input type="text" value="{$i.alt}" class="banner-param" title="[`Click for edit`]" name="alt" data-id="{$i.id}" placeholder="[`none`]"></td>
+                <td><input type="text" value="{$i.title}" class="banner-param" title="[`Click for edit`]" name="title" data-id="{$i.id}" placeholder="[`none`]"></td>
+                <td><input type="text" value="{$i.link}" class="banner-param" title="[`Click for edit`]" name="link" data-id="{$i.id}" placeholder="[`none`]"></td>
                 <td>
                     {if $i.on > 0}
                         <em>
@@ -143,15 +157,18 @@
                             [`Enabled`]
                         </em>
                         <br>&nbsp;<br>
-                        <a class="link-enable inline-link edit-link" onclick="$.banner.itemEdit({$i.id}, 0);" ><b><i>[`Disable`]</i></b></a>
+                        <a class="link-enable inline-link edit-link" onclick="$.banner.itemEdit({$i.id}, { on: 0});" ><b><i>[`Disable`]</i></b></a>
                     {else}
                         <em>
                             <i class="icon16 no"></i>
                             [`Disabled`]
                         </em>
                         <br>&nbsp;<br>
-                        <a class="link-enable inline-link edit-link" onclick="$.banner.itemEdit({$i.id}, 1);" ><b><i>[`Turn on`]</i></b></a>
+                        <a class="link-enable inline-link edit-link" onclick="$.banner.itemEdit({$i.id}, { on: 1});" ><b><i>[`Turn on`]</i></b></a>
                     {/if}
+                </td>
+                <td>
+                    {$i.click}
                 </td>
                 <td>
                     <a class="item-del-link" href="#" class="bold no-underline" id="{$i.id}">

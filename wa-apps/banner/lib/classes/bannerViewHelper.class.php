@@ -32,7 +32,8 @@ class bannerViewHelper
             }
             
             $banner['title'] = addslashes($banner['title']);
-            $html = "<a href='$banner[link]' title='$banner[title]' $target_blank ><img src='$banner[url]' alt='$banner[alt]' $attr></a>";
+            
+            $html = "<a href='".wa()->getRouteUrl("banner")."click/$banner[id]"."' title='$banner[title]' $target_blank ><img src='$banner[url]' alt='$banner[alt]' $attr></a>";
         } 
         return $html;
         

@@ -20,6 +20,8 @@ class mailerSendersDialogAction extends waViewAction
         }
 
         $params['ssl_is_set'] = extension_loaded('openssl');
+        $params['php_version_ok'] = version_compare(PHP_VERSION, '5.3') >= 0;
+        $params['php_version'] = PHP_VERSION;
 
         if ($sender) {
             $email = explode('@', $sender['email']);
@@ -27,7 +29,6 @@ class mailerSendersDialogAction extends waViewAction
             $sender['one_string_key'] = mailerHelper::getOneStringKey(ifset($params['dkim_pub_key']));
             $params['dkim_selector'] = mailerHelper::getDkimSelector($sender['email']);
         }
-//wa_dump($params);
 
         $this->assignSenderTypes(waSystemConfig::isDebug() || $params['type'] == 'test');
         $this->view->assign('show_delete_button', $id && $sender && $sender_model->countAll() > 1);
