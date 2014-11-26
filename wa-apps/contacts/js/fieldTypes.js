@@ -1557,7 +1557,7 @@ $.wa.fieldTypesFactory = function(contactEditor, fieldType) {
                     //.append('<div class="ext"><strong><span style="display:none" class="replace-with-ext"></span></strong></div>')
                     .append(this.fieldValue.value)
                     .append('<span style="display:none" class="replace-with-ext"></span> ')
-                    .append('<a target="_blank" href="//maps.google.ru/maps?q=' + encodeURIComponent(map_url) + '&z=15" class="small map-link">' + $_('map') + '</a>');
+                    .append('<a target="_blank" href="//maps.google.com/maps?q=' + encodeURIComponent(map_url) + '&z=15" class="small map-link">' + $_('map') + '</a>');
                 return result;
             }
 

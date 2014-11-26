@@ -437,7 +437,7 @@ class waPageActions extends waActions
 
         if (!is_writable($path)) {
             $p = substr($path, strlen(wa()->getDataPath('', true)));
-            $errors = sprintf(_w("File could not bet saved due to the insufficient file write permissions for the %s folder."), $p);
+            $errors = sprintf(_w("File could not be saved due to insufficient write permissions for the %s folder."), $p);
         } else {
             $errors = array();
             $f = waRequest::file('file');
@@ -586,10 +586,12 @@ class waPageActions extends waActions
             $model = new waModel();
             $blocks = $model->query('SELECT * FROM site_block ORDER BY sort')->fetchAll('id');
 
+            $active_app = wa()->getApp();
             $apps = wa()->getApps();
             foreach ($apps as $_app_id => $_app) {
                 $path = $this->getConfig()->getAppsPath($_app_id, 'lib/config/site.php');
                 if (file_exists($path)) {
+                    waLocale::load(wa()->getLocale(), $this->getConfig()->getAppsPath($_app_id, 'locale'), $_app_id, true);
                     $site_config = include($path);
                     if (!empty($site_config['blocks'])) {
                         foreach ($site_config['blocks'] as $block_id => $block) {
@@ -606,6 +608,7 @@ class waPageActions extends waActions
                     }
                 }
             }
+            wa()->setActive($active_app);
         } else {
             $blocks = array();
         }

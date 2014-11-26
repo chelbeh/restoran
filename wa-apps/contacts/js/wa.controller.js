@@ -1167,7 +1167,7 @@
                 return; // could show it somewhere else in theory...
             }
             h1 = $(h1[0]);
-            if (h1.find('.loading').size() > 0) {
+            if (h1.find('.loading').show().size() > 0) {
                 return;
             }
             h1.append('<i class="icon16 loading"></i>');

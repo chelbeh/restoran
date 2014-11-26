@@ -104,10 +104,9 @@ class contactsContactsMergeSelectMasterAction extends waViewAction
                 'name' => ''
             );
             if ($c['create_contact_id']) {
-                try {
-                    $author = new waContact($c['create_contact_id']);
-                } catch (Exception $e) {
-                    // Contact not found. Ignore silently.
+                $author_contact = new waContact($c['create_contact_id']);
+                if ($author_contact->exists()) {
+                    $author = $author_contact;
                 }
             }
             $c['author'] = $author;

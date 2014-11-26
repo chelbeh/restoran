@@ -1305,3 +1305,7 @@ msgid_plural "%d contacts were skipped because they have user accounts"
 msgstr[0] "%d контакт был пропущен, потому что он является пользователем"
 msgstr[1] "%d контакты были пропущены, потому что они являются пользователями"
 msgstr[2] "%d контактов были пропущены, потому что они являются пользователями"
+
+#: /wa-apps/contacts/lib/config/logs.php:62
+msgid "created a new signup form"
+msgstr "создал новую форму регистрации"

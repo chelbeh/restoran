@@ -57,5 +57,8 @@ return array(
     ),
     'event_edit' => array(
         'name' => /*_w*/('edited event')
+    ),
+    'create_signup_form' => array(
+        'name' => /*_w*/('created a new signup form')
     )
 );
