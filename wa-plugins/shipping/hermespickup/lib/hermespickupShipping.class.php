@@ -4,13 +4,13 @@ class hermespickupShipping extends waShipping
 {
 
     public function calculate(){
-        return null;
-        $region_id = $this->getAddress('region');
+        $region_code = $this->getAddress('region');
         $city = $this->getAddress('city');
-        if ($region_id) {
-            if (isset($this->regions[$region_id]['price'])) {
-                $price = $this->regions[$region_id]['price'];
-                $time = $this->regions[$region_id]['time'];
+        if ($region_code) {
+            $region_id = "region_$region_code";
+            if (isset($this->regions[$region_code]['price'])) {
+                $price = $this->regions[$region_code]['price'];
+                $time = $this->regions[$region_code]['time'];
                 if($price>0){
                     //мы доставляем в этот регион
                     $rate = $price;
@@ -18,9 +18,9 @@ class hermespickupShipping extends waShipping
                     if($order_price>=$this->free_shipping){
                         $rate = 0;
                     }
-                    if(isset($this->regions[$region_id]['points'])){
+                    if(isset($this->$region_id)){
                         $result = array();
-                        foreach($this->regions[$region_id]['points'] as $id=>$params){
+                        foreach($this->$region_id as $id=>$params){
                             if($city==''||($city==$params['city'])){
                                 $result['point_'.$id] = array(
                                     'est_delivery' => $time,
@@ -43,10 +43,14 @@ class hermespickupShipping extends waShipping
         $str = '';
         $str .= "<b>Адрес:</b>\n";
         $str .= $params['address']."\n";
-        $str .= "<b>Время работы:</b>\n";
-        $str .= $params['hours']."\n";
-        $str .= "<b>Телефон:</b>\n";
-        $str .= $params['phone']."\n";
+        if($params['hours']){
+            $str .= "<b>Время работы:</b>\n";
+            $str .= $params['hours']."\n";
+        }
+        if($params['phone']){
+            $str .= "<b>Телефон:</b>\n";
+            $str .= $params['phone']."\n";
+        }
         return str_replace("\n", "<br>", $str);
     }
 
