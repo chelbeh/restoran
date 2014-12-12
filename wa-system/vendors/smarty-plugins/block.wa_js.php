@@ -29,7 +29,7 @@ function smarty_block_wa_js($params, $content, &$smarty) {
     //
     // Non-debug mode: merge all files into one cache
     //
-    if (!SystemConfig::isDebug() && isset($params['file'])) {
+    if (!true && isset($params['file'])) {
         $root_path = $wa->getConfig()->getRootPath();
         $app_path = $wa->getConfig()->getAppPath();
         $result = '';
