@@ -6,8 +6,8 @@ class hermespickupShipping extends waShipping
     public function calculate(){
         $region_code = $this->getAddress('region');
         $city = $this->getAddress('city');
+        $db_region_points = self::getRegionPoints();
         if ($region_code) {
-            $region_id = "region_$region_code";
             if (isset($this->regions[$region_code]['price'])) {
                 $price = $this->regions[$region_code]['price'];
                 $time = $this->regions[$region_code]['time'];
@@ -18,16 +18,17 @@ class hermespickupShipping extends waShipping
                     if($order_price>=$this->free_shipping){
                         $rate = 0;
                     }
-                    if(isset($this->$region_id)){
+                    if(isset($db_region_points[$region_code])){
                         $result = array();
-                        foreach($this->$region_id as $id=>$params){
+                        foreach($db_region_points[$region_code] as $id=>$params){
                             if($city==''||($city==$params['city'])){
-                                $result['point_'.$id] = array(
+                                $result['point_'.$params['id']] = array(
                                     'est_delivery' => $time,
                                     'currency'     => 'RUB',
                                     'rate'         => $rate,
                                     'name' => $params['name']." (".$params['address'].")",
                                     'comment' => self::getComment($params),
+                                    'force_subrates' => true,
                                 );
                             }
                         }
@@ -43,14 +44,6 @@ class hermespickupShipping extends waShipping
         $str = '';
         $str .= "<b>Адрес:</b>\n";
         $str .= $params['address']."\n";
-        if($params['hours']){
-            $str .= "<b>Время работы:</b>\n";
-            $str .= $params['hours']."\n";
-        }
-        if($params['phone']){
-            $str .= "<b>Телефон:</b>\n";
-            $str .= $params['phone']."\n";
-        }
         return str_replace("\n", "<br>", $str);
     }
 
@@ -83,8 +76,6 @@ class hermespickupShipping extends waShipping
             "<td><input readonly type='text' value='%name%'></td>".
             "<td><input readonly type='text' value='%city%'></td>".
             "<td><textarea readonly>%address%</textarea></td>".
-            "<td><textarea readonly>%hours%</textarea></td>".
-            "<td><textarea readonly>%phone%</textarea></td>".
             "</tr>";
     }
 
@@ -106,15 +97,9 @@ class hermespickupShipping extends waShipping
 
     public static function settingRegionControl($name, $params = array()){
         $control = '';
+        $db_region_points = self::getRegionPoints();
         $instance = $params['instance'];
         $db_regions = isset($instance->regions)?$instance->regions:array();
-        $db_points = array();
-        for($i = 0; $i<100; $i++){
-            $id = "region_$i";
-            if(isset($instance->$id)){
-                $db_points[$id] = $instance->$id;
-            }
-        }
         $rm = new waRegionModel();
         if ($regions = $rm->getByCountry('rus')) {
 
@@ -136,12 +121,12 @@ class hermespickupShipping extends waShipping
                 }
                 $count = 0;
                 $points_block = '';
-                if(isset($db_points['region_'.$region['code']])){
-                    foreach($db_points['region_'.$region['code']] as $key=>$params){
+                if(isset($db_region_points[$region['code']])){
+                    foreach($db_region_points[$region['code']] as $key=>$point){
                         $replace = array();
                         foreach(self::getFields() as $field){
-                            if(isset($params[$field])){
-                                $replace[] = $params[$field];
+                            if(isset($point[$field])){
+                                $replace[] = $point[$field];
                             }
                             else{
                                 $replace[] = '';
@@ -151,13 +136,13 @@ class hermespickupShipping extends waShipping
                         $html = str_replace('%id%',$key,$html);
                         $html = str_replace('%code%',$region['code'],$html);
                         $points_block .= $html;
-                        $count = $key;
+                        $count++;
                     }
                 }
                 $points = '';
                 $points .= "<div class='points_block' data-code='{$region['code']}' data-points='{$count}'>";
                 $points .= "<table class='points zebra'>";
-                $points .= "<tr><th>Название</th><th>Город</th><th>Адрес</th><th>Часы работы</th><th>Телефон</th></tr>";
+                $points .= "<tr><th>Название</th><th>Город</th><th>Адрес</th></tr>";
                 $points .= $points_block;
                 $points .= "</table></div>";
                 $c_params['namespace'] = $name."[{$region['code']}]";
@@ -210,5 +195,24 @@ class hermespickupShipping extends waShipping
 
     public function requestedAddressFields(){
         return false;
+    }
+
+    private static function getRegionPoints($region_id = 0){
+        $model = new waModel();
+        $data = $model->query("SELECT * FROM shipment_hermes_points")->fetchAll();
+        $regions = array();
+        foreach($data as $row){
+            if(!isset($regions[$row['region']])){
+                $regions[$row['region']] = array();
+            }
+            $regions[$row['region']][] = $row;
+        }
+        if($region_id>0){
+            if(isset($regions[$region_id])){
+                return $regions[$region_id];
+            }
+            return array();
+        }
+        return $regions;
     }
 }
