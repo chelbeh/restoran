@@ -198,8 +198,7 @@ class hermespickupShipping extends waShipping
     }
 
     private static function getRegionPoints($region_id = 0){
-        $model = new waModel();
-        $data = $model->query("SELECT * FROM shipment_hermes_points")->fetchAll();
+        $data = self::getAllPoints();
         $regions = array();
         foreach($data as $row){
             if(!isset($regions[$row['region']])){
@@ -214,5 +213,18 @@ class hermespickupShipping extends waShipping
             return array();
         }
         return $regions;
+    }
+
+    private static function getAllPoints(){
+        $model = new waModel();
+        $data = $model->query("SELECT * FROM shipment_hermes_points")->fetchAll();
+        return $data;
+    }
+
+    public function mapAction(){
+        $view = wa()->getView();
+        $view->assign('points', self::getAllPoints());
+        $html = $view->fetch($this->path.'/templates/map.html');
+        echo $html;
     }
 }

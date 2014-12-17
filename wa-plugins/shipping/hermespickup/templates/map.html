@@ -1,0 +1,26 @@
+<div><div id="yandexmap" style="width: 800px; height: 600px;"></div></div>
+<script type="text/javascript">
+    var shippingMap, shPoint;
+    $.getScript( "http://api-maps.yandex.ru/2.1/?lang=ru_RU", function( ) {
+        ymaps.ready(init);
+    });
+
+    function init(){
+        shippingMap = new ymaps.Map("yandexmap", {
+            center: [55.76, 37.64],
+            zoom: 7
+        });
+        addPoints();
+    }
+
+    function addPoints(){
+        {foreach $points as $point}
+            shPoint = new ymaps.Placemark([{$point.latitude}, {$point.longitude}], {
+                hintContent: '{$point.name}',
+                balloonContent: '{$point.address}'
+            });
+            shippingMap.geoObjects.add(shPoint);
+
+        {/foreach}
+    }
+</script>
