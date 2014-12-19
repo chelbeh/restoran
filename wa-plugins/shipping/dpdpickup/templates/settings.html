@@ -1,0 +1,45 @@
+{literal}
+<style>
+    .points_block{
+        padding: 0px 0 10px 20px;
+    }
+    table.zebra .point a{
+        display: inline-block;
+    }
+    .point{
+        margin: 0;
+    }
+
+    .points{
+        border: 1px solid #999;
+    }
+
+    table.points td{
+        vertical-align: top;
+    }
+
+    table.zebra a.inline{
+        margin-left: 20px;
+    }
+    .field .value .point textarea{
+        min-width: 200px;
+    }
+    .field .value .point input{
+        min-width: 130px;
+        width: 130px!important;
+    }
+</style>
+<script>
+    $( document ).ready(function() {
+        $(".points_block").each(function(){
+            var c = $(this).find(".point").length;
+            var that = $(this);
+            $(this).hide();
+            var link = $("<a href='#' class='inline'></a>");
+            link.text("Пунктов самовывоза: "+c);
+            link.click(function(){that.show(); $(this).hide(); return false});
+            $(this).before(link);
+        });
+    });
+</script>
+{/literal}

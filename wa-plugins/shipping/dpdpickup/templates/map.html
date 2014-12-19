@@ -1,0 +1,58 @@
+<div><div id="yandexmap" style="width: 800px; height: 600px;"></div></div>
+<script type="text/javascript">
+    var shippingMap, shPoint, BalloonContentLayout;
+    $.getScript( "http://api-maps.yandex.ru/2.1/?lang=ru_RU", function( ) {
+        ymaps.ready(init);
+    });
+
+    function init(){
+        shippingMap = new ymaps.Map("yandexmap", {
+            center: [55.753994, 37.622093],
+            zoom: 11
+        });
+        addPoints();
+        var region = $('[name="customer[address.shipping][region]"] option:selected').text();
+        var city = $('[name="customer[address.shipping][city]"]').val();
+        var search_str = region+' '+city;
+
+        ymaps.geocode(search_str, {
+            results: 1
+        }).then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0),
+                coords = firstGeoObject.geometry.getCoordinates();
+            shippingMap.setCenter(coords);
+        });
+    }
+
+    function addPoints(){
+        {foreach $points as $point}
+            BalloonContentLayout = ymaps.templateLayoutFactory.createClass(
+                '<div><b>{$point.name}</b></div><div>{$point.address}</div><a id="sh_select_{$point.id}" data-id="{$point.id}" href="#">Выбрать этот пункт самвывоза</a>', {
+                    build: function () {
+                        BalloonContentLayout.superclass.build.call(this);
+                        $('#sh_select_{$point.id}').bind('click', function(){
+                            if (typeof shippingMapSelect == 'function') {
+                                shippingMapSelect('point_'+$(this).data('id'));
+                            }
+                            if (typeof closeShippingMap == 'function') {
+                                closeShippingMap();
+                            }
+                            return false;
+                        });
+                    },
+                    clear: function () {
+                        $('#sh_select_{$point.id}').unbind('click');
+                        BalloonContentLayout.superclass.clear.call(this);
+                    }
+                });
+            shPoint = new ymaps.Placemark([{$point.latitude}, {$point.longitude}], {
+
+            }, {
+                balloonContentLayout: BalloonContentLayout,
+                balloonPanelMaxMapArea: 0
+            });
+            shippingMap.geoObjects.add(shPoint);
+
+        {/foreach}
+    }
+</script>
