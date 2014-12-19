@@ -143,18 +143,20 @@ class waDateTime
         // hack to insert localized month name
         if (strpos($format, 'F') !== false) {
             $month = $date_time->format('F');
+
+            $old_locale = waLocale::getLocale();
+            if ($locale && $locale != $old_locale) {
+                wa()->setLocale($locale);
+            }
             $local = _ws($month, $month, 2);
             $result = str_replace(
-            array(
-                    "@$month@",
-            $month
-            ),
-            array(
-            mb_strtolower($local),
-            $local
-            ),
-            $result
+                array("@$month@", $month),
+                array(mb_strtolower($local), $local),
+                $result
             );
+            if ($locale && $locale != $old_locale) {
+                wa()->setLocale($old_locale);
+            }
         }
         return $result;
     }
@@ -267,7 +269,7 @@ class waDateTime
             $locale = waSystem::getInstance()->getLocale();
         }
         $locale = waLocale::getInfo($locale);
-        $date_formats = $locale['date_formats'];
+        $date_formats = isset($locale['date_formats']) ? $locale['date_formats'] : array();
 
         $default = array(
             'humandate' => 'd f Y',
@@ -278,9 +280,6 @@ class waDateTime
             'fulldatetime' => 'Y-m-d H:i:s',
             'timestamp' => 'U',
         );
-
-
-
 
         if (isset($date_formats[$format])) {
             return $date_formats[$format];

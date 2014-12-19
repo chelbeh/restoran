@@ -425,7 +425,10 @@ class waSystem
                     throw new waException("Page not found", 404);
                 }
             } elseif (!strncmp($this->config->getRequestUrl(true), 'oauth.php', 9)) {
-                $app_id = $this->getStorage()->get('auth_app', 'webasyst');
+                $app_id = $this->getStorage()->get('auth_app');
+                if ($app_id && !$this->appExists($app_id)) {
+                    throw new waException("Page not found", 404);
+                }
                 $app_system = self::getInstance($app_id);
                 if (class_exists($app_id.'OAuthController')) {
                     $app_system->getFrontController()->execute(null, 'OAuth');
@@ -898,7 +901,8 @@ class waSystem
                 }
                 $apps[] = array(
                     'url' => $path.'/'.$url,
-                    'name' => $escape ? htmlspecialchars($name) : $name
+                    'name' => $escape ? htmlspecialchars($name) : $name,
+                    'app' => $r['app']
                 );
             }
         }

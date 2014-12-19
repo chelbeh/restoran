@@ -494,7 +494,7 @@ ul.menu-v li.hr { margin-top: 10px !important; border-top: 1px solid #ccc; paddi
 ul.menu-v li.hr:hover { background: inherit !important; }
 ul.menu-v li a.inline { display:inline; margin:0px; padding:0px; min-width:0px; }
 ul.menu-v.with-icons.stack { margin: 0 0 20px; }
-ul.menu-v.with-icons.stack li { margin: 1px 3px 5px -1px; }
+ul.menu-v.with-icons.stack li { margin: 1px 3px 5px 0; }
 ul.menu-v.with-icons.stack li a { padding-bottom: 7px; padding-left: 26px; padding-top: 7px; }
 ul.menu-v li.gray a, ul.menu-v li.grey a { color: #aaa; }
 ul.menu-v li.gray a:hover, ul.menu-v li.grey a:hover { color: red; }
@@ -1045,7 +1045,8 @@ i.icon10 { background-repeat:no-repeat; background-image: url(../../../wa-conten
 .wa-editor-wysiwyg-html-toggle li.selected a { background: white;}
 .wa-editor-wysiwyg-html-toggle li a { display: block; color: #888; font-weight: bold; padding: 4px 12px 6px; text-decoration: none; font-size: 0.9em; }
 
-#wa .redactor_editor { border: none; }
+#wa .redactor_editor,
+#wa .redactor-editor { border: none; }
 #redactor_modal footer { padding: 0 30px 20px; }
 #redactor_modal footer button { background: #fff !important; max-width: 33% !important; }
 #redactor_modal footer button.redactor_modal_action_btn { background: #6c3 !important; float: left; }

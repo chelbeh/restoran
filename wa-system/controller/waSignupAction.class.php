@@ -15,7 +15,7 @@ class waSignupAction extends waViewAction
         }
         // check auth app and url
         $signup_url = wa()->getRouteUrl((isset($auth['app']) ? $auth['app'] : '').'/signup');
-        if (wa()->getConfig()->getRequestUrl(false, true) != $signup_url) {
+        if (urldecode(wa()->getConfig()->getRequestUrl(false, true)) != $signup_url) {
             $this->redirect($signup_url);
         }
         $errors = array();
@@ -151,6 +151,11 @@ class waSignupAction extends waViewAction
             if (!empty($data['email'])) {
                 $this->send($contact);
             }
+            /**
+             * @event signup
+             * @param waContact $contact
+             */
+            wa()->event('signup', $contact);
             // after sign up callback
             $this->afterSignup($contact);
 
