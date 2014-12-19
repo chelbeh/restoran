@@ -16,6 +16,7 @@ class bannerBackendLoadController extends waJsonController
                 $data['title'] = htmlspecialchars(waRequest::post('title'), ENT_QUOTES);
                 $data['on'] = waRequest::post('on', 0, 'int');
                 $data['new_window'] = waRequest::post('new_window', 0, 'int');
+                $data['nofollow'] = waRequest::post('nofollow', 0, 'int');
 
                 $banner_model = new bannerItemsModel();
 

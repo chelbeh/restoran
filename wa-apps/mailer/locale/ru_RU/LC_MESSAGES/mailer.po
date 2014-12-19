@@ -1399,7 +1399,7 @@ msgstr ""
 msgid "Save as a template"
 msgstr "Сохранить как шаблон"
 
-msgid "Create new from this"
+msgid "Create a clone"
 msgstr "Создать новую из этой"
 
 msgid ""

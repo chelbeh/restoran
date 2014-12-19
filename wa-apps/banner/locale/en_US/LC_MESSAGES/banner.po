@@ -148,3 +148,9 @@ msgstr "Size"
 
 msgid "Code"
 msgstr "Code"
+
+msgid "Add 'nofollow'-attribute"
+msgstr "Add 'nofollow'-attribute"
+
+msgid "Nofollow-link"
+msgstr "Nofollow-link"

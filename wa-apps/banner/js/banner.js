@@ -173,7 +173,15 @@
                     if(e.keyCode == 13){
                         $(this).blur();
                     }
-                  });	
+                });	
+                $(".banner-param-chk").change(function(){
+                    var item_id = $(this).data("id");
+                    if ($(this).attr('checked')) {
+                        $.banner.itemEdit(item_id, {nofollow: 1});
+                    } else {
+                        $.banner.itemEdit(item_id, {nofollow: 0});
+                    }
+                });
 
 			});
 		},

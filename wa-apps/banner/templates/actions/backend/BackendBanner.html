@@ -103,6 +103,10 @@
 					         <div class="value"><input type="checkbox" value="1" name="on" checked/></div>
 					      </div>
                           <div class="field">
+					         <div class="name">[`Add 'nofollow'-attribute`]</div>
+					         <div class="value"><input type="checkbox" value="1" name="nofollow" /></div>
+					      </div>
+                          <div class="field">
 					         <div class="name">[`Open in the new window`]</div>
 					         <div class="value"><input type="checkbox" value="1" name="new_window"/></div>
 					      </div>
@@ -139,6 +143,7 @@
                 <th>[`'Title' tag`]</th>
                 <th>[`Link`]</th>
                 <th>[`Show`]</th>
+                <th>[`Nofollow-link`]</th>
                 <th>[`Clicks`]</th>
                 <th></th>
             </tr>
@@ -167,6 +172,7 @@
                         <a class="link-enable inline-link edit-link" onclick="$.banner.itemEdit({$i.id}, { on: 1});" ><b><i>[`Turn on`]</i></b></a>
                     {/if}
                 </td>
+                <td align="center"><input type="checkbox" value="1" {if $i.nofollow > 0}checked="checked"{/if} class="banner-param-chk"  name="nofollow" data-id="{$i.id}" ></td>
                 <td>
                     {$i.click}
                 </td>

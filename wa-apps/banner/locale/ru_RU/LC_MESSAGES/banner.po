@@ -142,7 +142,13 @@ msgid "Name"
 msgstr "Название"
 
 msgid "Size"
-msgstr "Размеры"
+msgstr "Размер"
 
 msgid "Code"
 msgstr "Код для вставки"
+
+msgid "Add 'nofollow'-attribute"
+msgstr "Добавить атрибут 'nofollow'"
+
+msgid "Nofollow-link"
+msgstr "Добавлять 'nofollow'"

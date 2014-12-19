@@ -842,6 +842,8 @@ body .redactor_air .redactor_toolbar {
   color: #999 !important;
   text-decoration: none !important;
 }
+#redactor-tab-control-2 { display: none !important; }
+.redactor_toolbar .re-video { display: none !important; }
 #redactor_modal footer button {
   position: relative;
   width: 100%;
