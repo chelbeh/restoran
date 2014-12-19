@@ -15,7 +15,7 @@
                 {if $cat.params.col > 1 && $cat.params.col <= 3}
                     {$base_col=$cat.params.col}
                 {/if}
-                <div class="dropdown-menu{if isset($cat.params.right) && $cat.params.right == '1'} menu_right{/if}">
+                <div class="dropdown-menu">
                     {$sum=0}
                     <div class="col_{$base_col} col_header"></div>
                     {$next=0}
@@ -260,7 +260,7 @@
         <ul class="list-unstyled blog-tags">
             {foreach $cloud as $tag}
                 {if $tag@index == 10}{break}{/if}
-                <li><a href="{$wa_app_url}tag/{$tag.uri_name}/"><i class="fa fa-tags"></i> {$tag.name|escape}</a></li>        
+                <li><a href="{$wa->getUrl('shop/frontend')}tag/{$tag.uri_name}/"><i class="fa fa-tags"></i> {$tag.name|escape}</a></li>        
             {/foreach}
         </ul>
     </div>

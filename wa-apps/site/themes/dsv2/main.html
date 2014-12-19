@@ -6,7 +6,7 @@
         </div>
     {else}
         <ol class="breadcrumb">
-        <li><a href="{$wa_app_url}">Главная</a></li>
+        <li><a href="{$wa_app_url}">[`Homepage`]</a></li>
     	{if !empty($breadcrumbs)}
             {foreach $breadcrumbs as $breadcrumb}
             <li><a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a></li>

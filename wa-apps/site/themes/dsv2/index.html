@@ -72,112 +72,18 @@
         {if $theme_settings.sidebar && !$mobile}
             <link href="{$wa_theme_url}sidebar.css?v{$wa_theme_version}" rel="stylesheet">
         {/if}
+        {$color_scheme=$theme_settings.color_scheme|substr:18}
+        {assign var="pos" value=$color_scheme|strpos:"."}
+        {$class = $color_scheme|substr:0:$pos}
+
+        {if $theme_settings.custom_color && $theme_settings.custom_color_hover}
+            {$class = "custom"}
+            {include file="themes.html" theme="custom" customcolor=$theme_settings.custom_color customhover=$theme_settings.custom_color_hover}
+        {else}
+            {include file="themes.html" theme=$class}
+        {/if}
+        {include file="holidays.html"}
     </head>
-    {$color_scheme=$theme_settings.color_scheme|substr:18}
-    {assign var="pos" value=$color_scheme|strpos:"."}
-    {$class = $color_scheme|substr:0:$pos}
-
-    {if $theme_settings.custom_color && $theme_settings.custom_color_hover}
-        {$class = 'custom'}
-        <style>
-.custom .theme-color { color: {$theme_settings.custom_color} !important }
-.custom .theme-color:hover { color: {$theme_settings.custom_color_hover} !important }
-.custom .theme-color-wh { color: {$theme_settings.custom_color} !important }
-.custom .theme-color-hover:hover { color: {$theme_settings.custom_color_hover} !important }
-.custom .theme-background { background-color: {$theme_settings.custom_color} !important }
-.custom .theme-background:hover { background-color: {$theme_settings.custom_color_hover} !important }
-.custom .theme-background-wh { background-color: {$theme_settings.custom_color} !important }
-.custom .theme-background-hover:hover { background-color: {$theme_settings.custom_color} !important }
-.custom .theme-border-color { border-color: {$theme_settings.custom_color} !important }
-.custom .theme-border-color-hover:hover { border-color: {$theme_settings.custom_color} !important }
-.custom .theme-shadow-color:hover {
-  -moz-box-shadow: 0 1px 5px {$theme_settings.custom_color};
-  -ms-box-shadow: 0 1px 5px {$theme_settings.custom_color};
-  -webkit-box-shadow: 0 0px 5px {$theme_settings.custom_color};
-  box-shadow: 0px 0px 5px {$theme_settings.custom_color};
-}
-.custom .footer ul li a:hover { color: {$theme_settings.custom_color_hover} }
-.custom .usermenu > li > a:hover { color: {$theme_settings.custom_color_hover} }
-.custom .navbar-default .navbar-nav>.active>a,
-.custom .navbar-default .navbar-nav>.active>a:hover,
-.custom .navbar-default .navbar-nav>.active>a:focus {
-  background-color: transparent;
-  color: {$theme_settings.custom_color};
-}
-.custom .navbar-default .navbar-nav>li>a:hover,
-.custom .navbar-default .navbar-nav>li>a:focus { color: {$theme_settings.custom_color_hover} }
-.custom .navbar-default .navbar-nav .selected>a,
-.custom .navbar-default .navbar-nav .selected>a:hover,
-.custom .navbar-default .navbar-nav .selected>a:focus { color: {$theme_settings.custom_color} }
-.custom div.dropdown-menu ul li a:hover { color: {$theme_settings.custom_color_hover} }
-.custom .breadcrumb a:hover { color: {$theme_settings.custom_color_hover} }
-.custom .user-toolbar ul #cart.highlight .count { background-color: {$theme_settings.custom_color} !important }
-.custom .user-toolbar ul #cart.highlight>a .fa { color: {$theme_settings.custom_color} }
-.custom .user-toolbar ul>li:hover>a .fa { color: {$theme_settings.custom_color_hover} !important }
-.custom .user-toolbar ul>li:hover .count { background-color: {$theme_settings.custom_color_hover} !important }
-.custom .modal-content { border-top: 2px solid {$theme_settings.custom_color} }
-.custom .btn-dsv { background-color: {$theme_settings.custom_color} }
-.custom .btn-dsv:hover { background-color: {$theme_settings.custom_color_hover} }
-.custom .wa-form .wa-submit input { background-color: {$theme_settings.custom_color} }
-.custom .wa-horizontal .wa-form .wa-submit a { color: {$theme_settings.custom_color} }
-.custom .btn-blue { background-color: {$theme_settings.custom_color} }
-.custom .btn-blue:hover { background-color: {$theme_settings.custom_color_hover} }
-.custom .table-dsv.table-hover>tbody>tr:hover>td,
-.custom .table-dsv.table-hover>tbody>tr:hover>th,
-.custom .table-dsv.table-hover>tbody>tr:hover>td a { background-color: {$theme_settings.custom_color} }
-.custom .tab-dsv .nav-tabs { border-bottom-color: {$theme_settings.custom_color} }
-.custom .tab-dsv .nav-tabs > li > a:hover { background-color: {$theme_settings.custom_color} }
-.custom .tab-dsv .nav-tabs > .active > a, 
-.custom .tab-dsv .nav-tabs > .active > a:hover, 
-.custom .tab-dsv .nav-tabs > .active > a:focus { background-color: {$theme_settings.custom_color} }
-.custom blockquote:hover { border-left-color: {$theme_settings.custom_color} }
-.custom .tt-input:focus,
-.custom .wa-captcha-input:focus,
-.custom .wa-form .wa-value input[type="text"]:focus,
-.custom .wa-form .wa-value input[type="password"]:focus,
-.custom .form-control:focus {
-border-color: {$theme_settings.custom_color};
--webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_color};
-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_color};
-}
-
-.custom .slider .bx-wrapper .bx-pager.bx-default-pager a:hover { background-color: {$theme_settings.custom_color} }
-.custom .product-slider-arrows a:hover { background-color: {$theme_settings.custom_color} }
-.custom ul.product-items li button { background-color: {$theme_settings.custom_color} }
-.custom ul.product-items li .userbar-list a.active { color: {$theme_settings.custom_color} }
-.custom ul.product-items li .userbar-list a:hover { color: {$theme_settings.custom_color_hover} }
-.custom ul.product-items li .addtouserbar span.active { background-color: {$theme_settings.custom_color} }
-.custom ul.product-items li .addtouserbar span:hover { background-color: {$theme_settings.custom_color_hover} }
-.custom .maintext ul li i.fa { color: {$theme_settings.custom_color} }
-.custom .carousel-arrow a.carousel-control:hover { color: {$theme_settings.custom_color} }
-.custom .thumbnail h3 a:hover,
-.custom .thumbnail-style h3 a:hover { color: {$theme_settings.custom_color} }
-.custom .subcategories a.subcat { border-bottom-color:{$theme_settings.custom_color} }
-.custom .filters .ui-slider-horizontal .ui-widget-header { background-color: {$theme_settings.custom_color} }
-.custom .product-page .product-links a.active { color: {$theme_settings.custom_color} }
-.custom .product-page .product-links a:hover { color: {$theme_settings.custom_color_hover} }
-.custom .checkout .checkout-step h2.active { background-color: {$theme_settings.custom_color} }
-.custom .checkout .checkout-step h2.active:after { border-top-color: {$theme_settings.custom_color} }
-.custom .da-slide h2 i { background: url(img/themesettings/bg-heading19.png) repeat }
-.custom .da-slide .da-link:hover { border-color: {$theme_settings.custom_color}; background: {$theme_settings.custom_color} }
-.custom .product-page #product-categories a:hover,
-.custom .product-page #product-tags a:hover { color: {$theme_settings.custom_color} }
-.custom .bonus { background-color: {$theme_settings.custom_color} }
-.custom .pagination li.selected a { background-color: {$theme_settings.custom_color} }
-.custom .pagination li a:hover { background-color: {$theme_settings.custom_color_hover} }
-
-.custom ul.photostream li.selected img { border-color: {$theme_settings.custom_color} }
-.custom .photo-albums a:hover { background-color: {$theme_settings.custom_color} }
-.custom #photo-author a { color: {$theme_settings.custom_color} }
-
-.custom .timeline .timeline-body h2 a:hover { color: {$theme_settings.custom_color} }
-.custom .timeline .timeline-footer > a { color: {$theme_settings.custom_color} }
-.custom .post .credentials a { color: {$theme_settings.custom_color} }
-.custom .comments-header { color: {$theme_settings.custom_color} }
-.custom .comment-form h4 { color: {$theme_settings.custom_color} }
-        </style>
-    {/if}
-
     <body class="{if $theme_settings.color_scheme && empty($theme_settings.my_color)}{$class}{/if} {if !$mobile && $theme_settings.layout == 'boxed'}boxed-layout container{/if}{if $mobile} touch{/if}">
         {* Сообщество facebook *}
         {if $theme_settings.fb_href && $theme_settings.sidebar && !$mobile}
@@ -193,46 +99,48 @@ box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_col
         <div class="wrapper">
             <div class="auth">
                 <div class="container">
-                    <ul class="applist list-unstyled pull-left hidden-xs">
-                        {$user_app_url.shop = $wa->getUrl('shop/frontend')}
-                        {$user_app_url.blog = $wa->getUrl('blog/frontend')}
-                        {$user_app_url.photos = $wa->getUrl('photos/frontend')}
-                        {foreach $wa->apps() as $a}
-                            {if $a.url==$user_app_url.shop}{$app_icon='fa-home'}
-                            {elseif $a.url==$user_app_url.blog}{$app_icon='fa-newspaper-o'}
-                            {elseif $a.url==$user_app_url.photos}{$app_icon='fa-camera-retro'}
-                            {else}{$app_icon='fa-globe'}
-                            {/if}
-                            <li{if $a.url==$wa_app_url} class="active"{/if}>
-                            <a href="{$a.url}" {if $a@first}style="border-left: 1px solid #ececec;"{/if}><i class="fa {$app_icon} fa-lg"></i> {$a.name}</a>
-                            </li>
-                        {/foreach}
-                    </ul>
-                    <ul class="usermenu pull-right">
-                        {if $wa->isAuthEnabled()}
-                            {if $wa->user()->isAuth()}
-                                {if $wa->shop}
-                                    <li><a href="{$wa->myUrl()}" style="border-left: 1px solid #ececec;">[s`My account`]</a></li>
+                    <div class="row">
+                        <ul class="applist list-unstyled pull-left hidden-xs">
+                            {$user_app_url.shop = $wa->getUrl('shop/frontend')}
+                            {$user_app_url.blog = $wa->getUrl('blog/frontend')}
+                            {$user_app_url.photos = $wa->getUrl('photos/frontend')}
+                            {foreach $wa->apps() as $a}
+                                {if $a.url==$user_app_url.shop}{$app_icon='fa-home'}
+                                {elseif $a.url==$user_app_url.blog}{$app_icon='fa-newspaper-o'}
+                                {elseif $a.url==$user_app_url.photos}{$app_icon='fa-camera-retro'}
+                                {else}{$app_icon='fa-globe'}
+                                {/if}
+                                <li{if $a.url==$wa_app_url} class="active"{/if}>
+                                <a href="{$a.url}" {if $a@first}style="border-left: 1px solid #ececec;"{/if}><i class="fa {$app_icon} fa-lg"></i> {$a.name}</a>
+                                </li>
+                            {/foreach}
+                        </ul>
+                        <ul class="usermenu pull-right">
+                            {if $wa->isAuthEnabled()}
+                                {if $wa->user()->isAuth()}
+                                    {if $wa->shop}
+                                        <li><a href="{$wa->myUrl()}" style="border-left: 1px solid #ececec;">[s`My account`]</a></li>
+                                    {else}
+                                        <li>{$wa->user('name')}</li>
+                                    {/if}                      
+                                    <li><a href="?logout">[s`Log out`]</a></li>
                                 {else}
-                                    <li>{$wa->user('name')}</li>
-                                {/if}                      
-                                <li><a href="?logout">[s`Log out`]</a></li>
-                            {else}
-                                <li><a href="#" data-toggle="modal" data-target="#signupModal" style="border-left: 1px solid #ececec;">[s`Sign up`]</a></li>
-                                <li><a href="#" data-toggle="modal" data-target="#loginModal">[s`Log in`]</a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#signupModal" style="border-left: 1px solid #ececec;">[s`Sign up`]</a></li>
+                                    <li><a href="#" data-toggle="modal" data-target="#loginModal">[s`Log in`]</a></li>
+                                {/if}
                             {/if}
-                        {/if}
-                        {if $wa_app == "shop" && count($currencies) > 1}
-                        <li class="dropdown crcy">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Валюта</a><ul class="dropdown-menu currencies" role="menu">
-                                {$currency = $wa->shop->currency()}
-                                {foreach $currencies as $c_code => $c}
-                                    <li{if $c_code == $currency} class="active"{/if}><a rel="{$c_code}">{if $c.code=="RUB"}{$c.sign_html}{else}{$c.sign}{/if}{if $c_code == $currency} <i class="fa fa-check"></i>{/if}</a></li>
-                                {/foreach}
-                            </ul>
-                        </li>
-                        {/if}
-                    </ul>
+                            {if $wa_app == "shop" && count($currencies) > 1}
+                            <li class="dropdown crcy">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">[`Currency`]</a><ul class="dropdown-menu currencies" role="menu">
+                                    {$currency = $wa->shop->currency()}
+                                    {foreach $currencies as $c_code => $c}
+                                        <li{if $c_code == $currency} class="active"{/if}><a rel="{$c_code}">{if $c.code=="RUB"}{$c.sign_html}{else}{$c.sign}{/if}{if $c_code == $currency} <i class="fa fa-check"></i>{/if}</a></li>
+                                    {/foreach}
+                                </ul>
+                            </li>
+                            {/if}
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -255,7 +163,19 @@ box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_col
                         <!-- End search -->
                         <div class="{if $mobile || $theme_settings.cart == 'bottom'}col-md-6{else}col-md-3{/if} col-xs-height col-middle">
                         <ul class="phones pull-right">
-                            {include file="dsv.phones.html" inline}
+                            {if $wa->block("site.phones")}
+                                {$wa->block("site.phones")}
+                            {else}
+                                <li>{if $wa->shop}{$wa->shop->settings('phone')} (Москва){/if}</li>
+                                <li><a href='#'>8 (800) 999-40-40 (по всей России)</a></li>
+                                {if $wa->shop && $wa->shop->settings('phone')}
+                                <li>
+                                    {if $wh = $wa->shop->settings('workhours')}
+                                        {$wh.days_from_to}{if $wh.hours_from && $wh.hours_to} {$wh.hours_from}—{$wh.hours_to}{/if}
+                                    {/if}
+                                </li>
+                                {/if}
+                            {/if}
                         </ul>
                         </div>
                         <!-- End phones -->
@@ -284,12 +204,12 @@ box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_col
                 <div class="container visible-xs visible-sm">
                     <div class="row">
                         <div class="col-xs-6 visible-xs visible-sm">
-                            <div class="logo theme-background-wh">
+                            <div class="logo">
                                 {include file="dsv.logo.html" inline}
                             </div>
                         </div>
                         <div class="col-xs-6 visible-xs visible-sm">
-                            <a href="javascript:void(0);" id="phones" class="theme-color pull-right" data-toggle="popover" data-container="body" data-placement="left" data-html="true" data-trigger="click hover focus" data-content="<ul class='list-unstyled' style='margin:0'>{include file='dsv.phones.html' inline}</ul>"><i class="fa fa-fw fa-phone"></i></a>
+                            <a href="javascript:void(0);" id="phones" class="theme-color pull-right" data-toggle="popover" data-container="body" data-placement="left" data-html="true" data-trigger="click hover focus" data-content="<ul class='list-unstyled' style='margin:0'>{$wa->block('site.phones')}</ul>"><i class="fa fa-fw fa-phone"></i></a>
                         </div>
                     </div>
                     <div class="row">
@@ -313,7 +233,11 @@ box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_col
                         <span class="navbar-brand visible-xs">Меню</span>
                     </div>
                     <div class="collapse navbar-collapse navbar-responsive-collapse">
-                        {$site_pages = $wa->site->pages()}
+                        {if $theme_settings.menu == 'site'}
+                            {$site_pages = $wa->site->pages()}
+                        {else}
+                            {$site_pages = $wa->shop->pages()}
+                        {/if}
                         {if count($site_pages)}
                         
                         <ul class="nav navbar-nav">
@@ -539,7 +463,9 @@ box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_col
                              {if count($site_pages)}
                                 <ul class="list-unstyled">
                                     {foreach $site_pages as $p}
+                                        {if !isset($p.nomenu)}
                                         <li><a href="{$p.url}">{$p.name}</a></li>
+                                        {/if}
                                     {/foreach} 
                                 </ul>
                             {/if}
@@ -556,15 +482,23 @@ box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px {$theme_settings.custom_col
                         <div class="col-md-3 col-sm-6">
                             <div class="footer-column">[`Contacts`]</div>
                             <ul class="list-unstyled">
+                            {if $wa->block("site.footer_phones")}
+                                {$wa->block("site.footer_phones")}
+                            {else}
                                 <li>г. Москва, ул. Выдуманная д.8, корп. 42, офис. 405</li>
                                 <li>Телефоны: +7 (111) 555-12-34; +1 (111) 555-55-55;</li>
                                 <li>Факс: +7 (111) 555-12-34</li>
                                 <li>Email: {if $wa->shop}{$wa->shop->settings('email')}{/if}</li>
+                            {/if}
                             </ul>
                         </div>
                     </div>
                     <div class="row align-center copyright">
-                        Copyright &copy; {if $wa->shop}{$wa->shop->settings('name')}{/if}, {time()|wa_datetime:"Y"}.
+                        {if $wa->block("site.copyright")}
+                            {$wa->block("site.copyright")}
+                        {else}
+                            Copyright &copy; {if $wa->shop}{$wa->shop->settings('name')}{/if}, {time()|wa_datetime:"Y"}.
+                        {/if}
                     </div>
                 </div>
             </div>

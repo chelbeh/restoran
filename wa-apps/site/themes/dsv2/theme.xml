@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.1.0">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.1.2">
     <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <description locale="en_US">Adaptive design theme for all base Webasyst apps</description>
@@ -58,9 +58,7 @@
         <file path="bootstrap-hover-dropdown.min.js" custom="0">
             <description locale="ru_RU">Bootstrap Hover Dropdown Plugin</description>
         </file>
-        <file path="dsv.phones.html" custom="0">
-            <description locale="ru_RU">Телефоны в шапке сайта</description>
-        </file>
+        
         <file path="dsv.logo.html" custom="0">
             <description locale="ru_RU">Вывод логотипа</description>
         </file>
@@ -97,6 +95,12 @@
         <file path="social.facebook.html" custom="1">
             <description locale="ru_RU">Виджет сообщества facebook</description>
         </file>
+        <file path="holidays.html" custom="1">
+            <description locale="ru_RU">Стили праздников</description>
+        </file>
+        <file path="themes.html" custom="1">
+            <description locale="ru_RU">Стили цветовой схемы</description>
+        </file>
     </files>
     <about locale="en_US">
 <![CDATA[
@@ -112,7 +116,7 @@
     </about>
     <settings>
         <setting var="color_scheme" control_type="image_select">
-            <value>img/themesettings/lightblue.png</value>
+            <value>img/themesettings/lightgreen.png</value>
             <name locale="ru_RU">Цветовая гамма</name>
             <name locale="en_US">Color scheme</name>
             <options>
@@ -361,6 +365,34 @@
                     <name locale="en_US">image 10</name>
                     <name locale="ru_RU">изображение 10</name>
                 </option>
+                <option value="ffffff3">
+                    <name locale="en_US">winter 1</name>
+                    <name locale="ru_RU">зима 1</name>
+                </option>
+                <option value="ffffff4">
+                    <name locale="en_US">winter 2</name>
+                    <name locale="ru_RU">зима 2</name>
+                </option>
+                <option value="ffffff5">
+                    <name locale="en_US">winter 3</name>
+                    <name locale="ru_RU">зима 3</name>
+                </option>
+                <option value="ffffff6">
+                    <name locale="en_US">winter 4</name>
+                    <name locale="ru_RU">зима 4</name>
+                </option>
+                <option value="ffffff7">
+                    <name locale="en_US">winter 5</name>
+                    <name locale="ru_RU">зима 5</name>
+                </option>
+                <option value="ffffff8">
+                    <name locale="en_US">winter 6</name>
+                    <name locale="ru_RU">зима 6</name>
+                </option>
+                <option value="012c7b">
+                    <name locale="en_US">winter 7</name>
+                    <name locale="ru_RU">зима 7</name>
+                </option>
             </options>
         </setting>
         <setting var="custom_background" control_type="image">
@@ -376,6 +408,7 @@
             <description locale="en_US">Example: #000000</description>
             <description locale="ru_RU">Например: #000000</description>
         </setting>
+        
         <setting var="layout" control_type="select">
             <value>wide</value>
             <name locale="en_US">Boxed layout of template</name>
@@ -391,19 +424,46 @@
                 </option>
             </options>
         </setting>
-        
+        <setting var="menu" control_type="select">
+            <value>site</value>
+            <name locale="en_US">Main menu from pages of app</name>
+            <name locale="ru_RU">Главное меню из страниц приложения</name>
+            <options>
+                <option value="site">
+                    <name locale="ru_RU">Сайт</name>
+                    <name locale="en_US">Site</name>
+                </option>
+                <option value="shop">
+                    <name locale="ru_RU">Магазин</name>
+                    <name locale="en_US">Shop</name>
+                </option>
+            </options>
+        </setting>
         <setting var="logo" control_type="image">
-            <value/>
+            <value>img/mylogo.png</value>
             <filename>img/mylogo.*</filename>
             <name locale="en_US">Company Logo</name>
             <name locale="ru_RU">Логотип компании</name>
         </setting>
         <setting var="slogan" control_type="text">
             <value/>
-            <name locale="en_US">The company slogan</name>
-            <name locale="ru_RU">Слоган компании</name>
+            <name locale="en_US">The company slogan
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">Holidays</p>                 
+            ]]>
+            </name>
+            <name locale="ru_RU">Слоган компании
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">Праздники</p>                 
+            ]]>
+            </name>
             <description locale="en_US">Example: Modern online shop</description>
             <description locale="ru_RU">Например: Современный интернет-магазин</description>
+        </setting>
+        <setting var="newyear" control_type="checkbox">
+            <value/>
+            <name locale="en_US">Use New Year holiday styles</name>
+            <name locale="ru_RU">Использовать новогоднее оформление</name>
         </setting>
         <setting var="social_size" control_type="image_select">
             <value>img/themesettings/medium.png</value>
@@ -442,6 +502,39 @@
             <name locale="ru_RU">Имя пользователя в Твиттере</name>
             <description locale="en_US">Example: webasyst</description>
             <description locale="ru_RU">Например: webasyst_ru</description>
+        </setting>
+        <setting var="youtube" control_type="text">
+            <value/>
+            <name locale="en_US">Youtube channel link</name>
+            <name locale="ru_RU">Ссылка на канал youtube</name>
+            <description locale="en_US">Example: http://www.youtube.com/user/yourchannel</description>
+            <description locale="ru_RU">Например: http://www.youtube.com/user/yourchannel</description>
+        </setting>
+        <setting var="vimeo" control_type="text">
+            <value/>
+            <name locale="en_US">Vimeo channel link</name>
+            <name locale="ru_RU">Ссылка на канал vimeo</name>
+            <description locale="en_US">Example: http://vimeo.com/yourchannel</description>
+            <description locale="ru_RU">Например: http://vimeo.com/yourchannel</description>
+        </setting>
+        <setting var="ok" control_type="text">
+            <value/>
+            <name locale="en_US">Odnoklassniki community link</name>
+            <name locale="ru_RU">Сообщество одноклассники</name>
+            <description locale="en_US">Example: http://www.odnoklassniki.ru/groupname</description>
+            <description locale="ru_RU">Например: http://www.odnoklassniki.ru/groupname</description>
+        </setting>
+        <setting var="skype" control_type="text">
+            <value/>
+            <name locale="en_US">Skype username</name>
+            <name locale="ru_RU">Пользователь скайп</name>
+            <description locale="en_US">Example: myusername</description>
+            <description locale="ru_RU">Например: myusername</description>
+        </setting>
+        <setting var="rss" control_type="checkbox">
+            <value/>
+            <name locale="en_US">RSS</name>
+            <name locale="ru_RU">RSS подписка в подвале</name>
         </setting>
         <setting var="cart" control_type="radio">
             <value>bottom</value>
@@ -486,7 +579,7 @@
             </options>
         </setting>
         <setting var="sidebar" control_type="checkbox">
-            <value>1</value>
+            <value/>
             <name locale="en_US">Show / hide sidebar</name>
             <name locale="ru_RU">Отобразить / скрыть боковую панель</name>
         </setting>
@@ -529,7 +622,7 @@
             </name>
         </setting>
         <setting var="vk_id" control_type="text">
-            <value>21415010</value>
+            <value/>
             <name locale="en_US">VK community id</name>
             <name locale="ru_RU">Идентификатор сообщества</name>
             <description locale="en_US">Example: 21415010</description>
@@ -591,7 +684,7 @@
             <description locale="ru_RU">Например: #000000</description>
         </setting>
         <setting var="fb_href" control_type="text">
-            <value>https://www.facebook.com/Webasyst.RU</value>
+            <value/>
             <name locale="en_US">FB community link</name>
             <name locale="ru_RU">Ссылка на сообщество</name>
             <description locale="en_US">Example: https://www.facebook.com/FacebookDevelopers</description>
@@ -725,5 +818,14 @@
             <msgid>Product catalog</msgid>
             <msgstr locale="ru_RU">Каталог товаров</msgstr>
         </locale>
+        <locale>
+            <msgid>Homepage</msgid>
+            <msgstr locale="ru_RU">Главная</msgstr>
+        </locale>
+        <locale>
+            <msgid>Total summ</msgid>
+            <msgstr locale="ru_RU">Общая сумма</msgstr>
+        </locale>
+        
     </locales>
 </theme>
