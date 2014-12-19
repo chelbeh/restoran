@@ -90,7 +90,7 @@ var lang_strings = {
                                 <td><strong>Плательщик</strong></td>
                             </tr>
                             <tr>
-                                <td class="inline_edit">{$order.billing_address.name|escape}</td>
+                                <td class="inline_edit">{$order.billing_address.name|default:$order.contact_name|escape}</td>
                             </tr>
                             <tr>
                                 <td class="inline_edit">{$order.billing_address.address|escape}</td>
@@ -101,7 +101,7 @@ var lang_strings = {
                                 <td><strong>Плательщик</strong></td>
                             </tr>
                             <tr>
-                                <td class="inline_edit">{$order.shipping_address.name|escape}</td>
+                                <td class="inline_edit">{$order.shipping_address.name|default:$order.contact_name|escape}</td>
                             </tr>
                             <tr>
                                 <td class="inline_edit">{$order.shipping_address.address|escape}</td>
@@ -147,5 +147,6 @@ var lang_strings = {
         </tbody>
     </table>
 </div>
+
 </body>
 </html>

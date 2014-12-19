@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @property-read string $bankname
  * @property-read string $bank_account_number
@@ -49,7 +50,10 @@ class invoicephysPayment extends waPayment implements waIPayment, waIPaymentCapt
      *
      * Displays printable form content (HTML) by id
      * @param string $id
-     * @param array $order_data
+     * @param waOrder $order
+     * @param array $params
+     * @throws waException
+     * @return string HTML
      */
     public function displayPrintForm($id, waOrder $order, $params = array())
     {
@@ -57,6 +61,7 @@ class invoicephysPayment extends waPayment implements waIPayment, waIPaymentCapt
             $view = wa()->getView();
             $view->assign('settings', $this->getSettings(), true);
             $view->assign('order', $order);
+
             return $view->fetch($this->path.'/templates/form.html');
         } else {
             throw new waException('print form not found');
