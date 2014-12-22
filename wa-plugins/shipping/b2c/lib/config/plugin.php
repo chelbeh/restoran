@@ -6,4 +6,5 @@ return array(
     'logo'        => 'img/logo.png',
     'version'     => '1.0.0',
     'vendor'      => 'vadim',
+    'comment_title'      => 'Города доставки',
 );

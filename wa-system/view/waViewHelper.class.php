@@ -1061,7 +1061,8 @@ HTML;
             $region_id = 77;
         }
         $region = $geoip->getRegionName($region_id);
-        return "<span id='region_name' class='region_name region_handler' data-id='$region_id'>$region</span>";
+        $city = $geoip->getCity();
+        return "<span id='region_name' class='region_name region_handler' data-id='$region_id' data-address='$city'>$region</span>";
     }
 
     public function regionsList(){

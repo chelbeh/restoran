@@ -46,9 +46,9 @@ class b2cShipping extends waShipping
     }
 
     private static function getComment($cities){
-        $str = 'Города доставки: <span class="b2c_cities">';
+        $str = '';
         foreach($cities as $c){
-            $str .= "<div class='b2c_city'>$c</div>";
+            $str .= "<div class='shipping_comment'>$c</div>";
         }
         $str .= "</span>";
         return $str;

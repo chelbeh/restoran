@@ -7,4 +7,5 @@ return array(
     'version'     => '1.0.0',
     'vendor'      => 'vadim',
     'map'           =>true,
+    'comment_title'      => 'Пункты самовывоза',
 );
