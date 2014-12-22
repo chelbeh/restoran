@@ -158,9 +158,11 @@ ul.m-compose-navigation li.m-disabled a {
 #right-sidebar-recipients-number {
     margin-left: 20px;
 }
-.m-editor { 
+.m-editor {
     position: relative;
 }
+.m-editor .wa-editor-core-wrapper { position: relative; }
+.m-editor .wa-editor-wysiwyg-html-toggle { position: absolute; right: 17px; top: -25px; float: none !important; margin: 0 !important; }
 .m-editor .fields .name { width: 90px; }
 .m-editor .fields .value { margin-left: 90px; }
 .m-editor-toolbar { background: #f7f7f7; margin: 30px 15px 0 -15px; min-height: 400px; border: 1px solid #ccc; border-left: 0; box-shadow: 0 1px 5px #ddd; -moz-box-shadow: 0 1px 5px #ddd; -webkit-box-shadow: 0 1px 5px #ddd; }
@@ -181,11 +183,11 @@ ul.m-compose-navigation li.m-disabled a {
 
 
 /* custom icons */
-.icon16.envelope { background-image: url('../img/envelope.png'); background-position: 0 0;}
-.icon16.campaigns { background-image: url('../img/campaigns.png'); background-position: 0 0;}
-.icon16.repeat { background-image: url('../img/repeat.png'); background-position: 0 0;}
-.icon16.sent { background-image: url('../img/sent.png'); background-position: 0 0;}
-.icon16.pause { background-image: url('../img/pause.png'); background-position: 0 0;}
+.icon16.envelope { background-image: url('../img/envelope.png'); background-position: 0 0; background-size: 16px 16px; }
+.icon16.campaigns { background-image: url('../img/campaigns.png'); background-position: 0 0; background-size: 16px 16px; }
+.icon16.repeat { background-image: url('../img/repeat.png'); background-position: 0 0; background-size: 16px 16px; }
+.icon16.sent { background-image: url('../img/sent.png'); background-position: 0 0; background-size: 16px 16px; }
+.icon16.pause { background-image: url('../img/pause.png'); background-position: 0 0; background-size: 16px 16px; }
 
 
 .field .el-rte .tabsbar {display: block}
@@ -716,10 +718,10 @@ label input { margin-top: -3px; }
     padding: 10px;
 }
 .icon16.blue-document {
-    background-image: url('../img/icon/blue-document.png');
+    background-image: url('../img/icon/blue-document.png'); background-size: 16px 16px;
 }
 .icon16.cheque-pen {
-    background-image: url('../img/icon/cheque-pen.png');
+    background-image: url('../img/icon/cheque-pen.png'); background-size: 16px 16px;
 }
 
 /**
@@ -1179,7 +1181,7 @@ label input { margin-top: -3px; }
 }
 
 a.inline-link.inline-link-notop b {
-    top: 0;    
+    top: 0;
 }
 /*
 * Choose recipients dialog
@@ -1237,3 +1239,5 @@ a.inline-link.inline-link-notop b {
 #c-search-container .content.right250px {
     /*margin-right: 37%;*/
 }
+
+.wysiwyg-html ul.mode-toggle { margin-top: -27px; }

@@ -3,6 +3,7 @@
 $.dsv = {
     {if $wa->shop}
     	shop_url: "{$wa->getUrl('shop/frontend')}",
+    	default_img_url: "{$wa_theme_url}img/dummy96.png",
 	    {$currency_info = $wa->shop->currency(true)}
 	    {if !isset($currency_info.sign_delim)}{$currency_info.sign_delim = " "}{/if}
 	    {if !isset($currency_info.sign_position)}{$currency_info.sign_position = 1}{/if}
@@ -11,6 +12,7 @@ $.dsv = {
 	    {if !isset($currency_info.frac_digits)}{$currency_info.frac_digits = 2}{/if}
 	    {if !isset($currency_info.thousands_sep)}{$currency_info.thousands_sep = ' '}{/if}
 	    currency: {json_encode($currency_info)},
+
 	{/if}
 }
 </script>

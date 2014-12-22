@@ -47,10 +47,10 @@
 
             {if $campaign.status != mailerMessageModel::STATUS_DRAFT}
                 {if mailerHelper::isAuthor()}
-                    <li><i class="icon16 add"></i><a href="javascript:void(0)" class="new-from-this-link float-right">[`Create new from this`]</a></li>
+                    <li><a href="javascript:void(0)" class="new-from-this-link"><i class="icon16 add"></i> [`Create a clone`]</a></li>
                 {/if}
                 {if mailerHelper::isAdmin()}
-                    <li><i class="icon16 script"></i><a href="javascript:void(0)" class="save-template-link float-right">[`Save as a template`]</a></li>
+                    <li><a href="javascript:void(0)" class="save-template-link"><i class="icon16 script"></i> [`Save as a template`]</a></li>
                 {/if}
             {/if}
 

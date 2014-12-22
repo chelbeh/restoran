@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="blog" parent_theme_id="site:dsv2" version="2.1.0">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="blog" parent_theme_id="site:dsv2" version="2.1.2">
     <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <files>
@@ -38,7 +38,7 @@
             <description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Блог»</description>
         </file>
         <file path="head.html" custom="0">
-            <description locale="en_US">Blog app's &lt;head&gt; instructions</description>
+            <description locale="en_US"></description>
             <description locale="en_US">Блок &lt;head&gt; приложения «Блог»</description>
         </file>
         <file path="stream.html" custom="0">

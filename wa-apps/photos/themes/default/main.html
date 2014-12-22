@@ -51,7 +51,6 @@
 </nav>
 
 <article class="page-content{if $_NAV_SIDEBAR} with-sidebar{else}{/if}" itemscope itemtype="http://schema.org/{if $action == 'photo'}Photograph{else}WebPage{/if}">
-
     {if !empty($breadcrumbs)}
         {if $wa->globals('isMyAccount')}
             {* within My Account we exclude first node from navigation because links are on the page already *}
@@ -60,7 +59,7 @@
         <div class="breadcrumbs" itemprop="breadcrumb">
             {foreach $breadcrumbs as $breadcrumb}
                 {if $breadcrumb}
-                    <a href="{$breadcrumb.full_url}">{$breadcrumb.name|escape}</a> <span class="rarr">&rarr;</span>
+                    <a href="{$breadcrumb.url}">{$breadcrumb.name|escape}</a> <span class="rarr">&rarr;</span>
                 {/if}
             {/foreach}
         </div>

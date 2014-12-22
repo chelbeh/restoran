@@ -55,7 +55,7 @@
   padding: 0;
   list-style: none;
 }
-.sidebar-nav-v1 li ul li { background: #fbfbfb }
+.sidebar-nav-v1 li>ul li { background: #f6f6f6 }
 .sidebar-nav-v1 li.active ul a { background: #f8f8f8 }
 .sidebar-nav-v1 li ul .list-group-item { border: none }
 .sidebar-nav-v1 li ul a {
@@ -176,7 +176,7 @@
 .sidebar-plugin ul li {
   display: inline-block;
   padding-top: 5px;
-  width: 50%;
+  width: 49%;
 }
 .sidebar-plugin ul li a {
   color: #555;
@@ -252,98 +252,21 @@ ul.blog-tags a:hover i {
   .col-md-9 .da-slide .da-img { margin-left: 6% }
 }
 
-.lightblue .sidebar-news .sidebar-post:hover:after { border-top-color: #03a9f4 }
-.lightblue .sidebar-plugin ul li a:hover,
-.lightblue .sidebar-info li a:hover { color: #03a9f4 }
-.lightblue ul.blog-tags a:hover { background-color: #03a9f4 }
-.lightblue .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #03a9f4 }
-.blue .sidebar-news .sidebar-post:hover:after { border-top-color: #5677fc }
-.blue .sidebar-plugin ul li a:hover,
-.blue .sidebar-info li a:hover { color: #5677fc }
-.blue ul.blog-tags a:hover { background-color: #5677fc }
-.blue .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #5677fc }
-.indigo .sidebar-news .sidebar-post:hover:after { border-top-color: #3f51b5 }
-.indigo .sidebar-plugin ul li a:hover,
-.indigo .sidebar-info li a:hover { color: #3f51b5 }
-.indigo ul.blog-tags a:hover { background-color: #3f51b5 }
-.indigo .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #3f51b5 }
-.deeppurple .sidebar-news .sidebar-post:hover:after { border-top-color: #673ab7 }
-.deeppurple .sidebar-plugin ul li a:hover,
-.deeppurple .sidebar-info li a:hover { color: #673ab7 }
-.deeppurple ul.blog-tags a:hover { background-color: #673ab7 }
-.deeppurple .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #673ab7 }
-.purple .sidebar-news .sidebar-post:hover:after { border-top-color: #9c27b0 }
-.purple .sidebar-plugin ul li a:hover,
-.purple .sidebar-info li a:hover { color: #9c27b0 }
-.purple ul.blog-tags a:hover { background-color: #9c27b0 }
-.purple .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #9c27b0 }
-.pink .sidebar-news .sidebar-post:hover:after { border-top-color: #e91e63 }
-.pink .sidebar-plugin ul li a:hover,
-.pink .sidebar-info li a:hover { color: #e91e63 }
-.pink ul.blog-tags a:hover { background-color: #e91e63 }
-.pink .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #e91e63 }
-.red .sidebar-news .sidebar-post:hover:after { border-top-color: #e51c23 }
-.red .sidebar-plugin ul li a:hover,
-.red .sidebar-info li a:hover { color: #e51c23 }
-.red ul.blog-tags a:hover { background-color: #e51c23 }
-.red .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #e51c23 }
-.cyan .sidebar-news .sidebar-post:hover:after { border-top-color: #00bcd4 }
-.cyan .sidebar-plugin ul li a:hover,
-.cyan .sidebar-info li a:hover { color: #00bcd4 }
-.cyan ul.blog-tags a:hover { background-color: #00bcd4 }
-.cyan .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #00bcd4 }
-.teal .sidebar-news .sidebar-post:hover:after { border-top-color: #009688 }
-.teal .sidebar-plugin ul li a:hover,
-.teal .sidebar-info li a:hover { color: #009688 }
-.teal ul.blog-tags a:hover { background-color: #009688 }
-.teal .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #009688 }
-.green .sidebar-news .sidebar-post:hover:after { border-top-color: #259b24 }
-.green .sidebar-plugin ul li a:hover,
-.green .sidebar-info li a:hover { color: #259b24 }
-.green ul.blog-tags a:hover { background-color: #259b24 }
-.green .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #259b24 }
-.lightgreen .sidebar-news .sidebar-post:hover:after { border-top-color: #8bc34a }
-.lightgreen .sidebar-plugin ul li a:hover,
-.lightgreen .sidebar-info li a:hover { color: #8bc34a }
-.lightgreen ul.blog-tags a:hover { background-color: #8bc34a }
-.lightgreen .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #8bc34a }
-.lime .sidebar-news .sidebar-post:hover:after { border-top-color: #cddc39 }
-.lime .sidebar-plugin ul li a:hover,
-.lime .sidebar-info li a:hover { color: #cddc39 }
-.lime ul.blog-tags a:hover { background-color: #cddc39 }
-.lime .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #cddc39 }
-.yellow .sidebar-news .sidebar-post:hover:after { border-top-color: #fdd835 }
-.yellow .sidebar-plugin ul li a:hover,
-.yellow .sidebar-info li a:hover { color: #fdd835 }
-.yellow ul.blog-tags a:hover { background-color: #fdd835 }
-.yellow .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #fdd835 }
-.amber .sidebar-news .sidebar-post:hover:after { border-top-color: #ffc107 }
-.amber .sidebar-plugin ul li a:hover,
-.amber .sidebar-info li a:hover { color: #ffc107 }
-.amber ul.blog-tags a:hover { background-color: #ffc107 }
-.amber .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #ffc107 }
-.orange .sidebar-news .sidebar-post:hover:after { border-top-color: #ff9800 }
-.orange .sidebar-plugin ul li a:hover,
-.orange .sidebar-info li a:hover { color: #ff9800 }
-.orange ul.blog-tags a:hover { background-color: #ff9800 }
-.orange .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #ff9800 }
-.deeporange .sidebar-news .sidebar-post:hover:after { border-top-color: #ff5722 }
-.deeporange .sidebar-plugin ul li a:hover,
-.deeporange .sidebar-info li a:hover { color: #ff5722 }
-.deeporange ul.blog-tags a:hover { background-color: #ff5722 }
-.deeporange .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #ff5722 }
-.brown .sidebar-news .sidebar-post:hover:after { border-top-color: #795548 }
-.brown .sidebar-plugin ul li a:hover,
-.brown .sidebar-info li a:hover { color: #795548 }
-.brown ul.blog-tags a:hover { background-color: #795548 }
-.brown .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #795548 }
-.opal .sidebar-news .sidebar-post:hover:after { border-top-color: #007a87 }
-.opal .sidebar-plugin ul li a:hover,
-.opal .sidebar-info li a:hover { color: #007a87 }
-.opal ul.blog-tags a:hover { background-color: #007a87 }
-.opal .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #007a87 }
-.deepblue .sidebar-news .sidebar-post:hover:after { border-top-color: #003580 }
-.deepblue .sidebar-plugin ul li a:hover,
-.deepblue .sidebar-info li a:hover { color: #003580 }
-.deepblue ul.blog-tags a:hover { background-color: #003580 }
-.deepblue .sidebar-photos li img:hover { box-shadow: 0 0 0 2px #003580 }
+@media (min-width: 992px) {
+  .content,
+  .page-content .project_services,
+  .news,
+  .bestnlead,
+  #page,
+  #product-description,
+  .related {
+    padding-right: 15px;
+  }
+  .product-slider-arrows {
+      right: 15px;
+  }
+  .col-md-12.content .subcategories a.subcat,
+  .col-md-12.content ul.product-items li {
+    margin-right: 6px;
+  }
+}

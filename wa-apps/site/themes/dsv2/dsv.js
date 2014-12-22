@@ -140,7 +140,7 @@ $(function() {
         });
     }
     
-    $('.list-toggle').on('click', function() {
+    /*$('.sidebar-nav-v1>li.list-toggle').on('click', function() {
         $(this).toggleClass('active');
-    });
+    });*/
 });

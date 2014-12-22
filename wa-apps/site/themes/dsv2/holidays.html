@@ -1,0 +1,23 @@
+<style>
+{if $theme_settings.newyear}
+	.logo { position: relative }
+	.logo-cap {
+		background-image: url("{$wa_theme_url}img/logo-cap.png");
+		display: inline-block;
+		height: 51px;
+		width: 45px;
+		position: absolute;
+		top: -9px;
+		left: -12px;
+	}
+	{if $wa_app == 'shop'}
+	.badge { background-image: url("{$wa_active_theme_url}img/new_year/badge_newyear.png"); text-indent: -20px }
+	.badge.new { width: 100px }
+	.badge.low-price { width: 78px }
+	.badge[style] { background: url("{$wa_active_theme_url}img/new_year/custom_badge_newyear.png") }
+	ul.product-items li button { background-image: url("{$wa_active_theme_url}img/new_year/snow.png") }
+	ul.product-items li .addtouserbar .favourite { background-image: url("{$wa_active_theme_url}img/new_year/snow2.png") }
+	ul.product-items li .addtouserbar .addtocompare { background-image: url("{$wa_active_theme_url}img/new_year/snow3.png") }
+	{/if}
+{/if}
+</style>

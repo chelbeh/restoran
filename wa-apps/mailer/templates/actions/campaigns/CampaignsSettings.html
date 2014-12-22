@@ -123,8 +123,8 @@ form#form-campaign { 1overflow: visible; }
                 <p>
                     <label>
                         <input type="hidden" name="params[google_analytics]" value="">
-                        <input id="ga-enable-checkbox" type="checkbox" name="params[google_analytics]" value="1"{if !empty($params.google_analytics)} checked="checked"{/if}>
-                        [`Enable Google Analytics for this campaign`]
+                        <label><input id="ga-enable-checkbox" type="checkbox" name="params[google_analytics]" value="1"{if !empty($params.google_analytics)} checked="checked"{/if}>
+                        [`Enable Google Analytics for this campaign`]</label>
                     </label>
                     <br>
                     <span class="hint">[`UTM tags will be added to all links (URLs) containing in the campaign message. It will allow to track these links visiting in your Google Analytics reports.`]</span>
