@@ -32,9 +32,12 @@
     }
 
     function addPoint(id, name, address, latitude, longitude, link){
-        var point_text = '<div><b>'+name+'</b></div><div>'+address+'</div>';
-        if(link){
+        var point_text = '<div><b>Пункт выдачи '+id+'</b></div><div><i>'+name+'</i></div><div>'+address+'</div>';
+        if(link==1){
             point_text += '<a id="sh_select_'+id+'" data-id="'+id+'" href="#">Выбрать этот пункт самвывоза</a>';
+        }
+        if(link==0){
+            point_text += '<a target="_blank" href="http://pschooser.hermes-dpd.ru/PSChooser/PSDetails?PSId='+id+'">подробнее</a>';
         }
         BalloonContentLayout = ymaps.templateLayoutFactory.createClass(
                 point_text, {
