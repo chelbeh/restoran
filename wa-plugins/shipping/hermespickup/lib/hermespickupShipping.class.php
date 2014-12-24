@@ -26,7 +26,7 @@ class hermespickupShipping extends waShipping
                                     'est_delivery' => $time,
                                     'currency'     => 'RUB',
                                     'rate'         => $rate,
-                                    'name' => $params['id'].' - '.$params['name']." (".$params['address'].")",
+                                    'name' => self::getComment($params),//$params['id'].' - '.$params['name']." (".$params['address'].")",
                                     'comment' => self::getComment($params),
                                     'force_subrates' => true,
                                     'params' => array(
@@ -55,7 +55,7 @@ class hermespickupShipping extends waShipping
     }
 
     private static function getSubComment($params){
-        return $params['id'].' - '.$params['name']." (".$params['address'].")";
+        return $params['id'].' - '.$params['city'].' - '.$params['name']." (".$params['address'].")";
     }
 
     public function allowedCurrency()
