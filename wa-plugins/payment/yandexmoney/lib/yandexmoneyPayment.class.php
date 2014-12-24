@@ -2,15 +2,18 @@
 
 /**
  *
- * @author WebAsyst Team
+ * @author Webasyst
  * @name YandexMoney
  * @description YandexMoney pament module
+ * @property-read string $integration_type
  * @property-read string $TESTMODE
  * @property-read string $shopPassword
  * @property-read string $ShopID
  * @property-read string $scid
  * @property-read string $payment_mode
  * @property-read array $paymentType
+ *
+ * @see https://money.yandex.ru/doc.xml?id=526537
  */
 class yandexmoneyPayment extends waPayment implements waIPayment
 {
@@ -60,61 +63,77 @@ class yandexmoneyPayment extends waPayment implements waIPayment
 
     public function payment($payment_form_data, $order_data, $auto_submit = false)
     {
+        $order_data = waOrder::factory($order_data);
         if ($order_data['currency_id'] != 'RUB') {
             return array(
                 'type' => 'error',
                 'data' => _w('Оплата на сайте Яндекс.Денег производится в только в рублях (RUB) и в данный момент невозможна, так как эта валюта не определена в настройках.'),
             );
         }
-        $hidden_fields = array(
-            'scid'           => $this->scid,
-            'ShopID'         => $this->ShopID,
-            'CustomerNumber' => $order_data['customer_contact_id'],
-            'customerNumber' => $order_data['customer_contact_id'],
-            'orderNumber'    => $this->app_id.'_'.$this->merchant_id.'_'.$order_data['order_id'],
-            'Sum'            => number_format($order_data['amount'], 2, '.', ''),
-        );
-        $fields = array();
-        if ($this->payment_mode) {
-            switch ($this->payment_mode) {
-                case 'customer':
-                    $ways = self::settingsPaymentOptions();
-                    $options = array(
-                        'title'       => 'Способ оплаты',
-                        'description' => '',
-                        'options'     => array(),
-                    );
-
-
-                    foreach ($ways as $way => $name) {
-                        if (isset($this->paymentType[$way]) && !empty($this->paymentType[$way])) {
-                            $options['options'][$way] = $name;
-                        }
-                    }
-                    if (count($options['options']) == 1) {
-                        $hidden_fields['paymentType'] = key($options['options']);
-                    } elseif (count($options['options']) > 1) {
-                        $options['value'] = key($options['options']);
-                        $fields['paymentType'] = waHtmlControl::getControl(waHtmlControl::SELECT, 'paymentType', $options);
-                        $auto_submit = false;
-                    }
-                    break;
-                default:
-                    $hidden_fields['paymentType'] = $this->payment_mode;
-                    break;
-            }
-
-        }
         $view = wa()->getView();
+        switch ($this->integration_type) {
 
-        $view->assign('hidden_fields', $hidden_fields);
-        $view->assign('fields', $fields);
-        $view->assign('form_url', $this->getEndpointUrl());
+            case 'personal':
+                $view->assign('plugin', $this);
+                $view->assign('order', $order_data);
+                $view->assign('return_url', $this->getAdapter()->getBackUrl(waAppPayment::URL_SUCCESS));
+                $view->assign('label', $this->app_id.'_'.$this->account.'_'.$order_data['order_id']);
+                break;
+            case 'kassa':
+                $hidden_fields = array(
+                    'scid'           => $this->scid,
+                    'ShopID'         => $this->ShopID,
+                    'CustomerNumber' => $order_data['customer_contact_id'],
+                    'customerNumber' => $order_data['customer_contact_id'],
+                    'orderNumber'    => $this->app_id.'_'.$this->merchant_id.'_'.$order_data['order_id'],
+                    'Sum'            => number_format($order_data['amount'], 2, '.', ''),
+                );
+                $fields = array();
+                if ($this->payment_mode) {
+                    switch ($this->payment_mode) {
+                        case 'customer':
+                            $ways = self::settingsPaymentOptions();
+                            $options = array(
+                                'title'       => 'Способ оплаты',
+                                'description' => '',
+                                'options'     => array(),
+                            );
 
-        $view->assign('auto_submit', $auto_submit);
+
+                            foreach ($ways as $way => $name) {
+                                if (isset($this->paymentType[$way]) && !empty($this->paymentType[$way])) {
+                                    $options['options'][$way] = $name;
+                                }
+                            }
+                            if (count($options['options']) == 1) {
+                                $hidden_fields['paymentType'] = key($options['options']);
+                            } elseif (count($options['options']) > 1) {
+                                $options['value'] = key($options['options']);
+                                $fields['paymentType'] = waHtmlControl::getControl(waHtmlControl::SELECT, 'paymentType', $options);
+                                $auto_submit = false;
+                            }
+                            break;
+                        default:
+                            $hidden_fields['paymentType'] = $this->payment_mode;
+                            break;
+                    }
+
+                }
+
+
+                $view->assign('hidden_fields', $hidden_fields);
+                $view->assign('fields', $fields);
+                $view->assign('form_url', $this->getEndpointUrl());
+
+                $view->assign('auto_submit', $auto_submit);
+                break;
+        }
+
+        $view->assign('integration_type', $this->integration_type);
 
         return $view->fetch($this->path.'/templates/payment.html');
     }
+
 
     protected function callbackInit($request)
     {
@@ -217,6 +236,7 @@ class yandexmoneyPayment extends waPayment implements waIPayment
     /**
      * Check MD5 hash of transfered data
      * @throws waPaymentException
+     * @param array $request
      */
     private function verifySign($request)
     {
@@ -280,11 +300,14 @@ class yandexmoneyPayment extends waPayment implements waIPayment
 
         }
         if ($missed_fields) {
-            self::log($this->id, array(
-                'method'  => __METHOD__,
-                'version' => $this->version,
-                'error'   => 'empty required field(s): '.implode(', ', $missed_fields),
-            ));
+            self::log(
+                $this->id,
+                array(
+                    'method'  => __METHOD__,
+                    'version' => $this->version,
+                    'error'   => 'empty required field(s): '.implode(', ', $missed_fields),
+                )
+            );
             throw new waPaymentException('Empty required field', self::XML_BAD_REQUEST);
         }
 
@@ -322,16 +345,19 @@ class yandexmoneyPayment extends waPayment implements waIPayment
             }
         }
 
-        $transaction_data = array_merge($transaction_data, array(
-            'type'        => null,
-            'native_id'   => ifset($transaction_raw_data['invoiceId']),
-            'amount'      => ifset($transaction_raw_data['orderSumAmount']),
-            'currency_id' => ifset($transaction_raw_data['orderSumCurrencyPaycash']) == 643 ? 'RUB' : 'N/A',
-            'customer_id' => ifempty($transaction_raw_data['customerNumber'], ifset($transaction_raw_data['CustomerNumber'])),
-            'result'      => 1,
-            'order_id'    => $this->order_id,
-            'view_data'   => $view_data
-        ));
+        $transaction_data = array_merge(
+            $transaction_data,
+            array(
+                'type'        => null,
+                'native_id'   => ifset($transaction_raw_data['invoiceId']),
+                'amount'      => ifset($transaction_raw_data['orderSumAmount']),
+                'currency_id' => ifset($transaction_raw_data['orderSumCurrencyPaycash']) == 643 ? 'RUB' : 'N/A',
+                'customer_id' => ifempty($transaction_raw_data['customerNumber'], ifset($transaction_raw_data['CustomerNumber'])),
+                'result'      => 1,
+                'order_id'    => $this->order_id,
+                'view_data'   => $view_data
+            )
+        );
 
         switch ($transaction_raw_data['action']) {
             case 'checkOrder': //Проверка заказа
@@ -403,7 +429,9 @@ class yandexmoneyPayment extends waPayment implements waIPayment
             'AC' => 'платеж с банковской карты',
             'GP' => 'платеж по коду через терминал',
             'MC' => 'оплата со счета мобильного телефона',
-            'NV' => 'оплата со счета WebMoney',
+            'WM' => 'оплата со счета WebMoney',
+            'SB' => 'Оплата через Сбербанк Онлайн',
+            'AB' => 'Оплата в Альфа-Клик',
         );
     }
 }
