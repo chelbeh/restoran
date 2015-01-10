@@ -1,0 +1,20 @@
+<div class="block hierarchical collapsible list_menu">
+    <ul class="menu-v with-icons">
+        <li>
+            <a href="?module=smartb&action=create">
+                <i class="icon16 add"></i>
+                [`Добавить баннер`]
+            </a>
+        </li>
+    </ul>
+    <ul class="menu-v">
+        {foreach $banners as $banner}
+            <li {if $id|default:'0'==$banner.id}class='current'{/if}>
+                <span class="count">{$banner.width}x{$banner.height}</span>
+                <a href="?module=smartb&id={$banner.id}">
+                    {$banner.title|escape:'html'}
+                </a>
+            </li>
+        {/foreach}
+    </ul>
+</div>

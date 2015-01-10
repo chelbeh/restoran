@@ -1,0 +1,310 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: banners\n"
+"POT-Creation-Date: 2014-10-26 16:55+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator:  banners\n"
+"Language-Team:  banners\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+"X-Poedit-Language: ru_RU\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: .\n"
+
+msgid "Smart banners"
+msgstr "Умные баннеры"
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:4
+msgid "настройки баннера"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:7
+msgid "удалить"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:13
+msgid "Код для вставки:"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:26
+#: /wa-apps/banners/templates/actions/banner/Banner.html:47
+#: /wa-apps/banners/templates/actions/banner/BannerCreate.html:10
+msgid "Сохранить"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:41
+msgid "Изображения"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:52
+msgid "Добавить изображение"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:62
+msgid "удалить изображение"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:64
+msgid "Тяните чтобы поменять сортировку"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:73
+msgid "Ссылка"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:79
+msgid "Описание"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:85
+msgid "Статус"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:91
+msgid "выключено"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:96
+msgid "включено"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:99
+msgid "Количество переходов"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:122
+msgid "Удалить данный баннер?"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/Banner.html:129
+msgid "Удалить данное изображение?"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/BannerCreate.html:2
+msgid "Новый баннер"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.fields.html:4
+msgid "Название"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.fields.html:10
+msgid "Размеры"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.fields.html:13
+msgid "Ширина"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.fields.html:17
+msgid "Высота"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.fields.html:21
+msgid "Обрабатывать изображения под размер баннера"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:4
+msgid "Анимация появления"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:15
+msgid "Анимация пропадания"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:27
+msgid "Скорость анимации"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:38
+msgid "Время показа каждого слайда"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:46
+msgid "Кнопки листания"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:57
+msgid "Кнопки навигации"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:68
+msgid "Цвет кнопок"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.params.html:79
+msgid "Цвет фона кнопок"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.upload.html:5
+msgid "Добавить"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.url_error.html:3
+msgid "Внимание! У вас не настроено поселение для данного приложения!"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.url_error.html:4
+msgid "Чтобы подсчитывалось количество переходов по баннерам, неоходимо добавить правило для Умных баннеров в"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/banner/include.url_error.html:7
+msgid "структуре сайта"
+msgstr ""
+
+#: /wa-apps/banners/templates/actions/sidebar/SidebarBanner.html:6
+msgid "Добавить баннер"
+msgstr ""
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:235
+msgid "Very fast"
+msgstr "Очень быстро"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:236
+msgid "Fast"
+msgstr "Быстро"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:237
+msgid "Regular"
+msgstr "Средне"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:238
+msgid "Slow"
+msgstr "Медленно"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:239
+msgid "Very slow"
+msgstr "Очень медленно"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:245
+msgid "None"
+msgstr "Нет"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:246
+msgid "Small buttons"
+msgstr "Маленькие"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:247
+msgid "Normal buttons"
+msgstr "Средние"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:248
+msgid "Big buttons"
+msgstr "Большие"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:157
+msgid "bounce"
+msgstr "Скачками"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:158
+msgid "bounceDown"
+msgstr "Скачками вниз"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:159
+msgid "bounceLeft"
+msgstr "Скачками слева"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:160
+msgid "bounceRight"
+msgstr "Скачками справа"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:161
+msgid "bounceUp"
+msgstr "Скачками вверх"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:163
+msgid "fade"
+msgstr "Плавное появление"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:164
+msgid "fadeDown"
+msgstr "Плавно вниз"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:165
+msgid "fadeDownBig"
+msgstr "Плавно вниз 2"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:166
+msgid "fadeLeft"
+msgstr "Плавно слева"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:167
+msgid "fadeLeftBig"
+msgstr "Плавно слева 2"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:168
+msgid "fadeRight"
+msgstr "Плавно справа"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:169
+msgid "fadeRightBig"
+msgstr "Плавно справа 2"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:170
+msgid "fadeUp"
+msgstr "Плавно вверх"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:171
+msgid "fadeUpBig"
+msgstr "Плавно вверх 2"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:173
+msgid "flipX"
+msgstr "Кручение по горизонтали"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:174
+msgid "flipY"
+msgstr "Кручение по вертикали"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:176
+msgid "lightSpeed"
+msgstr "Торможение"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:178
+msgid "rotate"
+msgstr "Вращение"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:179
+msgid "rotateDownLeft"
+msgstr "Вращение слева вниз"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:180
+msgid "rotateDownRight"
+msgstr "Вращение справа вниз"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:181
+msgid "rotateUpLeft"
+msgstr "Вращение слева вверх"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:182
+msgid "rotateUpRight"
+msgstr "Вращение справа вверх"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:184
+msgid "roll"
+msgstr "Качели"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:186
+msgid "zoom"
+msgstr "Увеличение"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:187
+msgid "zoomDown"
+msgstr "Увеличение вниз"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:188
+msgid "zoomLeft"
+msgstr "Увеличение слева"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:189
+msgid "zoomRight"
+msgstr "Увеличение справа"
+
+#: /wa-apps/banners/lib/classes/bannersBanner.class.php:190
+msgid "zoomUp"
+msgstr "Увеличение вверх"
+

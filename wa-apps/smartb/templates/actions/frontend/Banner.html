@@ -1,0 +1,56 @@
+<div id="smartb_{$uniq}" class="smartbs_smartb"
+{foreach $banner.params as $key=>$value}data-{$key}='{$value}' {/foreach}>
+    {foreach $images as $image}
+        <a href="{$image.link|escape:'html'}" class="smartbs_slide"><img src="{$image.url_thumb|escape:'html'}" alt="{$image.alt|escape:'html'}" title="{$image.alt|escape:'html'}"></a>
+    {/foreach}
+</div>
+<script>
+    if (typeof banners_loaded == 'undefined'){
+        document.write('<' + 'script language="javascript" type="text/javascript"');
+        document.write(' src="{$wa_url}wa-apps/smartb/js/smartb.js">');
+        document.write('<'+'/script'+'>');
+        (function(){
+            var link = document.createElement('link');
+            link.setAttribute('rel', 'stylesheet');
+            link.setAttribute('type', 'text/css');
+            link.setAttribute('href', "{$wa_url}wa-apps/smartb/css/smartb.css");
+            document.getElementsByTagName('head')[0].appendChild(link);
+        })();
+    }
+</script>
+
+<script type="text/javascript">
+    bannersBanner("smartb_{$uniq}", '{$wa_url}');
+</script>
+
+<style>
+    #smartb_{$uniq}{
+        width: {$banner.width}px;
+        height:{$banner.height}px;
+        overflow: hidden;
+    }
+    #smartb_{$uniq} > .smartbs_slide{
+        width: {$banner.width}px;
+        height:{$banner.height}px;
+        text-align: center;
+    }
+    #smartb_{$uniq} .smartbs_slide img{
+        max-width: {$banner.width}px;
+        max-height:{$banner.height}px;
+    }
+    #smartb_{$uniq}.smartbs_smartb .smartbs_navigation a.current{
+        background: #{$banner.params.button_color};
+    }
+    #smartb_{$uniq}.smartbs_smartb .smartbs_navigation a{
+        background: #{$banner.params.button_background};
+        border-color: #{$banner.params.button_color};
+    }
+    #smartb_{$uniq}.smartbs_smartb .smartbs_arrow:before{
+        color: #{$banner.params.button_color};
+    }
+    #smartb_{$uniq}.smartbs_smartb .smartbs_arrow{
+        background: #{$banner.params.button_background};
+        color: #{$banner.params.button_color};
+        border-color: #{$banner.params.button_color};
+    }
+</style>

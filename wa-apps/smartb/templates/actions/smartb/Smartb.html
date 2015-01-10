@@ -1,0 +1,165 @@
+{if isset($banner)}
+    <div class="block">
+        <div class="float-right">
+            <a href="#" class="toggle_link" data-id="settings"><i class="icon16 edit"></i>[`настройки баннера`]</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#" class="delete_smartb"><i class="icon16 delete"></i>[`удалить`]</a>
+        </div>
+        <h1>
+            {$banner.title|escape:'html'}
+            <span class="hint" style="margin-left: 20px">{$banner.width}x{$banner.height} px</span>
+        </h1>
+        <div class="code_block">
+            <span class="hint">[`Код для вставки:`]</span>
+            <span class="code">{literal}{$wa->smartb->banner("{/literal}{$banner.id}{literal}")}{/literal}</span>
+        </div>
+    </div>
+
+    <div id="settings" class="smartb_settings" {if count($images)>0}style="display: none" {/if}>
+        <form method="post">
+            {include './include.fields.html'}
+            {include './include.params.html' banner=$banner}
+            <div class="block">
+                <div class="field">
+                    <div class="value">
+                        <input type="submit" name="save_smartb" class="button green" value="[`Сохранить`]" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    {if $url_error|default:0}{include './include.url_error.html'}{/if}
+
+    <div class="block">
+    {$wa->smartb->banner("{$banner.id}")}
+    </div>
+
+
+    <div class="stat_block block">
+        <h6 class="heading">[`Статистика`]</h6>
+        <div class="border"></div>
+        <div class="field">
+            <div class="name">[`Количество показов`]</div>
+            <div class="value">
+                {$banner.views}
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">[`Количество кликов`]</div>
+            <div class="value">
+                {$banner.clicks}
+            </div>
+        </div>
+        <div class="field">
+            <div class="name">[`CTR`]</div>
+            <div class="value">
+                {$banner.CTR}%
+            </div>
+        </div>
+    </div>
+
+    <div class="block" id="block_images" {if count($images)==0}style="display: none" {/if}>
+        <h6 class="heading">[`Изображения`]</h6>
+        <div class="border"></div>
+        <form method="post">
+            <div id="smartb-images" data-id="{$banner.id}"></div>
+            <div class="block">
+                <input type="submit" name="save_images" class="button green" value="[`Сохранить`]" />
+            </div>
+        </form>
+    </div>
+    <div class="block">
+        <h6 class="heading">[`Добавить изображение`]</h6>
+        {include './include.upload.html'}
+    </div>
+
+    {literal}
+        <script type="text/html" id='template-smartb-images'>
+            {% for (var i = 0, n = o.images.length, image = o.images[0]; i < n; image = o.images[++i]) { %}
+            <div data-image-id="{%#image.id%}" class='image_block'>
+                <div class="float-right">
+                    <a href="#" class="delete_image"><i class="icon16 delete"></i>[`удалить изображение`]</a>
+                </div>
+                <div class="smartb_sortable">
+                    <div class='drag_handle' title='[`Тяните чтобы поменять сортировку`]'></div>
+                    <input type="hidden" class='sort_input' name="image_params[{%#image.id%}][sort]" value="{%#image.sort%}">
+                </div>
+                <div class="smartb_image">
+                    <img src="{%#image.url_thumb%}">
+                </div>
+                <div class="image_params">
+                    <div class="field">
+                        <div class="name">[`Ссылка`]</div>
+                        <div class="value">
+                            <input type="text" name="image_params[{%#image.id%}][url]" value="{%#image.url.replace(/"/g, '&quot;')%}">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">[`Описание`]</div>
+                        <div class="value">
+                            <input type="text" name="image_params[{%#image.id%}][alt]" value="{%#image.alt.replace(/"/g, '&quot;')%}">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">[`Статус`]</div>
+                        <div class="value">
+                            <input type="hidden" name="image_params[{%#image.id%}][disabled]" value="{%#image.disabled%}">
+                            {% if (image.disabled==1) { %}
+                            <i class="icon16 status-red"></i>
+                            <a href='#' class='inline_link toggle_status'>[`выключено`]</a>
+                            {% }else{ %}
+                            <i class="icon16 status-green"></i>
+                            <a href='#' class='inline_link toggle_status'>[`включено`]</a>
+                            {% } %}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">[`Количество переходов`]</div>
+                        <div class="value">
+                            {% if(image.clicks){ %}
+                            {%#image.clicks%}
+                            {% }else{ %}
+                            0
+                            {% }%}
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="name">[`CTR`]</div>
+                        <div class="value">
+                            {% if(image.CTR){ %}
+                            {%#image.CTR%}%
+                            {% }else{ %}
+                            0%
+                            {% }%}
+                        </div>
+                    </div>
+                </div>
+                <div class="clear-both"></div>
+            </div>
+            {% } %}
+        </script>
+    {/literal}
+
+    <div class="cb"></div>
+    <form method="post" id="form_delete"><input type="hidden" name="delete_smartb" value="1"></form>
+    <script>
+        $(document).ready(function() {
+            $("a.delete_smartb").click(function(){
+                if(confirm('[`Удалить данный баннер?`]')){
+                    $("#form_delete").submit();
+                }
+                return false;
+            });
+            $("a.delete_image").live('click',function(){
+                if(confirm('[`Удалить данное изображение?`]')){
+                    $(this).parents('.image_block').remove();
+                }
+                return false;
+            });
+            initBanner();
+            var images = {json_encode($images)};
+            showImages($('#smartb-images'), images);
+        });
+    </script>
+{/if}

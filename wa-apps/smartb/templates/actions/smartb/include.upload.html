@@ -1,0 +1,28 @@
+<form method="post" enctype="multipart/form-data">
+    <div class="block">
+        <div class="field-group">
+            <div class="field">
+                <div class="name">[`Добавить`]</div>
+                <div class="value">
+                    <input id="fileupload" type="file" name="image[]" data-url="?module=smartb&action=upload&id={$banner.id}" multiple>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            done: function(e, data) {
+                var files = data.result.data.files;
+                addImages($('#smartb-images'), files);
+                //$("html, body").animate({ scrollTop:$(document).height()}, '500', 'swing');
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+            }
+        });
+    });
+</script>
+

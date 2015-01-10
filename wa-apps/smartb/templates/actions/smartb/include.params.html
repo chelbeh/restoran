@@ -1,0 +1,87 @@
+<div class="block">
+    <div class="fields form">
+        <div class="field">
+            <div class="name">[`Анимация появления`]</div>
+            <div class="value">
+                <select name="params[animation_in]">
+                    {foreach $animation_in as $key=>$value}
+                        <option {if $banner.params.animation_in|default:''==$key}selected{/if} value="{$key}">{$value}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">[`Анимация пропадания`]</div>
+            <div class="value">
+                <select name="params[animation_out]">
+                    {foreach $animation_out as $key=>$value}
+                        <option {if $banner.params.animation_out|default:''==$key}selected{/if} value="{$key}">{$value}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">[`Скорость анимации`]</div>
+            <div class="value">
+                <select name="params[animation_speed]">
+                    {foreach $animation_speeds as $key=>$value}
+                        <option {if $banner.params.animation_speed|default:'1000'==$key}selected{/if} value="{$key}">{$value}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">[`Время показа каждого слайда`]</div>
+            <div class="value">
+                <input type="text" name="params[time]" value="{$banner.params.time|default:'3000'|escape:'html'}"/> мсек
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">[`Кнопки листания`]</div>
+            <div class="value">
+                <select name="params[arrow_buttons]">
+                    {foreach $sizes as $key=>$value}
+                        <option {if $banner.params.arrow_buttons|default:'normal'==$key}selected{/if} value="{$key}">{$value}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">[`Кнопки навигации`]</div>
+            <div class="value">
+                <select name="params[navigation]">
+                    {foreach $sizes as $key=>$value}
+                        <option {if $banner.params.navigation|default:'normal'==$key}selected{/if} value="{$key}">{$value}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="name">[`Цвет кнопок`]</div>
+            <div class="value">
+                <input type="text" id="button_color_input" name="params[button_color]" value="{$banner.params.button_color|default:'000000'|escape:'html'}"/><i id="button_color_icon" class="icon16 color"></i>
+                <div id="button_color_picker"></div>
+            </div>
+            <script>
+                initColor($('#button_color_input'), $('#button_color_icon'), $('#button_color_picker'));
+            </script>
+        </div>
+
+        <div class="field">
+            <div class="name">[`Цвет фона кнопок`]</div>
+            <div class="value">
+                <input type="text" id="button_background_input" name="params[button_background]" value="{$banner.params.button_background|default:'999999'|escape:'html'}"/><i id="button_background_icon" class="icon16 color"></i>
+                <div id="button_background_picker"></div>
+            </div>
+            <script>
+                initColor($('#button_background_input'), $('#button_background_icon'), $('#button_background_picker'));
+            </script>
+        </div>
+    </div>
+</div>

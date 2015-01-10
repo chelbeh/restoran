@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{$wa->title()} :: {$wa->appName()} &mdash; {$wa->accountName()}</title>
+    {$wa->css()}
+    <link type="text/css" rel="stylesheet" href="{$wa_app_static_url}css/style.css">
+
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"></script>
+
+
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.core.min.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.widget.min.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.mouse.min.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.position.min.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.draggable.min.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.droppable.min.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.sortable.min.js"></script>
+
+
+
+
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.dialog.js"></script>
+
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/fileupload/jquery.iframe-transport.js"></script>
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/fileupload/jquery.fileupload.js"></script>
+    <script type="text/javascript" src="{$wa_app_static_url}js/main.js"></script>
+    <script type="text/javascript" src="{$wa_app_static_url}js/tmpl.min.js"></script>
+
+    <script type="text/javascript" src="{$wa_url}wa-content/js/farbtastic/farbtastic.js"></script>
+    <link rel="stylesheet" media="screen" type="text/css" href="{$wa_url}wa-content/js/farbtastic/farbtastic.css" />
+
+    <script>base_url = "{$wa_app_url}";</script>
+</head>
+<body>
+<div id="wa">
+    {$wa->header()}
+    {if !isset($page)}{$page=''}{/if}
+    <div id="wa-app">

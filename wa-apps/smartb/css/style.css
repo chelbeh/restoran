@@ -1,0 +1,80 @@
+#wa{
+    background: url("../img/wh_bg.jpg") repeat scroll 0 0 transparent;
+}
+
+.cb{
+    clear: both;
+}
+
+#wa-app .content{
+    background: #f7f7f7;
+}
+
+input.number{
+    width: 50px;
+}
+
+.code_block{
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.code_block .code{
+    font-family: monospace;
+}
+
+.border{
+    border-top: 1px solid #999;
+}
+
+#smartb-images{
+    border-collapse: collapse;
+}
+
+.image_block{
+    clear: both;
+    padding: 10px;
+    border-bottom: 1px solid #999;
+    border-top: 1px solid #999;
+    background: #f7f7f7;
+}
+
+.smartb_sortable{
+    width: 20px;
+    float: left;
+}
+
+.smartb_sortable .drag_handle{
+    width: 16px;
+    height: 16px;
+    background: url(../img/drag.png) no-repeat top left;
+}
+
+.smartb_image{
+    width: 200px;
+    float: left;
+}
+
+.smartb_image img{
+    max-width: 200px;
+}
+
+.image_params{
+    float: left;
+    margin-left: 10px;
+}
+
+.icon16.color {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    height: 14px;
+    width: 14px;
+    cursor: pointer;
+    margin-left: 4px;
+    margin-top: 3px;
+}
+
+a.inline_link{
+    text-decoration: none;
+    border-bottom: 1px dotted;
+}

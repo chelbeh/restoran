@@ -1,0 +1,18 @@
+<div id="smartb_{$uniq}" class="smartbs_smartb" style="width: {$banner.width}px; height:{$banner.height}px; overflow: hidden; text-align: center"
+{foreach $banner.params as $key=>$value}data-{$key}='{$value}' {/foreach}>
+    {foreach $images as $image}
+        <a href="{$image.link|escape:'html'}" class="smartbs_slide"><img src="{$image.url_thumb|escape:'html'}" alt="{$image.alt|escape:'html'}" title="{$image.alt|escape:'html'}"></a>
+    {/foreach}
+</div>
+
+<style>
+    #smartb_{$uniq} > .smartbs_slide{
+        width: {$banner.width}px;
+        height:{$banner.height}px;
+        text-align: center;
+    }
+    #smartb_{$uniq} .smartbs_slide img{
+        max-width: {$banner.width}px;
+        max-height:{$banner.height}px;
+    }
+</style>

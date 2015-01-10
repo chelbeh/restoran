@@ -1,0 +1,25 @@
+<div class="block">
+    <div class="fields form">
+        <div class="field">
+            <div class="name">[`Название`]</div>
+            <div class="value"><input type="text" name="title" value="{$banner.title|default:''|escape:'html'}" /></div>
+        </div>
+    </div>
+    <div class="clear-both"></div>
+    <div class="fields form">
+        <h6 class="heading">[`Размеры`]</h6>
+        <div class="field">
+            <div class="name">[`Ширина`]</div>
+            <div class="value"><input type="number" class="number" name="width" value="{$banner.width|default:''}" /> px</div>
+        </div>
+        <div class="field">
+            <div class="name">[`Высота`]</div>
+            <div class="value"><input type="number" class="number" name="height" value="{$banner.height|default:''}" /> px</div>
+        </div>
+        <div class="field">
+            <div class="name"></div>
+            <div class="value"><label><input type="checkbox" name="scale" {if $banner.scale|default:false}checked{/if}/> [`Обрабатывать изображения под размер баннера`]</label></div>
+        </div>
+    </div>
+    <div class="clear-both"></div>
+</div>
