@@ -17,7 +17,7 @@
         {/if}
 
         <!-- Bootstrap -->
-        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,500,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,500,700&amp;subset=latin,cyrillic' rel='stylesheet' type='text/css'>
         <link href="{$wa_theme_url}bootstrap.min.css?v{$wa_theme_version}" rel="stylesheet">
         <link href="{$wa_theme_url}dsv.css?v{$wa_theme_version}" rel="stylesheet">
         <link href="{$wa_theme_url}dsv.user.css?v{$wa_theme_version}" rel="stylesheet">
@@ -125,7 +125,11 @@
                                     {/if}                      
                                     <li><a href="?logout">[s`Log out`]</a></li>
                                 {else}
-                                    <li><a href="#" data-toggle="modal" data-target="#signupModal" style="border-left: 1px solid #ececec;">[s`Sign up`]</a></li>
+                                    {if !$theme_settings.authtype}
+                                        <li><a href="#" data-toggle="modal" data-target="#signupModal" style="border-left: 1px solid #ececec;">[s`Sign up`]</a></li>
+                                    {else}
+                                        <li><a href="{$wa->signupUrl()}" style="border-left: 1px solid #ececec;">[s`Sign up`]</a></li>
+                                    {/if}
                                     <li><a href="#" data-toggle="modal" data-target="#loginModal">[s`Log in`]</a></li>
                                 {/if}
                             {/if}
@@ -149,7 +153,7 @@
                 <div class="container container-xs-height hidden-xs hidden-sm">
                     <div class="row row-xs-height">
                         <div class="col-md-3 col-xs-4 col-xs-height col-middle">
-                            <div class="logo">
+                            <div class="logo theme-background-wh">
                                 {include file="dsv.logo.html" inline}
                                 {if $theme_settings.slogan}
                                 <span>{$theme_settings.slogan}</span>
@@ -200,11 +204,11 @@
                     </div>
                 </div>
                 <!-- End PC header -->
-
+                {if $wa->isMobile()}
                 <div class="container visible-xs visible-sm">
                     <div class="row">
                         <div class="col-xs-6 visible-xs visible-sm">
-                            <div class="logo">
+                            <div class="logo theme-background-wh">
                                 {include file="dsv.logo.html" inline}
                             </div>
                         </div>
@@ -219,9 +223,10 @@
                     </div>
                 </div>
                 <!-- End mobile header -->
+                {/if}
             </div>
             <!-- End header -->
-            <nav class="navbar navbar-inverse" rol="navigation">
+            <nav class="navbar navbar-inverse" role="navigation">
                 <div class="container">
                     <div class="navbar-header">
                         <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
@@ -289,7 +294,7 @@
                         <div class="modal-header">
                             <div class="modal-bordered">
                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="loginLabel">[s`Sign up`]</h4>
+                                <h4 class="modal-title" id="signupLabel">[s`Sign up`]</h4>
                                 {$wa->authAdapters()}
                                 <p>
                                     У вас уже есть аккаунт? Выполните <a href="#" data-auth="1">вход</a>.
@@ -347,13 +352,13 @@
             </div>
             <!-- End Signup modal -->
 
-            <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
+            <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="signUpLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header">
                             <div class="modal-bordered">
                                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                <h4 class="modal-title" id="loginLabel">[s`Sign In`]</h4>
+                                <h4 class="modal-title" id="signUpLabel">[s`Sign In`]</h4>
                                 {$wa->authAdapters()}
                                 <p>
                                     У вас нет аккаунта? Пройдите <a href="#" data-signup="1">регистрацию</a>.
@@ -390,7 +395,7 @@
             </div>
             <!-- End Login modal -->
 
-            <div class="modal fade" id="forgotModal" tabindex="-1" rold="dialog" aria-labelledby="forgotLabel" aria-hidden="true">
+            <div class="modal fade" id="forgotModal" tabindex="-1" role="dialog" aria-labelledby="forgotLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -423,7 +428,7 @@
                 </div>
             </div>
 
-            {if $theme_settings.sidebar && !$mobile && strpos($wa->currentUrl(), 'checkout') === false && strpos($wa->currentUrl(), 'cart') === false}
+            {if $theme_settings.sidebar && !$mobile && strpos($wa->currentUrl(), 'checkout') === false && strpos($wa->currentUrl(), 'cart') === false && $wa_app != 'hub'}
             <div role="main">
                 <div class="page container nopadd">
                     {if $wa_app == 'site' || $wa_app == 'shop'}
@@ -448,13 +453,13 @@
                 <div class="container">
                     <div class="row footer-menu">
                         <div class="col-md-3 col-md-offset-1 col-sm-6 logo-social">
-                            <div class="logo margin-bottom-30">
+                            <div class="logo theme-background-wh margin-bottom-30">
                                 {include file="dsv.logo.html" inline}
                             </div>
                             <div class="footer-column">
                                 [`Contact with us`]
                             </div>
-                            <ul class="list-unstyled list-inline social clearfix">
+                            <ul class="list-unstyled list-inline social clearfix {if $theme_settings.social_inverse}inverse{/if}">
                                 {include file="dsv.social.html" inline}
                             </ul>
                         </div>
@@ -570,7 +575,7 @@
             </div>
             
             <div id="back-top">
-                <a href="#top" title="[`Scroll top`]"><img src="{$wa_url}wa-data/public/site/themes/dsv2/img/scrolltop.png"></a></div>
+                <a href="#top" title="[`Scroll top`]"><img src="{$wa_url}wa-data/public/site/themes/dsv2/img/scrolltop.png" alt="[`Scroll top`]"></a></div>
             <!-- End toolbar -->
         {*debug*}
         {*|@debug_print_var*}

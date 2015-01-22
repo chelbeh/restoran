@@ -374,3 +374,22 @@
 	line-height: 32px;
 	margin-bottom: 10px;
 }
+
+/* БЛОГ 1.3.0 */
+html.realtime-preview,
+html.realtime-preview body { background: #fff; }
+html.realtime-preview .footer,
+html.realtime-preview .header,
+html.realtime-preview .navbar,
+html.realtime-preview .auth,
+html.realtime-preview .wrapper-toolbar,
+html.realtime-preview .breadcrumb{ display: none; }
+/*html.realtime-preview .page-content { margin-right: 0; }
+html.realtime-preview .page { top: 0; margin: 10px 0; }*/
+
+
+.photo-album-attachment ul.thumbs { padding-left: 0; }
+.photo-album-attachment ul.thumbs li { list-style: none; display: inline-block; margin: 0 20px 20px 0; float: left; }
+.photo-album-attachment .photo { margin-bottom: 20px; }
+.photo-album-attachment .photo img { margin-top: -10px; }
+.post .photo-album-attachment { padding-top: 10px; }

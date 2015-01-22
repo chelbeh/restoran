@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.1.2">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.2.1">
     <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <description locale="en_US">Adaptive design theme for all base Webasyst apps</description>
@@ -116,7 +116,7 @@
     </about>
     <settings>
         <setting var="color_scheme" control_type="image_select">
-            <value>img/themesettings/lightgreen.png</value>
+            <value>img/themesettings/lightblue.png</value>
             <name locale="ru_RU">Цветовая гамма</name>
             <name locale="en_US">Color scheme</name>
             <options>
@@ -393,6 +393,10 @@
                     <name locale="en_US">winter 7</name>
                     <name locale="ru_RU">зима 7</name>
                 </option>
+                <option value="ffffff9">
+                    <name locale="en_US">New year</name>
+                    <name locale="ru_RU">Новогодняя</name>
+                </option>
             </options>
         </setting>
         <setting var="custom_background" control_type="image">
@@ -408,7 +412,6 @@
             <description locale="en_US">Example: #000000</description>
             <description locale="ru_RU">Например: #000000</description>
         </setting>
-        
         <setting var="layout" control_type="select">
             <value>wide</value>
             <name locale="en_US">Boxed layout of template</name>
@@ -423,6 +426,13 @@
                     <name locale="en_US">Wide</name>
                 </option>
             </options>
+        </setting>
+        <setting var="authtype" control_type="checkbox">
+            <value/>
+            <name locale="en_US">Use default auth forms</name>
+            <name locale="ru_RU">Использовать стандартные формы регистрации</name>
+            <description locale="en_US">Needed, if you use custom fields in forms</description>
+            <description locale="ru_RU">Необходимо, если вы используете кастомные поля в формах</description>
         </setting>
         <setting var="menu" control_type="select">
             <value>site</value>
@@ -439,8 +449,27 @@
                 </option>
             </options>
         </setting>
+        <setting var="cart" control_type="radio">
+            <value>top</value>
+            <name locale="en_US">Cart position</name>
+            <name locale="ru_RU">Расположение корзины</name>
+            <options>
+                <option value="top">
+                    <name locale="en_US">top</name>
+                    <name locale="ru_RU">вверху</name>
+                    <description locale="en_US">Cart placed in app menu.</description>
+                    <description locale="ru_RU">Корзина находится в меню приложений.</description>
+                </option>
+                <option value="bottom">
+                    <name locale="en_US">bottom</name>
+                    <name locale="ru_RU">Внизу</name>
+                    <description locale="en_US">Cart placed in usermenu (compare, favourite)</description>
+                    <description locale="ru_RU">Корзина находится в пользовательском меню (сравнение, избранное).</description>
+                </option>
+            </options>
+        </setting>
         <setting var="logo" control_type="image">
-            <value>img/mylogo.png</value>
+            <value></value>
             <filename>img/mylogo.*</filename>
             <name locale="en_US">Company Logo</name>
             <name locale="ru_RU">Логотип компании</name>
@@ -462,8 +491,16 @@
         </setting>
         <setting var="newyear" control_type="checkbox">
             <value/>
-            <name locale="en_US">Use New Year holiday styles</name>
-            <name locale="ru_RU">Использовать новогоднее оформление</name>
+            <name locale="en_US">Use New Year holiday styles
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">Social networks</p>                 
+            ]]>
+            </name>
+            <name locale="ru_RU">Использовать новогоднее оформление
+            <![CDATA[
+                <p style="color:#000; font-weight:bold; margin: 30px -500px 0 0;">Социальные сети</p>                 
+            ]]>
+            </name>
         </setting>
         <setting var="social_size" control_type="image_select">
             <value>img/themesettings/medium.png</value>
@@ -474,6 +511,11 @@
                 <option value="img/themesettings/medium.png"/>
                 <option value="img/themesettings/large.png"/>
             </options>
+        </setting>
+        <setting var="social_inverse" control_type="checkbox">
+            <value>1</value>
+            <name locale="en_US">Inverse icons styles</name>
+            <name locale="ru_RU">Инвертировать стили иконок</name>
         </setting>
         <setting var="fb" control_type="text">
             <value>https://www.facebook.com/</value>
@@ -497,7 +539,7 @@
             <description locale="ru_RU">Например: https://plus.google.com/mypage/</description>
         </setting>
         <setting var="tt" control_type="text">
-            <value>https://twitter.com/</value>
+            <value><![CDATA[username]]></value>
             <name locale="en_US">Twitter username</name>
             <name locale="ru_RU">Имя пользователя в Твиттере</name>
             <description locale="en_US">Example: webasyst</description>
@@ -533,35 +575,16 @@
         </setting>
         <setting var="rss" control_type="checkbox">
             <value/>
-            <name locale="en_US">RSS</name>
-            <name locale="ru_RU">RSS подписка в подвале</name>
-        </setting>
-        <setting var="cart" control_type="radio">
-            <value>bottom</value>
-            <name locale="en_US">Cart position
+            <name locale="en_US">RSS
             <![CDATA[
                 <p style="color:#000; font-weight:bold; margin: 65px -500px 0 0;">Sidebar</p>                 
             ]]>
             </name>
-            <name locale="ru_RU">Расположение корзины
+            <name locale="ru_RU">RSS подписка в подвале
             <![CDATA[
                 <p style="color:#000; font-weight:bold; margin: 65px -500px 0 0;">Боковая панель</p>                 
             ]]>
             </name>
-            <options>
-                <option value="top">
-                    <name locale="en_US">top</name>
-                    <name locale="ru_RU">вверху</name>
-                    <description locale="en_US">Cart placed in app menu.</description>
-                    <description locale="ru_RU">Корзина находится в меню приложений.</description>
-                </option>
-                <option value="bottom">
-                    <name locale="en_US">bottom</name>
-                    <name locale="ru_RU">Внизу</name>
-                    <description locale="en_US">Cart placed in usermenu (compare, favourite)</description>
-                    <description locale="ru_RU">Корзина находится в пользовательском меню (сравнение, избранное).</description>
-                </option>
-            </options>
         </setting>
         <setting var="catalog_header" control_type="select">
             <value>light</value>
@@ -826,6 +849,9 @@
             <msgid>Total summ</msgid>
             <msgstr locale="ru_RU">Общая сумма</msgstr>
         </locale>
-        
+        <locale>
+            <msgid>To cart</msgid>
+            <msgstr locale="ru_RU">Перейти в корзину</msgstr>
+        </locale>
     </locales>
 </theme>

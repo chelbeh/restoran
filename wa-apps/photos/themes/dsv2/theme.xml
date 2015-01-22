@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="photos" parent_theme_id="site:dsv2" version="2.1.2">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="photos" parent_theme_id="site:dsv2" version="2.2.1">
     <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <description locale="ru_RU">Семейство адаптивных тем дизайна.</description>
@@ -32,12 +32,12 @@
             <description locale="ru_RU">Список фотографий «простыней»</description>
         </file>
         <file path="photo.html" custom="0">
-            <description locale="en_US">One photo and its details</description>
+            <description locale="en_US"></description>
             <description locale="ru_RU">Просмотр фотографий по одной</description>
         </file>
         <file path="home.html" custom="0">
             <description locale="en_US">Wrapper for the main photo gallery homepage</description>
-            <description locale="ru_RU"></description>
+            <description locale="ru_RU"/>
         </file>
         <file path="album.html" custom="0">
             <description locale="en_US">Wrapper for photo album</description>

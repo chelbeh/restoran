@@ -5,7 +5,7 @@
         {$selected_category=null}
     {/if}
     {$categories = $wa->shop->categories(0, null, true, true)}
-    <nav class="navbar navbar-default" rol="navigation">
+    <nav class="navbar navbar-default" role="navigation">
         <div class="container">
         <div class="navbar-header">
             <button class="navbar-toggle" data-toggle="collapse" data-target="#catalog">
@@ -96,7 +96,7 @@
                             {foreach $cat.childs as $subcat}
                                 <li{if $subcat.childs} class="dropdown-submenu"{/if}>
                                     <a href="{$subcat.url}">{$subcat.name}</a>
-                                    {wa_print_tree tree=$subcat.childs selected=$selected_category unfolded=true collapsible_class='collapsible' class="dropdown-menu" elem ='<a href=":url" title=":name">:name</a>'}
+                                    {wa_print_tree tree=$subcat.childs selected=$selected_category unfolded=true depth=0 collapsible_class='collapsible' class="dropdown-menu" elem ='<a href=":url" title=":name">:name</a>'}
                                 </li>
                             {/foreach}
                         </ul>
@@ -136,7 +136,7 @@
             <ul class="nav navbar-nav">
                 {if $wa->shop && count($categories)}
                     <li class="dropdown cats">
-                        <a href="{$cat.url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true"><i class="fa fa-bars fa-lg"></i> [s`Categories`]</a>
+                        <a href="#" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true"><i class="fa fa-bars fa-lg"></i> [s`Categories`]</a>
                         <ul class="dropdown-menu">
                             {foreach $categories as $cat}
                                 <li><a href="{$cat.url}">{$cat.name}</a></li>

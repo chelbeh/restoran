@@ -28,6 +28,20 @@
                 <div>
                     {$post.text}
                 </div>
+
+                {* attached album photo thumbs *}
+                {if $post.album_id && $post.album.id && $post.album.photos}
+                    {$photos_loaded = 1} {* required for proper photo thumbs retinification *}
+                    <div class="photo-album-attachment">
+                        <ul class="thumbs">
+                            {foreach $post.album.photos as $p}
+                                <li><a href="{$post.link}#photo{$p.id}"><img src="{$p.thumb_crop.url}" class="retinify" width="96" height="96" alt="{$p.name|escape}"></a></li>
+                            {/foreach}
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                {/if}
+
                 {* @event prepare_posts_frontend.%plugin_id%.after *}
                 {if !empty($post.plugins.after)}
                     <div class="text_after">
@@ -81,3 +95,10 @@
 {/foreach}
 <li class="clearfix" style="float: none;"></li>
 </ul>
+
+{if !empty($photos_loaded) && blogPhotosBridge::is2xEnabled()}
+    <script src="{$wa_url}wa-content/js/jquery-plugins/jquery.retina.min.js"></script>
+    <script>$(function() { "use strict";
+        $.Retina && $('img.retinify').retina();
+    });</script>
+{/if}

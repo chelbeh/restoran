@@ -109,6 +109,7 @@ body.boxed-layout {
 .logo {
   display: inline-block;
 }
+.logo img { max-width: 260px }
 .slogan { padding-left: 15px }
 .phones {
   font-size: 13px;
@@ -835,6 +836,63 @@ i.icon {
 .icon.large.youtube:hover { background-position: -362px -180px }
 .icon.large.vk:hover { background-position: -423px -180px }
 .icon.large.ok:hover { background-position: -483px -180px }
+
+.inverse .icon.small.rss { background-position: 0 0 }
+.inverse .icon.small.twitter { background-position: -31px 0 }
+.inverse .icon.small.skype { background-position: -62px 0 }
+.inverse .icon.small.vimeo { background-position: -92px 0 }
+.inverse .icon.small.fb { background-position: -123px 0 }
+.inverse .icon.small.gp { background-position: -154px 0 }
+.inverse .icon.small.youtube { background-position: -184px 0 }
+.inverse .icon.small.vk { background-position: -215px 0 }
+.inverse .icon.small.ok { background-position: -246px 0 }
+.inverse .icon.small.rss:hover { background-position: 0 -28px }
+.inverse .icon.small.twitter:hover { background-position: -31px -28px }
+.inverse .icon.small.skype:hover { background-position: -62px -28px }
+.inverse .icon.small.vimeo:hover { background-position: -92px -28px }
+.inverse .icon.small.fb:hover { background-position: -123px -28px }
+.inverse .icon.small.gp:hover { background-position: -154px -28px }
+.inverse .icon.small.youtube:hover { background-position: -184px -28px }
+.inverse .icon.small.vk:hover { background-position: -215px -28px }
+.inverse .icon.small.ok:hover { background-position: -246px -28px }
+
+.inverse .icon.medium.rss { background-position: 0 -72px }
+.inverse .icon.medium.twitter { background-position: -46px -72px }
+.inverse .icon.medium.skype { background-position: -93px -72px }
+.inverse .icon.medium.vimeo { background-position: -139px -72px }
+.inverse .icon.medium.fb { background-position: -185px -72px }
+.inverse .icon.medium.gp { background-position: -231px -72px }
+.inverse .icon.medium.youtube { background-position: -277px -72px }
+.inverse .icon.medium.vk { background-position: -324px -72px }
+.inverse .icon.medium.ok { background-position: -370px -72px }
+.inverse .icon.medium.rss:hover { background-position: 0 -115px }
+.inverse .icon.medium.twitter:hover { background-position: -46px -115px }
+.inverse .icon.medium.skype:hover { background-position: -93px -115px }
+.inverse .icon.medium.vimeo:hover { background-position: -139px -115px }
+.inverse .icon.medium.fb:hover { background-position: -185px -115px }
+.inverse .icon.medium.gp:hover { background-position: -231px -115px }
+.inverse .icon.medium.youtube:hover { background-position: -277px -115px }
+.inverse .icon.medium.vk:hover { background-position: -324px -115px }
+.inverse .icon.medium.ok:hover { background-position: -370px -115px }
+
+.inverse .icon.large.rss { background-position: 0 -180px }
+.inverse .icon.large.twitter { background-position: -60px -180px }
+.inverse .icon.large.skype { background-position: -121px -180px }
+.inverse .icon.large.vimeo { background-position: -181px -180px }
+.inverse .icon.large.fb { background-position: -241px -180px }
+.inverse .icon.large.gp { background-position: -302px -180px }
+.inverse .icon.large.youtube { background-position: -362px -180px }
+.inverse .icon.large.vk { background-position: -423px -180px }
+.inverse .icon.large.ok { background-position: -483px -180px }
+.inverse .icon.large.rss:hover { background-position: 0 -237px }
+.inverse .icon.large.twitter:hover { background-position: -60px -237px }
+.inverse .icon.large.skype:hover { background-position: -121px -237px }
+.inverse .icon.large.vimeo:hover { background-position: -181px -237px }
+.inverse .icon.large.fb:hover { background-position: -241px -237px }
+.inverse .icon.large.gp:hover { background-position: -302px -237px }
+.inverse .icon.large.youtube:hover { background-position: -362px -237px }
+.inverse .icon.large.vk:hover { background-position: -423px -237px }
+.inverse .icon.large.ok:hover { background-position: -483px -237px }
 
 i.icon16 { background-repeat:no-repeat; height:16px; width:16px; display:inline-block; text-indent:-9999px; text-decoration:none!important; background-image: url("img/icons.png"); }
 * i.icon16 { text-decoration:none!important; /*vertical-align:top;*/ margin: 0.2em 0.25em 0 0; line-height: 1; }
