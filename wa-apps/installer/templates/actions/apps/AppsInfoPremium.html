@@ -20,7 +20,7 @@
 
                 <!-- already installed -->
                 <div class="align-center">
-                    {if $app.commercial && !$app.purchased}
+                    {if $app.commercial && empty($app.purchased)}
                         {* PAID APP, LICENSE IS NOT VALID *}
                         <form action="{$app.purchase_url|escape}" method="post">
                             <input type="hidden" name="app_id[]" value="{$app.slug}">
@@ -30,7 +30,7 @@
                             {/if}
                             <input type="hidden" name="domain" value="{$domain}">
                             <input type="hidden" name="installer_url" value="{$wa->currentUrl(true,true)}">
-                            {if $app.license_expire}
+                            {if !empty($app.license_expire)}
                                 {* EXPIRED LICENSE *}
                                 <input type="submit" class="button red" value="[`Renew license`]">
                                 <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$app.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$app.license_expire))}</p>
@@ -65,7 +65,7 @@
                                 </form>
                         {elseif $app.commercial}
 
-                            {if $app.license_expire}
+                            {if !empty($app.license_expire)}
                                 {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
                                 <form action="{$app.purchase_url|escape}" method="post">
                                     <input type="hidden" name="app_id[]" value="{$app.slug}">

@@ -22,11 +22,11 @@
 
             <!-- already installed -->
             <div class="align-center">
-                {if $plugin.commercial && !$plugin.purchased}
+                {if $plugin.commercial && empty($plugin.purchased)}
                 
                     {* PAID PLUGIN, LICENSE IS NOT VALID *}
                     
-                    {if $plugin.license_expire}
+                    {if !empty($plugin.license_expire)}
                         {* EXPIRED LICENSE *}
                         <a class="button green" href="{$plugin.renew_url|escape}">[`Renew license`]</a>
                         <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$plugin.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$plugin.license_expire))}</p>
@@ -83,7 +83,7 @@
 
                         {* PAID PLUGIN *}
 
-                        {if $plugin.license_expire}
+                        {if !empty($plugin.license_expire)}
                         
                             {* COMMERCIAL LICENSE WITH AN EXPIRATION DATE *}
                             <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$plugin.name|escape, installerHelper::getDomain()|escape, $plugin.license_expire)}</em></p>

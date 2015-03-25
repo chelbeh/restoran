@@ -20,9 +20,9 @@
 
                 <!-- already installed -->
                 <div class="align-center">
-                    {if $app.commercial && !$app.purchased}
+                    {if $app.commercial && empty($app.purchased)}
                         {* PAID APP, LICENSE IS NOT VALID *}                        
-                        {if $app.license_expire}
+                        {if !empty($app.license_expire)}
                         
                             {* EXPIRED LICENSE: renew ... *}
                             <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$app.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$app.license_expire))}</p>
@@ -80,7 +80,7 @@
                                 </form>
                         {elseif $app.commercial}
 
-                            {if $app.license_expire}
+                            {if !empty($app.license_expire)}
                                 {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
                                 <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$app.name|escape, installerHelper::getDomain()|escape, $app.license_expire)}</em></p>
                                 <a class="button green" href="{$app.renew_url|escape}" style="display: inline-block;">[`Extend license`]</a>

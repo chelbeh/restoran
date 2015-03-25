@@ -23,9 +23,9 @@
 
             <!-- already installed -->
             <div class="align-center">
-                {if $theme.commercial && !$theme.purchased}
+                {if $theme.commercial && empty($theme.purchased)}
                     {* PAID APP, LICENSE IS NOT VALID *}
-                    {if $theme.license_expire}
+                    {if !empty($theme.license_expire)}
                         {* EXPIRED LICENSE *}
                         <a class="button green" href="{$theme.renew_url|escape}">[`Renew license`]</a>
                         <p class="red"><i class="icon16 no"></i>{sprintf("[`License for using %s on <strong>%s</strong> has expired on %s`]",$theme.name|escape,installerHelper::getDomain()|escape,waDatetime::format('humandate',$theme.license_expire))}</p>
@@ -80,7 +80,7 @@
                         
                     {elseif $theme.commercial}
                     
-                        {if $theme.license_expire}
+                        {if !empty($theme.license_expire)}
                             {* COMMERCIAL LICENSE WITH AN EXPIRE DATE *}
                             <p><em class="i-installed-label"><i class="icon16 yes"></i>{sprintf("[`This is a licensed installation of %s on %s. License is valid through <strong>%s</strong>.`]",$theme.name|escape, installerHelper::getDomain()|escape, $theme.license_expire)}</em></p>
                             <a class="button green" href="{$theme.renew_url|escape}" style="display: inline-block;">[`Extend license`]</a>

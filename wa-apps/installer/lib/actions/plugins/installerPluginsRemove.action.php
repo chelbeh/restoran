@@ -25,11 +25,15 @@ class installerPluginsRemoveAction extends installerExtrasRemoveAction
         try {
             $paths = array();
             if (strpos($app_id, 'wa-plugins/') !== 0) {
-                $plugin_instance = waSystem::getInstance($app_id)->getPlugin($extras_id);
-                if (!$plugin_instance) {
-                    return false;
+                try {
+                    $plugin_instance = waSystem::getInstance($app_id)->getPlugin($extras_id);
+                    if (!$plugin_instance) {
+                        return false;
+                    }
+                    $plugin_instance->uninstall();
+                } catch (Exception $ex) {
+                    waLog::log($ex->getMessage(), 'installer.log');
                 }
-                $plugin_instance->uninstall();
                 $this->installer->updateAppPluginsConfig($app_id, $extras_id, null);
                 //wa-apps/$app_id/plugins/$slug
                 $paths[] = wa()->getAppPath("{$this->extras_type}/{$extras_id}", $app_id);

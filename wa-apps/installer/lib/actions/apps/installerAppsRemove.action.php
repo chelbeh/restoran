@@ -92,8 +92,12 @@ class installerAppsRemoveAction extends waViewAction
         if (!empty($info['plugins'])) {
             $plugins = $config->getPlugins();
             foreach ($plugins as $plugin => $enabled) {
-                if ($enabled && ($plugin_instance = $system->getPlugin($plugin))) {
-                    $plugin_instance->uninstall();
+                try {
+                    if ($enabled && ($plugin_instance = $system->getPlugin($plugin))) {
+                        $plugin_instance->uninstall();
+                    }
+                } catch (Exception $ex) {
+                    waLog::log($ex->getMessage(),'installer.log');
                 }
                 $this->apps->updateAppPluginsConfig($app_id, $plugin, null);
 
