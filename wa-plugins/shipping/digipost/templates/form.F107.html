@@ -15,10 +15,14 @@
         	<h1>Корректировка печатаемых данных: бланк Ф107</h1>
         	<p class="lead">Откорректируйте печатаемые данные и распечатайте бланк.</p>
         </div>
-        <div class="alert alert-info"> Лимит печатаемых бланков на сегодня: <b>{$limit}</b> шт. <small><a target="_blank" href="http://digi-post.ru/pay/rc">[увеличить]</a></small><br>
+        {if $limits->plan_name eq "БЕСПЛ"}
+        <div class="alert alert-danger"> <strong>Ваша лицензия по использованию нашего плагина неактивна!</strong> Необходимо <a href="https://api.digi-post.ru/invoice" target="_blank">оплатить</a> лицензию на api.digi-post.ru. Мы установили вам лимит печатаемых бланков на сегодня: <b>{$limits->blanks_limit}</b> шт. Вы уже напечатали <strong>{$limits->blanks_printed}</strong>  шт.</div>
+        {else}
+        <div class="alert alert-success"> Спасибо за оплату лицензии нашего плагина. Количество печатаемых в день бланков неограничено.</div>
+        {/if}
         {if isset($order.params["digipost.F107"])}
-        	Вы уже печатали этот бланк ранее. <a style="display:inline;" target="_blank" href="{$order.params["digipost.F107"]}">Скачайте этот бланк.</a>
-    	{/if}</div>
+        	<div class="alert alert-info">Вы уже печатали этот бланк ранее. <a style="display:inline;" target="_blank" href="{$order.params["digipost.F107"]}">Скачайте этот бланк.</a></div>
+    	{/if}
         
 <form class="form-horizontal" role="form" method="post" action="?module=order&action=printform&form_id=shipping.107&order_id={$order.id}&type=print">
 {$wa->csrf()}

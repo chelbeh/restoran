@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Печать бланка Ф.113</title>
+        <title>Печать бланка Ф.112</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -12,18 +12,23 @@
     
      <div class="container">
         <div class="page-header">
-        	<h1>Корректировка печатаемых данных: бланк Ф113</h1>
+        	<h1>Корректировка печатаемых данных: бланк Ф112</h1>
         	<p class="lead">Откорректируйте печатаемые данные и распечатайте бланк.</p>
         </div>
-        <div class="alert alert-info"> Лимит печатаемых бланков на сегодня: <b>{$limit}</b> шт. <small><a target="_blank" href="http://digi-post.ru/pay/rc">[увеличить]</a></small><br>
-        {if isset($order.params["digipost.F113"])}
-        	Вы уже печатали этот бланк ранее. <a style="display:inline;" target="_blank" href="{$order.params["digipost.F113"]}">Скачайте этот бланк.</a>
-    	{/if}</div>
+        {if $limits->plan_name eq "БЕСПЛ"}
+        <div class="alert alert-danger"> <strong>Ваша лицензия по использованию нашего плагина неактивна!</strong> Необходимо <a href="https://api.digi-post.ru/invoice" target="_blank">оплатить</a> лицензию на api.digi-post.ru. Мы установили вам лимит печатаемых бланков на сегодня: <b>{$limits->blanks_limit}</b> шт. Вы уже напечатали <strong>{$limits->blanks_printed}</strong>  шт.</div>
+        {else}
+        <div class="alert alert-success"> Спасибо за оплату лицензии нашего плагина. Количество печатаемых в день бланков неограничено.</div>
+        {/if}
         
-<form class="form-horizontal" role="form" method="post" action="?module=order&action=printform&form_id=shipping.113&order_id={$order.id}&type=print">
+        
+        {if isset($order.params["digipost.F112"])}
+        	<div class="alert alert-info">Вы уже печатали этот бланк ранее. <a style="display:inline;" target="_blank" href="{$order.params["digipost.F112"]}">Скачайте этот бланк.</a></div>
+    	{/if}
+        
+<form class="form-horizontal" role="form" method="post" action="?module=order&action=printform&form_id=shipping.112&order_id={$order.id}&type=print">
 {$wa->csrf()}
-<input type="hidden" name="blank_type" value="F113">
-<input type="hidden" name="key" value="{if !empty($settings.digipost_api_key)} {$settings.digipost_api_key|escape}{/if}">
+<input type="hidden" name="blank_type" value="F112">
 <!-- from -->
 <input type="hidden" name="from_name" value="{if !empty($settings.from_name)} {$settings.from_name|escape}{/if}">
 <input type="hidden" name="from_address_1" value="{if !empty($settings.from_address_1)} {$settings.from_address_1|escape}{/if}">
@@ -108,7 +113,7 @@
       <button type="submit" class="btn btn-success btn-lg btn-block">Печатать бланк</button>
     </div>
   </div>
-<div class="alert alert-info">Шаблон отправителя и данные юридического лица можно отредактировать в настройках плагина. Для печати бланков данные вашего заказа передаются на сервис <a target="_blank" href="http://digi-post.ru">digi-post.ru</a></div>
+<div class="alert alert-info">Шаблон отправителя и данные юридического лица можно отредактировать в настройках плагина. Для печати бланков данные вашего заказа передаются на сервис <a target="_blank" href="http://api.digi-post.ru">api.digi-post.ru</a></div>
 
 </form>
      </div> <!-- container -->

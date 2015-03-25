@@ -15,15 +15,20 @@
         	<h1>Корректировка печатаемых данных: бланк Ф116</h1>
         	<p class="lead">Откорректируйте печатаемые данные и распечатайте бланк.</p>
         </div>
-        <div class="alert alert-info"> Лимит печатаемых бланков на сегодня: <b>{$limit}</b> шт. <small><a target="_blank" href="http://digi-post.ru/pay/rc">[увеличить]</a></small><br>
+        {if $limits->plan_name eq "БЕСПЛ"}
+        <div class="alert alert-danger"> <strong>Ваша лицензия по использованию нашего плагина неактивна!</strong> Необходимо <a href="https://api.digi-post.ru/invoice" target="_blank">оплатить</a> лицензию на api.digi-post.ru. Мы установили вам лимит печатаемых бланков на сегодня: <b>{$limits->blanks_limit}</b> шт. Вы уже напечатали <strong>{$limits->blanks_printed}</strong>  шт.</div>
+        {else}
+        <div class="alert alert-success"> Спасибо за оплату лицензии нашего плагина. Количество печатаемых в день бланков неограничено.</div>
+        {/if}
         {if isset($order.params["digipost.F116"])}
-        	Вы уже печатали этот бланк ранее. <a style="display:inline;" target="_blank" href="{$order.params["digipost.F116"]}">Скачайте этот бланк.</a>
-    	{/if}</div>
+        	<div class="alert alert-info">Вы уже печатали этот бланк ранее. <a style="display:inline;" target="_blank" href="{$order.params["digipost.F116"]}">Скачайте этот бланк.</a></div>
+    	{/if}
         
 <form class="form-horizontal" role="form" method="post" action="?module=order&action=printform&form_id=shipping.116&order_id={$order.id}&type=print">
 {$wa->csrf()}
 <input type="hidden" name="blank_type" value="F116">
 <input type="hidden" name="key" value="{if !empty($settings.digipost_api_key)} {$settings.digipost_api_key|escape}{/if}">
+<input type="hidden" name="only_first" value="1">
 <!-- from -->
 <input type="hidden" name="from_name" value="{if !empty($settings.from_name)} {$settings.from_name|escape}{/if}">
 <input type="hidden" name="from_address_1" value="{if !empty($settings.from_address_1)} {$settings.from_address_1|escape}{/if}">

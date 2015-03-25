@@ -2,15 +2,15 @@
 return array(
 	'digipost_username'    => array(
 	//	'value'        => '20',
-		'title'        => 'Логин на Digi-Post.ru',
-		'description'  => 'Ваш логин на Digi-Post.ru. Чтобы получить логин, необходимо зарегистрироваться на сайте <a href="http://digi-post.ru/user/registration">Digi-Post.ru</a>.',
+		'title'        => 'Логин на api.Digi-Post.ru',
+		'description'  => 'Ваш логин на api.Digi-Post.ru. Чтобы получить логин, необходимо зарегистрироваться на сайте <a target="_blank" href="http://api.digi-post.ru/user/registration">api.Digi-Post.ru</a>.',
 		'control_type' => waHtmlControl::INPUT,
 	),
 	
 	'digipost_api_key'    => array(
 	//	'value'        => '20',
 		'title'        => 'API ключ',
-		'description'  => 'API ключ необходим для работы приложения. Чтобы получить API ключ, необходимо зарегистрироваться на сайте <a href="http://digi-post.ru/user/registration">Digi-Post.ru</a>. <a href="http://digi-post.ru/user/registration">Как получить API ключ</a>.',
+		'description'  => 'API ключ необходим для работы приложения. Чтобы получить API ключ, необходимо зарегистрироваться на сайте <a target="_blank" href="http://api.digi-post.ru/user/registration">api.Digi-Post.ru</a>. <a target="_blank" href="http://api.digi-post.ru/site/page?view=shopscript5">Как получить API ключ</a>.',
 		'control_type' => waHtmlControl::INPUT,
 	),
 	
@@ -23,8 +23,8 @@ return array(
 	
 	'upload'  => array(
         'value'        => '1',
-        'title'        => 'Передавать данные на сервер Digi-Post.ru',
-        'description'  => 'Выгружать почтовые идентификаторы, email и телефон клиента для их уведомления о движении посылки.',
+        'title'        => 'Передавать данные на сервер api.Digi-Post.ru',
+        'description'  => 'Необходимо для уведомления клиентов.',
         'control_type' => waHtmlControl::CHECKBOX,
     ),
     
@@ -74,7 +74,18 @@ return array(
 		'title'        => 'Вес по умолчанию',
 		'description'  => 'Если у товара не определен его вес, то расчет идет по этому значению.',
 		'control_type' => waHtmlControl::INPUT,
+		
 	),
+	
+/*
+	'statuses' => array(
+        'title' => 'Менять статус заказа на',
+        'description' => 'Меняет статус заказа при вручении на',
+        'control_type' => waHtmlControl::GROUPBOX,
+        'options_callback' => array('somePlugin', 'settingOrderStatuses'),
+        'value' => array('new', 'completed'),
+    ),
+*/
 
 	'from_name' => array(
 		'value'        => '',
@@ -82,7 +93,12 @@ return array(
 		'description'  => 'Для юридического лица — полное или краткое наименование; для гражданина — ФИО полностью.',
 		'control_type' => 'text',
 	),
-
+	'from_zip' => array(
+		'value'        => '101000',
+		'title'        => 'Индекс получателя наложенного платежа (магазина)',
+		'description'  => 'Индекс должен состоять ровно из 6 цифр.',
+		'control_type' => 'text',
+	),
 	'from_address_1' => array(
 		'value'        => '',
 		'title'        => 'Адрес получателя наложенного платежа (магазина), строка 1',
@@ -93,12 +109,6 @@ return array(
 		'value'        => '',
 		'title'        => 'Адрес получателя наложенного платежа (магазина), строка 2',
 		'description'  => 'Заполните, если адрес не помещается в одну строку.',
-		'control_type' => 'text',
-	),
-	'from_zip' => array(
-		'value'        => '',
-		'title'        => 'Индекс получателя наложенного платежа (магазина)',
-		'description'  => 'Индекс должен состоять ровно из 6 цифр.',
 		'control_type' => 'text',
 	),
 	'inn'    => array(
