@@ -482,7 +482,11 @@
     {/if}
 
     // Make sure draft link is removed from sidebar
-    $('#wa-app > .sidebar a[href="#/campaigns/letter/{$campaign.id}"]').closest('li').remove();
+    var obj = $('#wa-app > .sidebar a[href="#/campaigns/letter/{$campaign.id}"]').closest('li');
+    if (obj.length) {
+        obj.remove();
+        $.wa.mailer.reloadSidebar();
+    }
 
     // Pie chart
     $.wa.mailer.drawReportPie('{$wa_app_static_url}', [
@@ -629,4 +633,3 @@
     $.wa.mailer.setTitle();
 })($);
 </script>
-

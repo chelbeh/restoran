@@ -73,6 +73,15 @@
                 <span class="count">{$undeliverable_count}</span>
                 <a href="#/undeliverable/"><i class="icon16 delete-bw"></i>[`Delivering errors`]</a>
             </li>
+            {if $wa->user()->getRights($wa->app(), 'design')}
+            <!-- uncomment this to show "Design" link
+                <li class="sidebar-design-link">
+                    <a href="#/design/">
+                        <i class="icon16 palette"></i>[`Design`]
+                    </a>
+                </li>
+            -->
+            {/if}
         </ul>
     </div>
 {/if}

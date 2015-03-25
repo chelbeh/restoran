@@ -1,48 +1,6 @@
-<div class="dialog width600px height250px" id="wa-theme-parent-dialog">
-    <div class="dialog-background"> </div>
-    <div class="dialog-window">
-        <form>
-            <div class="dialog-content">
-                <div class="dialog-content-indent">
-                    <h1>[s`Parent theme`]</h1>
-                    <span class="wa-theme-dialog-error" style="color: red;font-weight: bold;"></span>
-                    <div class="fields form">
-                        <div class="field">
-                            <div class="name">
-                                [s`Change parent theme`]
-                            </div>
-                            <div class="value">
-                                <input type="hidden" name="id" value="{$theme.app_id}:{$theme.id}">
-                                <select name="parent_theme_id">
-                                    <option value=""{if !$theme.parent_theme_id} selected="selected"{/if}>[s`Not set`]</option>
-                                {foreach $parent_themes as $app_id => $info}
-                                    <optgroup label="{$info.name|escape}" title="{$app_id}">
-                                        {foreach $info.themes as $parent_theme_id => $theme_name}
-                                            {$parent_theme_id = "`$app_id`:`$parent_theme_id`"}
-                                            <option value="{$parent_theme_id}" title="{$parent_theme_id}"{if $parent_theme_id eq $theme.parent_theme_id} selected="selected"{else if ($parent_theme_id eq "`$theme.app_id`:`$theme.id`") || ($parent_theme_id eq $theme.id)} disabled="disabled"{/if}>{$theme_name|escape} ({$parent_theme_id})</option>
-                                        {/foreach}
-                                    </optgroup>
-                                {/foreach}
-                                </select>
-                            </div>
-                            <div class="value">
-                                <p class="small"><i class="icon10 exclamation"></i>[s`IMPORTANT: Theme parenting allows linking HTML templates, CSS files and images from other design themes. If you are about to change parent for a design theme which already has a parent, be aware that existing file links and connections may become corrupted. A design theme can have not more than one parent theme.`]</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="dialog-buttons">
-                <div class="dialog-buttons-gradient">
-                    <input type="submit" class="button green" value="[s`Save`]">
-                    [s`or`] <a href="#/design/themes/" class="cancel">[s`cancel`]</a>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
+<style>
+    #design-actions a.disabled { color: grey; }
+</style>
 <div class="dialog width500px height150px" id="wa-theme-reset-dialog">
     <div class="dialog-background"> </div>
     <div class="dialog-window">
@@ -72,24 +30,6 @@
 
 <script>
 $(function() {
-    $(".theme-parent").on('click', function () {
-        $("#wa-theme-parent-dialog").waDialog({
-            disableButtonsOnSubmit: true,
-            onSubmit: function () {
-                var data = $(this).serialize();
-                $.post("?module=design&action=themeParent", data, function (response) {
-                    $("#wa-theme-parent-dialog").hide();
-                    if (response.status == 'ok') {
-                        location.reload();
-                    } else {
-                        alert(response.errors);
-                    }
-                }, "json");
-                return false;
-            }
-        });
-        return false;
-    });
     $(".theme-reset").on('click', function () {
         if (!$(this).hasClass('disabled'))  {
             $('#wa-theme-reset-dialog').waDialog({

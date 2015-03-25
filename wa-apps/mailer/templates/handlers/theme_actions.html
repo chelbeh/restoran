@@ -1,10 +1,6 @@
 <!-- THEME ACTIONS -->
 <div class="block double-padded wa-theme-actions">
     <ul class="menu-v with-icons">
-        <li>
-            <i class="icon16 link"></i>[s`Parent theme`]: <strong>{if $theme.parent_theme_id}{$theme.parent_theme_id}{else}[s`not set`]{/if}</strong>
-            <a class="theme-parent inline" href="#">[s`Change`]</a>
-        </li>
         <li class="top-padded">
             <a class="theme-reset{if $theme.type neq waTheme::OVERRIDDEN} disabled{/if}" href="#" title="[s`This will reset all customizations you applied to this design theme. Are you sure?`]"{if $theme.type neq waTheme::OVERRIDDEN} onClick="window.alert('[s`You did not apply customizations to this theme yet, and thus there is nothing to revert.`]');"{/if}><i class="icon16 broom"></i>[s`Revert theme to original`]</a>
             {if $theme.type neq waTheme::OVERRIDDEN}
@@ -15,16 +11,3 @@
         </li>
     </ul>
 </div>
-{*
-<div>
-    <p>
-        <b>About this theme</b>
-    </p>
-    <p>
-        Default is a universal adaptive design theme family for all basic Webasyst apps: Site, Blog, Photos, Shop-Script, and others. The parent (main) theme of the family, which includes the basic set of CSS rules and the common layout template index.html, is the Default theme for the Site application. All Default design themes used in other applications (e.g., Blog or Photos) link common CSS and index.html layout file from the main theme.
-    </p>
-    <p>
-        Default design themes automatically link CSS depending on a visitor's device. Supported devices and platforms: iOS or Android based mobile devices, tablet computers such as iPad, common desktop computers and laptops.
-    </p>
-</div>
-*}

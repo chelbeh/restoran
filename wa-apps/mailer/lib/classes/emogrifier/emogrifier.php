@@ -48,7 +48,7 @@ class Emogrifier {
 
     protected $html = '';
     protected $css = '';
-    private $unprocessableHTMLTags = array('wbr');
+    private $unprocessableHTMLTags = array('wbr', 'meta', 'title');
     private $caches = array();
 
     // this attribute applies to the case where you want to preserve your original text encoding.
@@ -96,6 +96,13 @@ class Emogrifier {
     public function emogrify() {
         $body = $this->html;
 
+        if (!preg_match('//u', $body)) {
+            $tmp_body = @iconv('windows-1251', 'utf-8//ignore', $body);
+            if ($tmp_body) {
+                $body = $tmp_body;
+            }
+        }
+
         // remove any unprocessable HTML tags (tags that DOMDocument cannot parse; this includes wbr and many new HTML5 tags)
         if (count($this->unprocessableHTMLTags)) {
             $unprocessableHTMLTags = implode('|',$this->unprocessableHTMLTags);
@@ -110,6 +117,7 @@ class Emogrifier {
         $xmldoc->strictErrorChecking = false;
         $xmldoc->formatOutput = true;
         $xmldoc->loadHTML($body);
+
         $xmldoc->normalizeDocument();
 
         $xpath = new DOMXPath($xmldoc);

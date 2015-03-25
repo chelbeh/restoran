@@ -27,7 +27,7 @@ class mailerFilesUploadimageController extends waUploadJsonController
         $this->getResponse()->sendHeaders();
         if (!$this->errors) {
             if (waRequest::get('filelink')) {
-                echo stripslashes(json_encode(array('filelink' => $this->response)));
+                echo json_encode(array('filelink' => $this->response));
             } else {
                 $data = array('status' => 'ok', 'data' => $this->response);
                 echo json_encode($data);
@@ -63,17 +63,24 @@ class mailerFilesUploadimageController extends waUploadJsonController
 
     protected function save(waRequestFile $f)
     {
-        if (file_exists($this->path.DIRECTORY_SEPARATOR.$f->name)) {
-            $i = strrpos($f->name, '.');
-            $name = substr($f->name, 0, $i);
-            $ext = substr($f->name, $i + 1);
+        $name = $f->name;
+        if (!preg_match('//u', $name)) {
+            $tmp_name = @iconv('windows-1251', 'utf-8//ignore', $name);
+            if ($tmp_name) {
+                $name = $tmp_name;
+            }
+        }
+        if (file_exists($this->path.DIRECTORY_SEPARATOR.$name)) {
+            $i = strrpos($name, '.');
+            $ext = substr($name, $i + 1);
+            $name = substr($name, 0, $i);
             $i = 1;
             while (file_exists($this->path.DIRECTORY_SEPARATOR.$name.'-'.$i.'.'.$ext)) {
                 $i++;
             }
-            $this->name = $name.'-'.$i.'.'.$ext;
-            return $f->moveTo($this->path, $this->name);
+            $name = $name.'-'.$i.'.'.$ext;
         }
-        return $f->moveTo($this->path, $f->name);
+        $this->name = $name;
+        return $f->moveTo($this->path, $this->name);
     }
 }
