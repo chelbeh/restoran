@@ -1189,3 +1189,19 @@ msgstr ""
 #: /wa-apps/installer/templates/actions/themes/ThemesView.html:105
 msgid "Get new themes from Webasyst Store"
 msgstr ""
+
+#: /wa-apps/installer/templates/actions/update/Update.row.html:99
+msgid "To get the update, you need to have separate %s app license for every individual domain the app is used on: %s"
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/apps/AppsInfo.html:151
+msgid "%s will be downloaded from Webasyst Store and installed for free. Once installed, you will be able either to pay for the app on a monthly basis or to buy a permanent license."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/settings/Settings.html:62
+msgid "Main account administrative email where system notification will be sent."
+msgstr ""
+
+#: /wa-apps/installer/templates/actions/settings/Settings.html:68
+msgid "Sender"
+msgstr ""

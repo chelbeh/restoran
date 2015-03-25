@@ -28,5 +28,37 @@ class installerPluginsAction extends installerItemsAction
     {
         return parent::getAppOptions() + array('system' => true);
     }
+
+    protected function extendApplications(&$applications)
+    {
+        parent::extendApplications($applications);
+        $system_plugins = array();
+        foreach (array_keys($applications) as $id) {
+            if (strpos($id, 'wa-plugins/') === 0) {
+                $system_plugins[str_replace('wa-plugins/', '', $id)] = $id;
+            }
+        }
+        if (!empty($system_plugins)) {
+            $applicable = array();
+            foreach ($applications as $id => &$info) {
+                if (!isset($info['system_plugins'])) {
+                    $info['system_plugins'] = array();
+                }
+
+                foreach ($system_plugins as $type => $slug) {
+                    if (!empty($info['installed'][$type.'_plugins'])) {
+                        $applicable[$slug] = true;
+                        $info['system_plugins'][$slug] = $slug;
+                    }
+                }
+
+                unset($info);
+            }
+            foreach ($system_plugins as $slug) {
+                if (empty($applicable[$slug])) {
+                    unset($applications[$slug]);
+                }
+            }
+        }
+    }
 }
-//EOF

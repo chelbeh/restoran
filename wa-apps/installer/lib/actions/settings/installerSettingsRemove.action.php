@@ -22,16 +22,23 @@ class installerSettingsRemoveAction extends waViewAction
             if ($settings) {
                 $model = new waAppSettingsModel();
                 $changed = false;
-                foreach ((array) $settings as $setting) {
+                foreach ((array)$settings as $setting) {
                     if (in_array($setting, array('auth_form_background'))) {
-                        if ($value = $model->get('webasyst', $setting)) {
-                            waFiles::delete(wa()->getDataPath($value, true, 'webasyst'));
+                        $images_path = wa()->getDataPath(null, true, 'webasyst');
+                        if ($images = waFiles::listdir($images_path)) {
+                            foreach ($images as $image) {
+                                if (is_file($images_path.'/'.$image) && !preg_match('@\.(jpe?g|png|gif|bmp)$@', $image)) {
+
+
+                                    waFiles::delete($images_path."/".$image);
+                                }
+                            }
                             $message[] = _w('Image deleted');
                         }
                     } else {
                         $changed = true;
                     }
-                    $model->set('webasyst', $setting, false);
+                    $model->del('webasyst', $setting);
                 }
                 if ($changed) {
                     $message[] = _w('Settings saved');
@@ -52,4 +59,3 @@ class installerSettingsRemoveAction extends waViewAction
         }
     }
 }
-//EOF

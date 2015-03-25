@@ -38,10 +38,10 @@ class digipostShipping extends waShipping
 				if (!empty($from_zip)) {
 
 					$services = array();
-					
-					$url = 'http://digi-post.ru/api/calc?';
+
+					$url = 'https://api.digi-post.ru/calc?';
 					$data = array('to'=>$this->getAddress('zip'), 'from'=>$from_zip, 'weight'=>$weight, 'value'=>$valued);
-					
+
 					$Response = $this->getFromDigiApi($url, $data, 'get');
 
 					if (is_string($this->getSettings('allowance'))) {
@@ -129,8 +129,8 @@ class digipostShipping extends waShipping
 					'name'        => 'Форма №7 (ярлык)',
 					'description' => 'Ярлык (наклейка) на отправление',
 				),
-				113 => array(
-					'name'        => 'Форма №113 (наложка)',
+				112 => array(
+					'name'        => 'Форма №112 (наложка)',
 					'description' => 'Бланк почтового перевода наложенного платежа',
 				),
 				107 => array(
@@ -144,7 +144,7 @@ class digipostShipping extends waShipping
 			) : array();
 		} else {
 			//return array();
-			return array ( 1 => array('name'=>"Почтовые формы"));
+			return array ( 666 => array('name'=>"Почтовые формы"));
 		}
 	}
 
@@ -159,169 +159,132 @@ class digipostShipping extends waShipping
 
 	}
 
-	private function displayPrintForm1(waOrder $order, $params = array())
+	private function displayPrintForm666(waOrder $order, $params = array())
 	{
 		throw new waException('Для печати почтовых форм введите API ключ в настройках плагина.');
 	}
 
-	private function displayPrintForm113(waOrder $order, $params = array())
+	private function displayPrintForm112(waOrder $order, $params = array())
 	{
-		
 
 		switch ($side = waRequest::get('type', ($order ? '' : 'print'), waRequest::TYPE_STRING)) {
 		case 'print':
 			$data = waRequest::post();
 			if (is_null($data)) {
-				throw new waException('ORDER data is empty! Try again.', 400);
+				throw new waException('ORDER data is empty! Перезагрузите страницу, и попробуйте еще раз.', 400);
 			}
-			$blankURL = $this->getFromApi($data, 'blanks');
+			$blankURL = $this->getFromDigiApi("https://api.digi-post.ru/blanks?", $data, 'post');
+
 			$orderId = waRequest::get('order_id');
-			if (is_string($blankURL)) {
+			if ($blankURL->error == 0 && is_string($blankURL->message)) {
 				$opm = new shopOrderParamsModel();
-				$opm->set($orderId, array('digipost.F113' => $blankURL, 'digipost.F113.date' => time()), false);
-				//print_r($opm);
-				header("Location: $blankURL");
+				$opm->set($orderId, array('digipost.F112' => $blankURL->message, 'digipost.F112.date' => time()), false);
+				header("Location: $blankURL->message");
 				die();
 			} else {
 				switch ($blankURL->error) {
-				case 1:
-					throw new waException('Нет такого бланка');
-				case 2:
-					throw new waException('Не заданы параметры запроса');
-				case 3:
-					throw new waException('API ключ не передан или не верен');
-				case 4:
-					throw new waException('Неизвестная ошибка, попробуйте еще раз');
-				case 5:
-					throw new waException('Лимит бланков исчерпан');
+				case 10:
+					throw new waException('Неверно указано имя пользователя в настройках плагина');
+				case 11:
+					throw new waException('Неверно указан API ключ или неверно указан пользователь в настройках плагина');
+				case 12:
+					throw new waException('Количество запросов к API превысило возможности бесплатного пользования');
+				case 300:
+					throw new waException('Исчерпан дневной лимит печатаемых бланков. Чтобы снять лимит, приобретите лицензию.');
+				case 301:
+					throw new waException('Не установлен параметр "order_price". Обратитесь на d.post@dtgp.ru');
+				case 303:
+					throw new waException('Установите параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 304:
+					throw new waException('Установите параметр "blank_type_id". Обратитесь на d.post@dtgp.ru ');
+				case 305:
+					throw new waException('Не передан массив "products". Обратитесь на d.post@dtgp.ru ');
+				case 306:
+					throw new waException('Неверный параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 307:
+					throw new waException('Параметр "order_price" должен быть больше нуля. Обратитесь на d.post@dtgp.ru ');
+
 				}
 			}
 			break;
 		default:
-			$digipost_api_key = trim($this->digipost_api_key);
-			$data = array('key'=>$digipost_api_key, 'get_limit'=>'1');
-			$Response = $this->getFromApi($data, 'blanks_limit');
-			if($Response === FALSE) {
-				$limit = false;
-			} else {
-				$limit = json_decode($Response)->limit;
-			}
+
+			$data = array();
+			$plan = $this->getFromDigiApi("https://api.digi-post.ru/tracking/limits", $data, '');
+
+			$limits = $plan->message;
 
 			$this->view()->assign('order', $order);
-			$this->view()->assign('limit', $limit);
+			$this->view()->assign('limits', $limits);
 			$this->view()->assign('settings', $this->getSettings());
 			break;
 		}
-		return $this->view()->fetch($this->path.'/templates/form.F113.html');
+		return $this->view()->fetch($this->path.'/templates/form.F112.html');
 	}
 
-	private function displayPrintForm116(waOrder $order, $params = array())
-	{
-		
 
-		switch ($side = waRequest::get('type', ($order ? '' : 'print'), waRequest::TYPE_STRING)) {
-		case 'print':
-			$data = waRequest::post();
-			if (is_null($data)) {
-				throw new waException('ORDER data is empty! Try again.', 400);
-			}
-			$blankURL = $this->getFromApi($data, 'blanks');
-			$orderId = waRequest::get('order_id');
-			if (is_string($blankURL)) {
-				$opm = new shopOrderParamsModel();
-				$opm->set($orderId, array('digipost.F116' => $blankURL, 'digipost.F116.date' => time()), false);
-				//print_r($opm);
-				header("Location: $blankURL");
-				die();
-			} else {
-				switch ($blankURL->error) {
-				case 1:
-					throw new waException('Нет такого бланка');
-				case 2:
-					throw new waException('Не заданы параметры запроса');
-				case 3:
-					throw new waException('API ключ не передан или не верен');
-				case 4:
-					throw new waException('Неизвестная ошибка, попробуйте еще раз');
-				case 5:
-					throw new waException('Лимит бланков исчерпан');
-				}
-			}
-			break;
-		default:
-			$digipost_api_key = trim($this->digipost_api_key);
-
-			$data = array('key'=>$digipost_api_key, 'get_limit'=>'1');
-			$Response = $this->getFromApi($data, 'blanks_limit');
-
-			if($Response === FALSE) {
-				$limit = false;
-			} else {
-				$limit = json_decode($Response)->limit;
-			}
-
-			$this->view()->assign('order', $order);
-			$this->view()->assign('limit', $limit);
-			$this->view()->assign('settings', $this->getSettings());
-			break;
-		}
-		return $this->view()->fetch($this->path.'/templates/form.F116.html');
-	}
 
 	private function displayPrintForm7(waOrder $order, $params = array())
 	{
-		
-
 		switch ($side = waRequest::get('type', ($order ? '' : 'print'), waRequest::TYPE_STRING)) {
 		case 'print':
 			$data = waRequest::post();
 			if (is_null($data)) {
 				throw new waException('ORDER data is empty! Try again.', 400);
 			}
-			$blankURL = $this->getFromApi($data, 'blanks');
+
+			$blankURL = $this->getFromDigiApi("https://api.digi-post.ru/blanks?", $data, 'post');
+
 			$orderId = waRequest::get('order_id');
-			if (is_string($blankURL)) {
+			if (is_string($blankURL->message)) {
 				$opm = new shopOrderParamsModel();
-				$opm->set($orderId, array('digipost.7' => $blankURL, 'digipost.7.date' => time()), false);
+				$opm->set($orderId, array('digipost.F7' => $blankURL->message, 'digipost.F7.date' => time()), false);
 				//print_r($opm);
-				header("Location: $blankURL");
+				header("Location: $blankURL->message");
 				die();
 			} else {
 				switch ($blankURL->error) {
-				case 1:
-					throw new waException('Нет такого бланка');
-				case 2:
-					throw new waException('Не заданы параметры запроса');
-				case 3:
-					throw new waException('API ключ не передан или не верен');
-				case 4:
-					throw new waException('Неизвестная ошибка, попробуйте еще раз');
-				case 5:
-					throw new waException('Лимит бланков исчерпан');
+				case 10:
+					throw new waException('Неверно указано имя пользователя в настройках плагина');
+				case 11:
+					throw new waException('Неверно указан API ключ или неверно указан пользователь в настройках плагина');
+				case 12:
+					throw new waException('Количество запросов к API превысило возможности бесплатного пользования');
+				case 300:
+					throw new waException('Исчерпан дневной лимит печатаемых бланков. Чтобы снять лимит, приобретите лицензию.');
+				case 301:
+					throw new waException('Не установлен параметр "order_price". Обратитесь на d.post@dtgp.ru');
+				case 303:
+					throw new waException('Установите параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 304:
+					throw new waException('Установите параметр "blank_type_id". Обратитесь на d.post@dtgp.ru ');
+				case 305:
+					throw new waException('Не передан массив "products". Обратитесь на d.post@dtgp.ru ');
+				case 306:
+					throw new waException('Неверный параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 307:
+					throw new waException('Параметр "order_price" должен быть больше нуля. Обратитесь на d.post@dtgp.ru ');
 				}
 			}
 			break;
 		default:
-			$digipost_api_key = trim($this->digipost_api_key);
-			$data = array('key'=>$digipost_api_key, 'get_limit'=>'1');
-			$Response = $this->getFromApi($data, 'blanks_limit');
-			if($Response === FALSE) {
-				$limit = false;
-			} else {
-				$limit = json_decode($Response)->limit;
-			}
+			$data = array();
+			$plan = $this->getFromDigiApi("https://api.digi-post.ru/tracking/limits", $data, '');
+
+			$limits = $plan->message;
 
 			$this->view()->assign('order', $order);
-			$this->view()->assign('limit', $limit);
+			$this->view()->assign('limits', $limits);
 			$this->view()->assign('settings', $this->getSettings());
 			break;
 		}
 		return $this->view()->fetch($this->path.'/templates/form.F7.html');
 	}
 
-	private function displayPrintForm107(waOrder $order, $params = array())
+
+
+	private function displayPrintForm116(waOrder $order, $params = array())
 	{
-		
 
 		switch ($side = waRequest::get('type', ($order ? '' : 'print'), waRequest::TYPE_STRING)) {
 		case 'print':
@@ -329,41 +292,108 @@ class digipostShipping extends waShipping
 			if (is_null($data)) {
 				throw new waException('ORDER data is empty! Try again.', 400);
 			}
-			$blankURL = $this->getFromApi($data, 'blanks');
+
+			$blankURL = $this->getFromDigiApi("https://api.digi-post.ru/blanks?", $data, 'post');
+
 			$orderId = waRequest::get('order_id');
-			if (is_string($blankURL)) {
+			if (is_string($blankURL->message)) {
 				$opm = new shopOrderParamsModel();
-				$opm->set($orderId, array('digipost.107' => $blankURL, 'digipost.107.date' => time()), false);
-				//print_r($blankURL);
-				header("Location: $blankURL");
+				$opm->set($orderId, array('digipost.F116' => $blankURL, 'digipost.F116.date' => time()), false);
+				//print_r($opm);
+				header("Location: $blankURL->message");
 				die();
 			} else {
 				switch ($blankURL->error) {
-				case 1:
-					throw new waException('Нет такого бланка');
-				case 2:
-					throw new waException('Не заданы параметры запроса');
-				case 3:
-					throw new waException('API ключ не передан или не верен');
-				case 4:
-					throw new waException('Неизвестная ошибка, попробуйте еще раз');
-				case 5:
-					throw new waException('Лимит бланков исчерпан');
+				case 10:
+					throw new waException('Неверно указано имя пользователя в настройках плагина');
+				case 11:
+					throw new waException('Неверно указан API ключ или неверно указан пользователь в настройках плагина');
+				case 12:
+					throw new waException('Количество запросов к API превысило возможности бесплатного пользования');
+				case 300:
+					throw new waException('Исчерпан дневной лимит печатаемых бланков. Чтобы снять лимит, приобретите лицензию.');
+				case 301:
+					throw new waException('Не установлен параметр "order_price". Обратитесь на d.post@dtgp.ru');
+				case 303:
+					throw new waException('Установите параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 304:
+					throw new waException('Установите параметр "blank_type_id". Обратитесь на d.post@dtgp.ru ');
+				case 305:
+					throw new waException('Не передан массив "products". Обратитесь на d.post@dtgp.ru ');
+				case 306:
+					throw new waException('Неверный параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 307:
+					throw new waException('Параметр "order_price" должен быть больше нуля. Обратитесь на d.post@dtgp.ru ');
 				}
 			}
 			break;
 		default:
-			$digipost_api_key = trim($this->digipost_api_key);
-			$data = array('key'=>$digipost_api_key, 'get_limit'=>'1');
-			$Response = $this->getFromApi($data, 'blanks_limit');
-			if($Response === FALSE) {
-				$limit = false;
-			} else {
-				$limit = json_decode($Response)->limit;
-			}
+			$data = array();
+			$plan = $this->getFromDigiApi("https://api.digi-post.ru/tracking/limits", $data, '');
+
+			$limits = $plan->message;
 
 			$this->view()->assign('order', $order);
-			$this->view()->assign('limit', $limit);
+			$this->view()->assign('limits', $limits);
+			$this->view()->assign('settings', $this->getSettings());
+			break;
+		}
+		return $this->view()->fetch($this->path.'/templates/form.F116.html');
+	}
+
+
+
+	private function displayPrintForm107(waOrder $order, $params = array())
+	{
+		switch ($side = waRequest::get('type', ($order ? '' : 'print'), waRequest::TYPE_STRING)) {
+		case 'print':
+			$data = waRequest::post();
+			if (is_null($data)) {
+				throw new waException('ORDER data is empty! Try again.', 400);
+			}
+
+			$blankURL = $this->getFromDigiApi("https://api.digi-post.ru/blanks?", $data, 'post');
+
+			$orderId = waRequest::get('order_id');
+			if (is_string($blankURL->message)) {
+				$opm = new shopOrderParamsModel();
+				$opm->set($orderId, array('digipost.F107' => $blankURL, 'digipost.F107.date' => time()), false);
+				//print_r($blankURL);
+				header("Location: $blankURL->message");
+				die();
+			} else {
+				switch ($blankURL->error) {
+				case 10:
+					throw new waException('Неверно указано имя пользователя в настройках плагина');
+				case 11:
+					throw new waException('Неверно указан API ключ или неверно указан пользователь в настройках плагина');
+				case 12:
+					throw new waException('Количество запросов к API превысило возможности бесплатного пользования');
+				case 300:
+					throw new waException('Исчерпан дневной лимит печатаемых бланков. Чтобы снять лимит, приобретите лицензию.');
+				case 301:
+					throw new waException('Не установлен параметр "order_price". Обратитесь на d.post@dtgp.ru');
+				case 303:
+					throw new waException('Установите параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 304:
+					throw new waException('Установите параметр "blank_type_id". Обратитесь на d.post@dtgp.ru ');
+				case 305:
+					throw new waException('Не передан массив "products". Обратитесь на d.post@dtgp.ru ');
+				case 306:
+					throw new waException('Неверный параметр "blank_type". Обратитесь на d.post@dtgp.ru ');
+				case 307:
+					throw new waException('Параметр "order_price" должен быть больше нуля. Обратитесь на d.post@dtgp.ru ');
+				}
+			}
+			break;
+		default:
+			$data = array();
+			$plan = $this->getFromDigiApi("https://api.digi-post.ru/tracking/limits", $data, '');
+
+			$limits = $plan->message;
+
+			$this->view()->assign('order', $order);
+			$this->view()->assign('limits', $limits);
 			$this->view()->assign('settings', $this->getSettings());
 			break;
 		}
@@ -384,37 +414,50 @@ class digipostShipping extends waShipping
 		$digipost_api_key = trim($this->digipost_api_key);
 
 		if (empty($digipost_api_key)) {
-			return('Пожалуйста, зарегистрируйтесь на www.digi-post.ru и введите API ключ.');
+			return('Пожалуйста, зарегистрируйтесь на api.digi-post.ru и введите API ключ.');
 		}
 
-		$data = array('key'=>$digipost_api_key,'method'=>'get', 'type'=>'json', 'track_id'=>$tracking_id);
+		
+		$data = array('postcode'=>$tracking_id);
 
-		$Response = $this->getFromApi($data, 'tracking_get');
-		$res = json_decode($Response);
+		if ($tracking_id != null) {
+			$Response = $this->getFromDigiApi("https://api.digi-post.ru/tracking?mode=track&", $data, '');
+		}
 
-		if($res != null) {
-
+		if($Response->error == 0) {
 			$track = '<table class="light" width="100%"><tbody>';
 			$track .= '<tr><th>Дата</th><th>Тип</th><th>Атрибут</th><th>Место</th></tr>';
-			foreach ($res as $item) {
+			foreach ($Response->message as $item) {
 				$track .= '<tr>';
-				$track .= '<td>'.date('d.m.Y H:i:s', strtotime($item->date)).'</td><td>'.$item->type.'</td><td>'.$item->attribute.'</td><td>'.$item->placePostCode.' '.$item->placeName.'</td>';
+				$track .= '<td>'.$item->operationDate.'</td><td>'.$item->operationTypeName.'</td><td>'.$item->operationAttrName.'</td><td><a href="http://digi-post.ru/address/postcode/'.$item->operationIndex.'" target="_blank">'.$item->operationIndex.'</a>, '.$item->operationDescription.'</td>';
 				$track .= '<tr>';
 			}
 			$track .= '</tbody></table>';
-			$track .= '<p>Уведомляйте своих клиентов о движении посылки по EMAIL или SMS! <br>Настройте параметры уведомления на сайте Digi-Post.ru <a target="_blank" href="http://digi-post.ru/user/profile/trackingSettings">по этой ссылке</a>.</p>';
-
-			if ($this->upload) {
-				$order_id = waRequest::get('id', '', 'int');
-				$data2 = array('key'=>$digipost_api_key, 'method'=>'post', 'type'=>'xml', 'track_id'=>$tracking_id, 'order_id'=>$order_id);
-
-				$Response2 = $this->getFromApi($data2, 'tracking_get');
-				$track .= $Response2;
-
-			}
+			
+			$track .= '<br><a target="_blank" href="https://api.digi-post.ru/user/tracks/view/id/'.$tracking_id.'">Посмотрите</a> полную информацию движения трека, а так же уведомления, отправленные клиенту сервисом api.digi-post.ru<br><br>';
+			
+			$track .= '<p>Модуль отслеживания умеет <strong>автоматически</strong> уведомлять ваших клиентов через SMS и Email о статусе движения посылки. Таким образом повышается лояльность клиентов, увеличивается конверсия, снижается процент возвратов. Ведь мы будем по вашему заданию отправлять уведомления клиенту каждые 5 дней, пока он не заберет посылку. <br><br>Настройте параметры уведомления на сайте api.Digi-Post.ru <a target="_blank" href="https://api.digi-post.ru/user/settings">в разделе "Настройки"</a>.</p>';
 		} else {
-			$track = $Response;
+			$track = $Response->message;
 		}
+		
+		if($Response->error == 105) {
+			$som = new shopOrderModel();
+			$order_id = waRequest::get('id', '', 'int');
+			$order = $som->getOrder($order_id, true, true);
+			
+			$contact = new waContact($order['contact']['id']);
+			
+			$order_data = array('postcode'=>$tracking_id, 'tracking_name'=>'Заказ #'.$order['id'], 'order_id'=>$order['id'], 'client_name'=>$contact->get('name'),'client_phone'=>$contact->get('phone'),'client_email'=>$contact->get('email'));
+			$upload_track = $this->getFromDigiApi("https://api.digi-post.ru/tracking?mode=addtrack&", $order_data, 'post');
+			
+			if ($upload_track->error == '13') {
+				$track .= '<br><br><storng>Упппс!</strong> Мы попытались добавить идентификатор '.$tracking_id.' в систему api.digi-post.ru автоматически, но сделать это не получилось, так как <strong>ваша лицензия неактивна</strong>. <a target="_blank" href="https://api.digi-post.ru/invoice">Оплатите</a> использование сервиса api.digi-post.ru, чтобы добавлять неограниченное количество идентификаторов.';
+			}
+		}
+		
+		
+		
 		return $track;
 	}
 
@@ -435,78 +478,10 @@ class digipostShipping extends waShipping
 		return parent::saveSettings($settings);
 	}
 
-	public function getFromApi($data, $type) {
-
-		$timeout = 15;
-		$str = http_build_query($data);
-		
-		if ($type == 'blanks') {
-			$url = "http://digi-post.ru/blanks/russianpost/api";
-		} elseif ($type == 'calculate') {
-			$url = "http://digi-post.ru/calc/api?".$str;
-		} elseif ($type == 'tracking_get') {
-			$url = "http://digi-post.ru/tracking/trackit/api?".$str;
-		} elseif ($type == 'blanks_limit') {
-			$url = "http://digi-post.ru/blanks/russianpost/api?".$str;
-		} else {
-			throw new waException('Не указан тип запроса к API. Обратитесь за поддежкой в digi-post.ru');
-		}
-
-		if (extension_loaded('curl') && function_exists('curl_init')) {
-			$curl_error = null;
-			if (!($ch = curl_init())) {
-				$curl_error = 'curl init error';
-			}
-			if (curl_errno($ch) != 0) {
-				$curl_error = 'curl init error: '.curl_errno($ch);
-			}
-			if (!$curl_error) {
-
-				@curl_setopt($ch, CURLOPT_URL, $url);
-				@curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-				@curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
-				if ($type == 'blanks') {
-					@curl_setopt($ch, CURLOPT_POST, true);
-					@curl_setopt($ch, CURLOPT_POSTFIELDS, $str);
-				}
-
-				$res = @curl_exec($ch);
-				$response = $this->getResult($res);
-
-				if (curl_errno($ch) != 0) {
-					$curl_error = 'curl error: '.curl_errno($ch);
-				}
-				curl_close($ch);
-			} else {
-				throw new waException($curl_error);
-			}
-		} else {
-			//$response .= " PHP extension 'curl' is not loaded;";
-			throw new waException("PHP extension 'curl' is not loaded");
-			/*
-if (!ini_get('allow_url_fopen')) {
-				$hint .= " PHP ini option 'allow_url_fopen' are disabled;";
-			} else {
-				$old_timeout = @ini_set('default_socket_timeout', $timeout);
-				$res = @file_get_contents($url.$str);
-				$response = $this->getResult($res);
-				@ini_set('default_socket_timeout', $old_timeout);
-			}
-*/
-		}
-		/*
-if (!$response && !$hint) {
-			throw new waException(sprintf('Пустой ответ от сервера. (Empty response. Hint: %s)', $hint));
-		}
-*/
-
-		return $response;
-	}
 
 	public function getFromDigiApi($url, $data, $type) {
 
-		$timeout = 5;
+		$timeout = 7;
 		if (!empty($data)) {
 			$str = http_build_query($data);
 		} else {
@@ -529,6 +504,7 @@ if (!$response && !$hint) {
 				@curl_setopt($ch, CURLOPT_USERPWD, trim($this->digipost_username) . ":" . trim($this->digipost_api_key));
 				@curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 				@curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				@curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
 
 				if ($type == 'post') {
@@ -540,9 +516,11 @@ if (!$response && !$hint) {
 				$response = $this->getResult($res);
 
 				//print_r($response);
+				//var_dump($res);
 
 				if (curl_errno($ch) != 0) {
-					$curl_error = 'curl error: '.curl_errno($ch);
+					$curl_error = 'Curl error: '.curl_errno($ch);
+					throw new waException($curl_error);
 				}
 				curl_close($ch);
 			} else {

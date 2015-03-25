@@ -48,7 +48,7 @@
                         {if !empty($app.installed) && $app.enabled} {assign var=app_id value=$app.slug}
                             <li {if isset($slug)&&$slug==$app.slug && (!isset($vendor) || $vendor==$app.vendor)}class="selected"{/if}>
                                 <a href="#/themes&slug={$app.slug}/" data-href="#/themes%s&slug={$app.slug}/">
-                                    {if strpos($app.icons.16, '.')}<img src="{$app.icons.16}" alt="{$app.name|escape}" />{else}<i class="icon16 {$app.icons.16}"></i>{/if}{$app.name|default:{$app.slug}|escape}
+                                    {if strpos($app.icons.16, '.')}<img src="{$app.icons.16|regex_replace:'@^/@':$wa_url}" alt="{$app.name|escape}" />{else}<i class="icon16 {$app.icons.16}"></i>{/if}{$app.name|default:{$app.slug}|escape}
                                      {if !empty($app.themes) && false}
                                         <span class="count">{if is_array($app.themes)}{$app.themes|count}{else}{$app.themes}{/if}</span>
                                      {/if}
@@ -107,7 +107,7 @@
                     <!-- theme price and status -->
                     {if !$theme.installed}
                         {if $theme.commercial}
-                            {if $theme.lease_price == 'free'}
+                            {if ifset($theme.lease_price) == 'free'}
                                 {* free to install on this particular installation (cloud) *}
                                 <span class="black">[`Free`]</span>
                             {else}
@@ -117,7 +117,7 @@
                                 {else}
                                     <span class="gray">
                                         {$theme.price}
-                                        {if $theme.lease_price}
+                                        {if !empty($theme.lease_price)}
                                             [`or`] {sprintf('[`%s/mo`]',$theme.lease_price)}
                                         {/if}
                                     </span>

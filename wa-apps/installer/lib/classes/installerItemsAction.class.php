@@ -20,8 +20,11 @@ abstract class installerItemsAction extends waViewAction
             'apps'   => false,
             'filter' => (array)waRequest::get('filter'),
         );
+    }
 
-        //'requirements' => true,
+    protected function extendApplications(&$applications)
+    {
+
     }
 
     public function execute()
@@ -42,16 +45,10 @@ abstract class installerItemsAction extends waViewAction
         $app_options = $this->getAppOptions();
 
         try {
-            $s = array();
+
             $applications = installerHelper::getInstaller()->getApps($app_options, $filter);
+            $this->extendApplications($applications);
             $subject = waRequest::get('subject');
-            if ($this->module == 'plugins') {
-                foreach (array_keys($applications) as $id) {
-                    if (strpos($id, 'wa-plugins/') === 0) {
-                        $s[] = $id;
-                    }
-                }
-            }
 
             if (empty($subject)) {
                 $extras = array();
@@ -73,8 +70,10 @@ abstract class installerItemsAction extends waViewAction
                         $search['slug'] = array_keys($applications);
                     }
                 } else {
-                    if (in_array('shop', $search['slug'])) {
-                        $search['slug'] = array_unique(array_merge($search['slug'], $s));
+                    foreach ($search['slug'] as $id) {
+                        if (isset($applications[$id]) && !empty($applications[$id]['system_plugins'])) {
+                            $search['slug'] = array_unique(array_merge($search['slug'], $applications[$id]['system_plugins']));
+                        }
                     }
                 }
 
@@ -94,7 +93,7 @@ abstract class installerItemsAction extends waViewAction
                                 }
 
                                 if (in_array($app_id, $keys) !== false) {
-                                    $app = & $applications[$app_id];
+                                    $app = &$applications[$app_id];
                                     if (!isset($app[$this->module])) {
                                         $app[$this->module] = array();
                                     }
@@ -104,7 +103,7 @@ abstract class installerItemsAction extends waViewAction
                                 } elseif (!empty($extras_item['inherited'])) {
                                     foreach (array_keys($extras_item['inherited']) as $app_id) {
                                         if (in_array($app_id, $keys) !== false) {
-                                            $app = & $applications[$app_id];
+                                            $app = &$applications[$app_id];
                                             if (!isset($app[$this->module])) {
                                                 $app[$this->module] = array();
                                             }

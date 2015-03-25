@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Печать бланка Ф.112</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    
+     <div class="container">
+        <div class="page-header">
+        	<h1>Корректировка печатаемых данных: бланк Ф112</h1>
+        	<p class="lead">Откорректируйте печатаемые данные и распечатайте бланк.</p>
+        </div>
+        {if $limits->plan_name eq "БЕСПЛ"}
+        <div class="alert alert-danger"> <strong>Ваша лицензия по использованию нашего плагина неактивна!</strong> Необходимо <a href="https://api.digi-post.ru/invoice" target="_blank">оплатить</a> лицензию на api.digi-post.ru. Мы установили вам лимит печатаемых бланков на сегодня: <b>{$limits->blanks_limit}</b> шт. Вы уже напечатали <strong>{$limits->blanks_printed}</strong>  шт.</div>
+        {else}
+        <div class="alert alert-success"> Спасибо за оплату лицензии нашего плагина. Количество печатаемых в день бланков неограничено.</div>
+        {/if}
+        
+        
+        {if isset($order.params["digipost.F112"])}
+        	<div class="alert alert-info">Вы уже печатали этот бланк ранее. <a style="display:inline;" target="_blank" href="{$order.params["digipost.F112"]}">Скачайте этот бланк.</a></div>
+    	{/if}
+        
+<form class="form-horizontal" role="form" method="post" action="?module=order&action=printform&form_id=shipping.112&order_id={$order.id}&type=print">
+{$wa->csrf()}
+<input type="hidden" name="blank_type" value="F112">
+<!-- from -->
+<input type="hidden" name="from_name" value="{if !empty($settings.from_name)} {$settings.from_name|escape}{/if}">
+<input type="hidden" name="from_address_1" value="{if !empty($settings.from_address_1)} {$settings.from_address_1|escape}{/if}">
+<input type="hidden" name="from_address_2" value="{if !empty($settings.from_address_2)} {$settings.from_address_2|escape}{/if}">
+<input type="hidden" name="from_zip" value="{if !empty($settings.from_zip)} {$settings.from_zip|escape}{/if}">
+<!-- from end -->
+
+<fieldset>
+  <legend>Данные получателя</legend>
+  <div class="form-group">
+    <label for="to_name" class="col-sm-2 control-label">ФИО получателя</label>
+    <div class="col-sm-5">
+      <input type="text" class="form-control" name="to_name" id="to_name" placeholder="Петров Василий Иванович" value="{$order.contact.lastname} {$order.contact.firstname}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="to_address_1" class="col-sm-2 control-label">Адрес получателя, строка 1</label>
+    <div class="col-sm-5">
+      <input type="text" class="form-control" name="to_address_1" id="to_address_1" placeholder="Россия, Ростовская обл., Ростов-на-Дону" value="{if !empty($order.shipping_address.country_name)}{$order.shipping_address.country_name|escape},{/if} {if !empty($order.shipping_address.region_name) and $order.shipping_address.region_name!=$order.shipping_address.city}{$order.shipping_address.region_name|escape}, {/if}{if !empty($order.shipping_address.city)}{$order.shipping_address.city|escape},{/if} {if !empty($order.shipping_address.region_name)}{$order.shipping_address.region_name|escape}{/if}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="to_address_2" class="col-sm-2 control-label">Адрес получателя, строка 2</label>
+    <div class="col-sm-5">
+      <input type="text" name="to_address_2" class="form-control" id="to_address_2" placeholder="ул.Семашко д24к1" value="{if !empty($order.shipping_address.street)}{$order.shipping_address.street|escape}{/if}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="to_zip" class="col-sm-2 control-label">Индекс получателя</label>
+    <div class="col-sm-2">
+      <input type="text" name="to_zip" class="form-control" id="to_zip" placeholder="346000" value="{if !empty($order.shipping_address.zip)}{$order.shipping_address.zip|escape}{/if}">
+    </div>
+  </div>
+</fieldset>
+<fieldset>
+  <legend>Почтовый перевод</legend>
+  <div class="form-group">
+    <label for="order_price" class="col-sm-2 control-label">на сумму</label>
+    <div class="col-sm-2">
+      <input type="text" name="order_price" class="form-control" id="order_price" placeholder="346.00" value="{number_format($order.total, 2, '.', '')}">
+    </div>
+  </div>
+</fieldset>
+
+<fieldset>
+  <legend>Данные юр. лица</legend>
+  <div class="form-group">
+    <label for="inn" class="col-sm-2 control-label">ИНН</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" name="inn" id="inn" maxlength="12" value="{if !empty($settings.inn)}{$settings.inn|escape}{/if}" placeholder="123456789012">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="bik" class="col-sm-2 control-label">БИК банка</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" name="bik" id="bik" maxlength="9" value="{if !empty($settings.bik)}{$settings.bik|escape}{/if}" placeholder="123456789">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="current_account" class="col-sm-2 control-label">Расчетный счет</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" name="current_account" id="current_account" maxlength="20" value="{if !empty($settings.current_account)}{$settings.current_account|escape}{/if}" placeholder="12345678901234567890">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="correspondent_account" class="col-sm-2 control-label">Корреспондентский счет</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" name="correspondent_account" id="correspondent_account" maxlength="20" value="{if !empty($settings.correspondent_account)}{$settings.correspondent_account|escape}{/if}" placeholder="12345678901234567890">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="bank_name" class="col-sm-2 control-label">Наименование банка</label>
+    <div class="col-sm-3">
+      <input type="text" class="form-control" name="bank_name" id="bank_name" maxlength="20" value="{if !empty($settings.bank_name)}{$settings.bank_name|escape}{/if}" placeholder="ОАО Банк Москвы">
+    </div>
+  </div>
+  
+</fieldset>
+<br>
+  <div class="form-group">
+    <div class="well" style="max-width: 400px; margin: 0 auto 10px;">
+      <button type="submit" class="btn btn-success btn-lg btn-block">Печатать бланк</button>
+    </div>
+  </div>
+<div class="alert alert-info">Шаблон отправителя и данные юридического лица можно отредактировать в настройках плагина. Для печати бланков данные вашего заказа передаются на сервис <a target="_blank" href="http://api.digi-post.ru">api.digi-post.ru</a></div>
+
+</form>
+     </div> <!-- container -->
+
+</body>
+</html>
