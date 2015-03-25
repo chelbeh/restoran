@@ -451,7 +451,7 @@ AddDefaultCharset utf-8
 
 <ifModule mod_headers.c>
     <FilesMatch "\.(jpg|jpeg|png|gif|js|css)$">
-	Header set Cache-Control "max-age=3153600, public"
+    Header set Cache-Control "max-age=3153600, public"
     </FilesMatch>
 </ifModule>
 
@@ -714,6 +714,7 @@ if (file_exists($js_path)) {
 <script type="text/javascript">
 /* inline js from wa-installer/js/wa-installer.js*/
 {$inline_js}
+wai.options.lang='{$lang}';
 </script>
 JS;
 

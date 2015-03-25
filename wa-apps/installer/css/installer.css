@@ -16,6 +16,12 @@
 .i-installed-label.not-licensed { color: #888; }
 .i-installed-label.overdue { color: red; }
 
+.i-image-select { margin-top: 0; padding-left: 0; }
+.i-image-select li { display: inline-block; list-style: outside none none; margin: 0 5px 5px 0; padding: 0; }
+.i-image-select li a { border: 4px solid #fff; display: block; max-height: 100px; max-width: 100px; overflow: hidden; }
+.i-image-select li a img { width: 100px; height: 100px; }
+.i-image-select li.selected a { border-color: #fdda3b; border-radius: 4px; }
+
 /* Listings filter
 ------------------ */
 
@@ -180,7 +186,7 @@ transform:skew(3deg, -1deg) translate(5px,-3px) scale(1,0.99) rotate(-1deg); tra
 .i-breadcrumbs span { margin: 0 5px; }
 
 .i-product-page { padding: 15px; }
-.i-product-page .profile .image img { width: 96px; height: 96px; } 
+.i-product-page .profile .image img { width: 96px; height: 96px; }
 .i-product-page .sidebar { float:right; width: 340px; }
 .i-product-page .content { margin-right: 350px; }
 @media screen and (min-width:1366px){ /* large screens */
@@ -315,8 +321,8 @@ table.zebra.i-updates .js-changelog { margin-top: 10px; font-size: 0.9em; }
 /* @2x
 ------ */
 
-@media 
-(-webkit-min-device-pixel-ratio: 2), 
+@media
+(-webkit-min-device-pixel-ratio: 2),
 (min-resolution: 192dpi) {
     .i-badge i.thumb-up { background-image: url('../img/thumb-up@2x.png'); background-size: 100%; }
 }

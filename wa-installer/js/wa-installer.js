@@ -14,6 +14,7 @@
             'mod_rewrite_id': 'input_mod_rewrite',
             'redirect_url_id': 'redirect_url',
             'redirect_message_id': 'redirect_message',
+            'lang':null,
             'end': true
         },
         form: null,
@@ -72,6 +73,9 @@
                 if (wai.xmlReq) {
                     wai.xmlReq.onreadystatechange = wai.onGetState;
                     var url = "install.php?action=getstate&source=ajax&req_time=" + wai.date.getTime();
+                    if (wai.options.lang) {
+                        url += '&lang=' +wai.options.lang;
+                    }
                     wai.xmlReq.open("GET", url, true);
                     wai.xmlReq.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
                     wai.xmlReq.send(null);
@@ -193,7 +197,7 @@
                     var url = "install.php";
                     var query = [];
                     query[query.length] = 'step=' + '2';
-                    query[query.length] = 'lang=' + 'ru_RU';
+                    query[query.length] = 'lang=' +  wai.options.lang;
                     query[query.length] = 'timestamp=' + wai.date.getTime();
                     url = url + '?' + query.join('&');
                     wai.xmlReqExtract.open("GET", url, true);

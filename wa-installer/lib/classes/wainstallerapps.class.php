@@ -22,6 +22,7 @@ class waInstallerApps
     private static $cache_ttl;
     private $license;
     private $identity_hash;
+    private $beta;
     private $promo_id;
     private static $force;
 
@@ -116,6 +117,8 @@ class waInstallerApps
         return $raw ? $signature : base64_encode(json_encode($signature));
     }
 
+    private static $app_domains = array();
+
     private static function getDomains($apps, $raw = false)
     {
         $d = null;
@@ -137,6 +140,13 @@ class waInstallerApps
                                     if (!in_array($domain, $d)) {
                                         $d[] = $domain;
                                     }
+                                    if (!isset(self::$app_domains[$app_id])) {
+                                        self::$app_domains[$app_id] = array();
+                                    }
+                                    if (!in_array($domain, self::$app_domains[$app_id])) {
+                                        self::$app_domains[$app_id][] = $domain;
+                                    }
+
                                     $id = array_search($domain, $d);
                                     if (!isset($s[$app_id])) {
                                         $s[$app_id] = array();
@@ -207,6 +217,10 @@ class waInstallerApps
         $this->license = $license;
         /* identity hash */
         $this->identity_hash = self::getGenericConfig('identity_hash');
+        $this->beta = self::getGenericConfig('beta');
+        if (in_array($this->beta, array(true, '1', 1), true)) {
+            $this->beta = 'beta';
+        }
         $this->promo_id = self::getGenericConfig('promo_id');
         if (!$this->identity_hash) {
             $this->updateGenericConfig();
@@ -736,6 +750,7 @@ class waInstallerApps
                     $item['slug'] = $slug = $app_id;
                     $item['action'] = self::applicableAction($item);
                     $item['applicable'] = self::checkRequirements($item['requirements'], false, $item['action']);
+                    $item['domains'] = isset(self::$app_domains[$app_id]) ? self::$app_domains[$app_id] : array();
                     $this->buildUrl($item['download_url']);
                 } elseif (!empty($items[$app_id])) {
                     if (empty($item['name'])) {
@@ -976,7 +991,7 @@ class waInstallerApps
                     }
                 }
                 $extras[$app_id] = array(
-                    $type => $this->enumerate($path, ifset($enum_options[$app_id], array()), $enum_filter),
+                    $type => $this->enumerate($path, isset($enum_options[$app_id]) ? $enum_options[$app_id] : array(), $enum_filter),
                 );
             }
             $installed = $extras;
@@ -1156,7 +1171,7 @@ class waInstallerApps
         }
 
         if (isset($item['installed']) && !empty($item['installed']) !== false) {
-            $l = & $item['installed'];
+            $l = &$item['installed'];
             $sizes = array(48, 24, 16);
             if (!empty($l['icon']) && !is_array($l['icon'])) {
                 $l['icon'] = array(48 => $l['icon']);
@@ -1196,6 +1211,7 @@ class waInstallerApps
 
     private function buildUrl(&$path)
     {
+        $original = $path;
         if (is_array($path)) {
             $is_url = true;
             foreach ($path as &$chunk) {
@@ -1204,7 +1220,7 @@ class waInstallerApps
             }
         } else {
             $is_url = preg_match('@^https?://@', $path);
-            if (($this->license || $this->identity_hash) && $is_url && $this->originalUrl($path)) {
+            if (($this->license || $this->identity_hash || $this->beta) && $is_url && $this->originalUrl($path)) {
                 $query = parse_url($path, PHP_URL_QUERY);
                 if ($this->license) {
                     $query = $query.($query ? '&' : '').'license='.$this->license;
@@ -1218,10 +1234,24 @@ class waInstallerApps
                 if ($domain = $this->getDomain()) {
                     $query = $query.($query ? '&' : '').'domain='.urlencode(base64_encode($domain));
                 }
-                if (preg_match('@/download/@', $path)) {
+                if (preg_match('@/(download|archive)/@', $path)) {
                     $query = $query.($query ? '&' : '').'signature='.urlencode(self::getServerSignature());
+
+                    if ($this->beta && preg_match('@/archive/@', $path)) {
+                        $path = preg_replace('@/(archive)/@', "/\$1/{$this->beta}/", $path, 1);
+                    }
                 }
+
+                if (preg_match('@/versions/\?@', $path)) {
+                    if ($this->beta) {
+                        $path = preg_replace('@/versions/\?@', "/versions/{$this->beta}/?", $path, 1);
+                    }
+                }
+
                 if (preg_match('@/updates/\?@', $path)) {
+                    if ($this->beta) {
+                        $path = preg_replace('@/updates/\?@', "/updates/{$this->beta}/?", $path, 1);
+                    }
                     parse_str($path, $raw);
                     if (!empty($raw['v']) && ($raw['v'] = array_filter($raw['v']))) {
                         $stack = debug_backtrace();
