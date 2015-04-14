@@ -1,1 +1,15 @@
-Список новостей
+{$latest_posts = $wa->blog->posts(null, 10)}
+{if !empty($latest_posts)}<!-- latest posts-->
+    <div class="title">Новости</div>
+    <div class="latest-posts">
+        {foreach $latest_posts as $post}
+            <div class="post">
+                <div class="page-info">
+                    <div class="date">{$post.datetime|wa_datetime:"date"}</div>
+                </div>
+                <p><a href="{$post.link}">{$post.text|strip_tags|truncate:100}</a></p>
+                <br>
+            </div>
+        {/foreach}
+    </div>
+{/if}
