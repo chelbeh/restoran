@@ -1,0 +1,9 @@
+{* post list: minimalistic view mode; used for post filtering by tags, author, search, etc. *}
+
+{foreach $posts as $post}
+    {include 'post_small.html'}
+{foreachelse}
+    {if !isset($page) || $page lt 2}
+        {_w('%d post','%d posts',0)}
+    {/if}
+{/foreach}

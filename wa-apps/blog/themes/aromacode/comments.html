@@ -1,0 +1,48 @@
+{* comment list and a comment posting form *}
+
+<div class="comments" >
+    <a name="comments"></a>
+        <h3 class="comment-count" {if $post.comment_count == 0}style="display: none;"{/if}>
+            {_w('%d comment','%d comments',$post.comment_count)}
+        </h3>
+
+        {if $post.comment_count == 0}
+            <ul class="list-unstyled">
+                <!-- placeholder for new comments -->
+            </ul>
+        {/if}
+
+
+        {$depth=-1}
+        {foreach $post.comments as $comment}
+            {if $comment.depth < $depth}
+                {$loop=$depth-$comment.depth}
+                {section name="end-comment" loop=$loop}
+                        </li>
+                    </ul>
+                {/section}
+                {$depth=$comment.depth}
+            {/if}
+            {if $comment.depth == $depth}
+
+                </li>
+                <li>
+            {/if}
+            {if $comment.depth > $depth}
+
+            <ul class="list-unstyled">
+                <li>
+                {$depth=$comment.depth}
+            {/if}
+
+            {include file="comment.html" inline}
+            {* sub comment *}
+        {/foreach}
+        {section name="end-comment" loop=$depth }
+
+                    </li>
+                </ul>
+        {/section}
+        </li>
+    </ul>
+</div>

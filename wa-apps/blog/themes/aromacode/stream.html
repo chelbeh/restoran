@@ -1,0 +1,14 @@
+{if !empty($stream_title)}<h1><span>{$stream_title}</span></h1>{/if}
+    <a name="page_{$page}"></a>
+
+        {if $is_search}
+            {include file="stream_search.html" inline}
+        {else}
+            {include file="stream_posts.html" inline}
+        {/if}
+
+<ul class="pagination">
+    {for $p=1 to $pages}
+        <li{if $p eq $page} class="selected"{/if}><a href="{if $p eq $page}#page_{$page}{else}?page={$p}{/if}">{$p}</a></li>
+    {/for}
+</ul>

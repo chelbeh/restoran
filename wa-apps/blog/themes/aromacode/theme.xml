@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="aromacode" author="Vadim" app="blog" version="1.0" parent_theme_id="shop:aromacode">
+    <name locale="ru_RU">aromacode</name>
+    <files>
+        <file path="error.html" custom="0" parent="1"/>
+        <file path="index.html" custom="0" parent="1"/>
+    </files>
+</theme>
