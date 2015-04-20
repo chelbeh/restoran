@@ -1,6 +1,15 @@
 <div><div id="yandexmap" style="width: 800px; height: 600px;"></div></div>
 <script type="text/javascript">
     var shippingMap, shPoint, BalloonContentLayout;
+    if (typeof map_params !== 'undefined') {
+        var map = $("#yandexmap");
+        if(map_params.width){
+            map.width(map_params.width);
+        }
+        if(map_params.height){
+            map.height(map_params.height);
+        }
+    }
     $.getScript( "http://api-maps.yandex.ru/2.1/?lang=ru_RU", function( ) {
         ymaps.ready(init);
     });
@@ -12,7 +21,13 @@
         });
         addPoints();
 
-        var search_str = $('#shipping_map').data('address');
+        var search_str;
+        if (typeof map_params !== 'undefined') {
+            search_str = map_params.address;
+        }
+        else {
+            search_str = $('#shipping_map').data('address');
+        }
 
         ymaps.geocode(search_str, {
             results: 1
@@ -24,8 +39,13 @@
     }
 
     function addPoints(){
-        var link = $('#shipping_map').data('link');
-        //alert(link);
+        var link;
+        if (typeof map_params !== 'undefined') {
+            link = map_params.link;
+        }
+        else {
+            link = $('#shipping_map').data('link');
+        }
         {foreach $points as $point}
             addPoint('{$point.id}', '{$point.name}', '{$point.address}', '{$point.latitude}', '{$point.longitude}', link);
         {/foreach}
