@@ -1,7 +1,8 @@
-<a href="{$wa_app_url}">
+<a href="{if $wa->shop}{$wa->getUrl('shop/frontend')}{else}{$wa_app_url}{/if}">
     {if $theme_settings.logo}
-        <img src="{$wa_theme_url}{$theme_settings.logo}" alt="{$wa->accountName()}" />
+        <img src="{if $wa_app != 'site'}{$wa_parent_theme_url}{else}{$wa_theme_url}{/if}{$theme_settings.logo}" alt="{$wa->accountName()}" class="img-responsive" />
     {else}
-        <img src="{$wa_theme_url}img/logo.png" alt="{$wa->accountName()}">
+        <img src="{$wa_theme_url}img/logo.png" alt="{$wa->accountName()}" class="img-responsive">
     {/if}
 </a>
+<span class="logo-cap"></span>

@@ -1,0 +1,5 @@
+<form method="get" action="{$wa_app_url}">
+    <span class="add-on"><i class="icon-search"></i></span>
+    <input id="search{if !empty($_mobile)}-m{/if}" type="search" name="query" placeholder="[`Search posts`]"{if !empty($blog_query)} value="{$blog_query}"{/if} />
+    <input type="submit" class="search-button" value="[`Find`]" />
+</form>

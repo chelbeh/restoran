@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="blog" parent_theme_id="site:dsv2" version="2.0.0">
-    <name locale="en_US">Default 2.0 1</name>
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="blog" parent_theme_id="site:dsv2" version="2.2.0">
+    <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <files>
         <file path="index.html" custom="0" parent="1">
@@ -38,7 +38,7 @@
             <description locale="ru_RU">Основное макет вывода содержимого и навигации в приложении «Блог»</description>
         </file>
         <file path="head.html" custom="0">
-            <description locale="en_US">Blog app's &lt;head&gt; instructions</description>
+            <description locale="en_US"/>
             <description locale="en_US">Блок &lt;head&gt; приложения «Блог»</description>
         </file>
         <file path="stream.html" custom="0">
@@ -93,17 +93,27 @@
             <description locale="en_US">JS</description>
             <description locale="ru_RU">JS</description>
         </file>
-    <file path="dsv.blog.css" custom="1"><description locale="ru_RU">CSS стили приложения «Блог»</description></file></files>
+        <file path="dsv.blog.css" custom="1">
+            <description locale="ru_RU">CSS стили приложения «Блог»</description>
+        </file>
+        <file path="dsv.user.css" custom="1" parent="1">
+            <description locale="ru_RU">Пользовательский файл стилей</description>
+        </file>
+        <file path="post.album.html">
+            <description locale="en_US">Photo album attached to the blog post</description>
+            <description locale="ru_RU">Фотоальбом, прикрепленный к записи в блоге</description>
+        </file>
+    </files>
     <about locale="en_US">
 <![CDATA[
-<p><b>Default</b> is a universal adaptive design theme family for all basic Webasyst apps: Site, Blog, Photos, Shop-Script, and others. The parent (main) theme of the family, which includes the basic set of CSS rules and the common layout template index.html, is the Default theme for the Site application. All Default design themes used in other applications (e.g., Blog or Photos) link common CSS and index.html layout file from the main theme.</p>
-<p>Default design themes automatically link CSS depending on a visitor's device. Supported devices and platforms: iOS or Android based mobile devices, tablet computers such as iPad, common desktop computers and laptops.</p>
+<p><b> «Design with taste» </b> - is a universal family of those designs for all base application framework WebAsyst: Website, Blog, Photography, Shop-Script and others. Parent (main) theme of family, which includes a basic set of CSS-styles and the overall layout design index.html, is the theme for the application «Design with taste» "Site" (this issue). All themes «Design with taste» design for other applications (Blog, Photo and others) use the base CSS and index.html from the parent (main) theme. </ p>
+<p><b> «Design with taste» </b> also adapted and optimized for mobile devices (Pads and Smartphones). Topic is based on Bootstrap 3, which provide correct display on all modern browsers.</p>
 ]]>
     </about>
     <about locale="ru_RU">
 <![CDATA[
-<p><b>Default</b> — это универсальное семейство адаптивных тем дизайна для всех базовых приложений фреймворка Вебасист: Сайт, Блог, Фото, Shop-Script и других. Родительской (основной) темой семейства, включающей в себя базовый набор CSS-стилей и общий макет дизайна index.html, является тема Default для приложения «Сайт» (данная тема). Все темы дизайна Default для других приложений (Блог, Фото и других) используют базовый CSS и index.html из родительской (основной) темы.</p>
-<p>Темы дизайна семейства Default оптимизированы для всех современных браузеров, планшетных компьютеров и мобильных устройств на основе iOS и Android. CSS-стили подключаются в зависимости от разрешения и типа устройства, которым пользуется посетитель сайта.</p>
+<p><b> «Дизайн со вкусом» </b> - это универсальное семейство адаптивных тем дизайна для всех базовых приложений фреймворка Вебасист: Сайт, Блог, Фото, Shop-Script и других. Родительской (основной) темой семейства, включающей в себя базовый набор CSS-стилей и общий макет дизайна index.html, является тема «Дизайн со вкусом» для приложения «Сайт». Все темы дизайна шаблона других приложений (Блог, Фото, Магазин и других) используют базовый CSS и index.html из родительской (основной) темы. </p>
+<p><b> «Дизайн со вкусом» </b> также адаптирован и оптимизирован для мобильных устройств (планшеты и смартфоны). Тема дизайна разработана на основе Bootstrap 3, что обеспечивает корректное отображение на всех современных браузерах. </p>
 ]]>
     </about>
 </theme>

@@ -8,10 +8,6 @@
 h1.search-criteria { margin-bottom: 1em; text-align: center; }
 .album-note { display: block; font-style: italic; }
 .album-description { margin:0px; padding:0 15px 15px; }
-.sub-albums { margin:0px; line-height: 1.3em; padding:0 15px 15px; }
-.sub-albums table { margin:0; }
-.sub-albums table td { max-width:33.33%; padding: 0 5px; }
-.sub-albums a { line-height: 20px; }
 .album-page { border: 1px solid; margin-bottom:40px; padding-top:15px; }
 .ie8 .album-page, .gt-ie8 .album-page { margin-top: 50px; }
 .lazyloading-wrapper { display:none !important; }
@@ -201,3 +197,15 @@ a .icon16 { height: auto; width: auto; background: none; text-indent: 0; vertica
 .icon12.star-half:after, a .icon16.star-half:after { content: "\f005"; }
 .icon12.star-empty:before, a .icon16.star-empty:before { content: "\f005"; }
 .icon16.loading { background-image: url("/wa-content/img/loading16.gif"); background-position: 0 0; }
+
+ul.albums { list-style: none; padding: 0; margin: 0 0 20px; text-align: center; }
+ul.albums li { width: 25%; display: inline-block; margin-bottom: 20px; }
+ul.albums li a { text-decoration: none; }
+ul.albums li a strong { text-decoration: underline; display: block; }
+ul.albums li .cover img { border: 4px solid; border-color: #f7f7f7; vertical-align: top; margin-bottom: 7px; max-width: 90%; }
+ul.albums li:hover .cover img { border-color: #fd0; }
+ul.albums li .count { display: block; color: #aaa; font-size: 0.9em; /*margin-top: 5px;*/  }
+
+ul.albums.subalbums { margin: 0 15px; text-align: left; }
+ul.albums.subalbums li { width: 12.5%; text-align: center; margin-bottom: 15px; }
+ul.albums.subalbums li .cover img { border-width: 2px; }

@@ -5,38 +5,63 @@
 <!--[if !IE]><!-->	<html class="no-js">	<!--<![endif]-->
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	
 	<title>{$wa->title()|escape}</title>
 	<meta name="Keywords" content="{$wa->meta('keywords')|escape}" />
 	<meta name="Description" content="{$wa->meta('description')|escape}" />
-	{*if $wa->isMobile()*}
-        <meta name="viewport" content="width=device-width" />
-        <meta name="HandheldFriendly" content="true" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    {*/if*}
+	
+    <meta name="viewport" content="width=768" />
+    <meta name="HandheldFriendly" content="true" />
+        
 	{if !empty($canonical)}<link rel="canonical" href="{$canonical}" />{/if}
+	<link rel="shortcut icon" href="/favicon.ico"/>
+    {if $wa->blog}
+        <!-- rss -->
+        {$rss=$wa->blog->rssUrl()}
+        {if $rss}<link rel="alternate" type="application/rss+xml" title="[s`RSS`] &mdash; {$wa->accountName()}" href="{$rss}">{/if}
+    {/if}
 	
     {* CSS *}
-    {if $wa->shop && !empty($theme_settings.sumbolRUB)}<link href="{$wa_url}wa-content/font/ruble/arial/fontface.css" rel="stylesheet" type="text/css" />{/if}
+    {if $wa->shop && !empty($theme_settings.sumbolRUB)}<link href="{$wa_static_url}wa-content/font/ruble/arial/fontface.css" rel="stylesheet" type="text/css" />{/if}
 	<link href="{$wa_theme_url}wm-site/font-awesome/css/font-awesome.min.css?v3.2.1" rel="stylesheet" type="text/css" />
-	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:400,700&amp;subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="{$wa_theme_url}buysimply.css?v{$wa_theme_version}" rel="stylesheet" type="text/css" />
     {$wa->css()} {* links active plugins CSS *}
     
     {* JS *}
     <script type="text/javascript" src="{$wa_theme_url}wm-site/modernizr.min.js?v2.8.2.27052014"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{$wa_url}wa-content/js/jquery/jquery-1.8.2.min.js"><\/script>')</script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{$wa_static_url}wa-content/js/jquery/jquery-1.11.1.min.js"><\/script>')</script>
+    <script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery/jquery-migrate-1.2.1.min.js"></script>
   	{if $wa_app == 'shop' && isset($action) && $action == 'default'}<script src="{$wa_theme_url}wm-site/jquery.cycle.all.min.js?v2.99"></script>{/if}
-  	<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js?v{$wa->version()}"></script>
-  	{if !empty($theme_settings.tagsCloud)}<script src="{$wa_theme_url}/jquery.tagcanvas.min.js?v2.2" type="text/javascript"></script>{/if}
-  	{if !empty($theme_settings.communityVKid) || ($wa_app == 'shop' && !empty($theme_settings.reviewsVKapiId) && $action == 'product')}<script src="http://vk.com/js/api/openapi.js" type="text/javascript"></script>{/if}
+  	<script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-plugins/jquery.cookie.js?v{$wa->version()}"></script>
+  	{if !empty($theme_settings.tagsCloud)}<script src="{$wa_theme_url}jquery.tagcanvas.min.js?v2.2" type="text/javascript"></script>{/if}
+  	{if !empty($theme_settings.communityVKid) || ($wa_app == 'shop' && !empty($theme_settings.reviewsVKapiId) && $action == 'product')}<script src="//vk.com/js/api/openapi.js" type="text/javascript"></script>{/if}
   	{include file="head.all.html"}
   	<script type="text/javascript" src="{$wa_theme_url}buysimply.js?v{$wa_theme_version}"></script>
     {$wa->js()} {* links active plugins JS *}
     {$wa->headJs()} {* links Google Analytics tracking code and current site's custom JS (Site app) *}
     
+    <!--[if lt IE 9]>
+    <script>
+    document.createElement('header');
+    document.createElement('nav');
+    document.createElement('section');
+    document.createElement('article');
+    document.createElement('aside');
+    document.createElement('footer');
+    document.createElement('figure');
+    document.createElement('hgroup');
+    document.createElement('menu');
+    </script>
+    <![endif]-->
+    
     {include file="`$wa_active_theme_path`/head.html" inline}{if !preg_match('/\/(\w+)\/$/', $wa_theme_url, $them)}{$them[1]='buysimply'}{/if}
     {include file="scheme.settings.html" themeId=$them[1]}
+    {* конструкция для включения плагина "заметный и компактный банер" http://www.webasyst.ru/store/plugin/shop/stickyangle/
+        {if $wa->shop}{shopStickyanglePlugin::getCode()}{/if}
+     *}
 </head>
 <body id="{$wa_app}">
     {if !empty($theme_settings.communityFBhref) || ($wa_app == 'shop' && !empty($theme_settings.reviewsFBappId) && $action == 'product')}
@@ -45,7 +70,7 @@
         var js, fjs = d.getElementsByTagName(s)[0];
         if (d.getElementById(id)) return;
         js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/ru_RU/all.js#xfbml=1{if $wa_app == 'shop' && !empty($theme_settings.reviewsFBappId) && $action == 'product'}&appId={$theme_settings.reviewsFBappId}{/if}";
+        js.src = "//connect.facebook.net/{$wa->locale()}/all.js#xfbml=1{if $wa_app == 'shop' && !empty($theme_settings.reviewsFBappId) && $action == 'product'}&appId={$theme_settings.reviewsFBappId}{/if}";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
     {/if}
@@ -56,16 +81,16 @@
                 {if $wa->user()->isAuth()}
                     <div class="auth float-left">
                         <span>[`Welcome`], {$wa->user('name')}! </span>
-                        {if $wa->shop}                          		
-                            <span>(</span><a href="{$wa->getUrl('shop/frontend/my')}">[`Customer account`]</a> | 
+                        {if $wa->myUrl()}
+                            <span>(</span><a href="{$wa->myUrl()}" rel="nofollow">[`Customer account`]</a> | 
                         {/if}
-                        <a href="?logout">[s`Log out`]</a><span>)</span>
+                        <a href="?logout" rel="nofollow">[s`Log out`]</a><span>)</span>
                     </div>
                {else}
                     <div class="auth float-left">
                         <span>[`Welcome, Guest!`] 
-                        (</span><a{if !empty($theme_settings.authDialog)} class="auth-popup"{/if} href="{$wa->loginUrl()}">[s`Log in`]</a> | 
-                        <a{if !empty($theme_settings.authDialog)} class="auth-popup"{/if} href="{$wa->signupUrl()}">[s`Sign up`]</a><span>)</span>
+                        (</span><a{if !empty($theme_settings.authDialog)} class="auth-popup"{/if} href="{$wa->loginUrl()}" rel="nofollow">[s`Log in`]</a> | 
+                        <a{if !empty($theme_settings.authDialog)} class="auth-popup"{/if} href="{$wa->signupUrl()}" rel="nofollow">[s`Sign up`]</a><span>)</span>
                     </div>
                 {/if}
             {/if}
@@ -75,7 +100,7 @@
                 <p>[`Currency`]: 
                 {$currency = $wa->shop->currency()}
                 {foreach $currencies as $c_code => $c}                   
-                <a title="{$c.title}" class="currency {if $c_code == $currency} selected{/if}" rel="{$c_code}">
+                <a title="{$c.title}" class="currency {if $c_code == $currency} selected{/if}" data-code="{$c_code}" rel="nofollow">
                     {if $c.code == 'RUB' && !empty($theme_settings.sumbolRUB)}<span class="ruble">Р</span>{else}<span>{$c.sign}</span>{/if}
                 </a>
                 {/foreach}
@@ -84,7 +109,7 @@
                     $(".currency").click(function () {
                         var url = location.href;
                         if (url.indexOf('?') == -1) { url += '?'; } else { url += '&'; }
-                        location.href = url + 'currency=' + $(this).attr('rel');
+                        location.href = url + 'currency=' + $(this).data('code');
                     });
                 </script>              
           	</div>
@@ -93,7 +118,7 @@
             {if $wa->shop}<!-- shopping cart info -->
         		{$cart_total = $wa->shop->cart->total()}          
    	     		<div id="cart" class="float-right{if !$cart_total} empty{/if}">                      	
-                    <a href="{$wa->getUrl('shop/frontend/cart')}">
+                    <a href="{$wa->getUrl('shop/frontend/cart')}" rel="nofollow">
                     	<i class="icon-shopping-cart icon-2x"></i>   		     				
                         [s`Shopping cart`]: <span class="cart-total">{if !$cart_total}[`empty`]{else}{if empty($theme_settings.sumbolRUB)}{wa_currency($cart_total, $wa->shop->currency())}{else}{wa_currency_html($cart_total, $wa->shop->currency())}{/if}{/if}</span>
    	     			</a>
@@ -119,17 +144,12 @@
     	        {/if}
               	</div>
               	
-                <div class="search"><!-- product search -->
-                {if $wa->shop}
-                    <form method="get" action="{$wa->getUrl('shop/frontend')}search/">                      
-                        <span class="add-on"><i class="icon-search"></i></span>
-                        <input id="search" type="search" name="query" value="{if !empty($query)}{$query}{/if}" placeholder="[`Product search`]"{if !empty($theme_settings.autofitItem)} class="autofit"{/if} />
-                        <input type="submit" class="search-button" value="[`Find`]" />
-                    </form>
-                {/if}
+                <div class="search">
+                    {include file="`$wa_active_theme_path`/searchform.html"}
                 </div>
                 
       			<div class="contact"><!-- block contact -->
+      			{$wa->globals("_contact", 1)}
       			{if $contact=$wa->block("`$them[1]`.contact")}
     	            {$contact}
     	        {else}
@@ -138,25 +158,22 @@
       			</div>
       		</div>
         	{include file="horizontal.tree.html"}
+            {* конструркция для включения плагина "Сортировка брендов по алфавиту" http://www.webasyst.ru/store/plugin/shop/alphacat/
+            	{if $wa->shop}{shopAlphacatPlugin::display()}{/if}
+             *}
             {if empty($theme_settings.noadaptive)}
             <div id="mobile-search"><!-- adaptive -->
                 <div id="panel-sticker">
                     <span class="button signin" data-text="[`Close navigation pane`]">[`Open navigation pane`]</span>
                 </div>
                 <div class="search"><!-- product search -->
-                {if $wa->shop}
-                    <form method="get" action="{$wa->getUrl('shop/frontend')}search/">                      
-                        <span class="add-on"><i class="icon-search"></i></span>  
-                        <input id="search-m" type="search" name="query" value="{if !empty($query)}{$query}{/if}" placeholder="[`Product search`]"{if !empty($theme_settings.autofitItem)} class="autofit"{/if} />
-                        <input type="submit" class="search-button" value="[`Find`]" />
-                    </form>
-                {/if}
+                    {include file="`$wa_active_theme_path`/searchform.html" _mobile=1}
                 </div> 
             </div>
             {/if}
             <!-- MAIN CONTENT -->
 			<div id="main">
-              	<div class="sidebar">{include file="sidebar.html"}</div>
+              	<div class="sidebar">{include file="`$wa_active_theme_path`/sidebar.html"}</div>
               	<div class="content">{include file="`$wa_active_theme_path`/content.html"}</div>
               	<div id="dialog" class="dialog">
                     <div class="dialog-background"></div>
@@ -198,8 +215,8 @@
                     <!-- info pages -->
                     {foreach $site_pages_ as $pageMB}
                         {if $pageMB@first || ($pageMB@index is div by 3)}<ul class="align-center">{/if}
-                            <li{if $pageMB.id==$page_select || $pageMB.id==$wa->currentUrl()} class="selected"{/if}>
-                                <a href="{$pageMB.url}">{$pageMB.name}</a>
+                            <li{if $pageMB.id==$page_select || $pageMB.id==$wa->currentUrl(false,true)} class="selected"{/if}>
+                                <a href="{$pageMB.url}" rel="nofollow">{$pageMB.name}</a>
                             </li>
                             {if !$pageMB@last && !(($pageMB@index+1) is div by 3)}<li class="li-hr">|</li>{/if}
                         {if $pageMB@last || (($pageMB@index+1) is div by 3)}</ul>{/if}
@@ -208,13 +225,14 @@
                     <!-- wa apps -->
                     <ul class="align-center">
                     {foreach $wa->apps() as $a}
-                    <li{if $a.url==$wa_app_url} class="selected"{/if}><a href="{$a.url}">{$a.name}</a></li>
+                    <li{if $a.url==$wa_app_url} class="selected"{/if}><a href="{$a.url}" rel="nofollow">{$a.name}</a></li>
                     {if !$a@last}<li class="li-hr">|</li>{/if}
                     {/foreach} 
                     </ul>
                 </div>
                 
               	<div class="contact"><!--contact-->
+              	{$wa->globals("_contact", 0)}
               	{if $contact=$wa->block("`$them[1]`.contact")}
     	            {$contact}
     	        {else}
@@ -227,9 +245,16 @@
 	{include file="main.addition.html"}
   	<!--noindex--><div class="wrapper-lt-ie8">{include file="lt-ie8.html" themeId=$them[1]}</div><!--/noindex-->
     <p id="back-top">
-    	<a href="#top" title="[`Scroll page up`]">
+    	<a href="#top" title="[`Scroll page up`]" rel="nofollow">
     	    <span><i class="icon-double-angle-up"></i>[`Up`]</span>
     	</a>
     </p>
+    {* конструкции для включения плагина "Перезвонить Вам?" http://www.webasyst.ru/store/plugin/shop/recallback/ 
+     * (всплывающее окно "Вы нашли то что искали" и активизация кнопок "заказать обратный звонок" по классу "wm-recallback-plugin-button")
+        {if $wa->shop}
+            {shopRecallbackPlugin::popupWindow()}
+            {shopRecallbackPlugin::showRecallbackLink()}
+        {/if}
+     *}
 </body>
 </html>

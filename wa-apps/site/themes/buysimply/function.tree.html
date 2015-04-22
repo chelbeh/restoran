@@ -5,7 +5,7 @@
             {if $escape}{$name=$t.name|escape}{else}{$name=$t.name}{/if}
             {capture append="tree_list"}
                 <li class="level-{$t.depth}{if $selected == $t.id} selected{/if}">
-                    {if $icon_}{$icon_}{/if}<a href="{$t.url}"{if $title} title="{$name}"{/if}>{$name}</a>
+                    {if $icon_}{$icon_}{/if}<a data-icon-id="{$t.id}" href="{$t.url}"{if $title} title="{$name}"{/if}>{$name}</a>
                 </li>
             {/capture}
             {tree_to_list tree=$t.childs level=$level stage=$stage+1 escape=$escape title=$title icon_=$icon_}
@@ -20,7 +20,7 @@
                 {if $escape}{$name=$t.name|escape}{else}{$name=$t.name}{/if}
                 <li{if $selected == $t.id} class="selected"{/if}>
                     {if $wrap}<div class="wrp-fix">{/if}
-                    {if $icon_}{$icon_}{/if}<a href="{$t.url}"{if $title} title="{$name}"{/if}>{$name}</a>
+                    {if $icon_}{$icon_}{/if}<a data-icon-id="{$t.id}" href="{$t.url}"{if $title} title="{$name}"{/if}>{$name}</a>
                     {if $stwol && $t.childs}
                         {$tree_list = []}
                         {call tree_to_list tree=$t.childs level=$level escape=$escape title=$title icon_=$icon_}

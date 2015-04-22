@@ -1,2 +1,9 @@
 <li>{if $wa->shop}{$wa->shop->settings('phone')} (Москва){/if}</li>
 <li>8 (800) 999-40-40 (по всей России)</li>
+{if $wa->shop && $wa->shop->settings('phone')}
+<li>
+	{if $wh = $wa->shop->settings('workhours')}
+        {$wh.days_from_to}{if $wh.hours_from && $wh.hours_to} {$wh.hours_from}—{$wh.hours_to}{/if}
+    {/if}
+</li>
+{/if}

@@ -69,3 +69,11 @@
 
 /* Plugins
 ---------- */
+.photo-album-attachment ul.thumbs { padding-left: 0; margin: -20px 0 0; }
+.photo-album-attachment ul.thumbs li { list-style: none; display: inline-block; margin: 20px 20px 0 0 !important; }
+.photo-album-attachment .photo { margin-bottom: 20px; }
+.photo-album-attachment .photo img { margin-top: -10px; }
+.post .photo-album-attachment { padding-top: 0; }
+.post .photo-album-attachment img { vertical-align: middle; }
+
+.text_after .tags { margin-top: 15px; }

@@ -35,61 +35,64 @@
             </div>
             
             <!-- PAGES -->
+            {if $wa->site}
+                {$pages = $wa->site->pages()}
+                {if count($pages)}
+                    <div class="nav-group">
+                        <div class="nav-header">[`Information`]</div>
+                        <div class="nav-list">
+                            {$selected_node = null}
+                            {foreach $pages as $p}
+                                {if $wa->currentUrl()|strstr:$p.url && strlen($p.url) >= strlen($selected_node.url)}{$selected_node = $p}{/if}
+                            {/foreach}
+                            {if !$selected_node}{$selected_node.id = null}{/if}
 
-            {$pages = $wa->site->pages()}
-            {if count($pages)}
-                <div class="nav-group">
-                    <div class="nav-header">[`Information`]</div>
-                    <div class="nav-list">
-                        {$selected_node = null}
-                        {foreach $pages as $p}
-                            {if $wa->currentUrl()|strstr:$p.url && strlen($p.url) >= strlen($selected_node.url)}{$selected_node = $p}{/if}
-                        {/foreach}
-                        {if !$selected_node}{$selected_node.id = null}{/if}
+                            {* render *}
+                            {foreach $pages as $p}
+                                {if $p.url != $wa_url}
+                                    <div class="nav-item {if $p.id == $selected_node.id}active-nav-item{/if}">
+                                        <a href="{$p.url}">{$p.name}</a>
+                                    </div>
+                                {/if}
+                            {/foreach}
+                        </div>
+                    </div>
+                {/if}
+            {/if}
 
-                        {* render *}
-                        {foreach $pages as $p}
-                            {if $p.url != $wa_url}
-                                <div class="nav-item {if $p.id == $selected_node.id}active-nav-item{/if}">
+            {if $wa->shop}
+                {$shop_pages = $wa->shop->pages()}
+                {if count($shop_pages)}
+                    <div class="nav-group">
+                        <div class="nav-header">[s`Shop`]</div>
+                        <div class="nav-list">
+                            {foreach $shop_pages as $page}
+                                <div class="nav-item">
+                                    <a href="{$page.url}">{$page.name}</a>
+                                </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                {/if}
+            {/if}
+
+            {if $wa->blog}
+                {$pages = $wa->blog->pages()}
+                {if count($pages)}
+                    <div class="nav-group">
+                        <div class="nav-header">[s`Blog`]</div>
+                        <div class="nav-list">
+                            {foreach $pages as $p}
+                                <div class="nav-item">
                                     <a href="{$p.url}">{$p.name}</a>
                                 </div>
-                            {/if}
-                        {/foreach}
+                            {/foreach}
+                        </div>
                     </div>
-                </div>
-            {/if}
-
-            {$shop_pages = $wa->shop->pages()}
-            {if count($shop_pages)}
-                <div class="nav-group">
-                    <div class="nav-header">[s`Shop`]</div>
-                    <div class="nav-list">
-                        {foreach $shop_pages as $page}
-                            <div class="nav-item">
-                                <a href="{$page.url}">{$page.name}</a>
-                            </div>
-                        {/foreach}
-                    </div>
-                </div>
-            {/if}
-
-            {$pages = $wa->blog->pages()}
-            {if count($pages)}
-
-                <div class="nav-group">
-                    <div class="nav-header">[s`Blog`]</div>
-                    <div class="nav-list">
-                        {foreach $pages as $p}
-                            <div class="nav-item">
-                                <a href="{$p.url}">{$p.name}</a>
-                            </div>
-                        {/foreach}
-                    </div>
-                </div>
+                {/if}
             {/if}
 
             {if $wa->photos}
-            
                 <!-- PHOTOS CORE NAVIGATION -->
                 {$photo_url = $wa->getUrl('photos/frontend')}
                 <div class="nav-group">
@@ -116,7 +119,6 @@
             {/if}
             
             {if $wa->isAuthEnabled()}
-            
                 <!-- USER ACCOUNT -->
                 <div class="nav-group">
                     <div class="nav-header">[s`My account`]</div>

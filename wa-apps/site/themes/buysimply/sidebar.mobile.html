@@ -1,0 +1,47 @@
+<div class="information-block{if $theme_settings.top_menu_content == 'info_page'} hide-for-desktop{/if}">
+<!-- adaptive -->
+    <div class="caption"><span>[`Sections of site`]</span></div>
+    {if $wa->shop && $theme_settings.top_menu_source == 'shop'}
+        {$site_pages=$wa->shop->pages(0,2,false)}
+        {if $wa_app == 'shop'}{$page_select = $wa->param('page_id')}{else}{$page_select = null}{/if}
+    {else}
+        {$site_pages=$wa->site->pages(0,2,false)}
+        {if $wa_app == 'site' && isset($page.id)}{$page_select = $page.id}{else}{$page_select = null}{/if}
+    {/if}
+    <ul class="pages-navigation">
+    <!--home link-->
+    {if !empty($theme_settings.top_menu_index)}
+        <li{if $wa_url == $wa->currentUrl(false,true)} class="selected"{/if}><a href="{$wa_url}">[`Home`]</a></li>
+    {/if}
+    <!--pages-->
+    {foreach $site_pages as $pageMT}
+        {if !isset($pageMT.menu_top)}
+        <li{if $pageMT.id==$page_select} class="selected"{/if}>
+            <a href="{$pageMT.url}">{$pageMT.name}</a>
+            {if !empty($pageMT.childs)}<ul>
+            {foreach $pageMT.childs as $pageMT_}
+                {if !isset($pageMT_.menu_top)}
+                <li{if $pageMT_.id==$page_select} class="selected"{/if}>
+                    <a href="{$pageMT_.url}">{$pageMT_.name}</a>
+                    {if !empty($pageMT_.childs)}<ul>
+                    {foreach $pageMT_.childs as $pageMT__}
+                        {if !isset($pageMT__.menu_top)}
+                        <li{if $pageMT__.id==$page_select} class="selected"{/if}>
+                            <a href="{$pageMT__.url}">{$pageMT__.name}</a>
+                        </li>
+                        {/if}
+                    {/foreach}
+                    </ul>{/if}
+                </li>
+                {/if}
+            {/foreach}
+            </ul>{/if}
+        </li>
+        {/if}
+    {/foreach}
+    <!-- wa apps -->
+    {foreach $wa->apps() as $a}
+        <li{if $a.url==$wa_app_url} class="selected"{/if}><a href="{$a.url}">{$a.name}</a></li>
+    {/foreach}
+    </ul>
+</div>

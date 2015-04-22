@@ -1,0 +1,218 @@
+/* ФОТОПОТОК */
+.view-thumbs .image {
+   z-index:9;
+   cursor: default;
+   overflow: hidden;
+   text-align: center;
+   margin-bottom: 30px;
+   box-shadow: 0 0 3px #ddd;
+}
+.view-thumbs .image .mask,.image .content {
+   width: 100%;
+   height: 100%;
+   position: absolute;
+   overflow: hidden;
+   top: 0;
+   left: 0;
+}
+.view-thumbs .image img {
+   display: block;
+   position: relative;
+}
+.image { position: relative }
+.image .corner { position:absolute; z-index:10; color: #fff; font-weight: bold; }
+.image .corner.top { top:7px; }
+.image .corner.left { left:10px; }
+.image .corner.right { right:10px; }
+.image .corner.bottom { bottom:5px; }
+.image .corner .indicator { 
+   color: #fff;
+   background: rgba(0,0,0,0.5);
+   border-radius: 10px !important;
+   padding: 3px 6px;
+}
+#photo-list .image h2 {
+   text-transform: uppercase;
+   color: #fff;
+   text-align: center;
+   position: relative;
+   font-size: 22px;
+   padding: 10px;
+   background: rgba(0, 0, 0, 0.8);
+   margin: 20px 0 0 0;
+   text-shadow:none;
+}
+#photo-list .image .rating { margin-top: 5px }
+#photo-list .image p {
+   display: none;
+   font-family: Georgia, serif;
+   font-style: italic;
+   font-size: 12px;
+   position: relative;
+   color: #fff;
+   padding: 10px 20px 10px;
+   text-align: center;
+}
+#photo-list .image a.info {
+   color: #fff;
+   background: #000;
+   padding: 5px 12px;
+   text-decoration: none;
+   margin-top:10px;
+   display: inline-block;
+   overflow:hidden;
+   text-transform: uppercase;
+}
+
+/*CSS3 Hover Effect*/
+.image-tenth img {
+	left:10px;
+	margin-left:-10px;
+	position:relative;
+   -webkit-transition: all 0.6s ease-in-out;
+   -moz-transition: all 0.6s ease-in-out;
+   -o-transition: all 0.6s ease-in-out;
+   -ms-transition: all 0.6s ease-in-out;
+   transition: all 0.6s ease-in-out;
+}
+.image-tenth .mask {
+   -webkit-transition: all 0.5s linear;
+   -moz-transition: all 0.5s linear;
+   -o-transition: all 0.5s linear;
+   -ms-transition: all 0.5s linear;
+   transition: all 0.5s linear;
+   -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=0)";
+   filter: alpha(opacity=0);
+   opacity: 0;
+}
+#photo-list .image-tenth h2 {
+   color: #333;
+   margin: 20px 40px 0;
+   background: transparent;
+   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+   -webkit-transform: scale(0);
+   -moz-transform: scale(0);
+   -o-transform: scale(0);
+   -ms-transform: scale(0);
+   transform: scale(0);
+   -webkit-transition: all 0.5s linear;
+   -moz-transition: all 0.5s linear;
+   -o-transition: all 0.5s linear;
+   -ms-transition: all 0.5s linear;
+   transition: all 0.5s linear;
+   -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=0)";
+   filter: alpha(opacity=0);
+   opacity: 0;
+}
+.image-tenth p {
+   color: #333;
+   -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=0)";
+   filter: alpha(opacity=0);
+   opacity: 0;
+   -webkit-transform: scale(0);
+   -moz-transform: scale(0);
+   -o-transform: scale(0);
+   -ms-transform: scale(0);
+   transform: scale(0);
+   -webkit-transition: all 0.5s linear;
+   -moz-transition: all 0.5s linear;
+   -o-transition: all 0.5s linear;
+   -ms-transition: all 0.5s linear;
+   transition: all 0.5s linear;
+}
+.image-tenth a.info {
+   -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=0)";
+   filter: alpha(opacity=0);
+   opacity: 0;
+   -webkit-transform: scale(0);
+   -moz-transform: scale(0);
+   -o-transform: scale(0);
+   -ms-transform: scale(0);
+   transform: scale(0);
+   -webkit-transition: all 0.5s linear;
+   -moz-transition: all 0.5s linear;
+   -o-transition: all 0.5s linear;
+   -ms-transition: all 0.5s linear;
+   transition: all 0.5s linear;
+}
+.image-tenth:hover img {
+   -webkit-transform: scale(2) rotate(10deg);
+   -moz-transform: scale(2) rotate(10deg);
+   -o-transform: scale(2) rotate(10deg);
+   -ms-transform: scale(2) rotate(10deg);
+   transform: scale(2) rotate(10deg);
+   -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=30)";
+   filter: alpha(opacity=30);
+   opacity: 0.3;
+}
+.image-tenth:hover .mask {
+   -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=100)";
+   filter: alpha(opacity=100);
+   opacity: 1;
+}
+#photo-list .image-tenth:hover h2,.image-tenth:hover p,.image-tenth:hover a.info {
+   -webkit-transform: scale(1);
+   -moz-transform: scale(1);
+   -o-transform: scale(1);
+   -ms-transform: scale(1);
+   transform: scale(1);
+   -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=100)";
+   filter: alpha(opacity=100);
+   opacity: 1;
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+   .portfolio-4-columns .mask h2 {
+      font-size: 20px;
+      margin-bottom: 0px;
+   }
+
+   .portfolio-4-columns .mask p {
+      display: none;
+   }
+}
+
+/* ПРОСМОТР ФОТО */
+.stack-nav { font-size: 120%; margin-bottom: 10px; }
+.stack-nav .rewind { position: relative; left: -2px; top: 5px; }
+.stack-nav .ff { position: relative; left: 2px; top: 5px; }
+
+.stack .stack-nav { font-size: 120%; padding: 4px 8px 4px; display: inline-block; position: relative; background: #000; display: block\9; background: transparent\9; }
+.stack .stack-nav img { width: 22px; height: 20px; }
+.stack .stack-nav .rewind { position: absolute; left: -30px; top: 3px; }
+.stack .stack-nav .ff { position: absolute; right: -30px; left: auto; top: 3px; }
+.image .stack { position: absolute; top: 5px; left: 0; right: 0; color: #fff; padding: 10px; text-align: center;  }
+
+.photostream-container { width: 308px; margin: 0 auto; }
+ul.photostream { padding: 0; margin: 0; list-style: none; position: relative;}
+ul.photostream li { box-sizing: content-box; float: left; padding-right: 5px;  }
+ul.photostream li img { width: 60px; height: 60px; padding: 1px; border: 2px solid #fff; }
+ul.photostream li.selected img { border-color: #2bace2 }
+ul.photostream li.stream-nav { position: absolute; top: 21px; }
+ul.photostream li.stream-nav i { display: block; width: 12px; height: 14px; }
+ul.photostream li.stream-nav.rewind { left: -16px; padding: 0; }
+ul.photostream li.stream-nav.rewind i { background: url('img/photostream-rewind.png') no-repeat; background-size: 12px 14px; }
+ul.photostream li.stream-nav.ff { right: -36px; padding: 0; }
+ul.photostream li.stream-nav.ff i { background: url('img/photostream-ff.png') no-repeat; background-size: 12px 14px; }
+
+.photostream-divider { margin-top: 90px; border-top: 1px solid #ccc; margin-bottom: 20px; }
+#photo-name { font-size: 20px }
+#photo-description { font-style: italic }
+.photo-tags,
+.photo-albums { color: #fff }
+.photo-tags .fa,
+.photo-albums .fa { color: #555; margin-right: 5px; }
+.photo-tags a,
+.photo-albums a {
+   background-color: #f4f4f4;
+   color: #555;
+   display: inline-block;
+   padding: 5px;
+}
+.photo-tags a:hover,
+.photo-albums a:hover {
+   background-color: #2bace2;
+   color: #fff;
+   text-decoration: none;
+}

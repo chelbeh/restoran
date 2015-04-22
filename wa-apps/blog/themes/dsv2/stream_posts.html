@@ -8,7 +8,7 @@
         <div class="timeline-panel">
             <div class="timeline-heading">
                 {if !empty($post.preview)}
-                    <img src="{$wa_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
+                    <img src="{$wa_static_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
                 {/if}
             </div>
             <div class="timeline-body text-justify">
@@ -97,7 +97,7 @@
 </ul>
 
 {if !empty($photos_loaded) && blogPhotosBridge::is2xEnabled()}
-    <script src="{$wa_url}wa-content/js/jquery-plugins/jquery.retina.min.js"></script>
+    <script src="{$wa_static_url}wa-content/js/jquery-plugins/jquery.retina.min.js"></script>
     <script>$(function() { "use strict";
         $.Retina && $('img.retinify').retina();
     });</script>

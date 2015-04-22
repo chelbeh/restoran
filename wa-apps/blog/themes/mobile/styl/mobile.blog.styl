@@ -1,0 +1,381 @@
+/*
+ * Webasyst "Mobile" Theme
+ *
+ * Blog CSS File
+ *
+ * @link http://www.webasyst.com/
+ * @author Webasyst LLC
+ * @copyright 2015 Webasyst LLC
+ * @package Webasyst
+ */
+
+// Stylus variables
+@import "../../../../site/themes/mobile/styl/variables.styl";
+
+.wa-blog-wrapper
+    padding: 0.5em;
+    margin: 0;
+
+    .pageless-wrapper
+        margin: 0.5em 0 0;
+        text-align center
+
+    a:first-child + .article-wrapper
+        margin-top: 0;
+
+    .article-wrapper
+    .comment-list-wrapper
+    .comment-form-wrapper
+        margin: 0.5em 0 0;
+        padding: 0.5em;
+        border: 1px solid rgba(0,0,0,0.1)
+
+        background #fff
+        overflow hidden
+
+        &:first-child
+            margin-top: 0
+
+    .article-wrapper
+
+        .article-header
+            margin: 0 0 1.2em;
+            
+            a
+                text-decoration: none;
+
+            .date-block
+                font-size: 0.6em
+                line-height 1em;
+                text-align left
+                text-transform uppercase
+                color: #999;
+
+        .article-content
+            p
+                overflow hidden
+
+            img
+                max-width: 100% !important
+                height: auto !important
+
+            & > a:last-child
+                display inline-block
+                vertical-align top
+                margin: 0;
+                padding: 0.5em 1em
+                width 100%
+                box-sizing border-box
+
+                border: 1px solid #ccc;
+
+                $border-radius(5px)
+
+                font: normal 1em/1.5em $font-family;
+                text-align: center
+                text-decoration none
+                color: $color-black;
+                background: #eee linear-gradient(to bottom, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.0) 100%);
+
+        .photo-album-attachment
+            margin: 0.5em 0;
+
+            .description
+                color: #798997
+
+            .photo-image
+                margin: 0.5em 0 0;
+                padding: 0.5em;
+                line-height 0
+                background #f8f8f8
+
+                border: 1px solid #c8c8c8;
+                -webkit-border-radius: 5px;
+                border-radius: 5px;
+
+                a
+                    font-size: 0
+
+                    img
+                        width: 100%;
+                        -webkit-border-radius: 5px;
+                        border-radius: 5px;
+
+        .credentials-wrapper
+            display table
+            width: 100%;
+            margin: 0.5em 0 0;
+            padding: 0.5em 0 0;
+            border-top: 1px solid #ccc;
+
+            .comment-block
+                display table-cell
+                vertical-align middle
+                width: 1.75em;
+                padding: 0;
+                line-height 1.25em;
+
+                a
+                    display block
+                    width: 1.75em
+                    height: 1.75em
+
+                    background #fff url("../../../site/themes/mobile/img/icons/comment-icon.png") 50% no-repeat
+                    background-size 1.4em
+
+                    border: 1px solid transparent;
+                    $border-radius(2px)
+
+            .author-block
+                display table-cell
+                vertical-align middle
+                padding: 0;
+                line-height 1em;
+                box-sizing border-box
+
+                .author-name
+                    display inline-block
+                    vertical-align top
+                    max-width: 180px
+
+                    line-height 1.25em
+
+                    white-space nowrap
+                    text-overflow ellipsis
+                    overflow hidden
+
+                    a
+                        text-decoration none
+
+                .userpic-block
+                    display inline-block
+                    vertical-align top
+
+                    width: 1.25em
+                    height: 1.25em
+
+                    img
+                        width: 100%
+                        $border-radius(50%)
+
+    .comment-list-wrapper
+        padding: 0;
+
+        .comment-count
+            margin: 0;
+            padding: 0.25em 0.5em
+
+        .comment-wrapper > .comment-wrapper
+            .comment-item
+                padding-left: 15%;
+                border-width 1px 0 0
+
+                &:after
+                    position absolute
+                    top: 0.5em;
+                    left: 0;
+                    content: ""
+                    opacity: 0.33
+
+                    width: 2.5em
+                    height: 2.5em
+
+                    background transparent url("../../../site/themes/mobile/img/icons/arrow-child.png") 50% no-repeat
+                    background-size: 1em
+
+                .right-column
+
+                    .author-block
+                        width: 150px;
+
+                        .username
+                            color: #777
+
+                .text-block
+                    color: #777
+
+        .comment-item
+            position relative
+            padding: 0.75em 0.5em
+            border: solid rgba(0,0,0,0.1)
+
+            border-width 1px 0 0 3px
+
+            .credentials
+                display table
+                width: 100%
+
+                & > .left-column
+                    display table-cell
+                    vertical-align top
+
+                    width: 2em;
+                    line-height 0
+
+                    img
+                        width: 100%;
+                        -webkit-border-radius 50%;
+                        border-radius 50%;
+
+                & > .right-column
+                    position relative
+                    display table-cell
+                    vertical-align top
+                    padding: 0 0 0 0.5em;
+
+                    .author-block
+                        width: 196px;
+                        overflow hidden
+                        text-overflow ellipsis
+                        white-space nowrap
+
+                    .date-block
+                        display inline-block
+                        vertical-align top
+
+                        font-size: 0.8em
+                        color: #aaa
+
+                    .actions
+                        position absolute
+                        top: 0;
+                        right: 0;
+
+                        .reply-link
+                            display block
+                            width: 1.75em
+                            height: 1.75em
+
+                            opacity: 0.5
+
+                            background transparent url("../../../site/themes/mobile/img/icons/comment-icon.png") 50% no-repeat
+                            background-size 1.4em
+
+                            border: 1px solid transparent;
+
+                            $border-radius(2px)
+
+            .text-block
+                margin: 0.25em 0 0;
+                padding: 0.25em 0 0;
+                border-top: 1px dotted #f0f0f0;
+
+    .comment-form-wrapper
+
+        .comment-form-fields
+
+            .field-line
+                margin: 1em 0 0;
+
+                &:first-child
+                    margin-top: 0;
+
+                .wa-captcha
+                    margin: 1em 0 0;
+
+                    p
+                        margin: 0;
+                        line-height 0
+
+                        & + p
+                            display none
+
+                    img
+                        width 100%;
+
+                        -webkit-border-radius 5px
+                        border-radius 5px
+
+                        & + strong
+                            display none
+
+                    input
+                        margin: 1em 0 0;
+
+            .comment-submit
+                margin: 1em 0 0;
+
+                &:first-child
+                    margin-top: 0;
+
+.category-plugin
+    margin: 0.5em 0
+    padding: 0
+    border: 1px solid rgba(0,0,0,0.1)
+    background #fff
+    overflow hidden
+    $border-radius(5px)
+    $box-shadow(0 0 5px 0 rgba(127,127,127,0.1));
+
+    &:first-child
+        margin-top: 0
+
+    ul
+        margin: 0
+        padding: 0
+
+        li
+            display inline-block
+            vertical-align top
+            width: 100%
+            box-sizing border-box
+
+            margin: 0
+            padding: 0
+            border: solid rgba(0,0,0,0.1)
+            border-width 1px 0 0
+
+            &:first-child
+                border-width 0
+            a
+                position relative
+                display block
+                padding: 0.6em 2em 0.6em 0.8em
+                text-decoration none
+
+                &:after
+                    position absolute
+                    top: 0;
+                    right: 0;
+                    content: ""
+                    display block
+                    width: 2em
+                    height: 100%
+                    background transparent url("../../../site/themes/mobile/img/icons/arrow-right.png") 50% no-repeat
+                    background-size 0.6em
+
+.tag-plugin
+    margin: 0.5em 0
+    padding: 0
+    border: 1px solid rgba(0,0,0,0.1)
+    background #fff
+    overflow hidden
+    $border-radius(5px)
+    $box-shadow(0 0 5px 0 rgba(127,127,127,0.1));
+
+    &:first-child
+        margin-top: 0
+
+    .tags
+        a
+            border: solid rgba(0,0,0,0.1)
+            border-width 1px 0 0
+            position relative
+            display block
+            padding: 0.6em 2em 0.6em 0.8em
+            text-decoration none
+            box-sizing border-box
+
+            &:first-child
+                border-width 0
+
+            &:after
+                position absolute
+                top: 0;
+                right: 0;
+                content: ""
+                display block
+                width: 2em
+                height: 100%
+                background transparent url("../../../site/themes/mobile/img/icons/arrow-right.png") 50% no-repeat
+                background-size 0.6em

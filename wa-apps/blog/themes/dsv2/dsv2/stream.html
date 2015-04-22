@@ -30,7 +30,7 @@
 
 {if !$is_lazyloading}
 </div>
-<ul class="menu-h" id="stream-paging">
+<ul class="pagination" id="stream-paging">
     {for $p=1 to $pages}
         <li{if $p eq $page} class="selected"{/if}><a href="{if $p eq $page}#page_{$page}{else}?page={$p}{/if}">{$p}</a></li>
     {/for}

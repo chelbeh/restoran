@@ -1,5 +1,12 @@
-{if $theme_settings.vk != ''}<li><a href="{$theme_settings.vk}"><i class="icon vk"></i></a></li>{/if}<!-- вконтакте -->
-{if $theme_settings.ok != ''}<li><a href="{$theme_settings.ok}"><i class="icon ok"></i></a></li>{/if}<!-- одноклассники -->
-{if $theme_settings.fb != ''}<li><a href="{$theme_settings.fb}"><i class="icon fb"></i></a></li>{/if}<!-- facebook -->
-{if $theme_settings.tt != ''}<li><a href="https://twitter.com/{$theme_settings.tt}"><i class="icon tt"></i></a></li>{/if}
-{if $theme_settings.gp != ''}<li><a href="{$theme_settings.gp}"><i class="icon gp"></i></a></li>{/if}
+{$icon_size=$theme_settings.social_size|substr:18}
+{assign var="pos" value=$icon_size|strpos:"."}
+{$size = $icon_size|substr:0:$pos}
+{if $theme_settings.vk != ''}<li><a href="{$theme_settings.vk}" class="{$size}" target="_blank"><i class="icon {$size} vk"></i></a></li>{/if}<!-- вконтакте -->
+{if $theme_settings.fb != ''}<li><a href="{$theme_settings.fb}" class="{$size}" target="_blank"><i class="icon {$size} fb"></i></a></li>{/if}<!-- facebook -->
+{if $theme_settings.tt != ''}<li><a href="https://twitter.com/{$theme_settings.tt}" class="{$size}" target="_blank"><i class="icon {$size} twitter"></i></a></li>{/if}
+{if $theme_settings.gp != ''}<li><a href="{$theme_settings.gp}" class="{$size}" target="_blank"><i class="icon {$size} gp"></i></a></li>{/if}
+{if $theme_settings.ok != ''}<li><a href="{$theme_settings.ok}" class="{$size}" target="_blank"><i class="icon {$size} ok"></i></a></li>{/if}
+{if $theme_settings.skype != ''}<li><a href="skype:{$theme_settings.skype}?add" class="{$size}"><i class="icon {$size} skype"></i></a></li>{/if}
+{if $theme_settings.rss && $wa->blog}<li><a href="{$wa->getUrl('blog/frontend/rss')}" class="{$size}"><i class="icon {$size} rss"></i></a></li>{/if}
+{if $theme_settings.youtube != ''}<li><a href="{$theme_settings.youtube}" class="{$size}" target="_blank"><i class="icon {$size} youtube"></i></a></li>{/if}
+{if $theme_settings.vimeo != ''}<li><a href="{$theme_settings.vimeo}" class="{$size}" target="_blank"><i class="icon {$size} vimeo"></i></a></li>{/if}

@@ -8,6 +8,30 @@ $(document).ready(function () {
     $(document).bind('keyup.dialog', function(e) { 
         if (e.keyCode == 27) { $(".dialog:visible").hide().find('.dialog-window').empty().append('<div class="cart"></div>'); }
     });
+    // MAILER app email subscribe form
+    $('#mailer-subscribe-form input.charset').val(document.charset || document.characterSet);
+    $('#mailer-subscribe-form').submit(function() {
+        var form = $(this);
+
+        var email_input = form.find('input[name="email"]');
+        var email_submit = form.find('input[type="submit"]');
+        if (!email_input.val()) {
+            email_input.addClass('error');
+            return false;
+        } else {
+            email_input.removeClass('error');
+        }
+        
+        email_submit.hide();
+        email_input.after('<i class="icon16 loading"></i>');
+
+        $('#mailer-subscribe-iframe').load(function() {
+            $('#mailer-subscribe-form').hide();
+            $('#mailer-subscribe-iframe').hide();
+            $('#mailer-subscribe-thankyou').show();
+        });
+    });
+    
     //autofit for jQuery UI Autocomplete 1.8.2!
     $("#search.autofit, #search-m.autofit").each(function(){
     	var self = $(this);
@@ -196,6 +220,45 @@ $(document).ready(function () {
 	/*add branch selected*/
 	$('.buysimply-horizontal-tree, .buysimply-vertical-tree').find('.selected').parents('li').addClass('selected');
 	$('.pages-navigation .selected').parents('li').addClass('selected');
+	
+	if (1) {
+        /*HORIZONTAL*/
+        $('ul.buysimply-horizontal-tree>li>ul, ul.buysimply-horizontal-tree>li>div>ul').css('display', 'none');
+        $('ul.buysimply-horizontal-tree>li').hover(function(){
+            var self = $(this);
+            self.data('timer', setTimeout(function(){
+                self.find('ul:first').css('display', 'block');
+            }, 300));
+        }, function(){
+            clearTimeout($(this).data('timer'));
+            $(this).find('ul:first').css('display', 'none');
+        });
+        
+        /*VERTICAL*/
+        $('ul.vertical-tree-one>li>ul, ul.vertical-tree-two>li>ul, ul.vertical-tree-four>li>ul').css('display', 'none');
+        $('ul.vertical-tree-one>li, ul.vertical-tree-two>li, ul.vertical-tree-four>li').hover(function(){
+            var self = $(this);
+            self.data('timer', setTimeout(function(){
+                self.find('ul:first').css('display', 'block');
+            }, 300));
+        }, function(){
+            clearTimeout($(this).data('timer'));
+            $(this).find('ul:first').css('display', 'none');
+        });
+        
+        /*INFORMATION*/
+        $('.information-block>ul>li>ul').css('display', 'none');
+        $('.information-block>ul>li').hover(function(){
+            var self = $(this);
+            self.data('timer', setTimeout(function(){
+                self.find('ul:first').css('display', 'block');
+            }, 300));
+        }, function(){
+            clearTimeout($(this).data('timer'));
+            $(this).find('ul:first').css('display', 'none');
+        });
+    }
+	
 	//tags cloud
 	if($('#tagsCanvasContent').length){
         var option = {
@@ -267,15 +330,18 @@ $(document).ready(function () {
 	        var self = $(this), soa = self.find('.soaring-block');
 	        if(self.hasClass('empty')) return false;
 	        clearTimeout(soa.data('timer'));
-	        if(soa.is(':animated') || soa.hasClass('active')) return false;
-	        soa.css('top', -soa.outerHeight()-8);
-	        soa.stop().animate({top: self.outerHeight()}, 'slow', function(){
-	            $(this).addClass('active');
-	            //self.find('a:first').css('border-bottom', 'none');
-	        });
+	        soa.data('timer-tremor', setTimeout(function(){
+    	        if(soa.is(':animated') || soa.hasClass('active')) return false;
+    	        soa.css('top', -soa.outerHeight()-8);
+    	        soa.stop().animate({top: self.outerHeight()}, 'slow', function(){
+    	            $(this).addClass('active');
+    	            //self.find('a:first').css('border-bottom', 'none');
+    	        });
+	        }, 300));
 	    }, function(){
-	        if($('#cart').hasClass('empty')) return false;
 	        var soa = $(this).find('.soaring-block');
+	        clearTimeout(soa.data('timer-tremor'));
+	        if($('#cart').hasClass('empty')) return false;
 	        soa.data('timer', setTimeout(function(){
 	            soa.stop().animate({top: -soa.outerHeight()-8}, "slow", function(){
 	                $(this).removeClass('active').css('top', -1000);

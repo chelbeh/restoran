@@ -12,11 +12,7 @@
 {/if}
     
     <nav class="page-nav" role="navigation">
-    
         <div class="nav-sidebar">
-            
-            
-            
             <div class="nav-sidebar-body">      
                 <!-- more plugins -->
                 {* @event frontend_sidebar.%plugin_id%.section *}
@@ -48,26 +44,21 @@
                         </ul>
                     </div>
                 {/if}
-        
             </div>
-   
-            <div class="clear-both"></div>
-            
+            <div class="clearfix"></div>    
         </div>
     </nav>
     
-    <div id="page-content" {if $action == 'photo'} itemscope itemtype="http://schema.org/Photograph"{/if}>
+    <div id="page-content" {if $action == 'photo'} itemscope itemtype="http://schema.org/Photograph"{/if} class="container">
         <!-- integrnal navigation breadcrumbs -->
-        <div class="container">
-            <ol class="breadcrumb">
+        <ol class="breadcrumb">
+            {if !empty($breadcrumbs)}
                 <li><a href="{$wa_app_url}">[`Home Page`]</a></li>
-                {if !empty($breadcrumbs)}
-                    {foreach $breadcrumbs as $breadcrumb}
-                        <li><a href="{$breadcrumb.full_url}">{$breadcrumb.name|escape}</a></li>
-                    {/foreach}
-                {/if}
-            </ol>
-        </div>
+                {foreach $breadcrumbs as $breadcrumb}
+                    <li><a href="{$breadcrumb.full_url}">{$breadcrumb.name|escape}</a></li>
+                {/foreach}
+            {/if}
+        </ol>
         {$content}
     </div>
 

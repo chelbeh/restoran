@@ -1,7 +1,7 @@
 {if !empty($theme_settings.top_menu_type)}{$class_tree=$theme_settings.top_menu_type}{else}{$class_tree='3'}{/if}
 
 {$tree = $wa->shop->categories(0, null, true)}
-{if isset($category)}{$selected_category=$category.id}{else}{$selected_category=null}{/if}
+{if isset($category) && $wa_app == 'shop'}{$selected_category=$category.id}{else}{$selected_category=null}{/if}
 {if isset($product) && $product.categories}
     {$selected_category = $product.categories}
     {$selected_category = current($selected_category)}

@@ -1,5 +1,6 @@
 /* ФОТОПОТОК */
-.view-thumbs .image {
+.view-thumbs .image,
+.view-plain .image {
    z-index:9;
    cursor: default;
    overflow: hidden;
@@ -7,7 +8,9 @@
    margin-bottom: 30px;
    box-shadow: 0 0 3px #ddd;
 }
-.view-thumbs .image .mask,.image .content {
+.view-thumbs .image .mask,
+.view-plain .image .mask,
+.image .content {
    width: 100%;
    height: 100%;
    position: absolute;
@@ -15,9 +18,30 @@
    top: 0;
    left: 0;
 }
-.view-thumbs .image img {
+.view-thumbs .image img,
+.view-plain .image img {
    display: block;
    position: relative;
+}
+/*.view-plain .image img {
+   height: 300px !important;
+   width: auto !important;
+}*/
+
+.view-thumbs .image img {
+   height: 200px !important;
+   width: auto !important;
+}
+@media (max-width: 1000px) {
+   .view-thumbs .image img {
+      height: auto !important;
+      width: 100% !important;
+   }
+   /*
+   .view-plain .image img {
+      height: auto !important;
+      width: 100% !important;
+   }*/
 }
 .image { position: relative }
 .image .corner { position:absolute; z-index:10; color: #fff; font-weight: bold; }
@@ -87,7 +111,7 @@
 }
 #photo-list .image-tenth h2 {
    color: #333;
-   margin: 20px 40px 0;
+   margin: 20px 20px 0;
    background: transparent;
    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
    -webkit-transform: scale(0);
@@ -103,6 +127,7 @@
    -ms-filter: "progid: DXImageTransform.Microsoft.Alpha(Opacity=0)";
    filter: alpha(opacity=0);
    opacity: 0;
+   padding: 20px 10px 15px;
 }
 .image-tenth p {
    color: #333;
@@ -189,7 +214,7 @@ ul.photostream { padding: 0; margin: 0; list-style: none; position: relative;}
 ul.photostream li { box-sizing: content-box; float: left; padding-right: 5px;  }
 ul.photostream li img { width: 60px; height: 60px; padding: 1px; border: 2px solid #fff; }
 ul.photostream li.selected img { border-color: #2bace2 }
-ul.photostream li.stream-nav { position: absolute; top: 21px; }
+ul.photostream li.stream-nav { position: absolute; top: 27px; }
 ul.photostream li.stream-nav i { display: block; width: 12px; height: 14px; }
 ul.photostream li.stream-nav.rewind { left: -16px; padding: 0; }
 ul.photostream li.stream-nav.rewind i { background: url('img/photostream-rewind.png') no-repeat; background-size: 12px 14px; }
@@ -216,3 +241,28 @@ ul.photostream li.stream-nav.ff i { background: url('img/photostream-ff.png') no
    color: #fff;
    text-decoration: none;
 }
+.photo .image img {
+   margin: 0 auto;
+}
+
+/* Фото 1.2.0 */
+ul.albums { padding: 0; margin: 0 0 20px; text-align: left; }
+ul.albums li { width: 300px; list-style: none; display: inline-block; text-align: center; margin-top: 30px; margin-bottom: 20px; vertical-align: top; }
+ul.albums li .cover { width: 208px; min-height: 208px; margin: 0 auto 10px; position: relative; line-height: 1.2em; }
+ul.albums li .cover .sublayer { position: absolute; background: #fff; box-shadow: 0 1px 5px rgba(0,0,0,0.2); left: 2px; right: -2px; bottom: 5px;top:-2px; width: 192px; height: 192px; }
+ul.albums li .cover .sublayer.layer1 { z-index: 9; border-color: #aaa; -moz-transform: rotate(-3deg); -moz-transition: all 0.2s ease-in-out; -webkit-transform: rotate(-3deg); -webkit-transition: all 0.2s ease-in-out; transform: rotate(-3deg); transition: all 0.2s ease-in-out; }
+ul.albums li .cover .sublayer.layer2 { z-index: 8; -moz-transform: rotate(3deg); -moz-transition: all 0.2s ease-in-out; -webkit-transform: rotate(3deg); -webkit-transition: all 0.2s ease-in-out; transform: rotate(3deg); transition: all 0.2s ease-in-out; }
+ul.albums li .cover img { border: 7px solid white; box-shadow: 0 1px 5px rgba(0,0,0,0.3); -moz-transition: all 0.2s ease-in-out; -webkit-transition: all 0.2s ease-in-out; transition: all 0.2s ease-in-out; width: 192px; height: 192px; position: relative; z-index: 11; margin-bottom: 7px; }
+
+ul.albums li .count { display: block; color: #aaa; font-size: 0.9em; margin-top: 5px; }
+
+ul.albums li:hover .cover img { border-color: #ffd; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+ul.albums li a:hover { text-decoration: none }
+
+ul.albums.subalbums { margin-left: -20px; }
+ul.albums.subalbums li { width: 150px; }
+ul.albums.subalbums li .cover,
+ul.albums.subalbums li .cover .sublayer,
+ul.albums.subalbums li .cover img { width: 104px; height: 104px; }
+ul.albums.subalbums li .cover img { border-width: 5px; }
+ul.albums.subalbums li:hover .cover img { box-shadow: 0 2px 8px rgba(0,0,0,0.25); }

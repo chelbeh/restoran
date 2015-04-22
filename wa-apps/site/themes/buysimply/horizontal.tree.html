@@ -1,9 +1,10 @@
-<div class="header-navigation" role="navigation sitemap">
+{$_index = ($wa_url == $wa->currentUrl(false,true))}
+<div class="header-navigation" role="navigation">
 {if !empty($theme_settings.top_menu_content) && $theme_settings.top_menu_content == 'category_tree'}
     {if !empty($theme_settings.top_menu_type)}{$class_tree=$theme_settings.top_menu_type}{else}{$class_tree='3'}{/if}
 
     {$tree = $wa->shop->categories(0, null, true)}
-    {if isset($category)}{$selected_category=$category.id}{else}{$selected_category=null}{/if}
+    {if isset($category) && $wa_app == 'shop'}{$selected_category=$category.id}{else}{$selected_category=null}{/if}
     {if isset($product) && $product.categories}
         {$selected_category = $product.categories}
         {$selected_category = current($selected_category)}
@@ -30,22 +31,22 @@
     <ul class="buysimply-horizontal-tree horizontal-tree-one">
     {if !empty($theme_settings.top_menu_index)}
         <!--home link-->
-        <li{if $wa_url == $wa->currentUrl()} class="selected"{/if}><div class="wrp-fix"><a href="{$wa_url}">[`Home`]</a></div></li>
+        <li{if $wa_url == $wa->currentUrl(false,true)} class="selected"{/if}><div class="wrp-fix"><a href="{$wa_url}"{if !$_index} rel="nofollow"{/if}>[`Home`]</a></div></li>
     {/if}<!--pages-->
     {foreach $site_pages as $pageMT}
         {if !isset($pageMT.menu_top)}
         <li{if $pageMT.id==$page_select} class="selected"{/if}><div class="wrp-fix">
-            <a href="{$pageMT.url}">{$pageMT.name}</a>
+            <a href="{$pageMT.url}"{if !$_index} rel="nofollow"{/if}>{$pageMT.name}</a>
             {if !empty($pageMT.childs)}<ul>
             {foreach $pageMT.childs as $pageMT_}
                 {if !isset($pageMT_.menu_top)}
                 <li{if $pageMT_.id==$page_select} class="selected"{/if}>
-                    <a href="{$pageMT_.url}">{$pageMT_.name}</a>
+                    <a href="{$pageMT_.url}"{if !$_index} rel="nofollow"{/if}>{$pageMT_.name}</a>
                     {if !empty($pageMT_.childs)}<ul>
                     {foreach $pageMT_.childs as $pageMT__}
                         {if !isset($pageMT__.menu_top)}
                         <li{if $pageMT__.id==$page_select} class="selected"{/if}>
-                            <a href="{$pageMT__.url}">{$pageMT__.name}</a>
+                            <a href="{$pageMT__.url}"{if !$_index} rel="nofollow"{/if}>{$pageMT__.name}</a>
                         </li>
                         {/if}
                     {/foreach}
@@ -60,7 +61,7 @@
     {if empty($theme_settings.hideAPPS)}
         <!-- wa apps -->
         {foreach $wa->apps() as $a}
-            <li{if $a.url==$wa_app_url} class="selected"{/if}><div class="wrp-fix"><a href="{$a.url}">{$a.name}</a></div></li>
+            <li{if $a.url==$wa_app_url} class="selected"{/if}><div class="wrp-fix"><a href="{$a.url}"{if !$_index} rel="nofollow"{/if}>{$a.name}</a></div></li>
         {/foreach}
     {/if}
     </ul>

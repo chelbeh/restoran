@@ -1,34 +1,33 @@
-<div class="flying-cart">
+<div class="flying-cart hidden-xs hidden-sm">
     <div class="fcart-header">
         [`Your shopping cart`]
     </div>
-    <div id="cart-content">
-        {*$cart_items|var_dump*}
+    <div style="max-height: 200px; overflow-y: auto; position: relative">
+        <div id="cart-content">
         {foreach $wa->shop->cart->items() as $item}
         <div class="row row-xs-height" data-id="{$item.id}">
             <div class="fcart-img col-sm-3 col-xs-height col-middle">
                 {$cart_p = $wa->shop->product($item.product_id)}
                 {if $cart_p.skus[$item.sku_id].image_id}{$item.product.image_id = $cart_p.skus[$item.sku_id].image_id}{/if}
-                {$wa->shop->productImgHtml($item.product, '96x96', ['class' => 'img-responsive','alt' => $p.name,'default' => "`$wa_theme_url`img/dummy96.png"])}
+                {$wa->shop->productImgHtml($item.product, '96x96', ['class' => 'img-responsive','alt' => $cart_p.name,'default' => "`$wa_theme_url`img/dummy48.png"])}
             </div>
             <div class="col-md-3 col-xs-height col-middle hidden-sm hidden-xs">
                 <input type="text" value="{$item.quantity}" class="fcart-qty form-control">
             </div>
             <div class="fcart-info col-sm-9 col-md-6 col-xs-height">
-                <p class="fcart-name"><a href="{$p.url}">{$item.product.name|escape} <span class="gray">{if $item.sku_name && $item.sku_name != $item.product.name}{$item.sku_name|escape}{/if}</span></a></p>
+                <p class="fcart-name"><a href="{$wa->shop->productUrl($item.product)}" class="theme-color-wh">{$item.product.name|escape} <span class="gray">{if $item.sku_name && $item.sku_name != $item.product.name}{$item.sku_name|escape}{/if}</span></a></p>
                 <p class="fcart-price">
                     {$item.price = $wa->shop->cart->getItemTotal($item.id)}
-                    {shop_currency_html($item.price)}
+                    {wa_currency_html($item.price, $wa->shop->currency())}
                 </p>
-                <a href="javascript:void(0);" class="fcart-del" title="[`Delete`]"><i class="fa fa-times fa-lg"></i></a>
+                <a href="javascript:void(0);" class="fcart-del" title="[`Delete`]"><i class="fa fa-times fa-lg theme-color"></i></a>
             </div>
         </div>
-        <div class="divider"></div>
         {/foreach}
     </div>
-    <div class="fcart-footer">
-        <p class="align-center"><strong>Общая сумма: <span class="fcart-total">{wa_currency_html($cart_total, $wa->shop->currency())}</span></strong></p>
-        <a href="{$wa->getUrl('shop/frontend/cart')}" class="btn-blue">Перейти в корзину <i class="fa fa-angle-right fa-lg"></i></a>
     </div>
-    <span class="fcart-arrow"></span>
+    <div class="fcart-footer">
+        <p class="align-center"><strong>[`Total summ`]: <span class="fcart-total">{wa_currency_html($cart_total, $wa->shop->currency())}</span></strong></p>
+        <a href="{$wa->getUrl('shop/frontend/cart')}" class="btn-blue">[`To cart`] <i class="fa fa-angle-right fa-lg"></i></a>
+    </div>
 </div>

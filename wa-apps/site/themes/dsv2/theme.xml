@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.2.1">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="site" version="2.2.3.2">
     <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <description locale="en_US">Adaptive design theme for all base Webasyst apps</description>
@@ -100,6 +100,9 @@
         </file>
         <file path="themes.html" custom="1">
             <description locale="ru_RU">Стили цветовой схемы</description>
+        </file>
+        <file path="flying.cart.html" custom="1">
+            <description locale="ru_RU">Всплывающая корзина</description>
         </file>
     </files>
     <about locale="en_US">
@@ -412,6 +415,20 @@
             <description locale="en_US">Example: #000000</description>
             <description locale="ru_RU">Например: #000000</description>
         </setting>
+        <setting var="navbar_background_color" control_type="color">
+            <value/>
+            <name locale="en_US">Background color of menu pages</name>
+            <name locale="ru_RU">Фоновый цвет меню страниц</name>
+            <description locale="en_US">Example: #000000</description>
+            <description locale="ru_RU">Например: #000000</description>
+        </setting>
+        <setting var="navbar_color" control_type="color">
+            <value/>
+            <name locale="en_US">Text color of menu pages</name>
+            <name locale="ru_RU">Цвет текста меню страниц</name>
+            <description locale="en_US">Example: #000000</description>
+            <description locale="ru_RU">Например: #000000</description>
+        </setting>
         <setting var="layout" control_type="select">
             <value>wide</value>
             <name locale="en_US">Boxed layout of template</name>
@@ -469,7 +486,7 @@
             </options>
         </setting>
         <setting var="logo" control_type="image">
-            <value></value>
+            <value/>
             <filename>img/mylogo.*</filename>
             <name locale="en_US">Company Logo</name>
             <name locale="ru_RU">Логотип компании</name>
@@ -602,7 +619,7 @@
             </options>
         </setting>
         <setting var="sidebar" control_type="checkbox">
-            <value/>
+            <value>1</value>
             <name locale="en_US">Show / hide sidebar</name>
             <name locale="ru_RU">Отобразить / скрыть боковую панель</name>
         </setting>
@@ -647,7 +664,11 @@
         <setting var="vk_id" control_type="text">
             <value/>
             <name locale="en_US">VK community id</name>
-            <name locale="ru_RU">Идентификатор сообщества</name>
+            <name locale="ru_RU">Идентификатор сообщества
+            <![CDATA[
+                <p style="margin: 0 -500px 0 0; font-size: 0.8em;"><a href="http://v2.designsovkusom.ru/site/docs/#item52" style="color: #03a9f4" target="_blank">Как узнать идентификатор?</a></p>                 
+            ]]>
+            </name>
             <description locale="en_US">Example: 21415010</description>
             <description locale="ru_RU">Например: 21415010</description>
         </setting>
@@ -796,6 +817,10 @@
         <locale>
             <msgid>Company</msgid>
             <msgstr locale="ru_RU">Компания</msgstr>
+        </locale>
+        <locale>
+            <msgid>Apps</msgid>
+            <msgstr locale="ru_RU">Приложения</msgstr>
         </locale>
         <locale>
             <msgid>Contacts</msgid>

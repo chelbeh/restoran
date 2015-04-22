@@ -10,5 +10,4 @@
         {if $rss}<li><a href="{$rss}" title="RSS"><i class="soc-rss"></i></a></li><!--rss-->{/if}
     {/if}
 </ul>
-<p class="powered-by">&copy; Создание шаблона <a href="http://wm-site.ru">wm-site.ru</a></p>
-<!--{time()|wa_datetime:"Y"}-->
+<p class="powered-by">&copy; <a href="{$wa_url}">{$wa->accountName()}</a>, {time()|wa_datetime:"Y"}</p>

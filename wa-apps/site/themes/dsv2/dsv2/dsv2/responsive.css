@@ -1,0 +1,56 @@
+@media (max-width: 768px) {
+  .wa-form .wa-field .wa-value { margin-left: 0px }
+  .wa-form .wa-field .wa-value input[type="text"],
+  .wa-form .wa-field .wa-value input[type="email"],
+  .wa-form .wa-field .wa-value input[type="password"],
+  .wa-form .wa-value select {
+    min-width: 95%
+  }
+}
+
+@media (min-width: 768px) {
+	.modal-sm {
+		width: 380px;
+	}
+	.container-sm-height {
+	    display:table;
+	    padding-left:0px;
+	    padding-right:0px;
+	}
+	.row-sm-height {
+	    display:table-row;
+	}
+	.col-sm-height {
+	    display:table-cell;
+	    float:none;
+	}
+}
+
+@media (min-width: 992px) {
+    .container-md-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-md-height {
+        display:table-row;
+    }
+    .col-md-height {
+        display:table-cell;
+        float:none;
+    }
+}
+@media (min-width: 1200px) {
+    .container-lg-height {
+        display:table;
+        padding-left:0px;
+        padding-right:0px;
+    }
+    .row-lg-height {
+        display:table-row;
+    }
+    .col-lg-height {
+        display:table-cell;
+        float:none;
+    }
+}

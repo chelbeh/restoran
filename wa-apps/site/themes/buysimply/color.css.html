@@ -99,6 +99,8 @@ input[type="submit"]:hover { color: {$scheme.btncolorH}; text-shadow: {$scheme.b
 .manufactured .caption { color: {$scheme.color5}; }
 .caption span { border-color: {$scheme.bcolor}; }
 
+.page-content h2 a:hover, .page-content h3 a:hover { color: {$scheme.color4H}; }
+.page-content h2 a:hover, .page-content h3 a:hover { color: {$scheme.color4H}; }
 {*category
   vertical-tree *}
 .shop-category { border-color: {$scheme.ml1bcolor}; background: {$scheme.ml1bgcolor}; }
@@ -240,6 +242,9 @@ ul.horizontal-tree-four li li.selected>a { background: {$scheme.ml2bgcolorS}; bo
 #main-addition-2 ul li.disabled:hover a { color: {$scheme.cartcolorE}; background: none; cursor: default; }
 #main-addition-2 ul li.selected a,
 #main-addition-2 ul li:hover a { color: {$scheme.cartcolor}; background: {$scheme.cartbgcolor}; }
+
+#main-addition-2 ul li a.green { background: {$scheme.cartbgcolor}; }
+#main-addition-2 ul li a.red { background: red; }
 {*dialog*}
 .dialog-window>h1 { border-color: {$scheme.bcolor2}; }
 {*subscribe*}
@@ -470,8 +475,10 @@ table.cart td { border-color: {$scheme.bcolor}; }
 {*
  * PHOTO *}
 .album-note { color: {$scheme.color5}; }
-.sub-albums a { color: {$scheme.color4}; }
-.sub-albums a:hover { color: {$scheme.color4H}; }
+ul.albums li a { color: {$scheme.color4}; }
+ul.albums li a:hover { color: {$scheme.color4H}; }
+ul.albums li .cover img { border-color: {$scheme.il1bgcolor}; }
+ul.albums li:hover .cover img { border-color: {$scheme.bcolorH}; }
 .album-page { border-color: {$scheme.bcolor2}; }
 ul.photostream li.selected img { border-color: {$scheme.bcolorH}; }
 .photostream-divider { border-color: {$scheme.bcolor}; }
@@ -493,6 +500,20 @@ ul.view-mixed2 li.brick ul li a:hover .indicator { background: {$scheme.bcolorH}
 .comment-form label { color: {$scheme.color5}; }
 .comments ul li { border-color: {$scheme.bcolor3}; }
 .comments ul li span.hint a { color: {$scheme.color5}; }
+{/if}
+
+{if $wa_app == 'hub'}
+{*
+ * HUB *}
+.userbox { background: {$scheme.il1bgcolor}; }
+.userbox ul.menu-v li.selected a,
+.hub-aside-nav ul li a,
+.nav-sidebar-body > ul li a { color: {$scheme.color}; }
+.comment:hover { background: {$scheme.il1bgcolor}; }
+.follow, .comment.new { background: {$scheme.hbgcolor}; }
+ul.sorting li a,
+ul.topics li a.big,
+ul.category-list li a.category-name { color: {$scheme.color}; }
 {/if}
 
 </style>{/strip}

@@ -1,0 +1,86 @@
+{include file="`$wa_parent_theme_path`/sidebar.mobile.html"}
+
+<div id="gallery-nav" class="information-block">
+    <div class="caption"><span>[`Photo Gallery`]</span></div>
+    <ul>
+        <!-- core filters -->
+        <li{if $wa->currentUrl(false,true) == $wa_app_url} class="selected"{/if}>
+            <a href="{$wa_app_url}">[`Photostream`]</a>
+        </li>
+        <li{if $wa->param('action') neq 'page' && $wa->param('action') neq 'album' && $wa->param('hash') == 'favorites'} class="selected"{/if}>
+            <a href="{$wa_app_url}favorites/">[`Editors’ choice`]</a>
+        </li>
+        <!-- plugins -->
+        {* @event frontend_sidebar.%plugin_id%.menu *}
+        {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.menu)}
+            <li>{$item.menu}</li>
+        {/if}{/foreach}
+
+        <!-- albums -->
+        {if $albums = $wa->photos->albums(0)}
+            <li class="dropdown hide-for-mobile">
+                <a href="javascript:void(0);" class="inline-link">[`Albums`]<i class="icon-angle-down"></i><i class="icon-angle-right"></i></a>
+                {wa_print_tree tree=$albums class="cild-album" elem ='<a href=":url">:name</a>'}
+            </li>
+            {if empty($theme_settings.noadaptive)}
+            <li class="dropdown b-mob-tree hide-for-desktop dhtml">
+                <a href="javascript:void(0);" class="inline-link">[`Albums`]</a>
+                {wa_print_tree tree=$albums class="cild-album" elem ='<a href=":url">:name</a>'}
+            </li>
+            {/if}
+        {/if}
+
+        <!-- more plugins -->
+        {* @event frontend_sidebar.%plugin_id%.section *}
+        {capture name="more"}{strip}
+            {foreach $frontend_sidebar as $plugin_id => $item}{if !empty($item.section)}
+                <hr><div class="block">{$item.section}</div>
+            {/if}{/foreach}
+        {strip}{/capture}
+        {if $smarty.capture.more ne ""}
+            <li class="dropdown">
+                <a href="#" class="inline-link">[`More`]<i class="icon-angle-down"></i><i class="icon-angle-right"></i></a>
+                <div class="popup">
+
+                </div>
+            </li>
+        {/if}
+    </ul>
+</div>
+
+{if $wa->shop}{include file="`$wa_parent_theme_path`/vertical.tree.html"}{/if}
+
+{if !empty($theme_settings.photosInfo)}
+    {if $photos_pages = $wa->photos->pages(0, 2, true)}<!-- info pages -->{* static info page list *}
+        <div class="information-block">
+            <div class="caption"><span>[`Information`]</span></div>
+            {wa_print_tree tree=$photos_pages selected=$wa->param('page_id') unfolded=true class="pages-navigation" elem='<a href=":url">:name</a>'}
+        </div>
+    {/if}
+{/if}
+
+{if !empty($theme_settings.photosTags)}
+    {if $cloud = $wa->photos->tags()}<!-- tags -->
+    <div class="tags-block{if !empty($theme_settings.tagsCloud)} hide-for-desktop{/if}"{if !empty($theme_settings.tagsCloud)} id="tagsCanvasContent"{/if}>
+        <div class="caption"><span>[`Tags`]</span></div>
+        <div class="tags">
+        {foreach $cloud as $tag}        
+            <a href="{$wa_app_url}tag/{$tag.uri_name}/" style="font-size: {$tag.size}%; opacity: {$tag.opacity};">{$tag.name}</a>{if !$tag@last}, &nbsp;{/if}
+        {/foreach}
+        </div>
+    </div>
+        {if !empty($theme_settings.tagsCloud)}
+        <div class="tags-block hide-for-mobile">
+            <div class="caption"><span>[`Tags`]</span></div>
+            <canvas width="200" height="200" id="tagsCanvas"></canvas>
+        </div>
+        {/if}
+    {/if}
+{/if}
+
+{if $wa->mailer && $wa->getUrl('mailer/frontend/subscribe')}{include file="`$wa_parent_theme_path`/form.subscribe.html" place="place-sidebar"}{/if}{*FORM APP MAILER*}
+{if $wa->shop && empty($theme_settings.addition) && $wa->get('addition') != 'lastview'}{include file="`$wa_parent_theme_path`/lastview.product.html"}{/if}
+{if !empty($theme_settings.communityVKid)}{include file="`$wa_parent_theme_path`/community.vk.html" place="place-sidebar"}{/if}
+{if !empty($theme_settings.communityFBhref)}{include file="`$wa_parent_theme_path`/community.fb.html" place="place-sidebar"}{/if}
+{if $wa->blog && !empty($theme_settings.latest_posts)}{include file="`$wa_parent_theme_path`/last.posts.html" _index=false}{/if}
+{*include file="`$wa_parent_theme_path`/last.photos.html" _index=false*}

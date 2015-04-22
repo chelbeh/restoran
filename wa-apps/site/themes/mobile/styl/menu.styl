@@ -1,0 +1,152 @@
+body.menu-is-shown
+    overflow hidden
+
+    .hidden-menu-wrapper
+        left: 0;
+
+    /*.site-wrapper*/
+        /*$filter( blur(2px) );*/
+
+.hidden-menu-wrapper
+    display block;
+    position fixed;
+    top: 0;
+    left: -100%;
+    width 100%;
+    height: 100%;
+    z-index: 1000
+    background: rgba(255,255,255,0.001);
+    $transition(left 300ms linear)
+
+    overflow hidden
+    overflow-y auto
+    -webkit-overflow-scrolling: touch;
+
+    .menu-block-wrapper
+        position absolute
+        top: 0
+        left: 0
+        min-height 100%;
+        box-sizing border-box
+        padding: 0 1em 4em
+        width: 84.44%;
+        background rgba(28,31,35,0.93);
+
+        .logo-wrapper
+            padding: 1em 0 0
+            position relative
+            text-align center
+            line-height 0
+
+            img
+                max-width 100%;
+                -webkit-border-radius 3px
+                border-radius 3px
+
+        .search-wrapper
+            position relative
+            margin: 1em 0 0;
+            // Hack for 2.3 Droid
+            overflow-x hidden
+
+            input
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font: normal 1em/1.25em Arial, sans-serif;
+                color: #484848;
+
+            .text-field
+                width: 100%;
+                height: 2.5em;
+                padding: 0.25em 0.25em 0.25em 2.5em
+                -webkit-border-radius: 4px;
+                border-radius: 4px;
+
+            .submit-field
+                position absolute
+                top: 0;
+                left: 0;
+                width: 2.5em;
+                height: 2.5em;
+                background transparent url("img/icons/search-icon-128.png") 50% no-repeat;
+
+                -webkit-box-shadow: none
+                box-shadow: none
+
+                background-size 1.35em
+
+        .nav-wrapper
+            margin: 1em 0 0;
+
+            .nav-group
+
+                .nav-header
+                    margin: 2em 0 0;
+                    font: normal 0.8em/1.8em "Open Sans", sans-serif;
+                    text-align right
+                    text-transform uppercase
+                    color: #fff;
+
+                    & + .nav-list > .nav-item:first-child
+                        border-top: 1px solid #fff;
+
+                .nav-list
+                    ul&
+                    li
+                    .nav-item
+                        margin: 0;
+                        padding: 0;
+                        list-style none;
+
+                    li
+                    .nav-item
+                        border: solid #5f636a;
+                        border-width: 0 0 1px;
+                        padding: 0;
+
+                        font: normal 1em/1.5em $font-family
+                        color: #fff;
+
+                        &:first-child
+                            border-width 1px 0;
+
+                        a
+                            display block
+                            padding: 0.6em 0.5em;
+                            text-decoration: none;
+                            color: inherit
+                            background transparent 0.5em 50% no-repeat
+
+                            white-space nowrap
+                            overflow hidden
+                            text-overflow ellipsis
+
+                        &.cash-item
+                            select
+                                width: 100%
+                                border: none
+                                padding: 0.6em 0.5em 0.6em 0.3em;
+                                box-sizing border-box
+
+                                font: normal 1em/1em $font-family
+                                color: #fff
+
+                                background transparent
+
+                                option
+                                    color: $color-black
+                                    background #fff
+
+                        &.user-nav-item
+                            img
+                                position relative
+                                top: -0.1em;
+                                vertical-align middle
+                                margin: 0
+                                width: 1.5em
+                                height: 1.5em
+                                font-size: 1em
+
+                                -webkit-border-radius 50%
+                                border-radius 50%

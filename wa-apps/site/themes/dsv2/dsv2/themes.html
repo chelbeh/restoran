@@ -1,0 +1,445 @@
+{$color = [
+	'lightblue' => '#03a9f4 ',
+	'blue' => '#5677fc',
+	'indigo' => '#3f51b5',
+	'deeppurple' => '#673ab7',
+	'purple' => '#9c27b0',
+	'pink' => '#e91e63',
+	'red' => '#e51c23',
+	'cyan' => '#00bcd4',
+	'teal' => '#009688',
+	'green' => '#259b24',
+	'lightgreen' => '#8bc34a',
+	'lime' => '#cddc39',
+	'yellow' => '#fdd835',
+	'amber' => '#ffc107',
+	'orange' => '#ff9800',
+	'deeporange' => '#ff5722',
+	'brown' => '#795548',
+	'opal' => '#007a87',
+	'deepblue' => '#003580'
+]}
+{$hover = [
+	'lightblue' => '#0288d1',
+	'blue' => '#455ede',
+	'indigo' => '#303f9f',
+	'deeppurple' => '#512da8',
+	'purple' => '#7b1fa2',
+	'pink' => '#c2185b',
+	'red' => '#d01716',
+	'cyan' => '#0097a7',
+	'teal' => '#00796b',
+	'green' => '#0a7e07',
+	'lightgreen' => '#689f38',
+	'lime' => '#afb42b',
+	'yellow' => '#fbc02d',
+	'amber' => '#ffa000',
+	'orange' => '#f57c00',
+	'deeporange' => '#e64a19',
+	'brown' => '#5d4037',
+	'opal' => '#005962',
+	'deepblue' => '#00275E'
+]}
+<style>
+
+{if isset($customcolor) && isset($customhover)}
+	{$color1 = $customcolor}
+	{$color2 = $customhover}
+{else}
+	{$color1 = $color[$theme]}
+	{$color2 = $hover[$theme]}
+{/if}
+
+/* theme color 1 */
+.{$theme} .theme-color,
+.{$theme} .theme-color-wh,
+.{$theme} .navbar-default .navbar-nav>.active>a,
+.{$theme} .navbar-default .navbar-nav>.active>a:hover,
+.{$theme} .navbar-default .navbar-nav>.active>a:focus,
+.{$theme} .navbar-default .navbar-nav .selected>a,
+.{$theme} .navbar-default .navbar-nav .selected>a:hover,
+.{$theme} .navbar-default .navbar-nav .selected>a:focus,
+.{$theme} #cart.highlight>a .fa,
+.{$theme} .wa-horizontal .wa-form .wa-submit a { color: {$color1} !important }
+/* theme color 2 */
+.{$theme} .theme-color:hover,
+.{$theme} .theme-color-hover:hover,
+.{$theme} .footer ul li a:hover,
+.{$theme} .usermenu > li > a:hover,
+.{$theme} .navbar-default .navbar-nav>li>a:hover,
+.{$theme} .navbar-default .navbar-nav>li>a:focus,
+.{$theme} div.dropdown-menu ul li a:hover,
+.{$theme} .breadcrumb a:hover,
+.{$theme} .user-toolbar ul>li:hover>a .fa { color: {$color2} !important }
+
+/* theme background-color 1 */
+.{$theme} .theme-background,
+.{$theme} .theme-background-wh,
+.{$theme} .theme-background-hover:hover,
+.{$theme} #cart.highlight .count,
+.{$theme} .btn-dsv,
+.{$theme} .wa-form .wa-submit input,
+.{$theme} .btn-blue,
+.{$theme} .table-dsv.table-hover>tbody>tr:hover>td,
+.{$theme} .table-dsv.table-hover>tbody>tr:hover>th,
+.{$theme} .table-dsv.table-hover>tbody>tr:hover>td a,
+.{$theme} .tab-dsv .nav-tabs > li > a:hover,
+.{$theme} .tab-dsv .nav-tabs > .active > a, 
+.{$theme} .tab-dsv .nav-tabs > .active > a:hover, 
+.{$theme} .tab-dsv .nav-tabs > .active > a:focus,
+.{$theme} .hub-tabs.nav-tabs > li > a:hover,
+.{$theme} .hub-tabs.nav-tabs > .active > a, 
+.{$theme} .hub-tabs.nav-tabs > .active > a:hover, 
+.{$theme} .hub-tabs.nav-tabs > .active > a:focus { background-color: {$color1} !important }
+
+/* theme background-color 2 */
+.{$theme} .theme-background:hover,
+.{$theme} .user-toolbar ul>li:hover .count,
+.{$theme} .btn-blue:hover,
+.{$theme} .btn-dsv:hover { background-color: {$color2} !important }
+
+/* theme border-color 1 */
+.{$theme} .theme-border-color,
+.{$theme} .search.active_search input,
+.{$theme} .search.active_search button,
+.{$theme} .theme-border-color-hover:hover,
+.{$theme} .modal-content,
+.{$theme} .tab-dsv .nav-tabs,
+.{$theme} blockquote:hover { border-color: {$color1} !important }
+
+/* theme box-shadow color 1 */
+.{$theme} .theme-shadow-color:hover { 
+  -moz-box-shadow: 0 1px 5px {$color1};
+  -ms-box-shadow: 0 1px 5px {$color1};
+  -webkit-box-shadow: 0 0px 5px {$color1};
+  box-shadow: 0px 0px 5px {$color1};
+}
+.custom .tt-input:focus,
+.custom .wa-captcha-input:focus,
+.custom .wa-form .wa-value input[type="text"]:focus,
+.custom .wa-form .wa-value input[type="password"]:focus,
+.custom .form-control:focus,
+.custom textarea:focus,
+.custom .search.active_search {
+  border-color: {$color1} !important
+  -moz-box-shadow: 0 1px 5px {$color1};
+  -ms-box-shadow: 0 1px 5px {$color1};
+  -webkit-box-shadow: 0 0px 5px {$color1};
+  box-shadow: 0px 0px 5px {$color1};
+}
+.lightblue .tt-input:focus,
+.lightblue .wa-captcha-input:focus,
+.lightblue .wa-form .wa-value input[type="text"]:focus,
+.lightblue .wa-form .wa-value input[type="password"]:focus,
+.lightblue .form-control:focus,
+.lightblue textarea:focus,
+.lightblue .search.active_search {
+  border-color: #03a9f4 !important;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(3,169,244,.6) !important;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(3,169,244,.6) !important;
+}
+.blue .tt-input:focus,
+.blue .wa-captcha-input:focus,
+.blue .wa-form .wa-value input[type="text"]:focus,
+.blue .wa-form .wa-value input[type="password"]:focus,
+.blue .form-control:focus,
+.blue textarea:focus,
+.blue .search.active_search {
+  border-color: #5677fc !important;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(86,119,252,.6) !important;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(86,119,252,.6) !important;
+}
+.indigo .tt-input:focus,
+.indigo .wa-captcha-input:focus,
+.indigo .wa-form .wa-value input[type="text"]:focus,
+.indigo .wa-form .wa-value input[type="password"]:focus,
+.indigo .form-control:focus,
+.indigo textarea:focus,
+.indigo .search.active_search {
+border-color: #3f51b5 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(63,81,181,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(63,81,181,.6) !important;
+}
+.deeppurple .tt-input:focus,
+.deeppurple .wa-captcha-input:focus,
+.deeppurple .wa-form .wa-value input[type="text"]:focus,
+.deeppurple .wa-form .wa-value input[type="password"]:focus,
+.deeppurple .form-control:focus,
+.deeppurple textarea:focus,
+.deeppurple .search.active_search {
+border-color: #673ab7 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(103,58,183,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(103,58,183,.6) !important;
+}
+.purple .tt-input:focus,
+.purple .wa-captcha-input:focus,
+.purple .wa-form .wa-value input[type="text"]:focus,
+.purple .wa-form .wa-value input[type="password"]:focus,
+.purple .form-control:focus,
+.purple textarea:focus,
+.purple .search.active_search {
+border-color: #9c27b0 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(156,39,176,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(156,39,176,.6) !important;
+}
+.pink .tt-input:focus,
+.pink .wa-captcha-input:focus,
+.pink .wa-form .wa-value input[type="text"]:focus,
+.pink .wa-form .wa-value input[type="password"]:focus,
+.pink .form-control:focus,
+.pink textarea:focus,
+.pink .search.active_search  {
+border-color: #e91e63 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(233,30,99,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(233,30,99,.6) !important;
+}
+.red .tt-input:focus,
+.red .wa-captcha-input:focus,
+.red .wa-form .wa-value input[type="text"]:focus,
+.red .wa-form .wa-value input[type="password"]:focus,
+.red .form-control:focus,
+.red textarea:focus,
+.red .search.active_search  {
+border-color: #e51c23 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(229,28,35,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(229,28,35,.6) !important;
+}
+.cyan .tt-input:focus,
+.cyan .wa-captcha-input:focus,
+.cyan .wa-form .wa-value input[type="text"]:focus,
+.cyan .wa-form .wa-value input[type="password"]:focus,
+.cyan .form-control:focus,
+.cyan textarea:focus,
+.cyan .search.active_search {
+border-color: #00bcd4 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,188,212,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,188,212,.6) !important;
+}
+.teal .tt-input:focus,
+.teal .wa-captcha-input:focus,
+.teal .wa-form .wa-value input[type="text"]:focus,
+.teal .wa-form .wa-value input[type="password"]:focus,
+.teal .form-control:focus,
+.teal textarea:focus,
+.teal .search.active_search {
+border-color: #009688 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,150,136,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,150,136,.6) !important;
+}
+.green .tt-input:focus,
+.green .wa-captcha-input:focus,
+.green .wa-form .wa-value input[type="text"]:focus,
+.green .wa-form .wa-value input[type="password"]:focus,
+.green .form-control:focus,
+.green textarea:focus,
+.green .search.active_search {
+border-color: #259b24 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(37,155,36,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(37,155,36,.6) !important;
+}
+.lightgreen .tt-input:focus,
+.lightgreen .wa-captcha-input:focus,
+.lightgreen .wa-form .wa-value input[type="text"]:focus,
+.lightgreen .wa-form .wa-value input[type="password"]:focus,
+.lightgreen .form-control:focus,
+.lightgreen textarea:focus,
+.lightgreen .search.active_search  {
+border-color: #8bc34a !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(139,195,74,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(139,195,74,.6) !important;
+}
+.lime .tt-input:focus,
+.lime .wa-captcha-input:focus,
+.lime .wa-form .wa-value input[type="text"]:focus,
+.lime .wa-form .wa-value input[type="password"]:focus,
+.lime .form-control:focus,
+.lime textarea:focus,
+.lime .search.active_search  {
+border-color: #cddc39 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(205,220,57,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(205,220,57,.6) !important;
+}
+.yellow .tt-input:focus,
+.yellow .wa-captcha-input:focus,
+.yellow .wa-form .wa-value input[type="text"]:focus,
+.yellow .wa-form .wa-value input[type="password"]:focus,
+.yellow .form-control:focus,
+.yellow textarea:focus,
+.yellow .search.active_search   {
+border-color: #fdd835 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(253,216,53,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(253,216,53,.6) !important;
+}
+.amber .tt-input:focus,
+.amber .wa-captcha-input:focus,
+.amber .wa-form .wa-value input[type="text"]:focus,
+.amber .wa-form .wa-value input[type="password"]:focus,
+.amber .form-control:focus,
+.amber textarea:focus,
+.amber .search.active_search {
+border-color: #ffc107 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(255,193,7,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(255,193,7,.6) !important;
+}
+.orange .tt-input:focus,
+.orange .wa-captcha-input:focus,
+.orange .wa-form .wa-value input[type="text"]:focus,
+.orange .wa-form .wa-value input[type="password"]:focus,
+.orange .form-control:focus,
+.orange textarea:focus,
+.orange .search.active_search {
+border-color: #ff9800 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(255,152,0,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(255,152,0,.6) !important;
+}
+.deeporange .tt-input:focus,
+.deeporange .wa-captcha-input:focus,
+.deeporange .wa-form .wa-value input[type="text"]:focus,
+.deeporange .wa-form .wa-value input[type="password"]:focus,
+.deeporange .form-control:focus,
+.deeporange textarea:focus,
+.deeporange .search.active_search {
+border-color: #ff5722 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(255,87,34,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(255,87,34,.6) !important;
+}
+.brown .tt-input:focus,
+.brown .wa-captcha-input:focus,
+.brown .wa-form .wa-value input[type="text"]:focus,
+.brown .wa-form .wa-value input[type="password"]:focus,
+.brown .form-control:focus,
+.brown textarea:focus,
+.brown .search.active_search {
+border-color: #795548 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(121,85,72,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(121,85,72,.6) !important;
+}
+.opal .tt-input:focus,
+.opal .wa-captcha-input:focus,
+.opal .wa-form .wa-value input[type="text"]:focus,
+.opal .wa-form .wa-value input[type="password"]:focus,
+.opal .form-control:focus,
+.opal textarea:focus,
+.opal .search.active_search {
+border-color: #007a87 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,122,135,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,122,135,.6) !important;
+}
+.deepblue .tt-input:focus,
+.deepblue .wa-captcha-input:focus,
+.deepblue .wa-form .wa-value input[type="text"]:focus,
+.deepblue .wa-form .wa-value input[type="password"]:focus,
+.deepblue .form-control:focus,
+.deepblue textarea:focus,
+.deepblue .search.active_search {
+border-color: #003580 !important;
+-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,53,128,.6) !important;
+box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(0,53,128,.6) !important;
+}
+
+
+{if $wa_app == 'shop'}
+	/* shop */
+	.{$theme} .slider .bx-wrapper .bx-pager.bx-default-pager a:hover,
+	.{$theme} .product-slider-arrows a:hover,
+	.{$theme} ul.product-items li button,
+	.{$theme} ul.product-items li .addtouserbar span.active,
+	.{$theme} .filters .ui-slider-horizontal .ui-widget-header,
+	.{$theme} .bonus,
+	.{$theme} .pagination li.selected a,
+	.{$theme} .storequickorder-button,
+	.{$theme} .submit-button,
+	.{$theme} .quickorder-button,
+	.{$theme} .checkout .checkout-step h2.active,
+	.{$theme} .quantity.dialog_link { background-color: {$color1} }
+
+	.{$theme} ul.product-items li .addtouserbar span:hover,
+	.{$theme} .pagination li a:hover,
+	.{$theme} .storequickorder-button:hover,
+	.{$theme} .submit-button:hover,
+	.{$theme} .quickorder-button:hover,
+	.{$theme} .quantity.dialog_link:hover { background-color: {$color2} }
+
+	.{$theme} ul.product-items li .userbar-list a.active,
+	.{$theme} .maintext ul li i.fa,
+	.{$theme} .carousel-arrow a.carousel-control:hover,
+	.{$theme} .thumbnail h3 a:hover,
+	.{$theme} .thumbnail-style h3 a:hover,
+	.{$theme} .product-page .product-links a.active,
+	.{$theme} .checkout .checkout-step h2.active:after,
+	.{$theme} .product-page #product-categories a:hover,
+	.{$theme} .product-page #product-tags a:hover { color: {$color1} }
+
+	.{$theme} ul.product-items li .userbar-list a:hover,
+	.{$theme} .product-page .product-links a:hover { color: {$color2} }
+	.{$theme} .subcategories a.subcat,
+	.{$theme} .ui-dialog .ui-dialog-title,
+	.{$theme} .quickorder-header { border-bottom-color:{$color1} }
+	.{$theme} .da-slide .da-link:hover { border-color: {$color1}; background: {$color1} }
+
+	.lightblue .da-slide h2 i,
+	.lightblue .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading1.png) repeat }
+	.blue .da-slide h2 i,
+	.blue .slider .bx-wrapper h2 i  { background: url({$wa_active_theme_url}img/themesettings/bg-heading2.png) repeat }
+	.indigo .da-slide h2 i,
+	.indigo .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading3.png) repeat }
+	.deeppurple .da-slide h2 i,
+	.deeppurple .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading4.png) repeat }
+	.purple .da-slide h2 i,
+	.purple .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading5.png) repeat }
+	.pink .da-slide h2 i,
+	.pink .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading6.png) repeat }
+	.red .da-slide h2 i,
+	.red .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading7.png) repeat }
+	.cyan .da-slide h2 i,
+	.cyan .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading8.png) repeat }
+	.teal .da-slide h2 i,
+	.teal .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading9.png) repeat }
+	.green .da-slide h2 i,
+	.green .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading10.png) repeat }
+	.lightgreen .da-slide h2 i,
+	.lightgreen .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading11.png) repeat }
+	.lime .da-slide h2 i,
+	.lime .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading12.png) repeat }
+	.yellow .da-slide h2 i,
+	.yellow .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading13.png) repeat }
+	.amber .da-slide h2 i,
+	.amber .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading14.png) repeat }
+	.orange .da-slide h2 i,
+	.orange .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading15.png) repeat }
+	.deeporange .da-slide h2 i,
+	.deeporange .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading16.png) repeat }
+	.brown .da-slide h2 i,
+	.brown .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading17.png) repeat }
+	.opal .da-slide h2 i,
+	.opal .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading18.png) repeat }
+	.deepblue .da-slide h2 i,
+	.deepblue .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-heading19.png) repeat }
+	.custom .da-slide h2 i,
+	.custom .slider .bx-wrapper h2 i { background: url({$wa_active_theme_url}img/themesettings/bg-custom.png) repeat }
+{/if}
+
+{if $wa_app == 'blog'}
+	/* blog */
+	.{$theme} .timeline .timeline-body h2 a:hover,
+	.{$theme} .timeline .timeline-footer > a,
+	.{$theme} .post .credentials a,
+	.{$theme} .comments-header,
+	.{$theme} .comment-form h4 { color: {$color1} }
+{/if}
+
+{if $wa_app == 'photos'}
+	/* photos */
+	.{$theme} ul.photostream li.selected img { border-color: {$color1} }
+	.{$theme} .photo-albums a:hover { background-color: {$color1} }
+	.{$theme} #photo-author a { color: {$color1} }
+{/if}
+
+{if $theme_settings.sidebar && !($wa->isMobile() || $wa->userAgent('device') == 'ipad')}
+	.{$theme} .sidebar-news .sidebar-post:hover:after { border-top-color: {$color1} }
+	.{$theme} .sidebar-plugin ul li a:hover,
+	.{$theme} .sidebar-info li a:hover { color: {$color1} }
+	.{$theme} ul.blog-tags a:hover { background-color: {$color1} }
+	.{$theme} .sidebar-photos li img:hover { box-shadow: 0 0 0 2px {$color1} }
+{/if}
+</style>

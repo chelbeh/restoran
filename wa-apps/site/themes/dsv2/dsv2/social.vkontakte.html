@@ -1,0 +1,19 @@
+{if !empty($theme_settings.vk_id)}
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?115"></script>
+<!-- VK Widget -->
+<div id="vk_groups" class="margin-bottom-10"></div>
+<script type="text/javascript">
+VK.Widgets.Group(
+    "vk_groups", 
+    {
+        mode: {if empty($theme_settings.vk_mode)}0{else}{$theme_settings.vk_mode}{/if}, 
+        width: "260", 
+        height: "{if empty($theme_settings.vk_height)}400{else}{$theme_settings.vk_height}{/if}", 
+        color1: '{if empty($theme_settings.vk_color1)}#FFFFFF{else}{$theme_settings.vk_color1}{/if}', 
+        color2: '{if empty($theme_settings.vk_color2)}#2B587A{else}{$theme_settings.vk_color2}{/if}', 
+        color3: '{if empty($theme_settings.vk_color3)}#5B7FA6{else}{$theme_settings.vk_color3}{/if}'
+    },
+    {$theme_settings.vk_id}
+);
+</script>
+{/if}

@@ -1,0 +1,56 @@
+.general-button
+button
+input[type="text"]
+input[type="password"]
+input[type="button"]
+input[type="submit"]
+textarea
+    display inline-block
+    vertical-align top
+    margin: 0;
+    padding: 0.5em 1em
+    width 100%
+    box-sizing border-box
+
+    border: 1px solid #ccc;
+
+    $border-radius(5px)
+
+    font: normal 1em/1.5em $font-family;
+    text-decoration none
+    color: $color-black;
+
+    &.wa-error
+    &.error
+        border-color: #c03
+
+.errormsg
+    color: #c03
+
+.general-button
+button
+input[type="button"]
+input[type="submit"]
+    white-space: nowrap;
+    text-align: center;
+
+    border: 1px solid rgba(0,0,0,0.3);
+    border-top-color: rgba(0,0,0,0.2)
+
+    $box-shadow(0 1px 1px rgba(0, 0, 0, 0.1))
+    $appearance(none)
+    $user-select(none)
+
+    text-shadow: 0 1px 0px rgba(255,255,255,0.5);
+
+    background: #fcd630;
+    background: #fcd630 -moz-linear-gradient(top, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.0) 100%);
+    background: #fcd630 -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.5)), color-stop(100%,rgba(255,255,255,0.0)));
+    background: #fcd630 -webkit-linear-gradient(top, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.0) 100%);
+    background: #fcd630 -o-linear-gradient(top, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.0) 100%);
+    background: #fcd630 -ms-linear-gradient(top, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.0) 100%);
+    background: #fcd630 linear-gradient(to bottom, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.0) 100%);
+
+    &.gray
+    &.gray-button
+        background: #eee linear-gradient(to bottom, rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.0) 100%);

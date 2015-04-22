@@ -26,7 +26,7 @@
 }
 
 .sidebar-nav-v1 { margin-top: -1px }
-.sidebar-nav-v1 .collapse.in { overflow: visible !important }
+.sidebar-nav-v1.collapse.in { overflow: visible !important }
 .sidebar-nav-v1 li { padding: 0 }
 .sidebar-nav-v1 li a {
   color: #555;
@@ -100,7 +100,7 @@
   padding: 0;
   margin: 0;
   min-width: 200px;
-  z-index: 9999 !important;
+  z-index: 10000 !important;
 }
 .sidebar-nav-v1 li.dropdown ul a {
   border: none;
@@ -257,7 +257,6 @@ ul.blog-tags a:hover i {
   .content,
   .page-content .project_services,
   .news,
-  .bestnlead,
   #page,
   #product-description,
   .related {

@@ -1,144 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="buysimply" system="0" vendor="873332" author="wm-site" app="site" version="5.1">
-	<name locale="en_US">BuySimply</name>
-	<name locale="ru_RU">Купить Просто</name>
-	<files>
-		<file path="index.html" custom="0">
-			<description locale="en_US">Basic layout</description>
-			<description locale="ru_RU">Основной макет</description>
-		</file>
-		<file path="sidebar.html" custom="0">
-			<description locale="en_US">Column site navigation</description>
-			<description locale="ru_RU">Колонка навигации по сайту</description>
-		</file>
-		<file path="buysimply.css" custom="0">
-			<description locale="en_US">The main file CSS-styles</description>
-			<description locale="ru_RU">Основной файл CSS-стилей</description>
-		</file>    
-		<file path="content.html" custom="0">
-			<description locale="en_US">Displays the contents of the application "Site"</description>
-			<description locale="en_US">Вывод содержимого приложения «Сайт»</description>
-		</file>
-		<file path="head.html" custom="0">
-			<description locale="en_US">Application &lt;head&gt; element "Site"</description>
-			<description locale="en_US">Элемент &lt;head&gt; приложения «Сайт»</description>
-		</file>
-		<file path="page.html" custom="0">
-			<description locale="en_US">Content Information Page</description>
-			<description locale="ru_RU">Содержимое информационной страницы</description>
-		</file>
-		<file path="login.html" custom="0">
-			<description locale="en_US">Login page</description>
-			<description locale="ru_RU">Страница авторизации</description>
-		</file>
-		<file path="signup.html" custom="0">
-			<description locale="en_US">Registration page</description>
-			<description locale="ru_RU">Страница регистрации</description>
-		</file>
-		<file path="forgotpassword.html" custom="0">
-			<description locale="en_US">Password reset page</description>
-			<description locale="ru_RU">Страница сброса пароля</description>
-		</file>
-		<file path="error.html" custom="0">
-			<description locale="en_US">404, and other errors</description>
-			<description locale="ru_RU">404 и другие ошибки</description>
-		</file>
-		<file path="buysimply.logo.html" custom="0">
-			<description locale="en_US">Logo in the header.</description>
-			<description locale="ru_RU">Логотип в шапке сайта.</description>
-		</file>
-		<file path="buysimply.contact.html" custom="0">
-			<description locale="en_US">Contact basement and caps Site</description>
-			<description locale="ru_RU">Контакты подвала и шапки сайта</description>
-		</file>
-		<file path="buysimply.social.html" custom="0">
-			<description locale="en_US">Social Networking Buttons</description>
-			<description locale="ru_RU">Кнопки социальных сетей</description>
-		</file>
-		<file path="lt-ie8.html" custom="0">
-			<description locale="en_US">Plug for IE version below 8</description>
-			<description locale="ru_RU">Заглушка для IE версии ниже 8</description>
-		</file>
-		<file path="sidebar.photos.html" custom="0">
-			<description locale="en_US">Child block sidebar.html displaying navigation application "photo"</description>
-			<description locale="ru_RU">Дочерний блок sidebar.html отображающий навигацию приложения "фото"</description>
-		</file>
-		<file path="sidebar.blog.html" custom="0">
-			<description locale="en_US">Child block sidebar.html displaying navigation application "blog"</description>
-			<description locale="ru_RU">Дочерний блок sidebar.html отображающий навигацию приложения "блог"</description>
-		</file>
-		<file path="sidebar.shop.html" custom="0">
-			<description locale="en_US">Child block sidebar.html displaying navigation application "shop"</description>
-			<description locale="ru_RU">Дочерний блок sidebar.html отображающий навигацию приложения "магазин"</description>
-		</file>
-		<file path="buysimply.js" custom="0">
-			<description locale="en_US">The main JavaScript file</description>
-			<description locale="ru_RU">Основной файл JavaScript</description>
-		</file>
-		<file path="shop.filters.html" custom="0">
-			<description locale="en_US">Filter products in category</description>
-			<description locale="ru_RU">Фильтр товаров категории</description>
-		</file>
-		<file path="buysimply.user.css.html" custom="0">
-			<description locale="en_US">Template custom stylesheets (CSS)</description>
-			<description locale="ru_RU">Шаблон пользовательских таблиц стилей(CSS)</description>
-		</file>
-		<file path="scheme.settings.html" custom="0">
-			<description locale="en_US">Adjusting the color scheme</description>
-			<description locale="ru_RU">Настройки цветовой схемы</description>
-		</file>
-		<file path="soaring.cart.html" custom="0">
-			<description locale="en_US">Displaying products in the "information" basket</description>
-			<description locale="ru_RU">Отображение товаров в "информационной" корзине</description>
-		</file>	
-		<file path="color.css.html" custom="0">
-			<description locale="en_US">CSS color properties</description>
-			<description locale="ru_RU">CSS свойства цвета</description>
-		</file>
-		<file path="vertical.tree.html" custom="0">
-			<description locale="en_US">SWay to Shop "sitebar"</description>
-			<description locale="ru_RU">Дерево категорий магазина для "левого сайтбара"</description>
-		</file>
-		<file path="horizontal.tree.html" custom="0">
-			<description locale="en_US">Horizontal categories tree, or links to the main page</description>
-			<description locale="ru_RU">Горизонтальное дерево категорий, или ссылок на основные страницы</description>
-		</file>
-		<file path="community.fb.html" custom="0">
-			<description locale="en_US">Group template social network Facebook</description>
-			<description locale="ru_RU">Шаблон группы социальной сети facebook</description>
-		</file>
-		<file path="community.vk.html" custom="0">
-			<description locale="en_US">Group template social network Vkontakte</description>
-			<description locale="ru_RU">Шаблон группы социальной сети vkontakte</description>
-		</file>
-		<file path="lastview.product.html" custom="0">
-			<description locale="en_US">The display unit of goods previously visited.</description>
-			<description locale="ru_RU">Блок отображения товаров просмотренных ранее.</description>
-		</file>
-		<file path="main.addition.html" custom="0">
-			<description locale="en_US">Panel lists products "Favorites", "Comparison"</description>
-			<description locale="ru_RU">Панель списков продуктов: "Избранное", "Сравнение"</description>
-		</file>
-		<file path="main.addition.js" custom="0">
-			<description locale="en_US">JS script pane lists products "Favorites", "Comparison"</description>
-			<description locale="ru_RU">Скрипт JS панели списков продуктов: "Избранное", "Сравнение"</description>
-		</file>
-		<file path="form.subscribe.html" custom="0">
-			<description locale="en_US">Subscription form app "Mailer".</description>
-			<description locale="ru_RU">Форма подписки на рассылку приложения "Рассылки".</description>
-		</file>
-		<file path="buysimply.user.color.html" custom="0">
-			<description locale="en_US">Block template custom color settings.</description>
-			<description locale="ru_RU">Шаблон блока пользовательских настроек цвета.</description>
-		</file>
-		<file path="head.all.html" custom="0">
-			<description locale="ru_RU">Переменные и скрипты</description>
-			<description locale="en_US">Variables and Scripts</description>
-		</file>
-	</files>
-	<about locale="ru_RU">
-	<![CDATA[
+<theme id="buysimply" system="0" vendor="873332" author="wm-site" app="site" version="5.2.1">
+  <name locale="en_US">BuySimply</name>
+  <name locale="ru_RU">Купить Просто</name>
+  <description locale="ru_RU">Функциональный, привлекательный и продающий шаблон</description>
+  <description locale="en_US">Functional, attractive and marketing template</description>
+  <files>
+    <file path="index.html" custom="0">
+      <description locale="en_US">Basic layout</description>
+      <description locale="ru_RU"/>
+    </file>
+    <file path="sidebar.html" custom="0">
+      <description locale="en_US">Column site navigation</description>
+      <description locale="ru_RU">Левый сайтбар для приложения "сайт"</description>
+    </file>
+    <file path="buysimply.css" custom="0">
+      <description locale="en_US">The main file CSS-styles</description>
+      <description locale="ru_RU"/>
+    </file>
+    <file path="content.html" custom="0">
+      <description locale="en_US">Displays the contents of the application "Site"</description>
+      <description locale="ru_RU">Вывод содержимого приложения «Сайт»</description>
+    </file>
+    <file path="head.html" custom="0">
+      <description locale="en_US">Application &lt;head&gt; element "Site"</description>
+      <description locale="ru_RU">Элемент &lt;head&gt; приложения «Сайт»</description>
+    </file>
+    <file path="page.html" custom="0">
+      <description locale="en_US">Content Information Page</description>
+      <description locale="ru_RU">Содержимое информационной страницы</description>
+    </file>
+    <file path="login.html" custom="0">
+      <description locale="en_US">Login page</description>
+      <description locale="ru_RU">Страница авторизации</description>
+    </file>
+    <file path="signup.html" custom="0">
+      <description locale="en_US">Registration page</description>
+      <description locale="ru_RU">Страница регистрации</description>
+    </file>
+    <file path="forgotpassword.html" custom="0">
+      <description locale="en_US">Password reset page</description>
+      <description locale="ru_RU">Страница востановления пароля</description>
+    </file>
+    <file path="error.html" custom="0">
+      <description locale="en_US">404, and other errors</description>
+      <description locale="ru_RU">404, и другие ошибки</description>
+    </file>
+    <file path="buysimply.logo.html" custom="0">
+      <description locale="en_US">Logo in the header.</description>
+      <description locale="ru_RU">Блок логотипа в "шапке" сайта</description>
+    </file>
+    <file path="buysimply.contact.html" custom="0">
+      <description locale="en_US">Contact basement and caps Site</description>
+      <description locale="ru_RU"/>
+    </file>
+    <file path="buysimply.social.html" custom="0">
+      <description locale="en_US">Social Networking Buttons</description>
+      <description locale="ru_RU"/>
+    </file>
+    <file path="lt-ie8.html" custom="0">
+      <description locale="en_US">Plug for IE version below 8</description>
+      <description locale="ru_RU">Содержимое "заглушки" для устаревших браузеров (&gt;IE8)</description>
+    </file>
+    <file path="buysimply.js" custom="0">
+      <description locale="en_US">The main JavaScript file</description>
+      <description locale="ru_RU"/>
+    </file>
+    <file path="buysimply.user.css.html" custom="0">
+      <description locale="en_US">Template custom stylesheets (CSS)</description>
+      <description locale="ru_RU">Шаблон пользовательских таблиц стилей(CSS)</description>
+    </file>
+    <file path="scheme.settings.html" custom="0">
+      <description locale="en_US">Adjusting the color scheme</description>
+      <description locale="ru_RU">Параметры цветовой схемы</description>
+    </file>
+    <file path="soaring.cart.html" custom="0">
+      <description locale="en_US">Displaying products in the "information" basket</description>
+      <description locale="ru_RU">Отображение товаров в "информационной" корзине</description>
+    </file>
+    <file path="color.css.html" custom="0">
+      <description locale="en_US">CSS color properties</description>
+      <description locale="ru_RU">CSS свойства цвета</description>
+    </file>
+    <file path="vertical.tree.html" custom="0">
+      <description locale="en_US">SWay to Shop "sitebar"</description>
+      <description locale="ru_RU"/>
+    </file>
+    <file path="horizontal.tree.html" custom="0">
+      <description locale="en_US">Horizontal categories tree, or links to the main page</description>
+      <description locale="ru_RU"/>
+    </file>
+    <file path="community.fb.html" custom="0">
+      <description locale="en_US">Group template social network Facebook</description>
+      <description locale="ru_RU">Шаблон группы социальной сети facebook</description>
+    </file>
+    <file path="community.vk.html" custom="0">
+      <description locale="en_US">Group template social network Vkontakte</description>
+      <description locale="ru_RU">Шаблон группы социальной сети vkontakte</description>
+    </file>
+    <file path="lastview.product.html" custom="0">
+      <description locale="en_US">The display unit of goods previously visited.</description>
+      <description locale="ru_RU">Блок отображения товаров просмотренных ранее.</description>
+    </file>
+    <file path="main.addition.html" custom="0">
+      <description locale="en_US">Panel lists products "Favorites", "Comparison"</description>
+      <description locale="ru_RU">Панель списков продуктов: "Избранное", "Сравнение"</description>
+    </file>
+    <file path="main.addition.js" custom="0">
+      <description locale="en_US">JS script pane lists products "Favorites", "Comparison"</description>
+      <description locale="ru_RU">Скрипт JS панели списков продуктов: "Избранное", "Сравнение"</description>
+    </file>
+    <file path="form.subscribe.html" custom="0">
+      <description locale="en_US">Subscription form app "Mailer".</description>
+      <description locale="ru_RU">Форма подписки для приложения "Рассылки"</description>
+    </file>
+    <file path="buysimply.user.color.html" custom="0">
+      <description locale="en_US">Block template custom color settings.</description>
+      <description locale="ru_RU">Шаблон блока пользовательских настроек цвета.</description>
+    </file>
+    <file path="head.all.html" custom="0">
+      <description locale="ru_RU"/>
+      <description locale="en_US">Variables and scripts are common to all applications</description>
+    </file>
+    <file path="my.profile.html" custom="0">
+      <description locale="en_US">My profile: contact info editing form</description>
+      <description locale="ru_RU">личный кабинет: редактирование контактной информации</description>
+    </file>
+    <file path="my.nav.html" custom="0">
+      <description locale="en_US">My profile navigation</description>
+      <description locale="ru_RU">Навигационное меню внутри личного кабинета</description>
+    </file>
+    <file path="function.tree.html" custom="0">
+      <description locale="en_US">Tree function</description>
+      <description locale="ru_RU">Встроенная функция дерева навигации "Купить Просто"</description>
+    </file>
+    <file path="searchform.html" custom="0">
+      <description locale="en_US">Block search field</description>
+      <description locale="ru_RU">Блок поля поиска</description>
+    </file>
+    <file path="last.photos.html" custom="0">
+      <description locale="en_US">Block "latest images"</description>
+      <description locale="ru_RU">Блок "последние изображения"</description>
+    </file>
+    <file path="last.posts.html" custom="0">
+      <description locale="en_US">Block "latest news"</description>
+      <description locale="ru_RU">Блок "последние новости"</description>
+    </file>
+    <file path="sidebar.mobile.html" custom="0">
+      <description locale="en_US">Menu for Mobile Applications</description>
+      <description locale="ru_RU">Меню для мобильных приложений</description>
+    </file>
+  </files>
+  <about locale="ru_RU"><![CDATA[
 	<h1>Немного о теме оформления "Купить Просто"</h1>
 	<ul>
 	  <li>Разработан командой профессионалов, которая состоит из специалистов по Web – дизайну, верстке и интернет маркетингу.</li>
@@ -158,44 +171,48 @@
 	  </li>
 	</ul>
 	<p>Демо версия шаблона - "<a href="http://www.buysimply.wm-site.ru/" target="_blank">Купить Просто</a>"</p>
-	<p>Инструкция по настройке шаблона - <a href="http://www.webasyst.ru/store/theme/buysimply/dokumentatsiya/" target="_blank">Документация</a></p>
+	<p>Инструкции, вопросы и идеи по теме "<a href="http://wm-site.ru/buy_simply/" target="_blank">Купить Просто</a>"</p>
 	<p>Автор шаблона - студия "<a href="http://wm-site.ru/" target="_blank">wm-site.ru</a>"</p>
 	<p>По вопросам поддержки, обращайте на email kolmakov.igor@gmail.com  (Колмаков Игорь)</p>
-	]]>
-	</about>
-	<about locale="en_US">
-	<![CDATA[
-	!!!! НУжен перевод
+	]]></about>
+  <about locale="en_US"><![CDATA[
 	<h1>A little bit about the default theme "BuySimply"</h1>
 	<ul>
-	  <li>Разработан командой профессионалов, которая состоит из специалистов по Web – дизайну, верстке и интернет маркетингу.</li>
-		<li>Дизайн продуман для эффективного восприятия и взаимодействия пользователя с интернет магазином, он поможет Вам представить свою продукцию в наилучшем виде и создаст хорошее впечатление у потенциальных клиентов.</li>
-		<li>Расположение основных блоков и элементов соответствует современным требованиям к Usability интернет магазинов</li>
-		<li>При разработке использовались современные технологии, которые дают великолепное быстродействие (быструю загрузку и отображение сайта).</li>
-		<li>Исходный код разрабатывался согласно рекомендациям официальных источников.</li>
-		<li>Продуманный каркас шаблона, и эффективный интерфейс, направляют пользователя к основной цели – покупке.</li>
-		<li>Поддержка и кросбраузерная вёрстка делают шаблон совместимым с современными и популярными браузерами: Opera, Firefox, Google Chrome, Yandex, Safari, Internet Explorer старше 7 версии.</li>
-		<li>Адаптация шаблона под устройства с разрешением от 740px</li>
-	  <li>Вариации шаблона (в любой момент Вы можете изменить внешний вид Вашего сайта):
+	  <li>Developed by a team of professionals, which consists of experts in Web - design, layout and Internet marketing.</li>
+		<li>Design conceived for efficient perception and user interaction with the online store, it will help you to present your products in the best possible way and will create a good impression among potential customers.</li>
+		<li>Main blocks and elements of the modern requirements for Usability online stores</li>
+		<li>Used in the development of modern technologies, which give a great performance (fast loading and displaying the site).</li>
+		<li>The source code is developed according to the recommendations of official sources.</li>
+		<li>Thoughtful frame template, and efficient interface guides the user to the main goal - to buy.</li>
+		<li>Support and krosbrauzernaya layout make templates compatible with modern and popular browsers: Opera, Firefox, Google Chrome, Yandex, Safari, Internet Explorer 7 older version.</li>
+		<li>Adapting a template for the device with a resolution of 740px</li>
+	  <li>Variations template (at any time you can change the look of your site):
 		<ul>
-		  <li>7 цветовых схем - черно-желтая, темно-синяя, темно-розовая, зелено-оранжевая, светло-синяя, светло-красная, оранжево-синяя.</li>
-		  <li>7 типов отображения меню "дерева категорий".</li>
-		  <li>3 типа отображения галереи изображений товаров с возможностью применения уникального типа для каждого из товаров.</li>
+		  <li>7 color schemes - black and yellow, dark blue, dark pink, green, orange, light blue, light red, orange and blue.</li>
+		  <li>7 types of menus "category tree."</li>
+		  <li>3 types of picture image display items unique to apply a type for each of the products.</li>
 		</ul>
 	  </li>
 	</ul>
-	<p>Демо версия шаблона - "<a href="http://www.buysimply.wm-site.ru/" target="_blank">Купить Просто</a>"</p>
-	<p>Инструкция по настройке шаблона - <a href="http://www.webasyst.ru/store/theme/buysimply/dokumentatsiya/" target="_blank">Документация</a></p>
-	<p>Автор шаблона - студия "<a href="http://wm-site.ru/" target="_blank">wm-site.ru</a>"</p>
-	<p>По вопросам поддержки, обращайте на email kolmakov.igor@gmail.com  (Колмаков Игорь)</p>
-	]]>
-	</about>
-	<settings>
-		<setting var="instruction" control_type="image_select">
-            <value>1.png</value>
-            <name locale="en_US"/>
-            <name locale="ru_RU">
-			<![CDATA[
+	<p>Demo version of the template - "<a href="http://www.buysimply.wm-site.ru/" target="_blank">BuySimply</a>"</p>
+	<p>Instructions, questions and ideas on the topic <a href="http://wm-site.ru/buy_simply/" target="_blank">BuySimply</a></p>
+	<p>Author template - studio "<a href="http://wm-site.ru/" target="_blank">wm-site.ru</a>"</p>
+	<p>For support issues, please email kolmakov.igor@gmail.com  (Колмаков Игорь)</p>
+	]]></about>
+  <settings>
+    <setting var="instruction" control_type="image_select">
+      <value>1.png</value>
+      <name locale="en_US"><![CDATA[
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">For more information on configuring the design, refer to the instructions on our 
+			<a target="_blank" href="http://wm-site.ru/blog/nashi-razrabotki/shablon-kupit-prosto/instruktsii-po-nastroyke/">site</a></p>
+			
+				<br /><br />
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">1. Цветовая схема<br /><br />
+				1.1 Preset color schemes				
+				</p>
+								
+			]]></name>
+      <name locale="ru_RU"><![CDATA[
 			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">Подробную информацию по настройке дизайна, смотрите в инструкции на нашем 
 			<a target="_blank" href="http://wm-site.ru/blog/nashi-razrabotki/shablon-kupit-prosto/instruktsii-po-nastroyke/">сайте</a></p>
 			
@@ -204,15 +221,14 @@
 				1.1 Предустановленные цветовые схемы				
 				</p>
 								
-			]]>
-			</name>
-			<options>
-                <option value="img/1.png"/>
-			</options>	
-        </setting>		
-        <setting var="color_scheme" control_type="select">
-            <value>custom</value>
-            <name locale="ru_RU">Выберите предустановленную цветовую схему
+			]]></name>
+      <options>
+        <option value="img/1.png"/>
+      </options>
+    </setting>
+    <setting var="color_scheme" control_type="select">
+      <value>custom</value>
+      <name locale="ru_RU">Выберите предустановленную цветовую схему
 			<![CDATA[
 				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
 					2. Дополнительные настройки<br /><br />
@@ -220,41 +236,48 @@
 				</p>
 			]]>				
 			</name>
-            <name locale="en_US">Color scheme</name>
-            <options>
-                <option value="custom">
-                    <name locale="ru_RU">Черно-желтая</name>
-                    <name locale="en_US">Black and yellow</name>
-                </option>
-                <option value="black_blue">
-                    <name locale="ru_RU">Темно-синяя</name>
-                    <name locale="en_US">Dark blue</name>
-                </option>
-                <option value="black_pink">
-                    <name locale="ru_RU">Темно-розовая</name>
-                    <name locale="en_US">Dark pink</name>
-                </option>
-                <option value="green_pink_orange">
-                    <name locale="ru_RU">Зелено-оранжевая</name>
-                    <name locale="en_US">Green and orange</name>
-                </option>
-                <option value="light_blue">
-                    <name locale="ru_RU">Светло-синяя</name>
-                    <name locale="en_US">Light blue</name>
-                </option>
-                <option value="light_red">
-                    <name locale="ru_RU">Светло-красная</name>
-                    <name locale="en_US">Light red</name>
-                </option>
-                <option value="orange_blue">
-                    <name locale="ru_RU">Оранжево-синяя</name>
-                    <name locale="en_US">Orange-blue</name>
-                </option>
-            </options>
-        </setting>
-		<setting var="soaringItem" control_type="text">
-            <value>3</value>
-            <name locale="ru_RU">
+      <name locale="en_US">Select a preset color scheme
+			<![CDATA[
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+					2. Advanced Settings<br /><br />
+				2.1. Information about the contents of the basket (cap site)<br />
+				</p>
+			]]>	
+			</name>
+      <options>
+        <option value="custom">
+          <name locale="ru_RU">Черно-желтая</name>
+          <name locale="en_US">Black and yellow</name>
+        </option>
+        <option value="black_blue">
+          <name locale="ru_RU">Темно-синяя</name>
+          <name locale="en_US">Dark blue</name>
+        </option>
+        <option value="black_pink">
+          <name locale="ru_RU">Темно-розовая</name>
+          <name locale="en_US">Dark pink</name>
+        </option>
+        <option value="green_pink_orange">
+          <name locale="ru_RU">Зелено-оранжевая</name>
+          <name locale="en_US">Green and orange</name>
+        </option>
+        <option value="light_blue">
+          <name locale="ru_RU">Светло-синяя</name>
+          <name locale="en_US">Light blue</name>
+        </option>
+        <option value="light_red">
+          <name locale="ru_RU">Светло-красная</name>
+          <name locale="en_US">Light red</name>
+        </option>
+        <option value="orange_blue">
+          <name locale="ru_RU">Оранжево-синяя</name>
+          <name locale="en_US">Orange-blue</name>
+        </option>
+      </options>
+    </setting>
+    <setting var="soaringItem" control_type="text">
+      <value>3</value>
+      <name locale="ru_RU">
 			Количество видимых товаров в "плавающей" корзине 
 			<![CDATA[
 				<br /><br /><p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -264,12 +287,31 @@
 				</p>
 			]]>	
 			</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="soaringQuickorder" control_type="checkbox">
-            <value/>
-            <name locale="en_US"/>
-            <name locale="ru_RU">
+      <name locale="en_US">
+			The number of visible items in a "floating" basket
+			<![CDATA[
+				<br /><br /><p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			An empty box means otsuvstvie product information in a floating basket</p>
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				2.1.1. The "quick order"<br />
+				</p>
+			]]>	
+			</name>
+    </setting>
+    <setting var="soaringQuickorder" control_type="checkbox">
+      <value/>
+      <name locale="en_US">
+			Button in rapid order "floating" basket
+			<![CDATA[
+				<br /><br /><p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			The "quick order" works only when the plug-in "<a href="http://www.webasyst.ru/store/plugin/shop/quickorder/" target="_blank">Buy in 1 click</a>"<br />
+			<span style="color:red">*</span> functional work the "quick order" refers to the plugin "Buy 1-click"</p>
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				2.2. Type of Display Unit "authorization / registration" (in "pop-up" window / on a separate page)<br />
+				</p>
+			]]>
+			</name>
+      <name locale="ru_RU">
 			Кнопка быстрого заказа в "плавающей" корзине
 			<![CDATA[
 				<br /><br /><p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -280,11 +322,18 @@
 				</p>
 			]]>	
 			</name>
-        </setting>
-		<setting var="authDialog" control_type="checkbox">
-            <value>1</value>
-            <name locale="en_US"/>
-            <name locale="ru_RU">
+    </setting>
+    <setting var="authDialog" control_type="checkbox">
+      <value>1</value>
+      <name locale="en_US">
+			In the pop-up window.
+			<![CDATA[
+				<br /><br /><p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				2.3. Currency symbol "ruble"
+				</p>
+			]]>	
+			</name>
+      <name locale="ru_RU">
 			Во всплывающем окне.
 			<![CDATA[
 				<br /><br /><p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
@@ -292,10 +341,10 @@
 				</p>
 			]]>	
 			</name>
-        </setting>	
-		<setting var="sumbolRUB" control_type="checkbox">
-			<value>1</value>
-			<name locale="ru_RU">
+    </setting>
+    <setting var="sumbolRUB" control_type="checkbox">
+      <value>1</value>
+      <name locale="ru_RU">
 			Отобразить в качестве валюты РФ "символ рубля"
 			<![CDATA[
 			<br /><br />
@@ -308,11 +357,23 @@
 				</p>
 			]]>
 			</name>
-			<name locale="en_US"/>
-		</setting>
-		<setting var="noadaptive" control_type="checkbox">
-            <value/>
-            <name locale="ru_RU">
+      <name locale="en_US">
+			Display as the currency of the Russian Federation, "the symbol of the ruble"
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			The Bank of Russia December 11, 2013 approved the graphic symbol of the ruble (symbol rate) in the form of a capital letter "P" Cyrillic alphabet, supplemented at the bottom of a horizontal line.<br />
+<a href="http://www.cbr.ru/today/?Prtid=voterub" target="_blank">more info</a></p>
+
+<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				2.4. Adapting themes under the device width of the viewing area which is less than 1000px
+				</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="noadaptive" control_type="checkbox">
+      <value/>
+      <name locale="ru_RU">
 			Отключить адаптацию темы оформления
 			<![CDATA[
 <br /><br /><p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
@@ -320,12 +381,26 @@
 				</p>
 			]]>
 			</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="addition" control_type="select">
-            <value>1</value>
-            <name locale="en_US"/>
-            <name locale="ru_RU">
+      <name locale="en_US">
+			Disable adaptation themes
+			<![CDATA[
+<br /><br /><p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				2.5. Custom product lists (favorites, viewed, goods in comparison)
+				</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="addition" control_type="select">
+      <value>1</value>
+      <name locale="en_US">
+			Placing custom lists of goods
+						<![CDATA[
+<br /><br /><p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+				2.6. The number of items in the drop-down list block "product search"
+				</p>
+			]]>
+			</name>
+      <name locale="ru_RU">
 			Размещение пользовательских списков товаров
 						<![CDATA[
 <br /><br /><p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
@@ -333,20 +408,20 @@
 				</p>
 			]]>
 			</name>
-            <options>
-                <option value="0">
-					<name locale="en_US"/>
-					<name locale="ru_RU">В правой части области просмотра</name>
-				</option>
-                <option value="1">
-					<name locale="en_US"/>
-					<name locale="ru_RU">В нижней части области просмотра</name>
-				</option>
-            </options>
-        </setting>
-		<setting var="autofitItem" control_type="text">
-            <value>5</value>
-            <name locale="ru_RU">
+      <options>
+        <option value="0">
+          <name locale="en_US">The right side of the viewing area</name>
+          <name locale="ru_RU">В правой части области просмотра</name>
+        </option>
+        <option value="1">
+          <name locale="en_US">At the bottom of the viewing area</name>
+          <name locale="ru_RU">В нижней части области просмотра</name>
+        </option>
+      </options>
+    </setting>
+    <setting var="autofitItem" control_type="text">
+      <value><![CDATA[]]></value>
+      <name locale="ru_RU">
 			Укажите количество пунктов выпадающего списка 
 			<![CDATA[
 			<br /><br />			
@@ -361,16 +436,25 @@
 				</p>
 			]]>
 			</name>
-            <name locale="en_US">Number of products in the list of auto search</name>
-        </setting>
-		
-		
-		
-		
-		
-		<setting var="top_menu_content" control_type="select">
-            <value>info_page</value>
-            <name locale="ru_RU">Выберите содержимое верхнего горизонтального блока навигации
+      <name locale="en_US">
+			Specify the number of drop-down list of items 
+			<![CDATA[
+			<br /><br />			
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			A value of 0 or no value, disables the "drop-down list" in the "product search"<br />
+			<span style="color:red">*</span> Warning! If you are using a plug-in "Auto goods" should be disabled or "Auto Search" template or plugin "Auto Search".
+			</p>
+
+				<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+					<br /><br />3. Top horizontal navigation unit<br /><br />
+				3.1. Content top horizontal navigation unit<br />
+				</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="top_menu_content" control_type="select">
+      <value>info_page</value>
+      <name locale="ru_RU">Выберите содержимое верхнего горизонтального блока навигации
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -381,21 +465,32 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US">Content upper horizontal navigation unit</name>
-            <options>
-                <option value="info_page">
-                    <name locale="ru_RU">Информационные страницы (основные разделы сайта)</name>
-                    <name locale="en_US">Information Pages</name>
-                </option>
-                <option value="category_tree">
-                    <name locale="ru_RU">Дерево категорий</name>
-                    <name locale="en_US">Category tree</name>
-                </option>
-            </options>
-        </setting>		
-		<setting var="top_menu_index" control_type="checkbox">
-            <value/>
-            <name locale="ru_RU">Отображать ссылку "Главная" в списке "основных разделов сайта"
+      <name locale="en_US">
+			Select the contents of the upper horizontal navigation unit
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			If you have not installed application "store", then you should not change this setting.</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			4. The main sections of the site<br /><br />
+			4.1. Link "Home" in the "main menu"
+			</p>
+			]]>
+			</name>
+      <options>
+        <option value="info_page">
+          <name locale="ru_RU">Информационные страницы (основные разделы сайта)</name>
+          <name locale="en_US">Information Pages</name>
+        </option>
+        <option value="category_tree">
+          <name locale="ru_RU">Дерево категорий</name>
+          <name locale="en_US">Category tree</name>
+        </option>
+      </options>
+    </setting>
+    <setting var="top_menu_index" control_type="checkbox">
+      <value/>
+      <name locale="ru_RU">Отображать ссылку "Главная" в списке "основных разделов сайта"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -408,11 +503,24 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US">See the link "Home" in the "Information" pages "top horizontal navigation block"</name>
-        </setting>
-		<setting var="top_menu_source" control_type="select">
-            <value>site</value>
-            <name locale="ru_RU">Выберите "источник" ссылок на основные страницы магазина
+      <name locale="en_US">
+			Display a link "Home" in the "main menu"
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			"The purpose of reference" - the main page of your site (parameter $ wa_url)
+			<br /><span style="color:red">*</span> 
+			This setting will work only if prisuvstvii in "top horizontal navigation block" "info page" (paragraph 3.1, the "Information Pages").
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			4.2 Source reference to "basic information pages"
+			</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="top_menu_source" control_type="select">
+      <value>site</value>
+      <name locale="ru_RU">Выберите "источник" ссылок на основные страницы магазина
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -426,21 +534,35 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US">Source links to the main store page (links to information pages placed in the top navigation unit)</name>
-            <options>
-                <option value="site">
-                    <name locale="ru_RU">Информационные страницы приложения "сайт"</name>
-                    <name locale="en_US">Information application page "site"</name>
-                </option>
-                <option value="shop">
-                    <name locale="ru_RU">Информационные страницы приложения "магазин"</name>
-                    <name locale="en_US">Information application page "shop"</name>
-                </option>
-            </options>
-        </setting>
-		<setting var="hideAPPS" control_type="checkbox">
-            <value/>
-            <name locale="ru_RU">Скрыть ссылки приложений(магазн, сайт, блог, фото) в верхнем меню
+      <name locale="en_US">
+			Select the "source" of links to the main store page
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			By default, the source of links to the main pages - app "site" (Annex "site" - tab "page"), and the source reference unit "Information" (left saytbar) - app "store"
+(Annex "store" - tab "showcase" - "page")
+			<br /><span style="color:red">*</span> 
+			When you change the source of links to the main page - page application "store" and the source reference unit "Information" - the application "site".
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			4.3. Links to Applications (magazni, website, blog, photos) in the top menu
+			</p>
+			]]>
+			</name>
+      <options>
+        <option value="site">
+          <name locale="ru_RU">Информационные страницы приложения "сайт"</name>
+          <name locale="en_US">Information application page "site"</name>
+        </option>
+        <option value="shop">
+          <name locale="ru_RU">Информационные страницы приложения "магазин"</name>
+          <name locale="en_US">Information application page "shop"</name>
+        </option>
+      </options>
+    </setting>
+    <setting var="hideAPPS" control_type="checkbox">
+      <value/>
+      <name locale="ru_RU">Скрыть ссылки приложений(магазн, сайт, блог, фото) в верхнем меню
 			<![CDATA[
 			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
 			5. "дерево категорий"<br /><br />
@@ -448,11 +570,19 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US">Hide links APPS</name>
-        </setting>
-		<setting var="top_menu_type" control_type="select">
-            <value>1</value>
-            <name locale="ru_RU">Выберите тип отображения "дерева категорий"
+      <name locale="en_US">
+			Hide links applications (shop, site, blog, photos) in the top menu
+			<![CDATA[
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			5. "category tree"<br /><br />
+			5.1. Type of Display category tree
+			</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="top_menu_type" control_type="select">
+      <value>1</value>
+      <name locale="ru_RU">Выберите тип отображения "дерева категорий"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> Если "дерево категорий" присувствует в "верхнем горизонтальном блоке навигации" (п.2, значение "Дерево категорий"), тип отображения "Выезжающий список дочерних категорий" будет заменен на "Выпадающий список дочерних категорий".
@@ -465,29 +595,42 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US">Type of display category tree</name>
-            <options>
-                <option value="1">
-                    <name locale="ru_RU">Выпадающий список дочерних категорий</name>
-                    <name locale="en_US">Drop-down list of child categories</name>
-                </option>
-                <option value="2">
-                    <name locale="ru_RU">Выпадающий блок категорий 2 и 3-го уровней (структурированный)</name>
-                    <name locale="en_US">The drop-down box of category 2 and Layer 3 (structured)</name>
-                </option>
-				<option value="3">
-                    <name locale="ru_RU">Выезжающий список дочерних категорий</name>
-                    <name locale="en_US">Checking out the list of child categories</name>
-                </option>
-				<option value="4">
-                    <name locale="ru_RU">Выпадающий блок категорий 2 и 3-го уровней (неструктурированный)</name>
-                    <name locale="en_US">The drop-down box of category 2 and Layer 3 (unstructured)</name>
-                </option>
-            </options>
-        </setting>		
-		<setting var="latest_posts" control_type="checkbox">
-            <value>1</value>
-            <name locale="ru_RU">Отображать блок "Последние новости" в левом "сайтбаре"
+      <name locale="en_US">
+			Select the type of display "category tree"
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> If "category tree" prisuvstvuet in "top horizontal navigation block" (p.2, the "Category Tree"), display type "to leave the child list of the categories" is replaced by "drop-down list of child categories."
+			<br /><span style="color:red">*</span> 
+			This setting will work only when the app "store".
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			6. "Left sitebar"<br /><br />
+			6.1. Block "Latest News" on the left "sitebare"
+			</p>
+			]]>
+			</name>
+      <options>
+        <option value="1">
+          <name locale="ru_RU">Выпадающий список дочерних категорий</name>
+          <name locale="en_US">Drop-down list of child categories</name>
+        </option>
+        <option value="2">
+          <name locale="ru_RU">Выпадающий блок категорий 2 и 3-го уровней (структурированный)</name>
+          <name locale="en_US">The drop-down box of category 2 and Layer 3 (structured)</name>
+        </option>
+        <option value="3">
+          <name locale="ru_RU">Выезжающий список дочерних категорий</name>
+          <name locale="en_US">Checking out the list of child categories</name>
+        </option>
+        <option value="4">
+          <name locale="ru_RU">Выпадающий блок категорий 2 и 3-го уровней (неструктурированный)</name>
+          <name locale="en_US">The drop-down box of category 2 and Layer 3 (unstructured)</name>
+        </option>
+      </options>
+    </setting>
+    <setting var="latest_posts" control_type="checkbox">
+      <value>1</value>
+      <name locale="ru_RU">Отображать блок "Последние новости" в левом "сайтбаре"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -501,51 +644,64 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US">See block "Latest News" on the left "saytbare"</name>
-        </setting>
-		
-		<setting var="communityVKid" control_type="text">
-            <value/>
-            <name locale="ru_RU">Идентификатор группы ВКонтакте</name>
-            <name locale="en_US"/>
-        </setting>		
-		<setting var="communityVKheight" control_type="text">
-            <value>400</value>
-            <name locale="ru_RU">Высота блока в пикселах</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityVKmode" control_type="select">
-            <value></value>
-            <name locale="en_US"/>
-            <name locale="ru_RU">Содержимое виджета</name>
-            <options>
-                <option value="0">
-					<name locale="en_US"/>
-					<name locale="ru_RU">участники группы</name>
-				</option>
-                <option value="1">
-					<name locale="en_US"/>
-					<name locale="ru_RU">только название группы</name>
-				</option>
-				<option value="2">
-					<name locale="en_US"/>
-					<name locale="ru_RU">новости группы</name>
-				</option>
-            </options>
-        </setting>		
-		<setting var="communityVKcolor1" control_type="color">
-            <value>#FFFFFF</value>
-            <name locale="ru_RU">Цвет фона</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityVKcolor2" control_type="color">
-            <value>#2B587A</value>
-            <name locale="ru_RU">Цвет текста</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityVKcolor3" control_type="color">
-            <value>#5B7FA6</value>
-            <name locale="ru_RU">
+      <name locale="en_US">
+			Display unit "Latest News" on the left "saytbare"
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			Block "Latest News" is displayed only when the application during a "blog."
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			6.2. Widgets social groups (VKontakte, facebook)
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			6.2.1 List of participants / news group VKontakte
+			</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="communityVKid" control_type="text">
+      <value/>
+      <name locale="ru_RU">Идентификатор группы ВКонтакте</name>
+      <name locale="en_US">Group ID VKontakte</name>
+    </setting>
+    <setting var="communityVKheight" control_type="text">
+      <value>400</value>
+      <name locale="ru_RU">Высота блока в пикселах</name>
+      <name locale="en_US">Block height in pixels</name>
+    </setting>
+    <setting var="communityVKmode" control_type="select">
+      <value></value>
+      <name locale="en_US">Content widget</name>
+      <name locale="ru_RU">Содержимое виджета</name>
+      <options>
+        <option value="0">
+          <name locale="en_US">members of the group</name>
+          <name locale="ru_RU">участники группы</name>
+        </option>
+        <option value="1">
+          <name locale="en_US">only the name of the group</name>
+          <name locale="ru_RU">только название группы</name>
+        </option>
+        <option value="2">
+          <name locale="en_US">news Groups</name>
+          <name locale="ru_RU">новости группы</name>
+        </option>
+      </options>
+    </setting>
+    <setting var="communityVKcolor1" control_type="color">
+      <value>#FFFFFF</value>
+      <name locale="ru_RU">Цвет фона</name>
+      <name locale="en_US">background Color</name>
+    </setting>
+    <setting var="communityVKcolor2" control_type="color">
+      <value>#2B587A</value>
+      <name locale="ru_RU">Цвет текста</name>
+      <name locale="en_US">text color</name>
+    </setting>
+    <setting var="communityVKcolor3" control_type="color">
+      <value>#5B7FA6</value>
+      <name locale="ru_RU">
 			Цвет кнопок
 			<![CDATA[
 			<br /><br />
@@ -554,57 +710,65 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US"/>
-        </setting>		
-		<setting var="communityFBhref" control_type="text">
-            <value/>
-            <name locale="ru_RU">URL "страницы" Facebook(абсолютный)</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityFBheight" control_type="text">
-            <value>400</value>
-            <name locale="ru_RU">Высота блока в пикселах</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityFBcolorscheme" control_type="select">
-            <value>light</value>
-            <name locale="en_US"/>
-            <name locale="ru_RU">Цветовая схема</name>
-            <options>
-                <option value="light">
-					<name locale="en_US"/>
-					<name locale="ru_RU">light</name>
-				</option>
-                <option value="dark">
-					<name locale="en_US"/>
-					<name locale="ru_RU">dark</name>
-				</option>
-            </options>
-        </setting>
-		<setting var="communityFBcolor1" control_type="color">
-            <value>#ffffff</value>
-            <name locale="ru_RU">Цвет фона</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityFBshowFaces" control_type="checkbox">
-            <value>1</value>
-            <name locale="ru_RU">Показать список подписчиков "страницы"</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityFBstream" control_type="checkbox">
-            <value/>
-            <name locale="ru_RU">Показать новости "страницы"</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="communityFBheader" control_type="checkbox">
-            <value>1</value>
-            <name locale="ru_RU">Показать надпись "Найдите нас на Facebook"</name>
-            <name locale="en_US"/>
-        </setting>		
-		<setting var="communityFBshowBorder" control_type="checkbox">
-            <value>1</value>
-            <name locale="ru_RU">
-			Объвести рамкой блок виджета Facebook
+      <name locale="en_US">
+			color buttons
+			<![CDATA[
+			<br /><br />
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			6.2.2 List of subscribers / news Facebook page
+			</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="communityFBhref" control_type="text">
+      <value><![CDATA[]]></value>
+      <name locale="ru_RU">URL "страницы" Facebook(абсолютный)</name>
+      <name locale="en_US">URL "page" Facebook (absolute)</name>
+    </setting>
+    <setting var="communityFBheight" control_type="text">
+      <value>400</value>
+      <name locale="ru_RU">Высота блока в пикселах</name>
+      <name locale="en_US">Block height in pixels</name>
+    </setting>
+    <setting var="communityFBcolorscheme" control_type="select">
+      <value>light</value>
+      <name locale="en_US">The color scheme</name>
+      <name locale="ru_RU">Цветовая схема</name>
+      <options>
+        <option value="light">
+          <name locale="en_US">light</name>
+          <name locale="ru_RU">Светлая</name>
+        </option>
+        <option value="dark">
+          <name locale="en_US">dark</name>
+          <name locale="ru_RU">Темная</name>
+        </option>
+      </options>
+    </setting>
+    <setting var="communityFBcolor1" control_type="color">
+      <value>#ffffff</value>
+      <name locale="ru_RU">Цвет фона</name>
+      <name locale="en_US">background Color</name>
+    </setting>
+    <setting var="communityFBshowFaces" control_type="checkbox">
+      <value>1</value>
+      <name locale="ru_RU">Показать список подписчиков "страницы"</name>
+      <name locale="en_US">Show list of subscribers "pages"</name>
+    </setting>
+    <setting var="communityFBstream" control_type="checkbox">
+      <value/>
+      <name locale="ru_RU">Показать новости "страницы"</name>
+      <name locale="en_US">Show news "page"</name>
+    </setting>
+    <setting var="communityFBheader" control_type="checkbox">
+      <value>1</value>
+      <name locale="ru_RU">Показать надпись "Найдите нас на Facebook"</name>
+      <name locale="en_US">Display shows "Find us on Facebook"</name>
+    </setting>
+    <setting var="communityFBshowBorder" control_type="checkbox">
+      <value>1</value>
+      <name locale="ru_RU">
+			Обвести рамкой блок виджета Facebook
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -618,11 +782,25 @@
 			</p>
 			]]>
 			</name>
-            <name locale="en_US"/>
-        </setting>
-		<setting var="latest_photo" control_type="checkbox">
-            <value>1</value>
-            <name locale="ru_RU">Отображать блок "Последние изображения" в левом "сайтбаре"
+      <name locale="en_US">
+			Circle frame block Facebook widget
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			Included news "page" to prohibit the display of a list of subscribers "pages"
+			<br />
+			<span style="color:red">*</span>
+			Widget is formed on the basis of functional Facebook "<a target="_blank" href="https://developers.facebook.com/docs/plugins/like-box-for-pages">Like Box</a>", only "<a href="https://www.facebook.com/pages/create/?ref_type=page_profile" target="_blank">page</a>" Facebook.
+			</p>
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			6.3. Block "Latest images" left "saytbare"
+			</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="latest_photo" control_type="checkbox">
+      <value>1</value>
+      <name locale="ru_RU">Отображать блок "Последние изображения" в левом "сайтбаре"
 			<![CDATA[
 			<br /><br />
 			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
@@ -635,14 +813,32 @@
 			</p>
 			]]>
 			</name>
-			<name locale="en_US">See block "Latest News" on the left "saytbare"</name>
-        </setting>	
-		
-		
-		<setting var="siteInfo" control_type="checkbox">
-            <value>1</value>
-            <name locale="en_US"/>
-            <name locale="ru_RU">
+      <name locale="en_US">Display unit "Latest images" left "saytbare"
+			<![CDATA[
+			<br /><br />
+			<p style="margin-right:-500px; border-left:1px solid #ccc; border-bottom:1px solid #ccc;margin-left:10px; padding-left:10px; padding-bottom:10px;"><span style="color:red">*</span> 
+			Block "Latest images" will be displayed only when during a "Photos" app.
+			</p>
+			
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			
+			6.4. Block "Information" in the left saytbare (annex "Site")
+			</p>
+			]]>
+			</name>
+    </setting>
+    <setting var="siteInfo" control_type="checkbox">
+      <value>1</value>
+      <name locale="en_US">
+			Display unit "Information" (in the annex "Site")
+			<![CDATA[			
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			
+			6.5. Block "tags of goods" in the left saytbare
+			</p>
+			]]>
+			</name>
+      <name locale="ru_RU">
 			Отображать блок "Информация" (в приложении "Сайт")
 			<![CDATA[			
 			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
@@ -651,11 +847,23 @@
 			</p>
 			]]>
 			</name>
-        </setting>
-		<setting var="tagsCloud" control_type="checkbox">
-            <value>1</value>
-            <name locale="en_US"/>
-            <name locale="ru_RU">
+    </setting>
+    <setting var="tagsCloud" control_type="checkbox">
+      <value>1</value>
+      <name locale="en_US">
+			Use "3D tag cloud"
+			<![CDATA[
+			
+			<p style="color:#000; font-weight:bold; margin: 20px -500px 10px 0;">
+			<span style="color:#777;">* followed by SETUP templates for "store" / "blog" / "photo" <br />
+- App "store" (Annex "store" - vkadka "showcase" - to "design" link "Theme Settings") <br />
+- Application "blog" (Annex "blog" - to "design" link "Theme Settings") <br />
+- "Photos" app (application "photo" - to "design" link "Theme Settings")			 
+			 </span>
+			</p>
+			]]>
+			</name>
+      <name locale="ru_RU">
 			Использовать "3D облако тегов"
 			<![CDATA[
 			
@@ -669,228 +877,272 @@
 			</p>
 			]]>
 			</name>
-        </setting>
-	</settings>
-	<locales>
-		<locale>
-			<msgid>Buy</msgid>
-			<msgstr locale="ru_RU">Купить</msgstr>
-			<msgstr locale="bg_BG">Купи</msgstr>
-		</locale>
-		<locale>
-			<msgid>Simply</msgid>
-			<msgstr locale="ru_RU">Просто</msgstr>
-			<msgstr locale="bg_BG">Просто</msgstr>
-		</locale>		
-		<locale>
-			<msgid>Convenient online store</msgid>
-			<msgstr locale="ru_RU">Удобный интернет-магазин</msgstr>
-			<msgstr locale="bg_BG">Удобният онлайн магазин</msgstr>
-		</locale>
-		<locale>
-			<msgid>Unfortunately, the page you requested was not found.</msgid>
-			<msgstr locale="ru_RU">К сожалению, запрашиваемая Вами страница не найдена.</msgstr>
-			<msgstr locale="bg_BG">За съжаление страницата, която търсите не е намеренa.</msgstr>
-		</locale>
-		<locale>
-			<msgid>You can find the page that interests you, click on the link on the left or by clicking on the main page.</msgid>
-			<msgstr locale="ru_RU">Вы сможете найти интересующую Вас страницу, пройдя по ссылкам слева или перейдя на главную страницу.</msgstr>
-			<msgstr locale="bg_BG">За да намерите страницата, която ви интересува, щракнете върху връзката вляво или се върнете на главната страница.</msgstr>
-		</locale>
-		<locale>
-			<msgid>Go to home</msgid>
-			<msgstr locale="ru_RU">Перейти на главную</msgstr>
-			<msgstr locale="bg_BG">Към главната</msgstr>
-		</locale>
-		<locale>
-			<msgid>Home</msgid>
-			<msgstr locale="ru_RU">Главная</msgstr>
-			<msgstr locale="bg_BG">Главна</msgstr>
-		</locale>
-		<locale>
-			<msgid>No account yet?</msgid>
-			<msgstr locale="ru_RU">Еще не зарегистрированы?</msgstr>
-			<msgstr locale="bg_BG">Още не сте регистриран?</msgstr>
-		</locale>
-		<locale>
-			<msgid>Sign up now!</msgid>
-			<msgstr locale="ru_RU">Зарегистрируйтесь сейчас!</msgstr>
-			<msgstr locale="bg_BG">Регистрирайте се сега!</msgstr>
-		</locale>
-		<locale>
-			<msgid>or</msgid>
-			<msgstr locale="ru_RU">или</msgstr>
-			<msgstr locale="bg_BG">или</msgstr>
-		</locale>
-		<locale>
-			<msgid>Congratulations!</msgid>
-			<msgstr locale="ru_RU">Поздравляем!</msgstr>
-			<msgstr locale="bg_BG">Поздравления!</msgstr>
-		</locale>
-		<locale>
-			<msgid>Authorization was successful!</msgid>
-			<msgstr locale="ru_RU">Авторизация прошла успешно!</msgstr>
-			<msgstr locale="bg_BG">Авторизацията е успешна!</msgstr>
-		</locale>
-		<locale>
-			<msgid>Go to your account</msgid>
-			<msgstr locale="ru_RU">Перейти в личный кабинет</msgstr>
-			<msgstr locale="bg_BG">Преглед на профила</msgstr>
-		</locale>
-		<locale>
-			<msgid>Back to home page</msgid>
-			<msgstr locale="ru_RU">Вернуться на главную страницу</msgstr>
-			<msgstr locale="bg_BG">Обратно към началната страница</msgstr>
-		</locale>
-		<locale>
-			<msgid>Remove</msgid>
-			<msgstr locale="ru_RU">Удалить</msgstr>
-			<msgstr locale="bg_BG">Премахни</msgstr>
-		</locale>
-		<locale>
-			<msgid>pcs.</msgid>
-			<msgstr locale="ru_RU">шт.</msgstr>
-			<msgstr locale="bg_BG">бр.</msgstr>
-		</locale>
-		<locale>
-			<msgid>Welcome</msgid>
-			<msgstr locale="ru_RU">Добро пожаловать</msgstr>
-			<msgstr locale="bg_BG">Добре дошъл</msgstr>
-		</locale>
-		<locale>
-			<msgid>Customer account</msgid>
-			<msgstr locale="ru_RU">Личный кабинет</msgstr>
-			<msgstr locale="bg_BG">Личен профил</msgstr>
-		</locale>
-		<locale>
-			<msgid>Welcome, Guest!</msgid>
-			<msgstr locale="ru_RU">Добро пожаловать, Гость!</msgstr>
-			<msgstr locale="bg_BG">Добре дошъл, Гост!</msgstr>
-		</locale>		
-		<locale>
-			<msgid>Currency</msgid>
-			<msgstr locale="ru_RU">Валюта</msgstr>
-			<msgstr locale="bg_BG">Валута</msgstr>
-		</locale>		
-		<locale>
-			<msgid>empty</msgid>
-			<msgstr locale="ru_RU">пусто</msgstr>
-			<msgstr locale="bg_BG">празно</msgstr>
-		</locale>
-		<locale>
-			<msgid>Product search</msgid>
-			<msgstr locale="ru_RU">Поиск товаров</msgstr>
-			<msgstr locale="bg_BG">Търсене на продукт</msgstr>
-		</locale>
-		<locale>
-			<msgid>Find</msgid>
-			<msgstr locale="ru_RU">Найти</msgstr>
-			<msgstr locale="bg_BG">Търси</msgstr>
-		</locale>
-		<locale>
-			<msgid>Close navigation pane</msgid>
-			<msgstr locale="ru_RU">Закрыть панель навигации</msgstr>
-			<msgstr locale="bg_BG">Затворете панела за навигация</msgstr>
-		</locale>
-		<locale>
-			<msgid>Open navigation pane</msgid>
-			<msgstr locale="ru_RU">Открыть панель навигации</msgstr>
-			<msgstr locale="bg_BG">Отворете панела за навигация</msgstr>
-		</locale>
-		<locale>
-			<msgid>Up</msgid>
-			<msgstr locale="ru_RU">Вверх</msgstr>
-			<msgstr locale="bg_BG">Нагоре</msgstr>
-		</locale>
-		<locale>
-			<msgid>Scroll page up</msgid>
-			<msgstr locale="ru_RU">Прокрутить страницу вверх</msgstr>
-			<msgstr locale="bg_BG">Превърти страницата нагоре</msgstr>
-		</locale>
-		<locale>
-			<msgid>Open all viewed products</msgid>
-			<msgstr locale="ru_RU">Открыть все просмотренные товары</msgstr>
-			<msgstr locale="bg_BG">Отвори всички прегледани продукти</msgstr>
-		</locale>
-		<locale>
-			<msgid>Viewed products</msgid>
-			<msgstr locale="ru_RU">Просмотренные товары</msgstr>
-			<msgstr locale="bg_BG">Разгледани продукти</msgstr>
-		</locale>
-		<locale>
-			<msgid>Dear friends!</msgid>
-			<msgstr locale="ru_RU">Дорогие друзья!</msgstr>
-			<msgstr locale="bg_BG">Скъпи приятели!</msgstr>
-		</locale>
-		<locale>
-			<msgid>Unfortunately, your browser does not support modern technology used on our website.</msgid>
-			<msgstr locale="ru_RU">К сожалению, Ваш браузер не поддерживает современные технологии используемые на нашем сайте.</msgstr>
-			<msgstr locale="bg_BG">За съжаление, Вашият браузър не поддържа съвременните технологии, използвани в нашия уебсайт.</msgstr>
-		</locale>
-		<locale>
-			<msgid>Please refresh your browser by downloading it on the links below or contact your system administrator serving your computer.</msgid>
-			<msgstr locale="ru_RU">Пожалуйста, обновите браузер, скачав его по ссылкам ниже, или обратитесь к системному администратору, обслуживающему Ваш компьютер.</msgstr>
-			<msgstr locale="bg_BG">Моля, презаредете браузъра си, като го изтеглите от линковете по-долу или се свържете с вашия системен администратор, обслужващ вашия компютър.</msgstr>
-		</locale>
-		<locale>
-			<msgid>Favorites</msgid>
-			<msgstr locale="ru_RU">Избранное</msgstr>
-			<msgstr locale="bg_BG">Любими</msgstr>
-		</locale>
-		<locale>
-			<msgid>Compare</msgid>
-			<msgstr locale="ru_RU">Сравнить</msgstr>
-			<msgstr locale="bg_BG">Сравни</msgstr>
-		</locale>
-		<locale>
-			<msgid>Information</msgid>
-			<msgstr locale="ru_RU">Информация</msgstr>
-			<msgstr locale="bg_BG">Информация</msgstr>
-		</locale>
-		<locale>
-			<msgid>Sections of site</msgid>
-			<msgstr locale="ru_RU">Разделы сайта</msgstr>
-			<msgstr locale="bg_BG">Раздели</msgstr>
-		</locale>
-		<locale>
-			<msgid>News</msgid>
-			<msgstr locale="ru_RU">Новости</msgstr>
-			<msgstr locale="bg_BG">Новини</msgstr>
-		</locale>
-		<locale>
-			<msgid>Last photos</msgid>
-			<msgstr locale="ru_RU">Последние фото</msgstr>
-			<msgstr locale="bg_BG">Последни снимки</msgstr>
-		</locale>
-		<locale>
-			<msgid>TOTAL</msgid>
-			<msgstr locale="ru_RU">ОБЩАЯ СУММА</msgstr>
-			<msgstr locale="bg_BG">ОБЩА СУМА</msgstr>
-		</locale>
-		<locale>
-			<msgid>with discount</msgid>
-			<msgstr locale="ru_RU">с учетом скидки</msgstr>
-			<msgstr locale="bg_BG">с отстъпка</msgstr>
-		</locale>
-		<locale>
-			<msgid>Go to cart</msgid>
-			<msgstr locale="ru_RU">Перейти в корзину</msgstr>
-			<msgstr locale="bg_BG">Отиди в количката</msgstr>
-		</locale>
-		<locale>
-			<msgid>Categories</msgid>
-			<msgstr locale="ru_RU">Категории</msgstr>
-			<msgstr locale="bg_BG">Категории</msgstr>
-		</locale>
-		<locale>
-			<msgid>Subscribe</msgid>
-			<msgstr locale="ru_RU">Подписаться</msgstr>
-			<msgstr locale="bg_BG">Абонирам се</msgstr>
-		</locale>
-		<locale>
-			<msgid>Thank you for subscribing.</msgid>
-			<msgstr locale="ru_RU">Благодарим вас за подписку.</msgstr>
-			<msgstr locale="bg_BG">Благодарим ви, че се абонирахте.</msgstr>
-		</locale>		
-	</locales>
+    </setting>
+  </settings>
+  <locales>
+    <locale>
+      <msgid>Buy</msgid>
+      <msgstr locale="ru_RU">Купить</msgstr>
+      <msgstr locale="bg_BG">Купи</msgstr>
+      <msgstr locale="en_US">Buy</msgstr>
+    </locale>
+    <locale>
+      <msgid>Simply</msgid>
+      <msgstr locale="ru_RU">Просто</msgstr>
+      <msgstr locale="bg_BG">Просто</msgstr>
+      <msgstr locale="en_US">Simply</msgstr>
+    </locale>
+    <locale>
+      <msgid>Convenient online store</msgid>
+      <msgstr locale="ru_RU">Удобный интернет-магазин</msgstr>
+      <msgstr locale="bg_BG">Удобният онлайн магазин</msgstr>
+      <msgstr locale="en_US">Convenient online store</msgstr>
+    </locale>
+    <locale>
+      <msgid>Unfortunately, the page you requested was not found.</msgid>
+      <msgstr locale="ru_RU">К сожалению, запрашиваемая Вами страница не найдена.</msgstr>
+      <msgstr locale="bg_BG">За съжаление страницата, която търсите не е намеренa.</msgstr>
+      <msgstr locale="en_US">Unfortunately, the page you requested was not found</msgstr>
+    </locale>
+    <locale>
+      <msgid>You can find the page that interests you, click on the link on the left or by clicking on the main page.</msgid>
+      <msgstr locale="ru_RU">Вы сможете найти интересующую Вас страницу, пройдя по ссылкам слева или перейдя на главную страницу.</msgstr>
+      <msgstr locale="bg_BG">За да намерите страницата, която ви интересува, щракнете върху връзката вляво или се върнете на главната страница.</msgstr>
+      <msgstr locale="en_US">You can find the page that interests you, click on the link on the left or by clicking on the main page.</msgstr>
+    </locale>
+    <locale>
+      <msgid>Go to home</msgid>
+      <msgstr locale="ru_RU">Перейти на главную</msgstr>
+      <msgstr locale="bg_BG">Към главната</msgstr>
+      <msgstr locale="en_US">Go to home</msgstr>
+    </locale>
+    <locale>
+      <msgid>Home</msgid>
+      <msgstr locale="ru_RU">Главная</msgstr>
+      <msgstr locale="bg_BG">Главна</msgstr>
+      <msgstr locale="en_US">Home</msgstr>
+    </locale>
+    <locale>
+      <msgid>No account yet?</msgid>
+      <msgstr locale="ru_RU">Еще не зарегистрированы?</msgstr>
+      <msgstr locale="bg_BG">Още не сте регистриран?</msgstr>
+      <msgstr locale="en_US">No account yet?</msgstr>
+    </locale>
+    <locale>
+      <msgid>Sign up now!</msgid>
+      <msgstr locale="ru_RU">Зарегистрируйтесь сейчас!</msgstr>
+      <msgstr locale="bg_BG">Регистрирайте се сега!</msgstr>
+      <msgstr locale="en_US">Sign up now!</msgstr>
+    </locale>
+    <locale>
+      <msgid>or</msgid>
+      <msgstr locale="ru_RU">или</msgstr>
+      <msgstr locale="bg_BG">или</msgstr>
+      <msgstr locale="en_US">or</msgstr>
+    </locale>
+    <locale>
+      <msgid>Congratulations!</msgid>
+      <msgstr locale="ru_RU">Поздравляем!</msgstr>
+      <msgstr locale="bg_BG">Поздравления!</msgstr>
+      <msgstr locale="en_US">Congratulations!</msgstr>
+    </locale>
+    <locale>
+      <msgid>Authorization was successful!</msgid>
+      <msgstr locale="ru_RU">Авторизация прошла успешно!</msgstr>
+      <msgstr locale="bg_BG">Авторизацията е успешна!</msgstr>
+      <msgstr locale="en_US">Authorization was successful!</msgstr>
+    </locale>
+    <locale>
+      <msgid>Go to your account</msgid>
+      <msgstr locale="ru_RU">Перейти в личный кабинет</msgstr>
+      <msgstr locale="bg_BG">Преглед на профила</msgstr>
+      <msgstr locale="en_US">Go to your account</msgstr>
+    </locale>
+    <locale>
+      <msgid>Back to home page</msgid>
+      <msgstr locale="ru_RU">Вернуться на главную страницу</msgstr>
+      <msgstr locale="bg_BG">Обратно към началната страница</msgstr>
+      <msgstr locale="en_US">Back to home page</msgstr>
+    </locale>
+    <locale>
+      <msgid>Remove</msgid>
+      <msgstr locale="ru_RU">Удалить</msgstr>
+      <msgstr locale="bg_BG">Премахни</msgstr>
+      <msgstr locale="en_US">Remove</msgstr>
+    </locale>
+    <locale>
+      <msgid>pcs.</msgid>
+      <msgstr locale="ru_RU">шт.</msgstr>
+      <msgstr locale="bg_BG">бр.</msgstr>
+      <msgstr locale="en_US">pcs.</msgstr>
+    </locale>
+    <locale>
+      <msgid>Welcome</msgid>
+      <msgstr locale="ru_RU">Добро пожаловать</msgstr>
+      <msgstr locale="bg_BG">Добре дошъл</msgstr>
+      <msgstr locale="en_US">Welcome</msgstr>
+    </locale>
+    <locale>
+      <msgid>Customer account</msgid>
+      <msgstr locale="ru_RU">Личный кабинет</msgstr>
+      <msgstr locale="bg_BG">Личен профил</msgstr>
+      <msgstr locale="en_US">Customer account</msgstr>
+    </locale>
+    <locale>
+      <msgid>Welcome, Guest!</msgid>
+      <msgstr locale="ru_RU">Добро пожаловать, Гость!</msgstr>
+      <msgstr locale="bg_BG">Добре дошъл, Гост!</msgstr>
+      <msgstr locale="en_US">Welcome, Guest!</msgstr>
+    </locale>
+    <locale>
+      <msgid>Currency</msgid>
+      <msgstr locale="ru_RU">Валюта</msgstr>
+      <msgstr locale="bg_BG">Валута</msgstr>
+      <msgstr locale="en_US">Currency</msgstr>
+    </locale>
+    <locale>
+      <msgid>empty</msgid>
+      <msgstr locale="ru_RU">пусто</msgstr>
+      <msgstr locale="bg_BG">празно</msgstr>
+      <msgstr locale="en_US">empty</msgstr>
+    </locale>
+    <locale>
+      <msgid>Product search</msgid>
+      <msgstr locale="ru_RU">Поиск товаров</msgstr>
+      <msgstr locale="bg_BG">Търсене на продукт</msgstr>
+      <msgstr locale="en_US">Product search</msgstr>
+    </locale>
+    <locale>
+      <msgid>Find</msgid>
+      <msgstr locale="ru_RU">Найти</msgstr>
+      <msgstr locale="bg_BG">Търси</msgstr>
+      <msgstr locale="en_US">Find</msgstr>
+    </locale>
+    <locale>
+      <msgid>Close navigation pane</msgid>
+      <msgstr locale="ru_RU">Закрыть панель навигации</msgstr>
+      <msgstr locale="bg_BG">Затворете панела за навигация</msgstr>
+      <msgstr locale="en_US">Close navigation pane</msgstr>
+    </locale>
+    <locale>
+      <msgid>Open navigation pane</msgid>
+      <msgstr locale="ru_RU">Открыть панель навигации</msgstr>
+      <msgstr locale="bg_BG">Отворете панела за навигация</msgstr>
+      <msgstr locale="en_US">Open navigation pane</msgstr>
+    </locale>
+    <locale>
+      <msgid>Up</msgid>
+      <msgstr locale="ru_RU">Вверх</msgstr>
+      <msgstr locale="bg_BG">Нагоре</msgstr>
+      <msgstr locale="en_US">Up</msgstr>
+    </locale>
+    <locale>
+      <msgid>Scroll page up</msgid>
+      <msgstr locale="ru_RU">Прокрутить страницу вверх</msgstr>
+      <msgstr locale="bg_BG">Превърти страницата нагоре</msgstr>
+      <msgstr locale="en_US">Scroll page up</msgstr>
+    </locale>
+    <locale>
+      <msgid>Open all viewed products</msgid>
+      <msgstr locale="ru_RU">Открыть все просмотренные товары</msgstr>
+      <msgstr locale="bg_BG">Отвори всички прегледани продукти</msgstr>
+      <msgstr locale="en_US">---</msgstr>
+    </locale>
+    <locale>
+      <msgid>Viewed products</msgid>
+      <msgstr locale="ru_RU">Просмотренные товары</msgstr>
+      <msgstr locale="bg_BG">Разгледани продукти</msgstr>
+      <msgstr locale="en_US">Open all viewed products</msgstr>
+    </locale>
+    <locale>
+      <msgid>Dear friends!</msgid>
+      <msgstr locale="ru_RU">Дорогие друзья!</msgstr>
+      <msgstr locale="bg_BG">Скъпи приятели!</msgstr>
+      <msgstr locale="en_US">Dear friends!</msgstr>
+    </locale>
+    <locale>
+      <msgid>Unfortunately, your browser does not support modern technology used on our website.</msgid>
+      <msgstr locale="ru_RU">К сожалению, Ваш браузер не поддерживает современные технологии используемые на нашем сайте.</msgstr>
+      <msgstr locale="bg_BG">За съжаление, Вашият браузър не поддържа съвременните технологии, използвани в нашия уебсайт.</msgstr>
+      <msgstr locale="en_US">Unfortunately, your browser does not support modern technology used on our website.</msgstr>
+    </locale>
+    <locale>
+      <msgid>Please refresh your browser by downloading it on the links below or contact your system administrator serving your computer.</msgid>
+      <msgstr locale="ru_RU">Пожалуйста, обновите браузер, скачав его по ссылкам ниже, или обратитесь к системному администратору, обслуживающему Ваш компьютер.</msgstr>
+      <msgstr locale="bg_BG">Моля, презаредете браузъра си, като го изтеглите от линковете по-долу или се свържете с вашия системен администратор, обслужващ вашия компютър.</msgstr>
+      <msgstr locale="en_US">Please refresh your browser by downloading it on the links below or contact your system administrator serving your computer.</msgstr>
+    </locale>
+    <locale>
+      <msgid>Favorites</msgid>
+      <msgstr locale="ru_RU">Избранное</msgstr>
+      <msgstr locale="bg_BG">Любими</msgstr>
+      <msgstr locale="en_US">Favorites</msgstr>
+    </locale>
+    <locale>
+      <msgid>Compare</msgid>
+      <msgstr locale="ru_RU">Сравнить</msgstr>
+      <msgstr locale="bg_BG">Сравни</msgstr>
+      <msgstr locale="en_US">Compare</msgstr>
+    </locale>
+    <locale>
+      <msgid>Information</msgid>
+      <msgstr locale="ru_RU">Информация</msgstr>
+      <msgstr locale="bg_BG">Информация</msgstr>
+      <msgstr locale="en_US">Information</msgstr>
+    </locale>
+    <locale>
+      <msgid>Sections of site</msgid>
+      <msgstr locale="ru_RU">Разделы сайта</msgstr>
+      <msgstr locale="bg_BG">Раздели</msgstr>
+      <msgstr locale="en_US">Sections of site</msgstr>
+    </locale>
+    <locale>
+      <msgid>News</msgid>
+      <msgstr locale="ru_RU">Новости</msgstr>
+      <msgstr locale="bg_BG">Новини</msgstr>
+      <msgstr locale="en_US">News</msgstr>
+    </locale>
+    <locale>
+      <msgid>Last photos</msgid>
+      <msgstr locale="ru_RU">Последние фото</msgstr>
+      <msgstr locale="bg_BG">Последни снимки</msgstr>
+      <msgstr locale="en_US">Last photos</msgstr>
+    </locale>
+    <locale>
+      <msgid>TOTAL</msgid>
+      <msgstr locale="ru_RU">ОБЩАЯ СУММА</msgstr>
+      <msgstr locale="bg_BG">ОБЩА СУМА</msgstr>
+      <msgstr locale="en_US">TOTAL</msgstr>
+    </locale>
+    <locale>
+      <msgid>with discount</msgid>
+      <msgstr locale="ru_RU">с учетом скидки</msgstr>
+      <msgstr locale="bg_BG">с отстъпка</msgstr>
+      <msgstr locale="en_US">with discount</msgstr>
+    </locale>
+    <locale>
+      <msgid>Go to cart</msgid>
+      <msgstr locale="ru_RU">Перейти в корзину</msgstr>
+      <msgstr locale="bg_BG">Отиди в количката</msgstr>
+      <msgstr locale="en_US">Go to cart</msgstr>
+    </locale>
+    <locale>
+      <msgid>Categories</msgid>
+      <msgstr locale="ru_RU">Категории</msgstr>
+      <msgstr locale="bg_BG">Категории</msgstr>
+      <msgstr locale="en_US">Categories</msgstr>
+    </locale>
+    <locale>
+      <msgid>Subscribe</msgid>
+      <msgstr locale="ru_RU">Подписаться</msgstr>
+      <msgstr locale="bg_BG">Абонирам се</msgstr>
+      <msgstr locale="en_US">Subscribe</msgstr>
+    </locale>
+    <locale>
+      <msgid>Thank you for subscribing.</msgid>
+      <msgstr locale="ru_RU">Благодарим вас за подписку.</msgstr>
+      <msgstr locale="bg_BG">Благодарим ви, че се абонирахте.</msgstr>
+      <msgstr locale="en_US">Thank you for subscribing.</msgstr>
+    </locale>
+  </locales>
 </theme>

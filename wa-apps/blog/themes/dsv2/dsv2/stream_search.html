@@ -4,7 +4,7 @@
     <div class="post search-match margin-bottom-50" id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts"{/if} itemscope itemtype="http://schema.org/BlogPosting">
         <div class="post-heading">
             {if !empty($post.preview)}
-                <img src="{$wa_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
+                <img src="{$wa_static_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
             {/if}
         </div>
         <div class="post-info">

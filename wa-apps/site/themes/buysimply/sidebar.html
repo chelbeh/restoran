@@ -1,143 +1,51 @@
-<div class="information-block{if $theme_settings.top_menu_content == 'info_page'} hide-for-desktop{/if}">
-<!-- adaptive -->
-    <div class="caption"><span>[`Sections of site`]</span></div>
-    {if $wa->shop && $theme_settings.top_menu_source == 'shop'}
-        {$site_pages=$wa->shop->pages(0,2,false)}
-        {if $wa_app == 'shop'}{$page_select = $wa->param('page_id')}{else}{$page_select = null}{/if}
+{include file="sidebar.mobile.html"}
+{if $wa->shop}{include file="vertical.tree.html"}{/if}
+
+{if !empty($theme_settings.siteInfo)}
+    {if $wa->shop && $theme_settings.top_menu_source == 'site'}
+        {$shop_pages=$wa->shop->pages(0,2,false)}
+        {$page_select = null}
     {else}
-        {$site_pages=$wa->site->pages(0,2,false)}
-        {if $wa_app == 'site' && isset($page.id)}{$page_select = $page.id}{else}{$page_select = null}{/if}
+        {$shop_pages=$wa->site->pages(0,2,false)}
+        {$page_select = $page.id}
     {/if}
-    <ul class="pages-navigation">
-    <!--home link-->
-    {if !empty($theme_settings.top_menu_index)}
-        <li{if $wa_url == $wa->currentUrl()} class="selected"{/if}><a href="{$wa_url}">[`Home`]</a></li>
-    {/if}
-    <!--pages-->
-    {foreach $site_pages as $pageMT}
-        {if !isset($pageMT.menu_top)}
-        <li{if $pageMT.id==$page_select} class="selected"{/if}>
-            <a href="{$pageMT.url}">{$pageMT.name}</a>
-            {if !empty($pageMT.childs)}<ul>
-            {foreach $pageMT.childs as $pageMT_}
-                {if !isset($pageMT_.menu_top)}
-                <li{if $pageMT_.id==$page_select} class="selected"{/if}>
-                    <a href="{$pageMT_.url}">{$pageMT_.name}</a>
-                    {if !empty($pageMT_.childs)}<ul>
-                    {foreach $pageMT_.childs as $pageMT__}
-                        {if !isset($pageMT__.menu_top)}
-                        <li{if $pageMT__.id==$page_select} class="selected"{/if}>
-                            <a href="{$pageMT__.url}">{$pageMT__.name}</a>
-                        </li>
-                        {/if}
-                    {/foreach}
-                    </ul>{/if}
-                </li>
-                {/if}
-            {/foreach}
-            </ul>{/if}
-        </li>
-        {/if}
-    {/foreach}
-    <!-- wa apps -->
-    {foreach $wa->apps() as $a}
-        <li{if $a.url==$wa_app_url} class="selected"{/if}><a  href="{$a.url}">{$a.name}</a></li>
-    {/foreach}
-    </ul>
-</div>
-
-{if $wa_app == 'site'}<!-- site -->
-    {if $wa->shop}{include file="vertical.tree.html"}{/if}
-    
-    {if !empty($theme_settings.siteInfo)}
-        {if $wa->shop && $theme_settings.top_menu_source == 'site'}
-            {$shop_pages=$wa->shop->pages(0,2,false)}
-            {$page_select = null}
-        {else}
-            {$shop_pages=$wa->site->pages(0,2,false)}
-            {$page_select = $page.id}
-        {/if}
-        {if $shop_pages}<!-- info pages -->
-        <div class="information-block">
-            <div class="caption"><span>[`Information`]</span></div>
-            <ul>
-            {foreach $shop_pages as $pageML}
-                {if !isset($pageML.menu_left)}
-                <li{if $pageML.id==$page_select} class="selected"{/if}>
-                    <a href="{$pageML.url}">{$pageML.name}</a>
-                    {if !empty($pageML.childs)}<ul>
-                    {foreach $pageML.childs as $pageML_}
-                        {if !isset($pageML_.menu_left)}
-                        <li{if $pageML_.id==$page_select} class="selected"{/if}>
-                            <a href="{$pageML_.url}">{$pageML_.name}</a>
-                            {if !empty($pageML_.childs)}<ul>
-                            {foreach $pageML_.childs as $pageML__}
-                                {if !isset($pageML__.menu_left)}
-                                <li{if $pageML__.id==$page_select} class="selected"{/if}>
-                                    <a href="{$pageML__.url}">{$pageML__.name}</a>
-                                </li>
-                                {/if}
-                            {/foreach}
-                            </ul>{/if}
-                        </li>
-                        {/if}
-                    {/foreach}
-                    </ul>{/if}
-                </li>
-                {/if}
-            {/foreach}
-            </ul>
-        </div>
-        {/if}
-    {/if}
-{/if}
-{if $wa_app == 'shop'}<!-- shop -->{include file="sidebar.shop.html"}{/if}
-{if $wa_app == 'blog'}<!-- blog -->{include file="sidebar.blog.html"}{/if}
-{if $wa_app == 'photos'}<!-- photo -->{include file="sidebar.photos.html"}{/if}
-
-
-{if $wa->mailer}{include file="form.subscribe.html" place="place-sidebar"}{/if}{*FORM APP MAILER*}
-{if $wa->shop && empty($theme_settings.addition) && $wa->get('addition') != 'lastview'}{include file="lastview.product.html"}{/if}
-
-{if !empty($theme_settings.communityVKid)}{include file="community.vk.html" place="place-sidebar"}{/if}
-{if !empty($theme_settings.communityFBhref)}{include file="community.fb.html" place="place-sidebar"}{/if}
-
-{if $wa->blog && !empty($theme_settings.latest_posts) && $wa_app != 'blog'}
-	{$latest_posts = $wa->blog->posts(null, 5)}
-	{if !empty($latest_posts)}<!-- latest posts-->
-        <div class="latest-posts">
-            <a class="news" href="{$wa->getUrl('blog/frontend')}">[`News`]</a>
-            {foreach $latest_posts as $post}
-                <div class="post">                    
-                    <div class="credentials">        
-                        {$post.datetime|wa_datetime:"date"}
-                    </div>
-                    <p><a href="{$post.link}">{$post.text|strip_tags|truncate:100}</a></p>
-                </div>
-                {if !$post@last}<hr>{/if}
-            {/foreach}
-        </div>
-    {/if}
-{/if}
-
-{if $wa->photos && !empty($theme_settings.latest_photo) && $wa_app != 'photos'}
-	{$latest_photos = $wa->photos->photos('', null, 8)}
-	{if !empty($latest_photos)}<!-- latest photo-->
-	<div class="latest-photo">
-        <div class="caption"><span>[`Last photos`]</span></div>  
+    {if $shop_pages}<!-- info pages -->
+    <div class="information-block">
+        <div class="caption"><span>[`Information`]</span></div>
         <ul>
-        {foreach $latest_photos as $lphoto}      
-            <li{if $lphoto.stack_count > 0} class="stacked"{/if}>
-                <div class="image_">
-                {if empty($lphoto.frontend_link)}
-                    {$wa->photos->getImgHtml($lphoto, "96x96")}
-                {else}
-                    <a href="{$lphoto.frontend_link|default:'javascript:void(0);'}">{$wa->photos->getImgHtml($lphoto, "96x96")}</a>
-                {/if}
-                </div>        
+        {foreach $shop_pages as $pageML}
+            {if !isset($pageML.menu_left)}
+            <li{if $pageML.id==$page_select} class="selected"{/if}>
+                <a href="{$pageML.url}">{$pageML.name}</a>
+                {if !empty($pageML.childs)}<ul>
+                {foreach $pageML.childs as $pageML_}
+                    {if !isset($pageML_.menu_left)}
+                    <li{if $pageML_.id==$page_select} class="selected"{/if}>
+                        <a href="{$pageML_.url}">{$pageML_.name}</a>
+                        {if !empty($pageML_.childs)}<ul>
+                        {foreach $pageML_.childs as $pageML__}
+                            {if !isset($pageML__.menu_left)}
+                            <li{if $pageML__.id==$page_select} class="selected"{/if}>
+                                <a href="{$pageML__.url}">{$pageML__.name}</a>
+                            </li>
+                            {/if}
+                        {/foreach}
+                        </ul>{/if}
+                    </li>
+                    {/if}
+                {/foreach}
+                </ul>{/if}
             </li>
+            {/if}
         {/foreach}
         </ul>
-	</div>
-	{/if}
+    </div>
+    {/if}
 {/if}
+
+{if $wa->mailer && $wa->getUrl('mailer/frontend/subscribe')}{include file="form.subscribe.html" place="place-sidebar"}{/if}{*FORM APP MAILER*}
+{if $wa->shop && empty($theme_settings.addition) && $wa->get('addition') != 'lastview'}{include file="lastview.product.html"}{/if}
+{if !empty($theme_settings.communityVKid)}{include file="community.vk.html" place="place-sidebar"}{/if}
+{if !empty($theme_settings.communityFBhref)}{include file="community.fb.html" place="place-sidebar"}{/if}
+{if $wa->blog && !empty($theme_settings.latest_posts)}{include file="last.posts.html" _index=false}{/if}
+{if $wa->photos && !empty($theme_settings.latest_photo)}{include file="last.photos.html" _index=false}{/if}

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
+<theme id="dsv2" system="" vendor="988467" author="Designsovkusom" app="site" version="2.0.0">
+    <name locale="en_US">Design with taste 2</name>
+    <name locale="ru_RU">Дизайн со вкусом 2</name>
+    <description locale="en_US">Adaptive design theme for all base Webasyst apps</description>
+    <description locale="ru_RU">Семейство адаптивных тем дизайна для всех базовых приложений Webasyst</description>
+    <files>
+        <file path="index.html" custom="0">
+    		<description locale="en_US">Core layout of the Default theme family</description>
+    		<description locale="ru_RU">Основной макет тем дизайна семейства «Дизайн со вкусом»</description>
+        </file>
+    	<file path="main.html" custom="0">
+    		<description locale="en_US">Main layout for the Site app content</description>
+    		<description locale="en_US">Основной вывод приложения «Сайт»</description>
+    	</file>
+        <file path="page.html" custom="0">
+    		<description locale="en_US">Static page content and navigation</description>
+    		<description locale="ru_RU">Содержимое открытой страницы и навигация по страницам</description>
+        </file>
+        <file path="login.html" custom="0">
+    		<description locale="en_US">Login page</description>
+    		<description locale="ru_RU">Страница входа для пользователей</description>
+    	</file>
+        <file path="signup.html" custom="0">
+            <description locale="en_US">Sign up page</description>
+            <description locale="ru_RU">Страница регистрации пользователей</description>
+        </file>
+        <file path="forgotpassword.html" custom="0">
+            <description locale="en_US">Forgot password page</description>
+            <description locale="ru_RU">Страница сброса пароля</description>
+        </file>
+        <file path="error.html" custom="0">
+    		<description locale="en_US">404 and other errors</description>
+    		<description locale="ru_RU">404 и другие ошибки</description>
+        </file>
+        <file path="bootstrap.min.css" custom="0">
+            <description locale="ru_RU">Bootstrap v3.2.0</description>
+        </file>
+        <file path="dsv.css" custom="0">
+            <description locale="ru_RU">Базовый набор стилей «Дизайн со вкусом 2»</description>
+        </file>
+        <file path="responsive.css" custom="0">
+            <description locale="ru_RU">Дополнительные стили для адаптации шаблона</description>
+        </file>
+        <file path="font-awesome.min.css" custom="0">
+            <description locale="ru_RU">Font Awesome 4.1.0</description>
+        </file>
+        <file path="html5shiv.min.js" custom="0">
+            <description locale="ru_RU">HTML5 Shiv 3.7.2</description>
+        </file>
+        <file path="respond.min.js" custom="0">
+            <description locale="ru_RU">Respond.js v1.4.2</description>
+        </file>
+        <file path="bootstrap.min.js" custom="0">
+            <description locale="ru_RU">Bootstrap v3.2.0</description>
+        </file>
+        <file path="bootstrap-hover-dropdown.min.js" custom="0">
+            <description locale="ru_RU">Bootstrap Hover Dropdown Plugin</description>
+        </file>
+        <file path="dsv.phones.html" custom="0">
+            <description locale="ru_RU">Телефоны в шапке сайта</description>
+        </file>
+        <file path="dsv.logo.html" custom="0">
+            <description locale="ru_RU">Вывод логотипа</description>
+        </file>
+        <file path="dsv.social.html" custom="0">
+            <description locale="ru_RU">Вывод социальных иконок</description>
+        </file>
+        <file path="dsv.js" custom="0">
+            <description locale="ru_RU">Основной js файл</description>
+        </file>
+        <file path="head.html" custom="0">
+            <description locale="ru_RU">Блок &lt;head&gt; приложения «Сайт»</description>
+        </file>
+    <file path="search.html" custom="1"><description locale="ru_RU">Форма поиска</description></file><file path="menu.html" custom="1"><description locale="ru_RU">Меню категорий</description></file></files>
+    <about locale="en_US">
+<![CDATA[
+<p><b>Default</b> is a universal adaptive design theme family for all basic Webasyst apps: Site, Blog, Photos, Shop-Script, and others. The parent (main) theme of the family, which includes the basic set of CSS rules and the common layout template index.html, is the Default (i.e. this) theme for the Site application. All Default design themes used in other applications (e.g., Blog or Photos) link common CSS and index.html layout file from the main (i.e. this) theme.</p>
+<p>Default design themes automatically link CSS depending on a visitor's device. Supported devices and platforms: iOS or Android based mobile devices, tablet computers such as iPad, common desktop computers and laptops.</p>
+]]>
+    </about>
+    <about locale="ru_RU">
+<![CDATA[
+<p><b>Default</b> — это универсальное семейство адаптивных тем дизайна для всех базовых приложений фреймворка Вебасист: Сайт, Блог, Фото, Shop-Script и других. Родительской (основной) темой семейства, включающей в себя базовый набор CSS-стилей и общий макет дизайна index.html, является тема Default для приложения «Сайт» (данная тема). Все темы дизайна Default для других приложений (Блог, Фото и других) используют базовый CSS и index.html из родительской (основной) темы.</p>
+<p>Темы дизайна семейства Default оптимизированы для всех современных браузеров, планшетных компьютеров и мобильных устройств на основе iOS и Android. CSS-стили подключаются в зависимости от разрешения и типа устройства, которым пользуется посетитель сайта.</p>
+]]>
+    </about>
+    <settings>
+        <setting var="logo" control_type="image">
+            <value/>
+            <filename>img/mylogo.*</filename>
+            <name locale="en_US">Company Logo</name>
+            <name locale="ru_RU">Логотип компании</name>
+        </setting>
+        <setting var="custom_background" control_type="image">
+            <value/>
+            <filename>img/custom_background.*</filename>
+            <name locale="en_US">Custom background</name>
+            <name locale="ru_RU">Своя подложка</name>
+        </setting>
+        <setting var="fb" control_type="text">
+            <value>https://www.facebook.com/</value>
+            <name locale="en_US">Facebook page URL</name>
+            <name locale="ru_RU">Адрес страницы во «Фейсбуке»</name>
+            <description locale="en_US">Example: https://www.facebook.com/Webasyst</description>
+            <description locale="ru_RU">Например: https://www.facebook.com/Webasyst</description>
+        </setting>
+        <setting var="vk" control_type="text">
+            <value>http://vk.com/</value>
+            <name locale="en_US">VK.com page URL</name>
+            <name locale="ru_RU">Адрес страницы или группы во «ВКонтакте»</name>
+            <description locale="en_US">Example: http://vk.com/webasyst_ru</description>
+            <description locale="ru_RU">Например: http://vk.com/webasyst_ru</description>
+        </setting>
+        <setting var="ok" control_type="text">
+            <value>http://www.odnoklassniki.ru/</value>
+            <name locale="en_US">Odnoklassniki page URL</name>
+            <name locale="ru_RU">Адрес страницы или группы в Одноклассниках</name>
+            <description locale="en_US">Example: http://www.odnoklassniki.ru/mycommunity</description>
+            <description locale="ru_RU">Например: http://www.odnoklassniki.ru/mycommunity</description>
+        </setting>
+        <setting var="gp" control_type="text">
+            <value>https://plus.google.com/</value>
+            <name locale="en_US">Gooogle Plus page URL</name>
+            <name locale="ru_RU">Адрес страницы Google Plus</name>
+            <description locale="en_US">Example: https://plus.google.com/mypage/</description>
+            <description locale="ru_RU">Например: https://plus.google.com/mypage/</description>
+        </setting>
+        <setting var="tt" control_type="text">
+            <value>https://twitter.com/</value>
+            <name locale="en_US">Twitter username</name>
+            <name locale="ru_RU">Имя пользователя в Твиттере</name>
+            <description locale="en_US">Example: webasyst</description>
+            <description locale="ru_RU">Например: webasyst_ru</description>
+        </setting>
+        <setting var="color_scheme" control_type="image_select">
+            <value>img/themesettings/blue.png</value>
+            <name locale="ru_RU">Цветовая гамма</name>
+            <name locale="en_US">Color scheme</name>
+            <options>
+                <option value="img/themesettings/blue.png"/>
+                <option value="img/themesettings/blue2.png"/>
+                <option value="img/themesettings/blue3.png"/>
+                <option value="img/themesettings/darkblue.png"/>
+                <option value="img/themesettings/green.png"/>
+                <option value="img/themesettings/bermuda.png"/>
+                <option value="img/themesettings/sanmarino.png"/>
+                <option value="img/themesettings/orange.png"/>
+                <option value="img/themesettings/red.png"/>
+                <option value="img/themesettings/purple.png"/>
+                <option value="img/themesettings/brown.png"/>
+                <option value="img/themesettings/sun.png"/>
+                <option value="img/themesettings/darkpink.png"/>
+                <option value="img/themesettings/bluepurple.png"/>
+            </options>
+        </setting>
+        <setting var="custom_color" control_type="color">
+            <value/>
+            <name locale="en_US">Custom color</name>
+            <name locale="ru_RU">Свой цвет</name>
+            <description locale="en_US">Example: #000000</description>
+            <description locale="ru_RU">Например: #000000</description>
+        </setting>
+        <setting var="rub" control_type="select">
+            <value>text</value>
+            <name locale="ru_RU">Написание символа рубля</name>
+            <name locale="en_US">Ruble symbol</name>
+            <options>
+                <option value="text">
+                    <name locale="ru_RU">руб.</name>
+                    <name locale="en_US">руб.</name>
+                </option>
+                <option value="symbol">
+                    <name locale="ru_RU">Р</name>
+                    <name locale="en_US">Р</name>
+                </option>
+            </options>
+        </setting>
+    </settings>
+    <locales>
+        <locale>
+            <msgid>Follow us</msgid>
+            <msgstr locale="ru_RU">Подписаться на новости</msgstr>
+        </locale>
+        <locale>
+            <msgid>Catalog</msgid>
+            <msgstr locale="ru_RU">Каталог</msgstr>
+        </locale>
+        <locale>
+            <msgid>Subscribe to our email newsletter</msgid>
+            <msgstr locale="ru_RU">Подписаться на рассылку</msgstr>
+        </locale>
+        <locale>
+            <msgid>Or follow us on Facebook and Twitter</msgid>
+            <msgstr locale="ru_RU">Или подписывайтесь в соцсетях</msgstr>
+        </locale>
+        <locale>
+            <msgid>Your shopping cart</msgid>
+            <msgstr locale="ru_RU">Ваша корзина</msgstr>
+        </locale>
+        <locale>
+            <msgid>Favorites</msgid>
+            <msgstr locale="ru_RU">Избранное</msgstr>
+        </locale>
+        <locale>
+            <msgid>Recently viewed</msgid>
+            <msgstr locale="ru_RU">Недавно просмотренные</msgstr>
+        </locale>
+        <locale>
+            <msgid>Compare</msgid>
+            <msgstr locale="ru_RU">Сравнение</msgstr>
+        </locale>
+    </locales>
+</theme>

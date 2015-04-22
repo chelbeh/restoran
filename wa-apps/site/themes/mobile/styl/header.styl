@@ -1,0 +1,81 @@
+.header-wrapper
+    display table
+    position fixed
+    top: 0
+    left: 0
+    width: 100%;
+    height: 3.5em;
+    padding: 0.25em 0.5em;
+    box-sizing border-box
+    $box-shadow(0 0 3px 0 rgba(0,0,0,0.2))
+    background #fff
+    z-index 900
+
+    .settings-wrapper
+    .basket-wrapper
+        display table-cell
+        vertical-align: top
+        a
+            position relative
+            display block
+            margin: auto
+            width: 3rem;
+            height: 3rem;
+            background: 50% no-repeat
+            background-size 2rem
+            text-decoration none;
+            box-sizing border-box
+
+    .settings-wrapper
+        width: 3em
+        a
+
+            background-image: url("img/icons/hamburger.png")
+
+            &.is-active
+                background-color: #f0f0f0
+
+    .basket-wrapper
+        width: 4rem;
+        a
+            background-image: url("img/icons/cart.png")
+
+            &.is-active
+                border: 1px solid #fcfcfc
+                $border-radius(3px)
+
+            .basket-count
+                position absolute
+                top: 0;
+                right: -0.5rem;
+
+                min-width: 0.75rem;
+                padding: 0.25rem;
+                background #c00
+                $border-radius(0.75rem)
+                $box-shadow(0 0 0.5rem 0 rgba(123,123,123,0.33) )
+
+                font: normal 0.75em/1 $font-family;
+                text-align center
+                color: #fff
+
+    .logo-wrapper
+        display table-cell
+        vertical-align: middle
+        text-align center
+        color: #444;
+        text-transform uppercase
+
+        a
+            display block
+            text-decoration: none;
+            line-height 3rem
+
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+
+        img
+            font-size: 1em;
+            max-height: 3em
+            max-width 90%;

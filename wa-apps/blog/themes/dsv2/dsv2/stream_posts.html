@@ -1,15 +1,14 @@
 {* post stream (list): default view mode *}
-<div class="container">
 <ul class="timeline">
 {foreach $posts as $post}
     <li id="post-{$post.id}" {if $wa->param('blog_url')}itemprop="blogPosts" {/if}itemscope itemtype="http://schema.org/BlogPosting"{if $post@index is odd} class="timeline-inverted"{/if}>
         <div class="timeline-badge primary">
-            <i class="fa fa-dot-circle-o"></i>
+            <i class="fa fa-dot-circle-o theme-color-hover"></i>
         </div>
         <div class="timeline-panel">
             <div class="timeline-heading">
                 {if !empty($post.preview)}
-                    <img src="{$wa_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
+                    <img src="{$wa_static_url}{$post.preview}" alt="{$post.title}" class="img-responsive">
                 {/if}
             </div>
             <div class="timeline-body text-justify">
@@ -29,6 +28,20 @@
                 <div>
                     {$post.text}
                 </div>
+
+                {* attached album photo thumbs *}
+                {if $post.album_id && $post.album.id && $post.album.photos}
+                    {$photos_loaded = 1} {* required for proper photo thumbs retinification *}
+                    <div class="photo-album-attachment">
+                        <ul class="thumbs">
+                            {foreach $post.album.photos as $p}
+                                <li><a href="{$post.link}#photo{$p.id}"><img src="{$p.thumb_crop.url}" class="retinify" width="96" height="96" alt="{$p.name|escape}"></a></li>
+                            {/foreach}
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                {/if}
+
                 {* @event prepare_posts_frontend.%plugin_id%.after *}
                 {if !empty($post.plugins.after)}
                     <div class="text_after">
@@ -36,7 +49,7 @@
                     </div>
                 {/if}
                 {if $post.cutted}
-                    <a href="{$post.link}" class="btn-blue btn-simple">{$post.cut_link_label|default:'[`Continue reading →`]'}</a>
+                <a href="{$post.link}" class="btn-blue btn-simple">{$post.cut_link_label|default:'[`Continue reading →`]'}</a><br>
                 {/if}
             </div>
             <div class="timeline-footer">
@@ -82,4 +95,10 @@
 {/foreach}
 <li class="clearfix" style="float: none;"></li>
 </ul>
-</div>
+
+{if !empty($photos_loaded) && blogPhotosBridge::is2xEnabled()}
+    <script src="{$wa_static_url}wa-content/js/jquery-plugins/jquery.retina.min.js"></script>
+    <script>$(function() { "use strict";
+        $.Retina && $('img.retinify').retina();
+    });</script>
+{/if}

@@ -1,8 +1,8 @@
 {if $wa->shop && !empty($theme_settings.autofitItem)}
-    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.core.min.js?v{$wa->version()}"></script>
-    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.widget.min.js?v{$wa->version()}"></script>
-    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.position.min.js?v{$wa->version()}"></script>
-    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.core.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.widget.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.position.min.js?v{$wa->version()}"></script>
+    <script type="text/javascript" src="{$wa_static_url}wa-content/js/jquery-ui/jquery.ui.autocomplete.min.js?v{$wa->version()}"></script>
 {/if}
 <script type="text/javascript">
 {if $wa->shop}var sumbolrub = {if empty($theme_settings.sumbolRUB)}0{else}1{/if};{/if}
@@ -32,3 +32,17 @@ $.buysimply = {
     }
 };
 </script>
+{* конструкция включения плагина "Иконка, изображение и баннер для категории" http://www.webasyst.ru/store/plugin/shop/wmimageincat/ (вывода иконок для панели навигации дерева категорий)
+<script type="text/javascript">
+    {if $wa->shop && class_exists(shopWmimageincatPlugin)}var images = {json_encode(shopWmimageincatPlugin::getCategoryImageObj())};{/if}
+    $(document).ready(function(){
+        if(typeof(images) != 'undefined'){
+            $.each(images, function(k,v){
+                if(v.icon) {
+                    $('[data-icon-id="'+k+'"]').prepend('<img src="'+v.icon+'" alt="" style="vertical-align:middle; margin-right:3px;">');
+                }
+            });
+        }
+    });
+</script>
+*}

@@ -1,0 +1,19 @@
+{$latest_photos = $wa->photos->photos('', null, 8)}
+{if !empty($latest_photos)}<!-- latest photo-->
+<div class="latest-photo">
+    <div class="caption"><span>[`Last photos`]</span></div>  
+    <ul>
+    {foreach $latest_photos as $lphoto}      
+        <li{if $lphoto.stack_count > 0} class="stacked"{/if}>
+            <div class="image_">
+            {if empty($lphoto.frontend_link)}
+                {$wa->photos->getImgHtml($lphoto, "96x96")}
+            {else}
+                <a href="{$lphoto.frontend_link|default:'javascript:void(0);'}"{if !$_index} rel="nofollow"{/if}>{$wa->photos->getImgHtml($lphoto, "96x96")}</a>
+            {/if}
+            </div>        
+        </li>
+    {/foreach}
+    </ul>
+</div>
+{/if}

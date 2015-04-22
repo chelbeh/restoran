@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="blog" parent_theme_id="site:dsv2" version="2.2.0">
+<theme id="dsv2" system="0" vendor="988467" author="Designsovkusom" app="blog" parent_theme_id="site:dsv2" version="2.2.3">
     <name locale="en_US">Design with taste 2</name>
     <name locale="ru_RU">Дизайн со вкусом 2</name>
     <files>
@@ -49,9 +49,9 @@
             <description locale="en_US">Post search (filtering) results, e.g. custom search, by tag, by author</description>
             <description locale="ru_RU">Результат поиска (фильтрации) записей, например, по тегу или автору</description>
         </file>
-        <file path="stream_posts.html" custom="0">
+        <file path="stream_posts.html" custom="0" modified="1">
             <description locale="en_US">Default post list view mode</description>
-            <description locale="ru_RU">Основной вид списка записей блога</description>
+            <description locale="ru_RU"></description>
         </file>
         <file path="post.html" custom="0">
             <description locale="en_US">Dedicated post page</description>

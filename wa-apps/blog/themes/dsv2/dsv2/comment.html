@@ -1,18 +1,13 @@
 <div class="row comment" id="comment-{$comment.id}">
-    <div class="col-md-1 align-right{if !empty($comment.depth)} col-md-offset-1{/if}">
-        <div class="credentials">
-            <a name="comment{$comment.id}"{if $comment.site} href="{$comment.site}"{/if}>
-                <img src="{$comment.user.photo_url_50|default:$comment.user.photo_url}" class="userpic{if $comment.auth_provider && ($comment.auth_provider neq blogCommentModel::AUTH_GUEST) && ($comment.auth_provider neq blogCommentModel::AUTH_USER)} icon16{/if}" alt="">
-            </a>
-        </div>
-    </div>
-    <div class="{if empty($comment.depth)}col-md-11{else}col-md-10{/if} comment-text">
+    <div class="{if empty($comment.depth)}col-md-12{else}col-md-11{/if} comment-text">
         <h4>
+            <strong>
             {if empty($comment.site)}
                 <span class="username" itemprop="creator">{$comment.name}</span>
             {else}
                 <a href="{$comment.site}" class="username" itemprop="creator">{$comment.name}</a>
             {/if}
+            </strong>
            
             {* @event prepare_comments_frontend.%plugin_id%.authorname_suffix *}
             {if !empty($comment.plugins.authorname_suffix)}

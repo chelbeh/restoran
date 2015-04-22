@@ -1,0 +1,166 @@
+{include file="`$wa_parent_theme_path`/sidebar.mobile.html"}
+
+{*$blog_pages=$wa->blog->pages()*}{$timeline = $wa->blog->timeline()}
+{if !$settlement_one_blog || $timeline}{*|| $blog_pages *}
+<!-- navigation bar -->
+<div id="blog-nav" class="information-block">
+    <div class="caption"><span>[`Links blog`]</span></div>
+    <ul>
+    {if !$settlement_one_blog || $action == 'post' || $timeline}<!-- blog list -->
+        {$blogs = $wa->blog->blogs()}              		
+        {if count($blogs)>1}                  
+            <li{if is_array($wa->globals('blog_id')) && empty($is_search)} class="selected"{/if}>
+                <a href="{$wa->blog->url()}">[`All posts`]<span>({count($wa->blog->posts(null, 1000, ['id']))})</span></a>
+            </li>
+            {foreach $blogs as $blog}
+                <li{if $wa->globals('blog_id') eq $blog.id && empty($is_search)} class="selected"{/if}>
+                    <a href="{$blog.link}">{$blog.name}<span>({count($wa->blog->posts($blog.id, 1000, ['id']))})</span></a>
+                </li>
+            {/foreach}
+        {else}
+            {$blog=current($blogs)}
+            <li{if empty($is_search)} class="selected"{/if}>
+                <a href="{$wa->blog->url()}">{$blog.name}<span>({count($wa->blog->posts($blog.id, 1000, ['id']))})</span></a>
+            </li>
+        {/if}
+            
+        {if !empty($timeline)}<!-- timeline navigation -->
+            <li id="timeline" class="dropdown hide-for-mobile">
+                <a href="javascript:void(0);" class="inline-link">[`Calendar`]<i class="icon-angle-down"></i><i class="icon-angle-right"></i></a>
+	    	    {if !empty($timeline)}
+	    	    <ul class="menu-v">
+    			    {$year=null}
+    			    {foreach $timeline as $year_month => $item}
+        			    {if $year neq $item.year}
+            			    {if !$item@first}
+			    	                </ul>
+                                </li>
+				            {/if}
+			    	        <li{if $item.year_selected} class="selected"{/if}>
+			        	        {$year=$item.year}
+			            	    <a href="{$item.year_link}"  >{$item.year|default:'NULL'} год</a>
+            						<ul class="menu-v">
+				        {/if}
+				        <li{if $item.selected} class="selected"{/if}>
+				            <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">{_ws(date("F",gmmktime(0,0,0,$item.month)))}</a>
+				        </li>
+						{if $item@last}
+						        </ul>
+						    </li>
+					    {/if}
+                    {/foreach}
+				</ul>
+				{/if}
+            </li>
+            {if empty($theme_settings.noadaptive)}
+            <li id="timeline-mobile" class="dropdown b-mob-tree hide-for-desktop dhtml">
+                <a href="javascript:void(0);" class="inline-link">[`Calendar`]</a>
+	    	    {if !empty($timeline)}
+	    	    <ul class="menu-v">
+    			    {$year=null}
+    			    {foreach $timeline as $year_month => $item}
+        			    {if $year neq $item.year}
+            			    {if !$item@first}
+			    	                </ul>
+                                </li>
+				            {/if}
+			    	        <li{if $item.year_selected} class="selected"{/if}>
+			        	        {$year=$item.year}
+			            	    <a href="{$item.year_link}"  >{$item.year|default:'NULL'} год</a>
+            						<ul class="menu-v">
+				        {/if}
+				        <li{if $item.selected} class="selected"{/if}>
+				            <a href="{$item.link}" title="{_w("%d post","%d posts",$item.count)}">{_ws(date("F",gmmktime(0,0,0,$item.month)))}</a>
+				        </li>
+						{if $item@last}
+						        </ul>
+						    </li>
+					    {/if}
+                    {/foreach}
+				</ul>
+				{/if}
+            </li>
+            {/if}
+        {/if}
+    {/if}
+        
+        {if $frontend_action}
+    		{foreach $frontend_action as $plugin => $output}
+    		{if $plugin == 'category-plugin' && !empty($output.sidebar)}<!-- categories -->
+    		<li class="dropdown hide-for-mobile">
+    			<a href="javascript:void(0);" class="inline-link">[`Categories`]<i class="icon-angle-down"></i><i class="icon-angle-right"></i></a>
+               	{$output.sidebar}
+    		</li>
+        		{if empty($theme_settings.noadaptive)}
+        		<li class="dropdown b-mob-tree hide-for-desktop dhtml">
+        			<a href="javascript:void(0);" class="inline-link">[`Categories`]</a>
+                   	{$output.sidebar}
+        		</li>
+        		{/if}
+    		{/if}
+    		{/foreach}
+    	{/if}
+    
+        <!-- plugins -->
+        {* @event (frontend_action_default|frontend_action_post|frontend_action_page|frontend_action_error).%plugin_id%.sidebar *}
+        {if $frontend_action}
+    		{$pl = 0}{foreach $frontend_action as $plugin => $output}
+    		{if $plugin == 'tag-plugin' || $plugin == 'category-plugin'}{$pl = $pl + 1}{/if}
+    		{/foreach}
+    	    {if (count($frontend_action)-$pl) > 0}
+    		<li class="dropdown">
+    			<a href="javascript:void(0);" class="inline-link">[`More`]<i class="icon-angle-down"></i><i class="icon-angle-right"></i></a>
+               	<div class="popup">
+    				{foreach $frontend_action as $plugin => $output}
+    				{if $plugin != 'tag-plugin' && $plugin != 'category-plugin' && !empty($output.sidebar)}
+    				    {$output.sidebar}
+    				{/if}
+    				{/foreach}
+    			</div>
+    		</li>
+    		{/if}
+    	{/if}
+    </ul>
+</div>
+{/if}
+
+{if $wa->shop}{include file="`$wa_parent_theme_path`/vertical.tree.html"}{/if}
+
+{if !empty($theme_settings.blogInfo)}
+    {if $blog_pages = $wa->blog->pages(0, 2, true)}<!-- info pages -->{* static info page list *}
+        {if isset($page_id)}{$page_select = $page_id}{else}{$page_select = null}{/if}
+        <div class="information-block">
+            <div class="caption"><span>[`Information`]</span></div>
+            {wa_print_tree tree=$blog_pages selected=$page_select unfolded=true class="pages-navigation" elem='<a href=":url">:name</a>'}
+        </div>
+    {/if}
+{/if}
+
+{if !empty($theme_settings.blogTags)}
+    {if $frontend_action}
+        {foreach $frontend_action as $plugin => $output}
+        {if $plugin == 'tag-plugin'}<!-- tag cloud -->
+            {if !empty($output.sidebar)}
+            <div class="tags-block{if !empty($theme_settings.tagsCloud)} hide-for-desktop{/if}"{if !empty($theme_settings.tagsCloud)} id="tagsCanvasContent"{/if}>
+                <div class="caption"><span>[`Tags`]</span></div>
+                {*str_replace(['<div class="tags cloud">', '</div>'],'' , $output.sidebar)*}
+                {$output.sidebar}
+            </div>
+                {if !empty($theme_settings.tagsCloud)}
+                <div class="tags-block hide-for-mobile">
+                    <div class="caption"><span>[`Tags`]</span></div>
+                    <canvas width="200" height="200" id="tagsCanvas"></canvas>
+                </div>
+                {/if}
+            {/if}
+        {/if}
+        {/foreach}
+    {/if}
+{/if}
+
+{if $wa->mailer && $wa->getUrl('mailer/frontend/subscribe')}{include file="`$wa_parent_theme_path`/form.subscribe.html" place="place-sidebar"}{/if}{*FORM APP MAILER*}
+{if $wa->shop && empty($theme_settings.addition) && $wa->get('addition') != 'lastview'}{include file="`$wa_parent_theme_path`/lastview.product.html"}{/if}
+{if !empty($theme_settings.communityVKid)}{include file="`$wa_parent_theme_path`/community.vk.html" place="place-sidebar"}{/if}
+{if !empty($theme_settings.communityFBhref)}{include file="`$wa_parent_theme_path`/community.fb.html" place="place-sidebar"}{/if}
+{*include file="`$wa_parent_theme_path`/last.posts.html" _index=false*}
+{if $wa->photos && !empty($theme_settings.latest_photo)}{include file="`$wa_parent_theme_path`/last.photos.html" _index=false}{/if}

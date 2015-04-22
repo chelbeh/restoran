@@ -1,0 +1,16 @@
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
+<script>
+$.dsv = {
+    {if $wa->shop}
+    	shop_url: "{$wa->getUrl('shop/frontend')}",
+	    {$currency_info = $wa->shop->currency(true)}
+	    {if !isset($currency_info.sign_delim)}{$currency_info.sign_delim = " "}{/if}
+	    {if !isset($currency_info.sign_position)}{$currency_info.sign_position = 1}{/if}
+	    {if !isset($currency_info.sign_html)}{$currency_info.sign_html = $currency_info.sign}{/if}
+	    {if !isset($currency_info.decimal_point)}{$currency_info.decimal_point = ','}{/if}
+	    {if !isset($currency_info.frac_digits)}{$currency_info.frac_digits = 2}{/if}
+	    {if !isset($currency_info.thousands_sep)}{$currency_info.thousands_sep = ' '}{/if}
+	    currency: {json_encode($currency_info)},
+	{/if}
+}
+</script>

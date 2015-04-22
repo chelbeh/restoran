@@ -5,7 +5,7 @@
         {$selected_category=null}
     {/if}
     {$categories = $wa->shop->categories(0, null, true, true)}
-    <nav class="navbar navbar-default" rol="navigation">
+    <nav class="navbar navbar-default" role="navigation">
         <div class="container">
         <div class="navbar-header">
             <button class="navbar-toggle" data-toggle="collapse" data-target="#catalog">
@@ -21,55 +21,86 @@
                 {foreach $categories as $cat}
                     {if count($cat.childs)}
                     <li class="dropdown">
-                    <a href="{$cat.url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">{$cat.name} <i class="fa fa-angle-down"></i></a>
-                    <div class="dropdown-menu{if $cat.params.right == '1'} menu_right{/if}">
-                        {$base_col=5}
+                    <a href="{$cat.url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">{$cat.name}</a>
+                    {if isset($cat.params.col)}
+                    {if $cat.params.col > 1 && $cat.params.col <= 3}
+                        {$base_col=$cat.params.col}
+                    {/if}
+                    <div class="dropdown-menu{if isset($cat.params.right) && $cat.params.right == '1'} menu_right{/if}">
                         {$sum=0}
                         <div class="col_{$base_col} col_header">
                             {if $wa->isMobile()}
                             <a href="{$cat.url}">{$cat.name}</a>
                             {/if}
                         </div>
+                        {$next=0}
                         {foreach $cat.childs as $subcat}
                             {$col=1}
-                            {if !empty($subcat.params.col) && $subcat.params.split < 2}
+                            {if !empty($subcat.params.col) && (empty($subcat.params.split) || $subcat.params.split < 2)}
                                 {$col=$subcat.params.col}
                             {/if}
-                            <div class="col_{$col}{if $subcat.params.border=='0' || !empty($subcat.params.split)} border-none{/if}">
+                            {if $next != 1}
+                            <div class="col_{$col}{if isset($subcat.params.border) || !empty($subcat.params.split)} border-none{/if}">
+                            {/if}
                                 <ul>
-                                    <li class="first"><a href="{$subcat.url}">
-                                        {if isset($subcat.params.icon)}
-                                            <img src="{$wa_url}{$subcat.params.icon}" alt="{$subcat.name}" class="subcat-icon">
-                                        {/if}
-                                        {$subcat.name}
-                                    </a></li>
+                                    <li class="first">
+                                        <a href="{$subcat.url}">{if isset($subcat.params.icon)}<img src="{$wa_url}{$subcat.params.icon}" alt="{$subcat.name}" class="subcat-icon">{/if}{$subcat.name}</a>
+                                    </li>
                                     {if count($subcat.childs)}
-                                        {if !empty($subcat.params.split) && $subcat.params.split>1 && $subcat.params.split < 6}
+                                        {if !empty($subcat.params.split) && $subcat.params.split>1 && $subcat.params.split < 4}
                                             {$subcat_count=(count($subcat.childs)/$subcat.params.split)|round}
                                             {$sub_col=1}
                                         {/if}
                                         {foreach $subcat.childs as $subsubcat}
                                             <li><a href="{$subsubcat.url}">{$subsubcat.name}</a></li>
-                                            {if $subcat.params.split>1 && $subcat_count>1 && $subsubcat@iteration is div by $subcat_count}
+                                            {if !empty($subcat.params.split) && $subcat.params.split>1 && $subcat_count>1 && $subsubcat@iteration is div by $subcat_count}
                                                 {$sub_col=$sub_col+1}
                                                 </ul>
                                                 </div>
-                                                <div class="col_{$col}{if $subcat.params.border=='0' || $subcat.params.split!=$sub_col} border-none{/if}">
+                                                {$sum=$sum+$col}
+                                                {if $sum==$base_col}
+                                                    <div class="clearfix"></div>
+                                                    {$sum=0}
+                                                {/if}
+                                                {if !$subsubcat@last}
+                                                <div class="col_{$col}{if (!empty($subcat.params.border) && $subcat.params.border=='0') || (!empty($subcat.params.split) && $subcat.params.split!=$sub_col)} border-none{/if}">
                                                 <ul>
                                                 <li class="empty">&nbsp;</li>
+                                                {else}
+                                                <div class="col_{$base_col} border-none" style="display: none">
+                                                <ul>
+                                                <li></li>
+                                                {/if}
                                             {/if}
                                         {/foreach}
                                     {/if}
                                 </ul>
+                            {if count($subcat.childs)}    
                             </div>
-                            {$sum=$sum+$col}
-                            {if $sum>=$base_col}
+                                {$next=0}
+                                {$sum=$sum+$col}
+                            {else}
+                                {$next=1}
+                            {/if}
+                            
+                            {if $sum==$base_col}
                                 <div class="clearfix"></div>
                                 <div class="col_{$base_col} col_divider"></div>
                                 {$sum=0}
                             {/if}
                         {/foreach}
                     </div>
+                    {else}
+                        {$base_col=1}
+                        <ul class="dropdown-menu">
+                            {foreach $cat.childs as $subcat}
+                                <li{if $subcat.childs} class="dropdown-submenu"{/if}>
+                                    <a href="{$subcat.url}">{$subcat.name}</a>
+                                    {wa_print_tree tree=$subcat.childs selected=$selected_category unfolded=true depth=0 collapsible_class='collapsible' class="dropdown-menu" elem ='<a href=":url" title=":name">:name</a>'}
+                                </li>
+                            {/foreach}
+                        </ul>
+                    {/if}
                     </li>
                     {else}
                         <li><a href="{$cat.url}">{$cat.name}</a></li>
@@ -103,9 +134,9 @@
         </div>
         <div class="navbar-collapse collapse" id="catalog">
             <ul class="nav navbar-nav">
-                {if count($categories)}
+                {if $wa->shop && count($categories)}
                     <li class="dropdown cats">
-                        <a href="{$cat.url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true"><i class="fa fa-bars fa-lg"></i> [s`Categories`] <i class="fa fa-angle-down"></i></a>
+                        <a href="#" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true"><i class="fa fa-bars fa-lg"></i> [s`Categories`]</a>
                         <ul class="dropdown-menu">
                             {foreach $categories as $cat}
                                 <li><a href="{$cat.url}">{$cat.name}</a></li>
@@ -119,7 +150,7 @@
                     {$timeline = $wa->blog->timeline()}
                     {if !empty($timeline)}
                         <li>
-                            <a href="#" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">[`Calendar`]  <i class="fa fa-angle-down"></i></a>
+                            <a href="#" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">[`Calendar`]</a>
 
                             <ul class="dropdown-menu">
                                 {$year=null}
@@ -204,7 +235,7 @@
                     <!-- albums -->
                     {if $albums = $wa->photos->albums(0)}
                     <li>
-                        <a href="{$wa_app_url}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">[`Albums`] <i class="fa fa-angle-down"></i></a>
+                        <a href="javascript:void(0);" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown" data-delay="500" data-close-others="true">[`Albums`] <i class="fa fa-angle-down"></i></a>
                         <ul class="dropdown-menu">
                             {foreach $albums as $album}
                                 <li>

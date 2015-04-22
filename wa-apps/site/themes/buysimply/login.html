@@ -1,7 +1,7 @@
 <div id="page" role="main" class="login-page">
     <h1>[`Login`]</h1>
     {$wa->authAdapters()}
-    {$wa->loginForm($error)}<div class="clear"></div><br />
+    {$wa->loginForm($error, empty($without_form))}<div class="clear"></div><br />
     [`No account yet?`] <a href="{$wa->signupUrl()}" title="[s`Sign up`]">[`Sign up now!`]</a>
 </div>
  

@@ -14,6 +14,7 @@
     <td colspan="2" class="align-right align-middle">
       	<!-- block contact -->
       	<div class="contact">
+      	{$wa->globals("_contact", 1)}
       	{if $contact=$wa->block("`$themeId`.contact")}
             {$contact}
         {else}
@@ -23,18 +24,18 @@
     </td>
   </tr>
   <tr><td colspan="5">
-    <h1>[`Dear friends!`]</h1>
+    <p style="color:#353535;font-size:24px;font-weight:bold;line-height:normal;margin:90px 0 0 0;">[`Dear friends!`]</p>
     <p class="hello">[`Unfortunately, your browser does not support modern technology used on our website.`]</p>
   </td></tr>
   <tr><td colspan="5">
     <p class="help-text">[`Please refresh your browser by downloading it on the links below or contact your system administrator serving your computer.`]</p>
   </td></tr>
   <tr class="browser-icon align-center">
-    <td><a href="http://www.microsoft.com/rus/windows/internet-explorer/worldwide-sites.aspx" title="Internet Explorer"><span class="explorer"></span>Internet Explorer</a><p>Microsoft</p></td>
-    <td><a href="http://www.google.com/chrome/" title="Chrome"><span class="chrome"></span>Chrome</a><p>Google</p></td>
-    <td><a href="http://www.apple.com/ru/safari/" title="Safari"><span class="safari"></span>Safari</a><p>Apple</p></td>
-    <td><a href="http://www.opera.com/" title="Opera"><span class="opera"></span>Opera</a><p>Opera Software</p></td>
-    <td><a href="http://www.mozilla-europe.org/ru/firefox/" title="Firefox"><span class="firefox"></span>Firefox</a><p>Mozilla</p></td>
+    <td><a rel="nofollow" href="http://www.microsoft.com/rus/windows/internet-explorer/worldwide-sites.aspx" title="Internet Explorer"><span class="explorer"></span>Internet Explorer</a><p>Microsoft</p></td>
+    <td><a rel="nofollow" href="http://www.google.com/chrome/" title="Chrome"><span class="chrome"></span>Chrome</a><p>Google</p></td>
+    <td><a rel="nofollow" href="http://www.apple.com/ru/safari/" title="Safari"><span class="safari"></span>Safari</a><p>Apple</p></td>
+    <td><a rel="nofollow" href="http://www.opera.com/" title="Opera"><span class="opera"></span>Opera</a><p>Opera Software</p></td>
+    <td><a rel="nofollow" href="http://www.mozilla-europe.org/ru/firefox/" title="Firefox"><span class="firefox"></span>Firefox</a><p>Mozilla</p></td>
   </tr>
 </table>
 </div>
