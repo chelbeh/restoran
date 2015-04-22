@@ -45,6 +45,97 @@ disabled - used autoload instead
 require_once 'PEAR.php';
 */
 
+if (!function_exists('gzclose') && function_exists('gzclose')) {
+    /**
+     * https://bugs.php.net/bug.php?id=53829
+     */
+
+    /**
+     * @alias gzclose64
+     */
+    function gzclose()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gzclose64', $args);
+    }
+}
+if (!function_exists('gzeof') && function_exists('gzeof64')) {
+    /**
+     * @alias gzeof64
+     */
+    function gzeof()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gzeof64', $args);
+    }
+
+}
+if (!function_exists('gzread') && function_exists('gzread64')) {
+    /**
+     * @alias gzread64
+     */
+    function gzread()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gzread64', $args);
+    }
+}
+if (!function_exists('gzopen') && function_exists('gzopen64')) {
+
+    /**
+     * @alias gzopen64
+     */
+    function gzopen()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gzopen64', $args);
+    }
+
+}
+if (!function_exists('gzseek') && function_exists('gzseek64')) {
+    /**
+     * @alias gzseek64
+     */
+    function gzseek()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gzseek64', $args);
+    }
+}
+if (!function_exists('gztell') && function_exists('gztell64')) {
+
+    /**
+     * @alias gztell64
+     */
+    function gztell()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gztell64', $args);
+    }
+
+}
+if (!function_exists('gzwrite') && function_exists('gzwrite64')) {
+    /**
+     * @alias gzwrite64
+     */
+    function gzwrite()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gzwrite64', $args);
+    }
+}
+if (!function_exists('gzputs') && function_exists('gzputs64')) {
+
+    /**
+     * @alias gzputs64
+     */
+    function gzputs()
+    {
+        $args = func_get_args();
+        return call_user_func_array('gzputs64', $args);
+    }
+}
+
 
 define ('ARCHIVE_TAR_ATT_SEPARATOR', 90001);
 define ('ARCHIVE_TAR_END_BLOCK', pack("a512", ''));

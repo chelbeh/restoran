@@ -58,6 +58,22 @@ class installerUpdateExecuteController extends waJsonController
                 //cleanup cache
                 $this->cleanup();
 
+                //update themes
+                foreach ($this->urls as $url) {
+                    if (preg_match('@(wa-apps/)?(.+)/themes/(.+)@', $url['slug'], $matches)) {
+                        try {
+                            $theme = new waTheme($matches[3], $matches[2]);
+                            $theme->update();
+                        } catch (Exception $ex) {
+                            waLog::log(sprintf('Error during theme %s@%s update: %s', $matches[3], $matches[2], $ex->getMessage()));
+                        }
+                    }
+                }
+
+                //and again cleanup
+                $this->cleanup();
+
+
                 $this->getConfig()->setCount(false);
 
                 $response = $this->getResponse();

@@ -40,7 +40,6 @@ class waInstallerRequirements
 
     private function __clone()
     {
-        ;
     }
 
     /**
@@ -245,7 +244,8 @@ class waInstallerRequirements
                 if (!version_compare($version, $requirement['version'], $relation)) {
                     $format = !empty($requirement['strict']) ? _w('%s has %s version but should be %s %s') : _w('%s has %s version but recomended is %s %s');
                     $relation = _w($relation);
-                    $requirement['warning'] = sprintf($format, _w(ucfirst($subject)), $version, $relation, $requirement['version']);
+                    $name = $subject=='installer'?_w('Webasyst Framework'):_w(ucfirst($subject));
+                    $requirement['warning'] = sprintf($format, $name, $version, $relation, $requirement['version']);
                 } else {
                     if ($version) {
                         $requirement['note'] = $version;
@@ -368,7 +368,7 @@ class waInstallerRequirements
             $command_pattern = '@({'.implode('|', $commandcharacters).')@';
             $pattern = preg_replace($cleanup_pattern, '\\\\$1', $pattern);
             $pattern = preg_replace($command_pattern, '.$1', $pattern);
-            $hash_pattern = "@^([\da-f]{32})\s+\*({$pattern})$@m";
+            $hash_pattern = "@^([\\da-f]{32})\\s+\\*({$pattern})$@m";
             if (file_exists($md5_path)) {
                 $hashes = file_get_contents($md5_path);
                 if (preg_match_all($hash_pattern, $hashes, $file_matches)) {
@@ -413,3 +413,4 @@ class waInstallerRequirements
         return $relation;
     }
 }
+

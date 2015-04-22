@@ -57,23 +57,35 @@ class waInstallerFile
     public function getContent($path, $allow_caching = false)
     {
         //TODO enable caching
-        //TODO check response code 4xx/200
         $is_url = preg_match('@^https?://@', $path);
         if ($is_url && ($ch = self::getCurl($path))) {
-            if (session_id()) {
-                session_write_close();
-            }
-            $content = curl_exec($ch);
+            try {
+                if (session_id()) {
+                    session_write_close();
+                }
+                $content = curl_exec($ch);
 
-            if ($errno = curl_errno($ch)) {
-                $message = "Curl error: {$errno}# ".curl_error($ch)." at [{$path}]";
+                if ($err_no = curl_errno($ch)) {
+                    $message = "Curl error: {$err_no}# ".curl_error($ch)." at [{$path}]";
+                    throw new Exception($message);
+                }
+
+                $response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                if ($response_code != 200) {
+                    if ($response_code == 301) {
+                        $info = curl_getinfo($ch);
+                        $redirect = ifset($info['redirect_url'], $path);
+                        $message = "Unexpected redirect response from [%s] to [%s]. Check your updates settings or contact with support";
+                        throw new Exception(sprintf($message, parse_url($path, PHP_URL_HOST), parse_url($redirect, PHP_URL_HOST)));
+                    } else {
+                        throw new Exception("Invalid server response with code {$response_code} while request {$path}");
+                    }
+                }
+            } catch (Exception $ex) {
                 curl_close($ch);
-                throw new Exception($message);
+                throw $ex;
             }
-            $response_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            if ($response_code != 200) {
-                throw new Exception("Invalid server response with code {$response_code} while request {$path}");
-            }
+
             curl_close($ch);
         } elseif ($is_url && @ini_get('allow_url_fopen')) {
             if (session_id()) {
@@ -93,18 +105,23 @@ class waInstallerFile
                 $content = @file_get_contents($path);
             }
 
-            if (!$content) {
-                $response_code = 'unknown';
-                $hint = '';
-                if (!empty($http_response_header)) {
-                    foreach ($http_response_header as $header) {
-                        if (preg_match('@^status:\s+(\d+)\s+(.+)$@i', $header, $matches)) {
-                            $response_code = $matches[1];
-                            $hint = " Hint: {$matches[2]}";
-                            break;
-                        }
+            $response_code = 'unknown';
+            $hint = '';
+            if (!empty($http_response_header)) {
+                /**
+                 * @link http://php.net/manual/en/reserved.variables.httpresponseheader.php
+                 * @var string[] $http_response_header
+                 */
+                foreach ($http_response_header as $header) {
+                    if (preg_match('@^status:\s+(\d+)\s+(.+)$@i', $header, $matches)) {
+                        $response_code = (int)$matches[1];
+                        $hint = " Hint: {$matches[2]}";
+                        break;
                     }
                 }
+            }
+
+            if (!$content || !in_array($response_code, array('unknown', 200), true)) {
                 throw new Exception("Invalid server response with code {$response_code} while request {$path}.{$hint}");
             }
         } elseif (!$is_url) {
@@ -152,8 +169,14 @@ class waInstallerFile
             if ($post = self::getPost($url)) {
                 $curl_options[CURLOPT_POST] = 1;
                 $curl_options[CURLOPT_POSTFIELDS] = $post;
+                if (isset($curl_default_options[CURLOPT_FOLLOWLOCATION])) {
+                    //redirect doesn't work properly with POST
+                    unset($curl_default_options[CURLOPT_FOLLOWLOCATION]);
+                }
+
             }
             $curl_options[CURLOPT_URL] = $url;
+
             //TODO read proxy settings from generic config
             $options = array();
 
@@ -173,6 +196,7 @@ class waInstallerFile
     }
 
     /**
+     * 413 Entity Too Large error workaround
      * @param string $url
      * @return array POST data
      */
