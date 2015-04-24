@@ -190,7 +190,7 @@ class hermespickupShipping extends waShipping
         $data = $model->where("barcode = '$barcode'")->order('operation_date, datetime, id')->fetchAll();
         $result = "";
         if(count($data)>0){
-            $result = "<table class='tracking_table'>";
+            $result = "<table class='tracking_table table'>";
             foreach($data as $line){
                 $result .= "<tr>";
                 $result .= "<td>".date('d.m.Y H:i', strtotime($line['operation_date']))."</td>";
