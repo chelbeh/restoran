@@ -173,6 +173,7 @@ class waImageGd extends waImage
     protected function _save($file, $quality)
     {
         $extension = pathinfo($file, PATHINFO_EXTENSION);
+        $extension = 'jpg';//VADIM CODE
 
         list($save, $type) = $this->_save_function($extension, $quality);
 

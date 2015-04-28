@@ -117,6 +117,7 @@ class waImageImagick extends waImage
     protected function _save($file, $quality)
     {
         $extension = pathinfo($file, PATHINFO_EXTENSION);
+        $extension = 'jpg';//VADIM CODE
         $type = $this->_save_function($extension, $quality);
         $this->im->setImageCompressionQuality($quality);
         $this->im->stripImage();
