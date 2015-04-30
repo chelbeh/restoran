@@ -206,6 +206,11 @@ class robokassaPayment extends waPayment implements waIPayment
         $description = preg_replace('/[\s]{2,}/', ' ', $description);
         $form_fields = array();
         $form_fields['MrchLogin'] = $this->merchant_login;
+        //VADIM CODE START
+        if(isset($this->merchant_commission)&& $this->merchant_commission > 0){
+            $order->total = (100 + $this->merchant_commission)/100 * $order->total;
+        }
+        //VADIM CODE END
         $form_fields['OutSum'] = number_format($order->total, 2, '.', '');
         $form_fields['InvId'] = $order->id;
         $hash_string = implode(':', $form_fields).':'.$this->merchant_pass1;

@@ -42,6 +42,12 @@ return array(
         'description'  => '',
         'control_type' => waHtmlControl::INPUT,
     ),
+    'merchant_commission' => array(
+        'value'        => '0',
+        'title'        => 'Комиссия, начисляемая за использование сервиса (в %)',
+        'description'  => '',
+        'control_type' => waHtmlControl::INPUT,
+    ),
     'testmode'          => array(
         'value'        => '1',
         'title'        => 'Тестовый режим',
