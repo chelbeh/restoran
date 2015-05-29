@@ -39,7 +39,7 @@ if (substr($file[1], -3) == '@2x') {
     $file[1] = substr($file[1], 0, -3);
     $size = explode("x", $file[1]);
     foreach ($size as &$s) {
-        $s *= 2;
+        //$s *= 2;
     }
     unset($s);
 } else {
