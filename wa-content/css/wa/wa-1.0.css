@@ -328,6 +328,8 @@ position:relative; top:0.05em; margin:0 0 -0.5em; }
 .indicator.red { background: red; color:#fff !important; }
 .count.indicator { top: 0; font-size: 11px; }
 .username { font-weight: bold; }
+.userpic,
+.userpic20 { border-radius: 50%; }
 .status { margin: 2px 0 5px; padding: 0; color:#666666; font-style:normal; font-weight: normal; }
 .editable:hover { background: #eed; cursor:text; }
 .errormsg { display: block; font-size: 0.9em; font-weight: bold; font-style: italic; color: red; }
@@ -402,6 +404,13 @@ input.long { min-width: 350px !important; width: 350px !important; }
 .profile.image32px .details { margin-left: 37px; min-height: 37px; }
 .profile.image50px .details { margin-left: 55px; min-height: 55px; }
 .profile.image96px .details { margin-left: 105px; min-height: 105px; }
+.profile.image20px img.userpic { width: 20px; height: 20px; }
+.profile.image32px .details { margin-left: 37px; min-height: 37px; }
+.profile.image32px img.userpic { width: 32px; height: 32px; }
+.profile.image50px .details { margin-left: 65px; min-height: 55px; }
+.profile.image50px img.userpic { width: 50px; height: 50px; }
+.profile.image96px .details { margin-left: 105px; min-height: 105px; }
+.profile.image96px img.userpic { width: 96px; height: 96px; }
 
 /* INPUTs
 -------------------------------------------- */
