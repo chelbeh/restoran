@@ -34,6 +34,7 @@
         <div class="share42init" data-path="{$wa_parent_theme_url}img/" style="float:left;"></div>
     </div>
 
+    {literal}
     <!-- Put this script tag to the <head> of your page -->
     <script type="text/javascript" src="//vk.com/js/api/openapi.js?116"></script>
 
@@ -46,6 +47,7 @@
     <script type="text/javascript">
         VK.Widgets.Comments("vk_comments", {limit: 20, width: "665", attach: "*"});
     </script>
+    {/literal}
 
     {* @event prepare_posts_frontend.%plugin_id%.after *}
     {if !empty($post.plugins.after)}
